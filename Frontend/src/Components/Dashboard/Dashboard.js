@@ -14,7 +14,7 @@ class Dashboard extends React.Component {
             .then(
                 res => {
                     this.setState({ data: res.response })
-                    console.log("api::", res.response)
+                    console.log("api::", Object.keys(res.response))
                 }
             ).catch(err => console.log(err));
     }
