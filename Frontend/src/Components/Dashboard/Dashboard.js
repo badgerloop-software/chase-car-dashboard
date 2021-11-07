@@ -19,12 +19,20 @@ class Dashboard extends React.Component {
             ).catch(err => console.log(err));
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        // console.log(prevState.data, this.state.data)
+        // Typical usage (don't forget to compare props):
+         if (prevState?.data !== this.state.data) {
+            this.getNewData()
+         }
+      }
+
     callBackEndApi = async () => {
         const response = await fetch('/api');
         const body = await response.json();
 
         if (response.status !== 200) {
-            console.error("something is wrong with the api!!")
+            console.error("api: error")
             throw Error(body.message)
         }
 
@@ -36,7 +44,7 @@ class Dashboard extends React.Component {
             .then(
                 res => {
                     this.setState({ data: res.response })
-                    console.log("api::", res.response)
+                    // console.log("api::", res.response)
                 }
             ).catch(err => console.log(err));
     }
@@ -50,9 +58,9 @@ class Dashboard extends React.Component {
                 <p>Car Name:{this.state.data?.carName}</p>
                 <p>Speed:{this.state.data?.speed}</p>
                 <p>Power:{this.state.data?.power}</p>
-                <button onClick={() => this.getNewData()}>
+                {/* <button onClick={() => this.getNewData()}>
                     Update Data
-                </button>
+                </button> */}
             </div>
         );
     }
