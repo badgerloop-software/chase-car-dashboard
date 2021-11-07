@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
             <div className="Dashboard">
                 Dashboard 
                 {/* Note: Data used here is just to test to ake sure we are able to communicate with the backend */}
-                <p>Car Name:{this.state.data?.CarName}</p>
+                <p>Car Name:{this.state.data?.carName}</p>
                 <p>Speed:{this.state.data?.speed}</p>
                 <p>Power:{this.state.data?.power}</p>
             </div>

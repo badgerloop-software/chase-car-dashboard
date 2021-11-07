@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 data = {
-    CarName: "BadgerLoop",
+    carName: "BadgerLoop",
     speed: 500,
     power: 200,
 
