@@ -1,6 +1,5 @@
 const express = require("express");
 const http = require("http");
-const socketIo = require("socket.io");
 
 const port = 4001;
 const index = require("./routes/data");
