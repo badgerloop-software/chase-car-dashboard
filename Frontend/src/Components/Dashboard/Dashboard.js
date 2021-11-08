@@ -55,12 +55,9 @@ class Dashboard extends React.Component {
                 Dashboard
                 {/* Note: Data used here is just to test to make sure we are able to communicate with the backend
                           and update data */}
-                <p>Car Name:{this.state.data?.carName}</p>
-                <p>Speed:{this.state.data?.speed}</p>
-                <p>Power:{this.state.data?.power}</p>
-                {/* <button onClick={() => this.getNewData()}>
-                    Update Data
-                </button> */}
+                <p>Speed: {this.state.data?.speed}</p>
+                <p>Power: {this.state.data?.power}</p>
+                <p>Charge: {this.state.data?.charge}</p>
             </div>
         );
     }

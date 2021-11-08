@@ -1,6 +1,24 @@
 {
-  "carName": null,
   "speed": 0,
   "power": 0,
-  "connected": false
+  "charge": 0,
+  "solarPower": 0,
+  "netPower": 0,
+  "motorPower": 0,
+  "milesLeft": 0,
+  "state": null,
+  "batteryTemp": 0,
+  "motorTemp": 0,
+  "motorControllerTemp": 0,
+  "lowBattery": false,
+  "bpsFault": false,
+  "eStop": false,
+  "communication": false,
+  "cruiseControl": false,
+  "leftTurn": false,
+  "rightTurn": false,
+  "frontLeftTP": 0,
+  "frontRightTP": 0,
+  "backLeftTP": 0,
+  "backRightTP": 0
 }
