@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const JSON_DATA = require("../package.json");
 const SOLAR_CAR_DATA = require("../Data/dynamic_data.json");
 let FRONTEND_DATA = require("../Data/cache_data.json");
