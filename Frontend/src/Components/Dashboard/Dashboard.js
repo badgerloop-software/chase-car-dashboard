@@ -58,6 +58,17 @@ class Dashboard extends React.Component {
                 <p>Speed: {this.state.data?.speed}</p>
                 <p>Power: {this.state.data?.power}</p>
                 <p>Charge: {this.state.data?.charge}</p>
+                <p>netPower: {this.state.data?.netPower}</p>
+                <p>motorPower: {this.state.data?.motorPower}</p>
+                <p>milesLeft: {this.state.data?.milesLeft}</p>
+                <p>batteryTemp: {this.state.data?.batteryTemp}</p>
+                <p>motorTemp: {this.state.data?.motorTemp}</p>
+                <p>motorControllerTemp: {this.state.data?.motorControllerTemp}</p>
+                <p>frontLeftTP: {this.state.data?.frontLeftTP}</p>
+                <p>frontRightTP: {this.state.data?.frontRightTP}</p>
+                <p>backLeftTP: {this.state.data?.backLeftTP}</p>
+                <p>backRightTP: {this.state.data?.backRightTP}</p>
+                <p>state: {this.state.data?.state}</p>
             </div>
         );
     }
