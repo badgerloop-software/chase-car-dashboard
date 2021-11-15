@@ -3,6 +3,7 @@
 # dependencies
 /Frontend/node_modules
 /Backend/node_modules
+/DataGenerator/node_modules
 /.pnp
 .pnp.js
 

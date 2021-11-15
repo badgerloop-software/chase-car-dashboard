@@ -9,7 +9,7 @@ class Car {
         this.speed = 100;
         this.speedChanger = 0;
 
-        this.motorPower = 0
+        this.motorPower = 0;
         this.netPower = 0;
 
         this.milesLeft = 30;
