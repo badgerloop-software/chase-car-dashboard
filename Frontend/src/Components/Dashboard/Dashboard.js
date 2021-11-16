@@ -1,77 +1,46 @@
-import React from "react";
+import { Box, Heading, Text } from "@chakra-ui/layout";
+import React, { useState, useLayoutEffect } from "react";
 
-class Dashboard extends React.Component {
+export default function Dashboard(props) {
+  const callBackendAPI = async () => {
+    const response = await fetch("/api");
+    const body = await response.json();
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            data: null
-        }
+    if (response.status !== 200) {
+      console.error("api: error");
+      throw Error(body.message);
     }
 
-    componentDidMount() {
-        this.callBackEndApi()
-            .then(
-                res => {
-                    this.setState({ data: res.response })
-                    console.log("api::", Object.keys(res.response))
-                }
-            ).catch(err => console.log(err));
-    }
+    return body;
+  };
 
-    componentDidUpdate(prevProps, prevState) {
-        // console.log(prevState.data, this.state.data)
-        // Typical usage (don't forget to compare props):
-         if (prevState?.data !== this.state.data) {
-            this.getNewData()
-         }
-      }
+  const [state, setState] = useState({ data: null });
+  useLayoutEffect(() => {
+    callBackendAPI()
+      .then((res) => {
+        setState({ data: res.response });
+        // console.log("api::", res.response);
+      })
+      .catch((err) => console.log(err));
+  }, [state]);
 
-    callBackEndApi = async () => {
-        const response = await fetch('/api');
-        const body = await response.json();
-
-        if (response.status !== 200) {
-            console.error("api: error")
-            throw Error(body.message)
-        }
-
-        return body;
-    }
-
-    getNewData(e) {
-        this.callBackEndApi()
-            .then(
-                res => {
-                    this.setState({ data: res.response })
-                    // console.log("api::", res.response)
-                }
-            ).catch(err => console.log(err));
-    }
-
-    render() {
-        return (
-            <div className="Dashboard">
-                Dashboard
-                {/* Note: Data used here is just to test to make sure we are able to communicate with the backend
-                          and update data */}
-                <p>Speed: {this.state.data?.speed}</p>
-                <p>Power: {this.state.data?.power}</p>
-                <p>Charge: {this.state.data?.charge}</p>
-                <p>netPower: {this.state.data?.netPower}</p>
-                <p>motorPower: {this.state.data?.motorPower}</p>
-                <p>milesLeft: {this.state.data?.milesLeft}</p>
-                <p>batteryTemp: {this.state.data?.batteryTemp}</p>
-                <p>motorTemp: {this.state.data?.motorTemp}</p>
-                <p>motorControllerTemp: {this.state.data?.motorControllerTemp}</p>
-                <p>frontLeftTP: {this.state.data?.frontLeftTP}</p>
-                <p>frontRightTP: {this.state.data?.frontRightTP}</p>
-                <p>backLeftTP: {this.state.data?.backLeftTP}</p>
-                <p>backRightTP: {this.state.data?.backRightTP}</p>
-                <p>state: {this.state.data?.state}</p>
-            </div>
-        );
-    }
+  return (
+    <Box>
+      <Heading>Dashboard</Heading>
+      <Text>Speed: {state.data?.speed}</Text>
+      <Text>Power: {state.data?.power}</Text>
+      <Text>Charge: {state.data?.charge}</Text>
+      <Text>netPower: {state.data?.netPower}</Text>
+      <Text>motorPower: {state.data?.motorPower}</Text>
+      <Text>milesLeft: {state.data?.milesLeft}</Text>
+      <Text>batteryTemp: {state.data?.batteryTemp}</Text>
+      <Text>motorTemp: {state.data?.motorTemp}</Text>
+      <Text>motorControllerTemp: {state.data?.motorControllerTemp}</Text>
+      <Text>frontLeftTP: {state.data?.frontLeftTP}</Text>
+      <Text>frontRightTP: {state.data?.frontRightTP}</Text>
+      <Text>backLeftTP: {state.data?.backLeftTP}</Text>
+      <Text>backRightTP: {state.data?.backRightTP}</Text>
+      <Text>state: {state.data?.state}</Text>
+    </Box>
+  );
 }
-
-export default Dashboard;
