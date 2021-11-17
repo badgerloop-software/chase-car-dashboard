@@ -1,12 +1,12 @@
-import "./Dashboard.css"
 import {
-  Box,
+  Center,
+  Grid,
+  GridItem,
   Heading,
+  HStack,
   Text,
-  Flex, Center, Spacer,
-  Square, GridItem, Grid
+  VStack,
 } from "@chakra-ui/react";
-import { Select} from "@chakra-ui/react"
 import React, { useState, useLayoutEffect } from "react";
 
 export default function Dashboard(props) {
@@ -33,9 +33,39 @@ export default function Dashboard(props) {
   }, [state]);
 
   return (
-    <Box>
-      {/* <Heading>Dashboard</Heading> */}
-      {/* <Box className="dashborad-container" >
+    <Grid
+      templateColumns="1fr 2fr"
+      templateRows="3fr 1fr 4fr 1fr 3fr"
+      h="100vh"
+      w="100vw"
+    >
+      <GridItem
+        colStart={1}
+        colSpan={1}
+        rowStart={1}
+        rowSpan={1}
+        borderColor="black"
+        borderWidth={1}
+        p={2}
+      >
+        <VStack>
+          <Heading size="md">Faults</Heading>
+          <HStack flexWrap="wrap">
+            <Text>A</Text>
+            <Text>B</Text>
+            <Text>C</Text>
+          </HStack>
+        </VStack>
+      </GridItem>
+      <GridItem
+        colStart={1}
+        colSpan={1}
+        rowStart={2}
+        rowSpan={3}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <Heading>Data</Heading>
         <Text>Speed: {state.data?.speed}</Text>
         <Text>Power: {state.data?.power}</Text>
         <Text>Charge: {state.data?.charge}</Text>
@@ -50,60 +80,82 @@ export default function Dashboard(props) {
         <Text>backLeftTP: {state.data?.backLeftTP}</Text>
         <Text>backRightTP: {state.data?.backRightTP}</Text>
         <Text>state: {state.data?.state}</Text>
-      </Box> */}
-      <Grid
-        h="100vh"
-        templateRows="repeat(3, 1fr)"
-        templateColumns="repeat(5, 1fr)"
-        gap={1}
-        style={{ border: "1px solid green" }}
+      </GridItem>
+      <GridItem
+        colStart={1}
+        colSpan={1}
+        rowStart={5}
+        rowSpan={1}
+        borderColor="black"
+        borderWidth={1}
       >
-        <GridItem rowSpan={3} colSpan={1} bg="blue.100" >
-          <Grid
-            h="100%"
-            templateRows="repeat(3, 1fr)"
-            templateColumns="repeat(1, 1fr)"
-            gap={1}
+        <Center h="100%">
+          <Text as="i">Minimap</Text>
+        </Center>
+      </GridItem>
+      <GridItem
+        colStart={2}
+        colSpan={1}
+        rowStart={1}
+        rowSpan={2}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <HStack h="100%" align="stretch">
+          <Text
+            css={{ writingMode: "vertical-lr" }}
+            transform="rotate(180deg)"
+            borderLeftColor="grey.300"
+            borderLeftWidth={1}
+            textAlign="center"
           >
-            <GridItem colSpan={1} bg="blue.200" />
-            <GridItem colSpan={1} bg="blue.200" >
-              <Select bg="white" placeholder="Select option">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select>
-            </GridItem>
-            <GridItem colSpan={1} bg="blue.200" >
-              <Select bg="white" placeholder="Select option">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select>
-            </GridItem>
-          </Grid>
-        </GridItem>
-
-        <GridItem colSpan={4} bg="blue.100" >
-          <Grid
-            h="100%"
-            templateRows="repeat(1, 1fr)"
-            templateColumns="repeat(30, 1fr)"
-            gap={1}
+            Graph I
+          </Text>
+          <Center flex={1}>Graph</Center>
+        </HStack>
+      </GridItem>
+      <GridItem
+        colStart={2}
+        colSpan={1}
+        rowStart={3}
+        rowSpan={1}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <HStack h="100%" align="stretch">
+          <Text
+            css={{ writingMode: "vertical-lr" }}
+            transform="rotate(180deg)"
+            borderLeftColor="grey.300"
+            borderLeftWidth={1}
+            textAlign="center"
           >
-            <GridItem rowSpan={1} colSpan={1} bg="tomato" >
-              {/* <Center> */}
-                <Text id="vertical-text" orientation="vertical">Solor Car</Text>
-              {/* </Center> */}
-            </GridItem>
-            <GridItem colSpan={29} bg="tomato" />
-          </Grid>
-        </GridItem>
-        <GridItem colSpan={4} bg="blue.100" >
-        </GridItem>
-        <GridItem colSpan={4} bg="blue.100" >
-        </GridItem>
-      </Grid>
-
-    </Box>
+            Graph II
+          </Text>
+          <Center flex={1}>Graph</Center>
+        </HStack>
+      </GridItem>
+      <GridItem
+        colStart={2}
+        colSpan={1}
+        rowStart={4}
+        rowSpan={2}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <HStack h="100%" align="stretch">
+          <Text
+            css={{ writingMode: "vertical-lr" }}
+            transform="rotate(180deg)"
+            borderLeftColor="grey.300"
+            borderLeftWidth={1}
+            textAlign="center"
+          >
+            Graph III
+          </Text>
+          <Center flex={1}>Graph</Center>
+        </HStack>
+      </GridItem>
+    </Grid>
   );
 }
