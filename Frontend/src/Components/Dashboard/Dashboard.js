@@ -1,4 +1,5 @@
 import {
+  Box,
   Center,
   Grid,
   GridItem,
@@ -8,6 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
+import TirePressure from "./TirePressure";
 
 export default function Dashboard(props) {
   const callBackendAPI = async () => {
@@ -66,20 +68,29 @@ export default function Dashboard(props) {
         borderWidth={1}
       >
         <Heading>Data</Heading>
-        <Text>Speed: {state.data?.speed}</Text>
-        <Text>Power: {state.data?.power}</Text>
-        <Text>Charge: {state.data?.charge}</Text>
-        <Text>netPower: {state.data?.netPower}</Text>
-        <Text>motorPower: {state.data?.motorPower}</Text>
-        <Text>milesLeft: {state.data?.milesLeft}</Text>
-        <Text>batteryTemp: {state.data?.batteryTemp}</Text>
-        <Text>motorTemp: {state.data?.motorTemp}</Text>
-        <Text>motorControllerTemp: {state.data?.motorControllerTemp}</Text>
-        <Text>frontLeftTP: {state.data?.frontLeftTP}</Text>
-        <Text>frontRightTP: {state.data?.frontRightTP}</Text>
-        <Text>backLeftTP: {state.data?.backLeftTP}</Text>
-        <Text>backRightTP: {state.data?.backRightTP}</Text>
-        <Text>state: {state.data?.state}</Text>
+        <HStack>
+          <Box>
+            <Text>Speed: {state.data?.speed}</Text>
+            <Text>Power: {state.data?.power}</Text>
+            <Text>Charge: {state.data?.charge}</Text>
+            <Text>netPower: {state.data?.netPower}</Text>
+            <Text>motorPower: {state.data?.motorPower}</Text>
+            <Text>milesLeft: {state.data?.milesLeft}</Text>
+            <Text>batteryTemp: {state.data?.batteryTemp}</Text>
+            <Text>motorTemp: {state.data?.motorTemp}</Text>
+            <Text>motorControllerTemp: {state.data?.motorControllerTemp}</Text>
+            <Text>state: {state.data?.state}</Text>
+          </Box>
+          <TirePressure
+            size={10}
+            borderWidth={1}
+            borderColor="black"
+            frontLeftTP={state.data?.frontLeftTP}
+            frontRightTP={state.data?.frontRightTP}
+            backLeftTP={state.data?.backLeftTP}
+            backRightTP={state.data?.backRightTP}
+          />
+        </HStack>
       </GridItem>
       <GridItem
         colStart={1}
