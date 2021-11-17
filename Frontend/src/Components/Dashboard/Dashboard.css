@@ -1,3 +1,10 @@
 .dashborad-container{
     border: 2px solid rgb(59, 39, 39);
 }
+
+#vertical-text{
+    /* writing-mode: vertical-rl; 
+    transform: rotate(180deg); */
+    writing-mode: vertical-lr; 
+    transform: rotate(180deg);
+}

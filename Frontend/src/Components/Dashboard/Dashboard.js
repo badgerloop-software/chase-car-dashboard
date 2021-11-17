@@ -1,5 +1,12 @@
 import "./Dashboard.css"
-import { Box, Heading, Text, Flex, Center, Spacer, Square, GridItem, Grid } from "@chakra-ui/layout";
+import {
+  Box,
+  Heading,
+  Text,
+  Flex, Center, Spacer,
+  Square, GridItem, Grid
+} from "@chakra-ui/react";
+import { Select} from "@chakra-ui/react"
 import React, { useState, useLayoutEffect } from "react";
 
 export default function Dashboard(props) {
@@ -49,7 +56,7 @@ export default function Dashboard(props) {
         templateRows="repeat(3, 1fr)"
         templateColumns="repeat(5, 1fr)"
         gap={1}
-        style={{ border: "1px solid red" }}
+        style={{ border: "1px solid green" }}
       >
         <GridItem rowSpan={3} colSpan={1} bg="blue.100" >
           <Grid
@@ -59,12 +66,37 @@ export default function Dashboard(props) {
             gap={1}
           >
             <GridItem colSpan={1} bg="blue.200" />
-            <GridItem colSpan={1} bg="blue.200" />
-            <GridItem colSpan={1} bg="blue.200" />
+            <GridItem colSpan={1} bg="blue.200" >
+              <Select bg="white" placeholder="Select option">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+              </Select>
+            </GridItem>
+            <GridItem colSpan={1} bg="blue.200" >
+              <Select bg="white" placeholder="Select option">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+              </Select>
+            </GridItem>
           </Grid>
         </GridItem>
 
         <GridItem colSpan={4} bg="blue.100" >
+          <Grid
+            h="100%"
+            templateRows="repeat(1, 1fr)"
+            templateColumns="repeat(30, 1fr)"
+            gap={1}
+          >
+            <GridItem rowSpan={1} colSpan={1} bg="tomato" >
+              {/* <Center> */}
+                <Text id="vertical-text" orientation="vertical">Solor Car</Text>
+              {/* </Center> */}
+            </GridItem>
+            <GridItem colSpan={29} bg="tomato" />
+          </Grid>
         </GridItem>
         <GridItem colSpan={4} bg="blue.100" >
         </GridItem>
