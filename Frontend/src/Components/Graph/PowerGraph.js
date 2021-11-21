@@ -9,13 +9,21 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
-import TirePressure from "./TirePressure";
 
 export default function PowerGraph(props) {
 
     return (
-        <Box>
-            Power Graph
-        </Box>
+        <HStack h="100%" align="stretch">
+            <Text
+                css={{ writingMode: "vertical-lr" }}
+                transform="rotate(180deg)"
+                borderLeftColor="grey.300"
+                borderLeftWidth={1}
+                textAlign="center"
+            >
+                Power
+            </Text>
+            <Center flex={1}>Power Graph</Center>
+        </HStack>
     );
 }

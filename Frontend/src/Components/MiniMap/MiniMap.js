@@ -9,7 +9,6 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
-import TirePressure from "./TirePressure";
 
 export default function MiniMap(props) {
 

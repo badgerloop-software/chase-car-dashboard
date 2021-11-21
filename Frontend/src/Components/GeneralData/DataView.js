@@ -10,10 +10,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
 import TirePressure from "./TirePressure";
-import FaultsView from "./FaultsView";
 
 export default function DataView(props) {
-  
+
     return (
         <div>
 

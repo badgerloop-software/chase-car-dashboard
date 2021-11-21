@@ -9,10 +9,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
-import TirePressure from "./TirePressure";
-import FaultsView from "./FaultsView";
-import DataView from "./DataView";
-import MiniMap from "./MiniMap";
+import TirePressure from "../GeneralData/TirePressure";
+import FaultsView from "../Faults/FaultsView";
+import DataView from "../GeneralData/DataView";
+import MiniMap from "../MiniMap/MiniMap";
+import BatteryGraph from "../Graph/BatteryGraph";
+import PowerGraph from "../Graph/PowerGraph";
+import TemperatureGraph from "../Graph/TemperatureGraph";
 
 export default function Dashboard(props) {
   const callBackendAPI = async () => {
@@ -53,7 +56,7 @@ export default function Dashboard(props) {
         borderWidth={1}
         p={2}
       >
-        <FaultsView/>
+        <FaultsView data={state.data}/>
       </GridItem>
       <GridItem
         colStart={1}
@@ -73,7 +76,7 @@ export default function Dashboard(props) {
         borderColor="black"
         borderWidth={1}
       >
-      <MiniMap/>
+        <MiniMap/>
       </GridItem>
       <GridItem
         colStart={2}
@@ -83,18 +86,7 @@ export default function Dashboard(props) {
         borderColor="black"
         borderWidth={1}
       >
-        <HStack h="100%" align="stretch">
-          <Text
-            css={{ writingMode: "vertical-lr" }}
-            transform="rotate(180deg)"
-            borderLeftColor="grey.300"
-            borderLeftWidth={1}
-            textAlign="center"
-          >
-            Graph I
-          </Text>
-          <Center flex={1}>Graph</Center>
-        </HStack>
+        <BatteryGraph/>
       </GridItem>
       <GridItem
         colStart={2}
@@ -104,18 +96,7 @@ export default function Dashboard(props) {
         borderColor="black"
         borderWidth={1}
       >
-        <HStack h="100%" align="stretch">
-          <Text
-            css={{ writingMode: "vertical-lr" }}
-            transform="rotate(180deg)"
-            borderLeftColor="grey.300"
-            borderLeftWidth={1}
-            textAlign="center"
-          >
-            Graph II
-          </Text>
-          <Center flex={1}>Graph</Center>
-        </HStack>
+        <PowerGraph/>
       </GridItem>
       <GridItem
         colStart={2}
@@ -125,18 +106,7 @@ export default function Dashboard(props) {
         borderColor="black"
         borderWidth={1}
       >
-        <HStack h="100%" align="stretch">
-          <Text
-            css={{ writingMode: "vertical-lr" }}
-            transform="rotate(180deg)"
-            borderLeftColor="grey.300"
-            borderLeftWidth={1}
-            textAlign="center"
-          >
-            Graph III
-          </Text>
-          <Center flex={1}>Graph</Center>
-        </HStack>
+        <TemperatureGraph/>
       </GridItem>
     </Grid>
   );
