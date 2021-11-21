@@ -63,7 +63,7 @@ export default function Dashboard(props) {
         borderColor="black"
         borderWidth={1}
       >
-        <DataView/>
+        <DataView data={state.data}/>
       </GridItem>
       <GridItem
         colStart={1}
