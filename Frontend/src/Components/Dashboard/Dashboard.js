@@ -10,6 +10,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
 import TirePressure from "./TirePressure";
+import FaultsView from "./FaultsView";
+import DataView from "./DataView";
+import MiniMap from "./MiniMap";
 
 export default function Dashboard(props) {
   const callBackendAPI = async () => {
@@ -50,14 +53,7 @@ export default function Dashboard(props) {
         borderWidth={1}
         p={2}
       >
-        <VStack>
-          <Heading size="md">Faults</Heading>
-          <HStack flexWrap="wrap">
-            <Text>A</Text>
-            <Text>B</Text>
-            <Text>C</Text>
-          </HStack>
-        </VStack>
+        <FaultsView/>
       </GridItem>
       <GridItem
         colStart={1}
@@ -67,30 +63,7 @@ export default function Dashboard(props) {
         borderColor="black"
         borderWidth={1}
       >
-        <Heading>Data</Heading>
-        <HStack>
-          <Box>
-            <Text>Speed: {state.data?.speed}</Text>
-            <Text>Power: {state.data?.power}</Text>
-            <Text>Charge: {state.data?.charge}</Text>
-            <Text>netPower: {state.data?.netPower}</Text>
-            <Text>motorPower: {state.data?.motorPower}</Text>
-            <Text>milesLeft: {state.data?.milesLeft}</Text>
-            <Text>batteryTemp: {state.data?.batteryTemp}</Text>
-            <Text>motorTemp: {state.data?.motorTemp}</Text>
-            <Text>motorControllerTemp: {state.data?.motorControllerTemp}</Text>
-            <Text>state: {state.data?.state}</Text>
-          </Box>
-          <TirePressure
-            size={10}
-            borderWidth={1}
-            borderColor="black"
-            frontLeftTP={state.data?.frontLeftTP}
-            frontRightTP={state.data?.frontRightTP}
-            backLeftTP={state.data?.backLeftTP}
-            backRightTP={state.data?.backRightTP}
-          />
-        </HStack>
+        <DataView/>
       </GridItem>
       <GridItem
         colStart={1}
@@ -100,9 +73,7 @@ export default function Dashboard(props) {
         borderColor="black"
         borderWidth={1}
       >
-        <Center h="100%">
-          <Text as="i">Minimap</Text>
-        </Center>
+      <MiniMap/>
       </GridItem>
       <GridItem
         colStart={2}
