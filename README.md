@@ -1,16 +1,20 @@
-# chase-car-dashboard
-Chase Vehicle/Pit Dashboard
+# Solar Car 1 Engineering Dashboard
 
--Using Chakra UI for UI design
--Using react-chartjs-2 and chart.js for graphs
+## Libraries
+- [React](https://reactjs.org/) - Front-end library
+- [Chakra UI](https://chakra-ui.com/) - Component library
+- [Chart.js](https://www.chartjs.org/) & [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2) - Graph library & React wrapper
 
-###Running the Dashboard
-1. Open two terminals
-2. In one terminal:
+## Running the Dashboard
+1. To install dependencies, run ```npm i``` in your terminal.
+   1. If you just checked out a branch or updated your local
+      branch, this may be necessary to run the project.
+2. Open a second terminal session.
+3. In one session
    ```
    cd Backend
    node server.js
-3. In another terminal:
+4. In the other session
    ```
    cd Frontend
    npm start
