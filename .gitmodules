@@ -1,0 +1,4 @@
+[submodule "Backend/Data/sc1-data-format"]
+	path = Backend/Data/sc1-data-format
+	url = git@github.com:badgerloop-software/sc1-data-format.git
+	branch = main

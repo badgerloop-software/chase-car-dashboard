@@ -1,0 +1,3 @@
+-Generate data 
+-Store data in bufferarray
+-Send data through TCP to 
