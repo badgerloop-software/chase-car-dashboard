@@ -1,16 +1,5 @@
-import {
-  Box,
-  Center,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  Text,
-  VStack,
-  Select
-} from "@chakra-ui/react";
+import { Grid, GridItem, VStack, Select } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
-import TirePressure from "../GeneralData/TirePressure";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
 import MiniMap from "../MiniMap/MiniMap";
@@ -57,7 +46,7 @@ export default function Dashboard(props) {
         borderWidth={1}
         p={2}
       >
-        <FaultsView data={state.data}/>
+        <FaultsView data={state.data} />
       </GridItem>
       <GridItem
         colStart={1}
@@ -68,12 +57,17 @@ export default function Dashboard(props) {
         borderWidth={1}
       >
         <VStack h="100%" align="stretch" spacing={0}>
-          <Select size="xs" variant="flushed" bg="white" placeholder="Select option">
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
             <option value="general">General Data</option>
             <option value="battery">Battery Cells</option>
             <option value="minimap">Minimap</option>
           </Select>
-          <DataView data={state.data}/>
+          <DataView data={state.data} />
         </VStack>
       </GridItem>
       <GridItem
@@ -85,12 +79,17 @@ export default function Dashboard(props) {
         borderWidth={1}
       >
         <VStack h="100%" align="stretch" spacing={0}>
-          <Select size="xs" variant="flushed" bg="white" placeholder="Select option">
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
             <option value="general">General Data</option>
             <option value="battery">Battery Cells</option>
             <option value="minimap">Minimap</option>
           </Select>
-          <MiniMap/>
+          <MiniMap />
         </VStack>
       </GridItem>
       <GridItem
@@ -102,12 +101,17 @@ export default function Dashboard(props) {
         borderWidth={1}
       >
         <VStack h="100%" align="stretch" spacing={0}>
-          <Select size="xs" variant="flushed" bg="white" placeholder="Select option">
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
             <option value="battery">Battery</option>
             <option value="power">Power</option>
             <option value="temperature">Temperature</option>
           </Select>
-          <BatteryGraph/>
+          <BatteryGraph />
         </VStack>
       </GridItem>
       <GridItem
@@ -119,12 +123,17 @@ export default function Dashboard(props) {
         borderWidth={1}
       >
         <VStack h="100%" align="stretch" spacing={0}>
-          <Select size="xs" variant="flushed" bg="white" placeholder="Select option">
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
             <option value="battery">Battery</option>
             <option value="power">Power</option>
             <option value="temperature">Temperature</option>
           </Select>
-          <PowerGraph/>
+          <PowerGraph />
         </VStack>
       </GridItem>
       <GridItem
@@ -136,12 +145,17 @@ export default function Dashboard(props) {
         borderWidth={1}
       >
         <VStack h="100%" align="stretch" spacing={0}>
-          <Select size="xs" variant="flushed" bg="white" placeholder="Select option">
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
             <option value="battery">Battery</option>
             <option value="power">Power</option>
             <option value="temperature">Temperature</option>
           </Select>
-          <TemperatureGraph/>
+          <TemperatureGraph />
         </VStack>
       </GridItem>
     </Grid>
