@@ -14,9 +14,9 @@ class Car {
 
         this.milesLeft = 30;
 
-        this.batteryTemp = 18;
-        this.motorTemp = 19;
-        this.motorControllerTemp = 15;
+        this.batteryTemp = 18; //t1
+        this.motorTemp = 19; //t2
+        this.motorControllerTemp = 15; //t3
 
         this.lowBattery = false;
         this.bpsFault = false;
@@ -32,6 +32,9 @@ class Car {
         this.frontRightTP = 30;
         this.backtLeftTP = 30;
         this.backRightTP = 30;
+        
+        solarCell = someValue; // charge
+
 
     }
     start() {
