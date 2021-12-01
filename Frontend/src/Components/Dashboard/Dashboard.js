@@ -1,77 +1,163 @@
-import React from "react";
+import { Grid, GridItem, VStack, Select } from "@chakra-ui/react";
+import React, { useState, useLayoutEffect } from "react";
+import FaultsView from "../Faults/FaultsView";
+import DataView from "../GeneralData/DataView";
+import MiniMap from "../MiniMap/MiniMap";
+import BatteryGraph from "../Graph/BatteryGraph";
+import PowerGraph from "../Graph/PowerGraph";
+import TemperatureGraph from "../Graph/TemperatureGraph";
 
-class Dashboard extends React.Component {
+export default function Dashboard(props) {
+  const callBackendAPI = async () => {
+    const response = await fetch("/api");
+    const body = await response.json();
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            data: null
-        }
+    if (response.status !== 200) {
+      console.error("api: error");
+      throw Error(body.message);
     }
 
-    componentDidMount() {
-        this.callBackEndApi()
-            .then(
-                res => {
-                    this.setState({ data: res.response })
-                    console.log("api::", Object.keys(res.response))
-                }
-            ).catch(err => console.log(err));
-    }
+    return body;
+  };
 
-    componentDidUpdate(prevProps, prevState) {
-        // console.log(prevState.data, this.state.data)
-        // Typical usage (don't forget to compare props):
-         if (prevState?.data !== this.state.data) {
-            this.getNewData()
-         }
-      }
+  const [state, setState] = useState({ data: null });
+  useLayoutEffect(() => {
+    callBackendAPI()
+      .then((res) => {
+        setState({ data: res.response });
+        // console.log("api::", res.response);
+      })
+      .catch((err) => console.log(err));
+  }, [state]);
 
-    callBackEndApi = async () => {
-        const response = await fetch('/api');
-        const body = await response.json();
-
-        if (response.status !== 200) {
-            console.error("api: error")
-            throw Error(body.message)
-        }
-
-        return body;
-    }
-
-    getNewData(e) {
-        this.callBackEndApi()
-            .then(
-                res => {
-                    this.setState({ data: res.response })
-                    // console.log("api::", res.response)
-                }
-            ).catch(err => console.log(err));
-    }
-
-    render() {
-        return (
-            <div className="Dashboard">
-                Dashboard
-                {/* Note: Data used here is just to test to make sure we are able to communicate with the backend
-                          and update data */}
-                <p>Speed: {this.state.data?.speed}</p>
-                <p>Power: {this.state.data?.power}</p>
-                <p>Charge: {this.state.data?.charge}</p>
-                <p>netPower: {this.state.data?.netPower}</p>
-                <p>motorPower: {this.state.data?.motorPower}</p>
-                <p>milesLeft: {this.state.data?.milesLeft}</p>
-                <p>batteryTemp: {this.state.data?.batteryTemp}</p>
-                <p>motorTemp: {this.state.data?.motorTemp}</p>
-                <p>motorControllerTemp: {this.state.data?.motorControllerTemp}</p>
-                <p>frontLeftTP: {this.state.data?.frontLeftTP}</p>
-                <p>frontRightTP: {this.state.data?.frontRightTP}</p>
-                <p>backLeftTP: {this.state.data?.backLeftTP}</p>
-                <p>backRightTP: {this.state.data?.backRightTP}</p>
-                <p>state: {this.state.data?.state}</p>
-            </div>
-        );
-    }
+  return (
+    <Grid
+      templateColumns="1fr 2fr"
+      templateRows="3fr 1fr 4fr 1fr 3fr"
+      h="100vh"
+      w="100vw"
+    >
+      <GridItem
+        colStart={1}
+        colSpan={1}
+        rowStart={1}
+        rowSpan={1}
+        borderColor="black"
+        borderWidth={1}
+        p={2}
+      >
+        <FaultsView data={state.data} />
+      </GridItem>
+      <GridItem
+        colStart={1}
+        colSpan={1}
+        rowStart={2}
+        rowSpan={3}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <VStack h="100%" align="stretch" spacing={0}>
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
+            <option value="general">General Data</option>
+            <option value="battery">Battery Cells</option>
+            <option value="minimap">Minimap</option>
+          </Select>
+          <DataView data={state.data} />
+        </VStack>
+      </GridItem>
+      <GridItem
+        colStart={1}
+        colSpan={1}
+        rowStart={5}
+        rowSpan={1}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <VStack h="100%" align="stretch" spacing={0}>
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
+            <option value="general">General Data</option>
+            <option value="battery">Battery Cells</option>
+            <option value="minimap">Minimap</option>
+          </Select>
+          <MiniMap />
+        </VStack>
+      </GridItem>
+      <GridItem
+        colStart={2}
+        colSpan={1}
+        rowStart={1}
+        rowSpan={2}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <VStack h="100%" align="stretch" spacing={0}>
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
+            <option value="battery">Battery</option>
+            <option value="power">Power</option>
+            <option value="temperature">Temperature</option>
+          </Select>
+          <BatteryGraph />
+        </VStack>
+      </GridItem>
+      <GridItem
+        colStart={2}
+        colSpan={1}
+        rowStart={3}
+        rowSpan={1}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <VStack h="100%" align="stretch" spacing={0}>
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
+            <option value="battery">Battery</option>
+            <option value="power">Power</option>
+            <option value="temperature">Temperature</option>
+          </Select>
+          <PowerGraph />
+        </VStack>
+      </GridItem>
+      <GridItem
+        colStart={2}
+        colSpan={1}
+        rowStart={4}
+        rowSpan={2}
+        borderColor="black"
+        borderWidth={1}
+      >
+        <VStack h="100%" align="stretch" spacing={0}>
+          <Select
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+          >
+            <option value="battery">Battery</option>
+            <option value="power">Power</option>
+            <option value="temperature">Temperature</option>
+          </Select>
+          <TemperatureGraph />
+        </VStack>
+      </GridItem>
+    </Grid>
+  );
 }
-
-export default Dashboard;
