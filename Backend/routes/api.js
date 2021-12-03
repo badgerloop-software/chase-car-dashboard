@@ -5,50 +5,7 @@ const DATA_FORMAT = require("../Data/sc1-data-format/format.json");
 const SOLAR_CAR_DATA = require("../Data/dynamic_data.json");
 let FRONTEND_DATA = require("../Data/cache_data.json");
 
-/**
- * Unpacks a Buffer and updates the data to be passed to the front-end
- *
- * @param data the data to be unpacked
- */
-function unpackData(data) {
-    let buffOffset = 0; // Byte offset for the buffer array
-    let dataType = ""; // Data type specified in the data format json
-
-    for(const property in DATA_FORMAT) {
-        dataType = DATA_FORMAT[property][1];
-
-        // Add the data from the buffer to SOLAR_CAR_DATA
-        switch(dataType) {
-            case("uint8"):
-                // Read value from data, add it to SOLAR_CAR_DATA, and
-                // increment offset by one byte
-                SOLAR_CAR_DATA[property] = data.readUInt8(buffOffset++);
-                break;
-            case("float"):
-                // Read value from data and add it to SOLAR_CAR_DATA
-                SOLAR_CAR_DATA[property] = data.readFloatBE(buffOffset);
-                // Increment offset by four bytes
-                buffOffset += 4;
-                break;
-            case("char"):
-                // Read value from data, add it to SOLAR_CAR_DATA, and increment offset by
-                // one byte
-                SOLAR_CAR_DATA[property] = String.fromCharCode(data.readUInt8(buffOffset++));
-                break;
-            case("bool"):
-                // Read value from data, add it to SOLAR_CAR_DATA, and
-                // increment offset by one byte
-                SOLAR_CAR_DATA[property] = Boolean(data.readUInt8(buffOffset++));
-                break;
-            default:
-                break;
-        }
-    }
-
-    // Update the data to be passed to the front-end
-    FRONTEND_DATA = SOLAR_CAR_DATA;
-}
-
+// Send data to front-end
 router.get("/api", (req, res) => {
     res.send({ response: FRONTEND_DATA }).status(200);
 });
@@ -75,3 +32,41 @@ client.on('data', function (data) {
 client.on('close', function () {
     console.log(`Connection to car server (${car_port}) is closed`);
 });
+
+/**
+ * Unpacks a Buffer and updates the data to be passed to the front-end
+ *
+ * @param data the data to be unpacked
+ */
+function unpackData(data) {
+    let buffOffset = 0; // Byte offset for the buffer array
+    let dataType = ""; // Data type specified in the data format json
+
+    for(const property in DATA_FORMAT) {
+        dataType = DATA_FORMAT[property][1];
+
+        // Add the data from the buffer to SOLAR_CAR_DATA
+        switch(dataType) {
+            case("uint8"):
+                SOLAR_CAR_DATA[property] = data.readUInt8(buffOffset);
+                break;
+            case("float"):
+                SOLAR_CAR_DATA[property] = data.readFloatBE(buffOffset);
+                break;
+            case("char"):
+                SOLAR_CAR_DATA[property] = String.fromCharCode(data.readUInt8(buffOffset));
+                break;
+            case("bool"):
+                SOLAR_CAR_DATA[property] = Boolean(data.readUInt8(buffOffset));
+                break;
+            default:
+                break;
+        }
+
+        // Increment offset by amount specified in data format json
+        buffOffset += DATA_FORMAT[property][0];
+    }
+
+    // Update the data to be passed to the front-end
+    FRONTEND_DATA = SOLAR_CAR_DATA;
+}

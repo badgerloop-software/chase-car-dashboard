@@ -24,19 +24,13 @@ const server = net.createServer(function(socket) {
 	console.log("New connection")
 
 	setInterval(()=>{
-		buf1 = Buffer.alloc(52, (i++)%256); // 52 bytes (currently) in byte array format; wrap values so they don't exceed 255
+		buf1 = Buffer.alloc(52, (i++)%101); // 52 bytes (currently) in byte array format; wrap values so they don't exceed 100
 		socket.write(buf1);
 		socket.pipe(socket);
 	}, 500);
-
-
-
 });
 
 server.listen(port, ()=>{
 	console.log("Waiting for connection ...")
 	// console.log("Data:",buf1)
 });
-
-
-

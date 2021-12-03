@@ -9,12 +9,16 @@
 1. To install dependencies, run ```npm i``` in your terminal.
    1. If you just checked out a branch or updated your local
       branch, this may be necessary to run the project.
-2. Open a second terminal session.
-3. In one session
+2. Open three terminal sessions.
+3. In the first session, start the data generator and TCP server
+   ```
+   cd DataGenerator
+   node Server.js
+4. In the second session, start the server and TCP client
    ```
    cd Backend
    node server.js
-4. In the other session
+5. In the third session, run the React app
    ```
    cd Frontend
    npm start
