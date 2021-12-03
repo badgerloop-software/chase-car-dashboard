@@ -1,6 +1,6 @@
 const express = require("express");
 const http = require("http");
-const { Car } = require("./Car")
+const { Car } = require("./Car");
 var net = require('net');
 
 // const port = 4003;
@@ -17,18 +17,20 @@ var net = require('net');
 const port = 4003;
 
 const { Buffer } = require('buffer');
-const buf1 = Buffer.alloc(10,1);
+let i = 0;
+let buf1 = Buffer.alloc(52, 0);
 
 const server = net.createServer(function(socket) {
 	console.log("New connection")
 
 	setInterval(()=>{
+		buf1 = Buffer.alloc(52, (i++)%256); // 52 bytes (currently) in byte array format; wrap values so they don't exceed 255
 		socket.write(buf1);
 		socket.pipe(socket);
 	}, 500);
-	
 
- 
+
+
 });
 
 server.listen(port, ()=>{
