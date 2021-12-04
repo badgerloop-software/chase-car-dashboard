@@ -10,7 +10,7 @@ export default function DataView(props) {
           <Text>Speed: {props.data?.speed}</Text>
           <Text>Power: {props.data?.netPower}</Text>
           <Text>Charge: {props.data?.charge}</Text>
-          <Text>netPower: {props.data?.netPower}</Text>
+          <Text>netPower: {props.data?.batteryVoltage * props.data?.batteryCurrent}</Text>
           <Text>motorPower: {props.data?.motorPower}</Text>
           <Text>milesLeft: {props.data?.milesLeft}</Text>
           <Text>batteryTemp: {props.data?.batteryTemp}</Text>
