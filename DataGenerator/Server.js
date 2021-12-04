@@ -14,17 +14,24 @@ var net = require('net');
 // server.listen(port, () => console.log(`Listening on port ${port}`));
 
 //-----------TCP-------------
+const DATA_FORMAT = require("../Backend/Data/sc1-data-format/format.json");
 const port = 4003;
+
+// Calculate the number of bytes to allocate for the Buffer
+let bytes = 0;
+for(const property in DATA_FORMAT) {
+	bytes += DATA_FORMAT[property][0];
+}
 
 const { Buffer } = require('buffer');
 let i = 0;
-let buf1 = Buffer.alloc(52, 0);
+let buf1 = Buffer.alloc(bytes, 0);
 
 const server = net.createServer(function(socket) {
 	console.log("New connection")
 
 	setInterval(()=>{
-		buf1 = Buffer.alloc(52, (i++)%101); // 52 bytes (currently) in byte array format; wrap values so they don't exceed 100
+		buf1 = Buffer.alloc(bytes, (i++)%101); // 52 bytes (currently) in byte array format; wrap values so they don't exceed 100
 		socket.write(buf1);
 		socket.pipe(socket);
 	}, 500);
