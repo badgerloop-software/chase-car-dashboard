@@ -28,12 +28,12 @@ let i = 0;
 let buf1 = Buffer.alloc(bytes, 0);
 
 const server = net.createServer(function(socket) {
-	console.log("New connection")
+	console.log("New connection :)")
 
 	setInterval(()=>{
 		buf1 = Buffer.alloc(bytes, (i++)%101); // 52 bytes (currently) in byte array format; wrap values so they don't exceed 100
 		socket.write(buf1);
-		socket.pipe(socket);
+		// socket.pipe(socket);
 	}, 500);
 });
 
