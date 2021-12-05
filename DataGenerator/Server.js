@@ -24,20 +24,42 @@ for(const property in DATA_FORMAT) {
 }
 
 const { Buffer } = require('buffer');
-let i = 0;
-let buf1 = Buffer.alloc(bytes, 0);
+let buf1 = Buffer.alloc(bytes, 0); // Fill a buffer of the correct size with zeros
+let nextValue = 0;
+let buffOffset = 0;
 
 const server = net.createServer(function(socket) {
 	console.log("New connection :)")
 
 	setInterval(()=>{
-		/*Psuedocode: Automatically populating a Buffer of the correct length with groups of bytes in the correct order
-		              (speed, charge, solarPower, etc.) and formats (float, char, uint8, etc.) that represent random values from 0-100
+		buffOffset = 0; // Offset when adding each value to buf1
+		nextValue = (nextValue+1)%100; // Generate a new value
+
+		// Fill buf1 with new data according to the data format file
 		for(const property in DATA_FORMAT) {
-			randomVal = (i++)%101;
-			buf1.appendByteGroup(randomVal.toByteGroup(DATA_FORMAT[property][1]));
-		}*/
-		buf1 = Buffer.alloc(bytes, (i++)%101); // 52 bytes (currently) in byte array format; wrap values so they don't exceed 100
+			// Add the next value to the Buffer based on the data type
+			switch(DATA_FORMAT[property][1]) {
+				case("uint8"):
+					buf1.writeUInt8(nextValue, buffOffset);
+					break;
+				case("float"):
+					buf1.writeFloatBE(nextValue+0.125, buffOffset);
+					break;
+				case("char"):
+					buf1.writeUInt8(nextValue, buffOffset);
+					break;
+				case("bool"):
+					buf1.writeUInt8(nextValue%2, buffOffset);
+					break;
+				default:
+					// Fill the correct number of bytes with the next value if its type is not listed above
+					buf1.fill(nextValue, buffOffset, buffOffset + DATA_FORMAT[property][0]);
+					break;
+			}
+			// Increment offset by amount specified in data format json
+			buffOffset += DATA_FORMAT[property][0];
+		}
+
 		socket.write(buf1);
 		// socket.pipe(socket);
 	}, 500);
