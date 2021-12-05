@@ -1,0 +1,20 @@
+{
+  "name": "chase-car-dashboard",
+  "version": "1.0.0",
+  "description": "- [React](https://reactjs.org/) - Front-end library\r - [Chakra UI](https://chakra-ui.com/) - Component library\r - [Chart.js](https://www.chartjs.org/) & [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2) - Graph library & React wrapper",
+  "main": "index.js",
+  "scripts": {
+    "start":" (cd DataGenerator && node server.js) && (cd Backend && node server.js)" ,
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badgerloop-software/chase-car-dashboard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/badgerloop-software/chase-car-dashboard/issues"
+  },
+  "homepage": "https://github.com/badgerloop-software/chase-car-dashboard#readme"
+}
