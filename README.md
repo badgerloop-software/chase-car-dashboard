@@ -13,7 +13,7 @@
 3. In the first session, start the data generator and TCP server
    ```
    cd DataGenerator
-   node server.js
+   node Server.js
 4. In the second session, start the server and TCP client
    ```
    cd Backend
