@@ -1,9 +1,11 @@
 import { Grid, GridItem, VStack, Select } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
+import DataViewOptions from "./DataViewOptions";
 import DataView from "../GeneralData/DataView";
 import BatteryCells from "../BatteryCells/BatteryCells"
 import MiniMap from "../MiniMap/MiniMap";
+import GraphOptions from "./GraphOptions";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
@@ -192,9 +194,7 @@ export default function Dashboard(props) {
                   value={dataView1}
                   onChange={selectDataView}
               >
-                <option value="general">General Data</option>
-                <option value="battery">Battery Cells</option>
-                <option value="minimap">Minimap</option>
+                <DataViewOptions />
               </Select>
               {(switchDataView)(dataView1)}
             </VStack>
@@ -213,9 +213,7 @@ export default function Dashboard(props) {
                   value={dataView2}
                   onChange={selectDataView}
               >
-                <option value="general">General Data</option>
-                <option value="battery">Battery Cells</option>
-                <option value="minimap">Minimap</option>
+                <DataViewOptions />
               </Select>
               {(switchDataView)(dataView2)}
             </VStack>
@@ -246,9 +244,7 @@ export default function Dashboard(props) {
                   value={graph1}
                   onChange={selectGraph}
               >
-                <option value="battery">Battery</option>
-                <option value="power">Power</option>
-                <option value="temperature">Temperature</option>
+                <GraphOptions />
               </Select>
               {(switchGraph)(graph1)}
             </VStack>
@@ -268,9 +264,7 @@ export default function Dashboard(props) {
                   value={graph2}
                   onChange={selectGraph}
               >
-                <option value="battery">Battery</option>
-                <option value="power">Power</option>
-                <option value="temperature">Temperature</option>
+                <GraphOptions />
               </Select>
               {(switchGraph)(graph2)}
             </VStack>
@@ -290,9 +284,7 @@ export default function Dashboard(props) {
                   value={graph3}
                   onChange={selectGraph}
               >
-                <option value="battery">Battery</option>
-                <option value="power">Power</option>
-                <option value="temperature">Temperature</option>
+                <GraphOptions />
               </Select>
               {(switchGraph)(graph3)}
             </VStack>
