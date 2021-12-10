@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "scripts": {
     "data-generator": "cd DataGenerator && npm start",
-    "backend": "wait-port 4003",
+    "backend": "wait-port 4003 && cd Backend && npm start",
     "frontend": "wait-port 4001 && cd Frontend && npm start",
+    "stab": "wait-port 4001",
     "start": "run-p data-generator backend frontend"
   },
   "devDependencies": {

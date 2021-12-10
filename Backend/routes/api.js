@@ -33,6 +33,11 @@ client.on("close", function () {
   console.log(`Connection to car server (${car_port}) is closed`);
 });
 
+client.on("error", (err) => {
+  console.log("Client errored out:", err);
+  client.destroy();
+});
+
 /**
  * Unpacks a Buffer and updates the data to be passed to the front-end
  *

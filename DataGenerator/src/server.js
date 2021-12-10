@@ -31,18 +31,27 @@ let buffOffset = 0;
 const server = net.createServer((socket) => {
   console.log("New connection :)");
 
+  let interval;
+  function exit() {
+    clearInterval(interval);
+    socket.destroy();
+    console.log("socket successfully destroyed");
+  }
+
   socket.on("error", (error) => {
     console.warn("socket errored", error);
-    socket.destroy();
+    exit();
   });
   socket.on("close", (close) => {
     console.warn("socket closed", close);
+    exit();
   });
   socket.on("end", () => {
     console.warn("socket ended");
+    exit();
   });
 
-  setInterval(() => {
+  interval = setInterval(() => {
     buffOffset = 0; // Offset when adding each value to buf1
     nextValue = (nextValue + 1) % 100; // Generate a new value
 
