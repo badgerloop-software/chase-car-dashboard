@@ -8,22 +8,22 @@ export default function BatteryCells(props) {
             <SimpleGrid columns={4} rows={3} spacingX={'0.5vw'} spacingY={'0.5vh'}>
                 <CellGroup
                     groupNum={1}
-                    voltage={5.5}
+                    voltage={props.data?.batteryGroup1 ?? 5.0}
                     current={2.5}
                 />
                 <CellGroup
                     groupNum={2}
-                    voltage={5.5}
+                    voltage={props.data?.batteryGroup2 ?? 5.0}
                     current={2.5}
                 />
                 <CellGroup
                     groupNum={3}
-                    voltage={5.5}
+                    voltage={props.data?.batteryGroup3 ?? 5.0}
                     current={2.5}
                 />
                 <CellGroup
                     groupNum={4}
-                    voltage={5.5}
+                    voltage={props.data?.batteryGroup4 ?? 5.0}
                     current={2.5}
                 />
                 <CellGroup
