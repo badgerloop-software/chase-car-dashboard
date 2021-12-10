@@ -2,9 +2,9 @@
   "name": "chase-car-dashboard-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "build": "babel server.js -d dist",
+    "build": "babel ./src/ -d dist",
     "start": "npm run build && node ./dist/server.js"
   },
   "keywords": [],

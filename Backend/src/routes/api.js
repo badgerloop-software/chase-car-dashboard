@@ -1,13 +1,15 @@
 import { Router } from "express";
-import DATA_FORMAT from "../Data/sc1-data-format/format.json";
-import SOLAR_CAR_DATA from "../Data/dynamic_data.json";
-import FRONTEND_DATA from "../Data/cache_data.json";
+import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
+import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
+import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 
 const router = Router();
+let solarCarData = INITIAL_SOLAR_CAR_DATA,
+  frontendData = INITIAL_FRONTEND_DATA;
 
 // Send data to front-end
 router.get("/api", (req, res) => {
-  res.send({ response: FRONTEND_DATA }).status(200);
+  res.send({ response: frontendData }).status(200);
 });
 
 export default router;
@@ -53,18 +55,18 @@ function unpackData(data) {
     // Add the data from the buffer to SOLAR_CAR_DATA
     switch (dataType) {
       case "uint8":
-        SOLAR_CAR_DATA[property] = data.readUInt8(buffOffset);
+        solarCarData[property] = data.readUInt8(buffOffset);
         break;
       case "float":
-        SOLAR_CAR_DATA[property] = data.readFloatBE(buffOffset);
+        solarCarData[property] = data.readFloatBE(buffOffset);
         break;
       case "char":
-        SOLAR_CAR_DATA[property] = String.fromCharCode(
+        solarCarData[property] = String.fromCharCode(
           data.readUInt8(buffOffset)
         );
         break;
       case "bool":
-        SOLAR_CAR_DATA[property] = Boolean(data.readUInt8(buffOffset));
+        solarCarData[property] = Boolean(data.readUInt8(buffOffset));
         break;
       default:
         break;
@@ -75,5 +77,5 @@ function unpackData(data) {
   }
 
   // Update the data to be passed to the front-end
-  FRONTEND_DATA = SOLAR_CAR_DATA;
+  frontendData = solarCarData;
 }

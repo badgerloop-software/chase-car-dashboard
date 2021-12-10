@@ -38,6 +38,7 @@ const server = net.createServer(socket => {
   function exit() {
     clearInterval(interval);
     socket.destroy();
+    console.log("socket successfully destroyed");
   }
 
   socket.on("error", error => {

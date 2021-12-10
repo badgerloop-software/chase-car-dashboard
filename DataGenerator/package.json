@@ -4,7 +4,7 @@
   "description": "-Generate data \r -Store data in bufferarray\r -Send data through TCP to",
   "main": "server.js",
   "scripts": {
-    "build": "babel ./src/server.js -d dist",
+    "build": "babel ./src/ -d dist",
     "start": "npm run build && node ./dist/server.js"
   },
   "author": "",
