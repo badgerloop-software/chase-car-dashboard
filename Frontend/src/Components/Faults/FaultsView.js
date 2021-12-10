@@ -7,7 +7,6 @@ export default function Faults(props) {
       <HStack flexWrap="wrap">
         <Text>E-Stop {props.data?.eStop.toString()}</Text>
         <Text>BPS Fault {props.data?.bpsFault.toString()}</Text>
-        <Text>Low Battery {props.data?.lowBattery.toString()}</Text>
       </HStack>
     </VStack>
   );
