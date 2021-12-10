@@ -1,8 +1,15 @@
 {
+<<<<<<< HEAD
   "name": "chase-car-dashboard-backend",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.js",
+=======
+  "name": "chase-car-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+>>>>>>> main
   "scripts": {
     "build": "babel ./src/ -d dist",
     "start": "npm run build && node ./dist/server.js"
