@@ -1,11 +1,9 @@
 import { Grid, GridItem, VStack, Select } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
-import DataViewOptions from "./DataViewOptions";
 import DataView from "../GeneralData/DataView";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import MiniMap from "../MiniMap/MiniMap";
-import GraphOptions from "./GraphOptions";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
