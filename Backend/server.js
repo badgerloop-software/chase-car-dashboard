@@ -1,12 +1,11 @@
-const express = require("express");
-const http = require("http");
+import express from "express";
+import { createServer } from "http";
+import index from "./routes/api";
 
 const port = 4001;
-const index = require("./routes/api");
-
-const app = express()
+const app = express();
 app.use(index);
 
-const server = http.createServer(app);
+const server = createServer(app);
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
