@@ -1,5 +1,5 @@
 {
-  "name": "chase-car-dashboard",
+  "name": "chase-car-dashboard-frontend",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:4001",
@@ -41,5 +41,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4"
   }
 }

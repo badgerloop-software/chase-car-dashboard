@@ -1,14 +1,20 @@
 {
-  "name": "chase-car-dashboard",
+  "name": "chase-car-dashboard-datagenerator",
   "version": "1.0.0",
   "description": "-Generate data \r -Store data in bufferarray\r -Send data through TCP to",
-  "main": "Server.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel ./src/ -d dist",
+    "start": "npm run build && node ./dist/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4"
   }
 }
