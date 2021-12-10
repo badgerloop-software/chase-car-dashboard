@@ -8,9 +8,8 @@ export default function DataView(props) {
       <HStack>
         <Box>
           <Text>Speed: {props.data?.speed}</Text>
-          <Text>Power: {props.data?.power}</Text>
           <Text>Charge: {props.data?.charge}</Text>
-          <Text>netPower: {props.data?.netPower}</Text>
+          <Text>netPower: {(props.data?.batteryVoltage ?? 0) * (props.data?.batteryCurrent ?? 0)}</Text>
           <Text>motorPower: {props.data?.motorPower}</Text>
           <Text>milesLeft: {props.data?.milesLeft}</Text>
           <Text>batteryTemp: {props.data?.batteryTemp}</Text>
