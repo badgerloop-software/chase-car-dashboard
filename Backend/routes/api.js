@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const DATA_FORMAT = require("../Data/sc1-data-format/format.json");
-const SOLAR_CAR_DATA = require("../Data/dynamic_data.json");
+let SOLAR_CAR_DATA = require("../Data/dynamic_data.json");
 let FRONTEND_DATA = require("../Data/cache_data.json");
 
 // Send data to front-end
