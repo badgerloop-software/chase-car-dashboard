@@ -37,6 +37,12 @@ export default function BatteryGraph(props) {
                 display: true,
                 text: 'Battery Chart',
             },
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                }
+            }
         },
     };
 
