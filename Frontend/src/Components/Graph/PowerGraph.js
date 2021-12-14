@@ -36,7 +36,7 @@ export default function PowerGraph(props) {
             title: {
                 display: true,
                 text: 'Power Chart',
-            },
+            }
         },
     };
 
@@ -49,20 +49,27 @@ export default function PowerGraph(props) {
                 label: 'Net Power',
                 // NOTE Remove faker from package.json when actual data is put in
                 data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            },
-            {
-                label: 'Motor Power',
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                fill: {
+                    above: 'rgba(255, 64, 64, 0.25)',
+                    below: 'rgba(64, 255, 64, 0.25)',
+                    target:'+1'
+                },
+                borderColor: 'rgb(255, 64, 64)',
+                backgroundColor: 'rgba(255, 64, 64, 0.5)',
             },
             {
                 label: 'Solar Power',
                 data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
-                borderColor: 'rgb(255, 206, 86)',
-                backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                fill: false,
+                borderColor: 'rgb(64, 255, 64)',
+                backgroundColor: 'rgba(64, 255, 64, 0.5)',
+            },
+            {
+                label: 'Motor Power',
+                data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                fill: false,
+                borderColor: 'rgb(127, 127, 127)',
+                backgroundColor: 'rgba(127, 127, 127, 0.5)',
             },
         ],
     };
@@ -79,7 +86,7 @@ export default function PowerGraph(props) {
                 Power
             </Text>
             <Center flex={1}>
-                <Line options={ options } data={ data } />
+                <Line options={ options} data={ data } />
             </Center>
         </HStack>
     );
