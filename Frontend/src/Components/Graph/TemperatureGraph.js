@@ -29,6 +29,12 @@ export default function TemperatureGraph(props) {
         animation: {
             duration: 0,
         },
+        scales: {
+            y: {
+                suggestedMin: 0,
+                suggestedMax: 50
+            }
+        },
         plugins: {
             legend: {
                 position: 'left',
@@ -46,17 +52,23 @@ export default function TemperatureGraph(props) {
         labels,
         datasets: [
             {
-                label: 'Temperature 1',
+                label: 'Battery',
                 // NOTE Remove faker from package.json when actual data is put in
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                data: props.data?.batteryTemp ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
             {
-                label: 'Temperature 2',
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                label: 'Motor',
+                data: props.data?.motorTemp ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
                 borderColor: 'rgb(53, 162, 235)',
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+            {
+                label: 'Motor Controller',
+                data: props.data?.motorControllerTemp ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                borderColor: 'rgb(255, 210, 100)',
+                backgroundColor: 'rgba(255, 210, 100, 0.5)',
             },
         ],
     };

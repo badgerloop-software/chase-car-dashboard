@@ -29,6 +29,12 @@ export default function BatteryGraph(props) {
         animation: {
             duration: 0,
         },
+        scales: {
+            y: {
+                min: 0,
+                suggestedMax: 100
+            }
+        },
         plugins: {
             legend: {
                 position: 'left',
@@ -36,17 +42,11 @@ export default function BatteryGraph(props) {
             title: {
                 display: true,
                 text: 'Battery Chart',
-            },
-            scales: {
-                y: {
-                    min: 0,
-                    max: 100,
-                }
             }
         },
     };
 
-    const labels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const labels = props.data?.timestamps ?? [10,9,8,7,6,5,4,3,2,1];
 
     const data = {
         labels,
@@ -54,7 +54,7 @@ export default function BatteryGraph(props) {
             {
                 label: 'Battery %',
                 // NOTE Remove faker from package.json when actual data is put in
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                data: props.data?.charge ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             }
