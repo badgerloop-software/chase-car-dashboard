@@ -5,8 +5,8 @@ export default function Faults(props) {
     <VStack>
       <Heading size="md">Faults</Heading>
       <HStack flexWrap="wrap">
-        <Text>E-Stop {props.data?.eStop.toString()}</Text>
-        <Text>BPS Fault {props.data?.bpsFault.toString()}</Text>
+        <Text>E-Stop {props.data?.eStop[0].toString()}</Text>
+        <Text>BPS Fault {props.data?.bpsFault[0].toString()}</Text>
       </HStack>
     </VStack>
   );

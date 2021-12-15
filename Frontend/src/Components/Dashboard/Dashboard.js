@@ -146,11 +146,11 @@ export default function Dashboard(props) {
   // Choose the graph to return/display based on the given option
   const switchGraph = (optionValue) => {
     if (optionValue === "battery") {
-      return <BatteryGraph />;
+      return <BatteryGraph data={ state.data } />;
     } else if (optionValue === "power") {
-      return <PowerGraph />;
+      return <PowerGraph data={ state.data } />;
     } else if (optionValue === "temperature") {
-      return <TemperatureGraph />;
+      return <TemperatureGraph data={ state.data } />;
     } else {
       return <VStack />;
     }
