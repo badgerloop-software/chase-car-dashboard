@@ -7,6 +7,7 @@ import MiniMap from "../MiniMap/MiniMap";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
+import GeneralGraph from "../Graph/GeneralGraph";
 
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
@@ -151,6 +152,8 @@ export default function Dashboard(props) {
       return <PowerGraph data={ state.data } />;
     } else if (optionValue === "temperature") {
       return <TemperatureGraph data={ state.data } />;
+    } else if (optionValue === "general") {
+      return <GeneralGraph data={ state.data } />;
     } else {
       return <VStack />;
     }
@@ -295,6 +298,7 @@ function GraphOptions(props) {
       <option value="battery">Battery</option>
       <option value="power">Power</option>
       <option value="temperature">Temperature</option>
+      <option value="general">Any Data</option>
     </>
   );
 }
