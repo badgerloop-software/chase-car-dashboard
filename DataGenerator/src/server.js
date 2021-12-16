@@ -25,7 +25,7 @@ for (const property in DATA_FORMAT) {
 
 import { Buffer } from "buffer";
 let buf1 = Buffer.alloc(bytes, 0); // Fill a buffer of the correct size with zeros
-let nextValue = 0;
+let nextValue = 1;
 let buffOffset = 0;
 
 const server = net.createServer((socket) => {
@@ -53,23 +53,24 @@ const server = net.createServer((socket) => {
 
   interval = setInterval(() => {
     buffOffset = 0; // Offset when adding each value to buf1
-    nextValue = (nextValue + 1) % 100; // Generate a new value
 
     // Fill buf1 with new data according to the data format file
     for (const property in DATA_FORMAT) {
+      nextValue = Math.abs(Math.sin(nextValue)) * 100; // Generate a new value
+
       // Add the next value to the Buffer based on the data type
       switch (DATA_FORMAT[property][1]) {
         case "uint8":
-          buf1.writeUInt8(nextValue, buffOffset);
+          buf1.writeUInt8(Math.round(nextValue), buffOffset);
           break;
         case "float":
-          buf1.writeFloatBE(nextValue + 0.125, buffOffset);
+          buf1.writeFloatBE(Math.floor(nextValue) + 0.125, buffOffset);
           break;
         case "char":
-          buf1.writeUInt8(nextValue, buffOffset);
+          buf1.writeUInt8(Math.round(nextValue), buffOffset);
           break;
         case "bool":
-          buf1.writeUInt8(nextValue % 2, buffOffset);
+          buf1.writeUInt8(Math.round(nextValue) % 2, buffOffset);
           break;
         default:
           // Fill the correct number of bytes with the next value if its type is not listed above
