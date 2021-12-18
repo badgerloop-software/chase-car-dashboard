@@ -27,7 +27,9 @@ function generateData(data) {
     const labels = data?.timestamps ?? [10,9,8,7,6,5,4,3,2,1];
     let i=0;
 
+    // Add all datasets
     for(const key in data) {
+        // Don't add timestamps as a dataset
         if(key !== "timestamps") {
             datasets.push(
                 {
@@ -47,7 +49,7 @@ function generateData(data) {
     };
 }
 
-export default function TemperatureGraph(props) {
+export default function CustomGraph(props) {
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -66,7 +68,7 @@ export default function TemperatureGraph(props) {
             },
             title: {
                 display: true,
-                text: 'Temperature Chart',
+                text: 'Custom Chart',
             },
         },
     };
@@ -80,7 +82,7 @@ export default function TemperatureGraph(props) {
                 borderLeftWidth={1}
                 textAlign="center"
             >
-                Temperature
+                Custom
             </Text>
             <Center flex={1}>
                 <Line options={ options } data={ generateData(props.data) } />

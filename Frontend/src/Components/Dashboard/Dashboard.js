@@ -7,7 +7,7 @@ import MiniMap from "../MiniMap/MiniMap";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
-import GeneralGraph from "../Graph/GeneralGraph";
+import CustomGraph from "../Graph/CustomGraph";
 
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
@@ -91,8 +91,8 @@ export default function Dashboard(props) {
   // Update the value indicating which graph to display when an option is selected
   const selectGraph = (event) => {
     if (event.target.id === "graphSelect1") {
-      // Avoid duplicate graphs, unless they are both empty
-      if (event.target.value !== "") {
+      // Avoid duplicate graphs, unless they are both empty or custom
+      if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         switch (event.target.value) {
@@ -108,8 +108,8 @@ export default function Dashboard(props) {
       }
       setGraph1(event.target.value);
     } else if (event.target.id === "graphSelect2") {
-      // Avoid duplicate graphs, unless they are both empty
-      if (event.target.value !== "") {
+      // Avoid duplicate graphs, unless they are both empty or custom
+      if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         switch (event.target.value) {
@@ -125,8 +125,8 @@ export default function Dashboard(props) {
       }
       setGraph2(event.target.value);
     } else if (event.target.id === "graphSelect3") {
-      // Avoid duplicate graphs, unless they are both empty
-      if (event.target.value !== "") {
+      // Avoid duplicate graphs, unless they are both empty or custom
+      if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         switch (event.target.value) {
@@ -152,8 +152,8 @@ export default function Dashboard(props) {
       return <PowerGraph data={ state.data } />;
     } else if (optionValue === "temperature") {
       return <TemperatureGraph data={ state.data } />;
-    } else if (optionValue === "general") {
-      return <GeneralGraph data={ state.data } />;
+    } else if (optionValue === "custom") {
+      return <CustomGraph data={ state.data } />;
     } else {
       return <VStack />;
     }
@@ -298,7 +298,7 @@ function GraphOptions(props) {
       <option value="battery">Battery</option>
       <option value="power">Power</option>
       <option value="temperature">Temperature</option>
-      <option value="general">Any Data</option>
+      <option value="custom">Custom</option>
     </>
   );
 }
