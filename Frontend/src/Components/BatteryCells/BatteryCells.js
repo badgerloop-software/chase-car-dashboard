@@ -1,4 +1,4 @@
-import { Flex, Spacer, SimpleGrid, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Spacer, SimpleGrid, Heading, Text, VStack } from "@chakra-ui/react";
 import CellGroup from "./CellGroup";
 
 export default function BatteryCells(props) {
@@ -14,7 +14,14 @@ export default function BatteryCells(props) {
                 </Heading>
             </Flex>
             <Heading size="xs">Battery Cells</Heading>
-            <SimpleGrid columns={6} rows={5} spacingX={'0.25vw'} spacingY={'0.25vh'} >
+            <SimpleGrid
+                columns={6}
+                rows={5}
+                spacingX={'0.25vw'}
+                spacingY={'0.25vh'}
+                overflowY="scroll"
+                maxHeight="27.5vh"
+            >
                 <CellGroup
                     groupNum={1}
                     voltage={props.data?.batteryGroup1[0] ?? 5.0}
