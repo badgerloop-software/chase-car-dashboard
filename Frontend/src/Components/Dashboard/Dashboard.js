@@ -153,10 +153,43 @@ export default function Dashboard(props) {
     } else if (optionValue === "temperature") {
       return <TemperatureGraph data={ state.data } />;
     } else if (optionValue === "custom") {
-      return <CustomGraph data={ state.data } />;
+      return <CustomGraph
+                id=""
+                data={ state.data }
+                title=""
+                buttons={[]}
+                datasets={[]}
+                save={ saveCustomGraph }
+             />;
     } else {
-      return <VStack />;
+      for(const title in customGraphData) {
+        if (optionValue === title) {
+          return <CustomGraph
+                    id={ title }
+                    data={ state.data }
+                    title={ title }
+                    buttons={ customGraphData[title].buttons }
+                    datasets={ customGraphData[title].datasets }
+                    save={ saveCustomGraph }
+                 />;
+        }
+      }
     }
+  };
+
+  //------------------------- Saving custom graphs ----------------------------
+
+  const [customGraphData, setCustomGraphData] = React.useState({});
+
+  const saveCustomGraph = (data) => {
+    let graphData = customGraphData;
+
+    graphData[data.title] = data;
+
+    setCustomGraphData(graphData);
+
+    console.log(customGraphData);
+    // console.log("Colors: ", data.colors, "\nDatasets: ", data.datasets, "\nButtons: ", data.buttons, "\nTitle: ", data.title);
   };
 
   return (
@@ -232,7 +265,7 @@ export default function Dashboard(props) {
               value={graph1}
               onChange={selectGraph}
             >
-              <GraphOptions />
+              <GraphOptions customGraphs={ customGraphData } />
             </Select>
             {switchGraph(graph1)}
           </VStack>
@@ -252,7 +285,7 @@ export default function Dashboard(props) {
               value={graph2}
               onChange={selectGraph}
             >
-              <GraphOptions />
+              <GraphOptions customGraphs={ customGraphData } />
             </Select>
             {switchGraph(graph2)}
           </VStack>
@@ -272,7 +305,7 @@ export default function Dashboard(props) {
               value={graph3}
               onChange={selectGraph}
             >
-              <GraphOptions />
+              <GraphOptions customGraphs={ customGraphData } />
             </Select>
             {switchGraph(graph3)}
           </VStack>
@@ -293,11 +326,20 @@ function DataViewOptions(props) {
 }
 
 function GraphOptions(props) {
+  let customGraphs = [];
+
+  for(const title in props.customGraphs) {
+    customGraphs.push(
+        <option value={title} >{title}</option>
+    );
+  }
+
   return (
     <>
       <option value="battery">Battery</option>
       <option value="power">Power</option>
       <option value="temperature">Temperature</option>
+      {customGraphs}
       <option value="custom">Custom</option>
     </>
   );

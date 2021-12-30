@@ -5,6 +5,11 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
+    FormControl,
+    FormLabel,
+    FormHelperText,
+    FormErrorMessage,
+    Input,
     Button,
     IconButton,
     ButtonGroup,
@@ -17,7 +22,7 @@ import {
     useDisclosure,
     useBoolean
 } from "@chakra-ui/react";
-import React, { View, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import {
     Chart as ChartJS,
@@ -41,10 +46,57 @@ ChartJS.register(
 );
 
 export default function CustomGraph(props) {
-    const {isOpen, onOpen, onClose} = useDisclosure();
-    let [currentDatasets, setDatasets] = React.useState([]);
+    const {isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose} = useDisclosure();
+    const {isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose} = useDisclosure();
+    const [prevId, setPrevId] = React.useState("");
+    const [title, setTitle] = React.useState(props.title);
+    let [currentDatasets, setDatasets] = React.useState([]);//props.datasets);
     let [currentColors, setColors] = React.useState([]);
-    let [currentDatasetButtons, setDatasetButtons] = React.useState([]);
+    let [currentDatasetButtons, setDatasetButtons] = React.useState([]);//props.buttons);
+
+    // -------- Update component when switching to another custom graph ----------
+
+    useEffect(() => {
+        initializeGraph();
+    }, [props.id]);
+
+    // ----------------------- Initialize a saved graph --------------------------
+
+    const initializeGraph = () => {
+        const datasets = [];
+        const datasetButtons = [];
+        let i=0;
+
+        setPrevId(props.id);
+        setTitle(props.title);
+
+        for(const key in props.data) {
+            if(key !== "timestamps") {
+                if(props.datasets.includes(key)) {
+                    datasets.push(key);
+                    datasetButtons.push(DatasetButton(key, () => removeDataset(key), currentColors[i]));
+                }
+            }
+
+            i++;
+        }
+
+        // TODO - Is there a way around having to assign and set currentDatasets and currentDatasetButtons?
+        // Update now...
+        currentDatasets = datasets;
+        currentDatasetButtons = datasetButtons;
+        // ... and later?!?!?!
+        setDatasets(datasets);
+        setDatasetButtons(datasetButtons);
+    };
+
+    // ------------------------- Change/Validate title ---------------------------
+
+    const changeTitle = (event) => {
+        setTitle(event.target.value);
+    };
+
+    const isInvalidTitle = ((title === "") || (title === "custom") || (title === "Custom"));
 
     // ---------------- Cancel adding selected datasets -----------------
 
@@ -54,7 +106,7 @@ export default function CustomGraph(props) {
             if(key !== "timestamps") {
                 // Check which DataButtons are on and not hidden (indicating that they were just turned on)
                 if(!document.getElementById(key + "Btn")?.hidden
-                    && (document.getElementById(key + "Btn")?.getAttribute("addData") === "true")) {
+                    && (document.getElementById(key + "Btn")?.getAttribute("adddata") === "true")) {
                     // Reset the button so that it is false next time the user opens the Modal
                     document.getElementById(key + "Btn").click();
                 }
@@ -62,7 +114,7 @@ export default function CustomGraph(props) {
         }
 
         // Close the Modal
-        onClose();
+        onAddClose();
     };
 
     // --------------------- Add selected datasets ---------------------
@@ -72,11 +124,9 @@ export default function CustomGraph(props) {
         const datasetButtons = [];
         let i=0;
 
-        console.log("Before adding: ", currentDatasetButtons);
-
         for(const key in props.data) {
             if(key !== "timestamps") {
-                if(document.getElementById(key + "Btn")?.getAttribute("addData") === "true") {
+                if(document.getElementById(key + "Btn")?.getAttribute("adddata") === "true") {
                     datasets.push(key);
                     datasetButtons.push(DatasetButton(key, () => removeDataset(key), currentColors[i]));
 
@@ -92,7 +142,7 @@ export default function CustomGraph(props) {
         }
 
         // Close the Modal
-        onClose();
+        onAddClose();
 
         // TODO - Is there a way around having to assign and set currentDatasets and currentDatasetButtons?
         // Update now...
@@ -101,29 +151,22 @@ export default function CustomGraph(props) {
         // ... and later?!?!?!
         setDatasets(datasets);
         setDatasetButtons(datasetButtons);
-
-        console.log("After adding: ", currentDatasetButtons);
     };
 
     // ------------ Remove dataset (when attached close icon button is clicked) ----------------
 
     const removeDataset = (datasetLabel) => {
-        console.log("Before removing: ", currentDatasetButtons, datasetLabel, currentDatasets.indexOf(datasetLabel));
-
         // Find the index of the element to be removed
         const datasetIndex = currentDatasets.indexOf(datasetLabel);
         // Copy currentDatasets and currentDatasetButtons without the element at datasetIndex
-        const newDatasets = currentDatasets.filter((dataset, idx) => { return (idx != datasetIndex) });
-        const newDatasetButtons = currentDatasetButtons.filter((button, idx) => { return (idx != datasetIndex) });
-
+        const newDatasets = currentDatasets.filter((dataset, idx) => { return (idx !== datasetIndex) });
+        const newDatasetButtons = currentDatasetButtons.filter((button, idx) => { return (idx !== datasetIndex) });
         // Update now...
         currentDatasets = newDatasets;
         currentDatasetButtons = newDatasetButtons;
         // ... and later?!?!?!
         setDatasets(newDatasets);
         setDatasetButtons(newDatasetButtons);
-
-        console.log("After removing: ", currentDatasetButtons);
     };
 
     // ------------ Generate buttons for Modal -----------------
@@ -131,11 +174,10 @@ export default function CustomGraph(props) {
     const populateDataButtons = () => {
         const dataButtons = [];
         let i = 0;
-        if(currentColors.length == 0) {
+        if(currentColors.length === 0) {
             const rgbStrings = generateColors();
             currentColors = rgbStrings;
             setColors(rgbStrings);
-            console.log("generated colors");
         }
 
         for(const key in props.data) {
@@ -217,25 +259,40 @@ export default function CustomGraph(props) {
         };
     };
 
+    const saveGraph = () => {
+        props.save({
+            "datasets": currentDatasets,
+            "buttons": currentDatasetButtons,
+            "title": title
+        });
+
+        onSaveClose();
+    };
+
     return (
         <>
             <HStack h="100%" align="stretch" >
-                <Text
-                    css={{ writingMode: "vertical-lr" }}
-                    transform="rotate(180deg)"
-                    borderLeftColor="grey.300"
-                    borderLeftWidth={1}
-                    textAlign="center"
+                    <Text
+                        css={{ writingMode: "vertical-lr" }}
+                        transform="rotate(180deg)"
+                        borderLeftColor="grey.300"
+                        borderLeftWidth={1}
+                        textAlign="center"
+                    >
+                        { (title === "") ? "Custom" : title }
+                    </Text>
+                <VStack
+                    pt={1}
+                    pr={0.5}
+                    align="stretch"
+                    spacing={0}
+                    flex={1}
                 >
-                    Custom
-                </Text>
-                <VStack pt={1} pr={0.5} align="stretch" spacing={0} flex={1} >
-                    <Grid templateColumns="1fr 15fr" gap={2} >
-                        <Button
-                            onClick={ onOpen }
-                            colorScheme="blue"
-                            size="md"
-                        >
+                    <Grid templateColumns="1fr 1fr 15fr" gap={2} >
+                        <Button onClick={ onSaveOpen } colorScheme="blue" >
+                            Save
+                        </Button>
+                        <Button onClick={ onAddOpen } colorScheme="blue" >
                             Add
                         </Button>
                         <HStack align="stretch" spacing={1} overflowX="scroll" >
@@ -248,7 +305,7 @@ export default function CustomGraph(props) {
                 </VStack>
             </HStack>
 
-            <Modal onClose={ cancelAddDatasets } size="lg" isOpen={ isOpen } >
+            <Modal size="xl" onClose={ cancelAddDatasets } isOpen={ isAddOpen } >
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
@@ -269,6 +326,48 @@ export default function CustomGraph(props) {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+
+            <Modal onClose={ onSaveClose } size="md" isOpen={ isSaveOpen } >
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>
+                        Name Custom Graph
+                    </ModalHeader>
+                    <ModalBody>
+                        <FormControl isRequired isInvalid={ isInvalidTitle } >
+                            <FormLabel>Title</FormLabel>
+                            <Input
+                                value={ title }
+                                onChange={ changeTitle }
+                                placeholder="Enter graph title"
+                            />
+                            {!isInvalidTitle ? (
+                                <FormHelperText>
+                                    Enter a title for this custom graph
+                                </FormHelperText>
+                            ) : (
+                                (title === "") ? (
+                                    <FormErrorMessage>
+                                        Title is required
+                                    </FormErrorMessage>
+                                ) : (
+                                    <FormErrorMessage>
+                                        Invalid title
+                                    </FormErrorMessage>
+                                )
+                            )}
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button mr={2} onClick={ onSaveClose } >
+                            Cancel
+                        </Button>
+                        <Button disabled={ isInvalidTitle } colorScheme="blue" onClick={ saveGraph } >
+                            Save Graph
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     );
 }
@@ -282,11 +381,11 @@ function DataButton(dataLabel, alreadyAdded, rgb) {
             key={dataLabel + "Btn"}
             hidden={alreadyAdded}
             onClick={setFlag.toggle}
-            addData={(flag || alreadyAdded).toString()}
+            adddata={(flag || alreadyAdded).toString()}
             size="sm"
             bgColor={"rgb(" + rgb + ")"}
         >
-            {dataLabel + "Btn"} {flag.toString()}
+            {dataLabel} {flag.toString()}
         </Button>
     );
 }
