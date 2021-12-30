@@ -81,11 +81,9 @@ export default function CustomGraph(props) {
             i++;
         }
 
-        // TODO - Is there a way around having to assign and set currentDatasets and currentDatasetButtons?
-        // Update now...
+        // Update datasets and buttons
         currentDatasets = datasets;
         currentDatasetButtons = datasetButtons;
-        // ... and later?!?!?!
         setDatasets(datasets);
         setDatasetButtons(datasetButtons);
     };
@@ -144,11 +142,9 @@ export default function CustomGraph(props) {
         // Close the Modal
         onAddClose();
 
-        // TODO - Is there a way around having to assign and set currentDatasets and currentDatasetButtons?
-        // Update now...
+        // Update datasets and buttons
         currentDatasets = datasets;
         currentDatasetButtons = datasetButtons;
-        // ... and later?!?!?!
         setDatasets(datasets);
         setDatasetButtons(datasetButtons);
     };
