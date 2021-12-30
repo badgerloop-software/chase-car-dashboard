@@ -5,7 +5,6 @@ import {
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend,
 } from 'chart.js';
@@ -17,7 +16,6 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend
 );
@@ -37,11 +35,7 @@ export default function BatteryGraph(props) {
         },
         plugins: {
             legend: {
-                position: 'left',
-            },
-            title: {
-                display: true,
-                text: 'Battery Chart',
+                position: 'top',
             }
         },
     };

@@ -5,7 +5,6 @@ import {
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend,
 } from 'chart.js';
@@ -17,7 +16,6 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend
 );
@@ -37,11 +35,7 @@ export default function PowerGraph(props) {
         },
         plugins: {
             legend: {
-                position: 'left',
-            },
-            title: {
-                display: true,
-                text: 'Power Chart',
+                position: 'top',
             }
         }
     };
@@ -92,7 +86,7 @@ export default function PowerGraph(props) {
                 Power
             </Text>
             <Center flex={1}>
-                <Line options={ options} data={ data } />
+                <Line options={ options } data={ data } />
             </Center>
         </HStack>
     );

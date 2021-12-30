@@ -273,11 +273,17 @@ export default function CustomGraph(props) {
         <>
             <HStack h="100%" align="stretch" >
                     <Text
-                        css={{ writingMode: "vertical-lr" }}
+                        css={{
+                            writingMode: "vertical-rl",
+                            wordBreak: "normal",
+                            inlineSize: "100%"
+                        }}
                         transform="rotate(180deg)"
                         borderLeftColor="grey.300"
                         borderLeftWidth={1}
                         textAlign="center"
+                        maxH="29.5vh"
+                        flex={0}
                     >
                         { (title === "") ? "Custom" : title }
                     </Text>

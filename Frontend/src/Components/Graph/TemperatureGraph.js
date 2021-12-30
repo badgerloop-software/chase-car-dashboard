@@ -5,7 +5,6 @@ import {
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend,
 } from 'chart.js';
@@ -17,7 +16,6 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend
 );
@@ -37,12 +35,8 @@ export default function TemperatureGraph(props) {
         },
         plugins: {
             legend: {
-                position: 'left',
-            },
-            title: {
-                display: true,
-                text: 'Temperature Chart',
-            },
+                position: 'top',
+            }
         },
     };
 
