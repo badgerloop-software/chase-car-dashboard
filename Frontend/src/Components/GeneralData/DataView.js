@@ -1,11 +1,13 @@
 import { Box, Heading, HStack, Text } from "@chakra-ui/react";
 import TirePressure from "./TirePressure";
+import BatteryCharge from "./BatteryCharge";
 
 export default function DataView(props) {
   return (
     <div>
       <Heading>Data</Heading>
       <HStack>
+        <BatteryCharge charge={props.data?.charge[0]}/>
         <Box>
           <Text>Speed: {props.data?.speed[0]}</Text>
           <Text>Charge: {props.data?.charge[0]}</Text>
