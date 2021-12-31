@@ -23,7 +23,7 @@ import {
     useBoolean
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { SmallCloseIcon } from "@chakra-ui/icons";
+import { SmallCloseIcon, AddIcon, SmallAddIcon } from "@chakra-ui/icons";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -157,10 +157,10 @@ export default function CustomGraph(props) {
         // Copy currentDatasets and currentDatasetButtons without the element at datasetIndex
         const newDatasets = currentDatasets.filter((dataset, idx) => { return (idx !== datasetIndex) });
         const newDatasetButtons = currentDatasetButtons.filter((button, idx) => { return (idx !== datasetIndex) });
-        // Update now...
+
+        // Update datasets and buttons
         currentDatasets = newDatasets;
         currentDatasetButtons = newDatasetButtons;
-        // ... and later?!?!?!
         setDatasets(newDatasets);
         setDatasetButtons(newDatasetButtons);
     };
@@ -290,11 +290,11 @@ export default function CustomGraph(props) {
                     spacing={0}
                     flex={1}
                 >
-                    <Grid templateColumns="1fr 1fr 15fr" gap={2} >
+                    <Grid templateColumns="1fr 1.35fr 15fr" gap={2} >
                         <Button onClick={ onSaveOpen } colorScheme="blue" >
                             Save
                         </Button>
-                        <Button onClick={ onAddOpen } colorScheme="blue" >
+                        <Button rightIcon={ <AddIcon /> } onClick={ onAddOpen } colorScheme="blue" >
                             Add
                         </Button>
                         <HStack align="stretch" spacing={1} overflowX="scroll" >
@@ -385,9 +385,11 @@ function DataButton(dataLabel, alreadyAdded, rgb) {
             onClick={setFlag.toggle}
             adddata={(flag || alreadyAdded).toString()}
             size="sm"
-            bgColor={"rgb(" + rgb + ")"}
+            bgColor={flag ? "rgba(" + rgb + ", 0.8)" : "rgba(" + rgb + ", 0.25)"}
+            border={"2px"}
+            borderColor={"rgb(" + rgb + ")"}
         >
-            {dataLabel} {flag.toString()}
+            {dataLabel}
         </Button>
     );
 }
@@ -404,9 +406,9 @@ function DatasetButton(datasetLabel, removeDataset, rgb) {
             <Button
                 id={datasetLabel + "Btn2"}
                 key={datasetLabel + "Btn2"}
-                bgColor={"rgb(" + rgb + ")"}
+                bgColor={"rgba(" + rgb + ", 0.7)"}
                 border="1px"
-                borderColor="gray.300"
+                borderColor={"rgb(" + rgb + ")"}
             >
                 {datasetLabel}
             </Button>
@@ -415,9 +417,9 @@ function DatasetButton(datasetLabel, removeDataset, rgb) {
                 key={datasetLabel + "IcnBtn"}
                 value={ datasetLabel }
                 onClick={ removeDataset }
-                bgColor={"rgb(" + rgb + ")"}
+                bgColor={"rgba(" + rgb + ", 0.7)"}
                 border="1px"
-                borderColor="gray.300"
+                borderColor={"rgb(" + rgb + ")"}
                 icon={<SmallCloseIcon />}
             />
         </ButtonGroup>
