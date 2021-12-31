@@ -49,7 +49,7 @@ client.on("error", (err) => {
  */
 function unpackData(data) {
   let buffOffset = 0; // Byte offset for the buffer array
-  const xAxisCap = 10; // The max number of data points to have in each array at one time
+  const xAxisCap = 25; // The max number of data points to have in each array at one time
   let timestamps = solarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
 
   // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
