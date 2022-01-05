@@ -161,19 +161,15 @@ export default function Dashboard(props) {
                 datasets={[]}
                 save={ saveCustomGraph }
              />;
-    } else {
-      for(const title in customGraphData) {
-        if (optionValue === title) {
-          return <CustomGraph
-                    id={ title }
-                    data={ state.data }
-                    title={ title }
-                    buttons={ customGraphData[title].buttons }
-                    datasets={ customGraphData[title].datasets }
-                    save={ saveCustomGraph }
-                 />;
-        }
-      }
+    } else if(optionValue in customGraphData) {
+      return <CustomGraph
+                id={ optionValue }
+                data={ state.data }
+                title={ optionValue }
+                buttons={ customGraphData[optionValue].buttons }
+                datasets={ customGraphData[optionValue].datasets }
+                save={ saveCustomGraph }
+             />;
     }
   };
 
@@ -187,9 +183,6 @@ export default function Dashboard(props) {
     graphData[data.title] = data;
 
     setCustomGraphData(graphData);
-
-    console.log(customGraphData);
-    // console.log("Colors: ", data.colors, "\nDatasets: ", data.datasets, "\nButtons: ", data.buttons, "\nTitle: ", data.title);
   };
 
   return (
