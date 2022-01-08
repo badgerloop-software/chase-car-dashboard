@@ -15,6 +15,7 @@ import "chartjs-adapter-luxon";
 import { DateTime, Duration } from "luxon";
 import { useContext } from "react";
 import GraphContext from "./GraphContext";
+import GraphData from "./graph-data.json";
 
 ChartJS.register(
   CategoryScale,
@@ -56,7 +57,9 @@ export default function BatteryGraph(props) {
     scales: {
       xAxis: {
         type: "time",
-        min: DateTime.now().minus(Duration.fromMillis(60000)).toString(),
+        min: DateTime.now()
+          .minus(Duration.fromMillis(GraphData.historyLength))
+          .toString(),
         suggestedMax: DateTime.now().toString(),
       },
     },

@@ -22,5 +22,6 @@
       "category": "Tires",
       "values": ["frontLeftTP", "frontRightTP", "backLeftTP", "backRightTP"]
     }
-  ]
+  ],
+  "historyLength": 60000
 }

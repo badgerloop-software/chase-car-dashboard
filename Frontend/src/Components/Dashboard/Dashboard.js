@@ -7,11 +7,9 @@ import DataView from "../GeneralData/DataView";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
-<<<<<<< HEAD
 import CustomGraph from "../Graph/CustomGraph";
-=======
 import GraphContext from "../Graph/GraphContext";
->>>>>>> 9c5d326 (SHARED STATE BETWEEN COMPONENTS WOOOOO)
+import GraphData from "../Graph/graph-data.json";
 import MiniMap from "../MiniMap/MiniMap";
 
 function reducer(currentState, newData) {
@@ -19,6 +17,13 @@ function reducer(currentState, newData) {
   for (const key in newData) {
     if (!currentState[key]) currentState[key] = [];
     currentState[key].unshift({ x: now, y: newData[key] });
+
+    while (
+      now.diff(currentState[key][currentState[key].length - 1].x).toMillis() >
+      GraphData.historyLength
+    ) {
+      currentState[key].pop();
+    }
   }
   return currentState;
 }
@@ -110,7 +115,7 @@ export default function Dashboard(props) {
   const selectGraph = (event) => {
     if (event.target.id === "graphSelect1") {
       // Avoid duplicate graphs, unless they are both empty or custom
-      if ((event.target.value !== "") && (event.target.value !== "custom")) {
+      if (event.target.value !== "" && event.target.value !== "custom") {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         // eslint-disable-next-line
@@ -128,7 +133,7 @@ export default function Dashboard(props) {
       setGraph1(event.target.value);
     } else if (event.target.id === "graphSelect2") {
       // Avoid duplicate graphs, unless they are both empty or custom
-      if ((event.target.value !== "") && (event.target.value !== "custom")) {
+      if (event.target.value !== "" && event.target.value !== "custom") {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         // eslint-disable-next-line
@@ -146,7 +151,7 @@ export default function Dashboard(props) {
       setGraph2(event.target.value);
     } else if (event.target.id === "graphSelect3") {
       // Avoid duplicate graphs, unless they are both empty or custom
-      if ((event.target.value !== "") && (event.target.value !== "custom")) {
+      if (event.target.value !== "" && event.target.value !== "custom") {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         // eslint-disable-next-line
@@ -168,31 +173,35 @@ export default function Dashboard(props) {
   // Choose the graph to return/display based on the given option
   const switchGraph = (optionValue) => {
     if (optionValue === "battery") {
-      return <BatteryGraph data={ state.data } />;
+      return <BatteryGraph data={state.data} />;
     } else if (optionValue === "power") {
-      return <PowerGraph data={ state.data } />;
+      return <PowerGraph data={state.data} />;
     } else if (optionValue === "temperature") {
-      return <TemperatureGraph data={ state.data } />;
+      return <TemperatureGraph data={state.data} />;
     } else if (optionValue === "custom") {
-      return <CustomGraph
-                id=""
-                data={ state.data }
-                title=""
-                buttons={[]}
-                datasets={[]}
-                save={ saveCustomGraph }
-             />;
+      return (
+        <CustomGraph
+          id=""
+          data={state.data}
+          title=""
+          buttons={[]}
+          datasets={[]}
+          save={saveCustomGraph}
+        />
+      );
     } else {
-      for(const title in customGraphData) {
+      for (const title in customGraphData) {
         if (optionValue === title) {
-          return <CustomGraph
-                    id={ title }
-                    data={ state.data }
-                    title={ title }
-                    buttons={ customGraphData[title].buttons }
-                    datasets={ customGraphData[title].datasets }
-                    save={ saveCustomGraph }
-                 />;
+          return (
+            <CustomGraph
+              id={title}
+              data={state.data}
+              title={title}
+              buttons={customGraphData[title].buttons}
+              datasets={customGraphData[title].datasets}
+              save={saveCustomGraph}
+            />
+          );
         }
       }
     }
@@ -351,10 +360,8 @@ function DataViewOptions(props) {
 function GraphOptions(props) {
   let customGraphs = [];
 
-  for(const title in props.customGraphs) {
-    customGraphs.push(
-        <option value={title} >{title}</option>
-    );
+  for (const title in props.customGraphs) {
+    customGraphs.push(<option value={title}>{title}</option>);
   }
 
   return (
