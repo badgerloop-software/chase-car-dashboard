@@ -30,7 +30,6 @@ ChartJS.register(
 
 export default function BatteryGraph(props) {
   const graphData = useContext(GraphContext);
-  const startTime = useConst(DateTime.now());
   const data = {
     datasets: [
       {

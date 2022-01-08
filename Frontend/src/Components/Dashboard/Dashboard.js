@@ -11,6 +11,7 @@ import CustomGraph from "../Graph/CustomGraph";
 import GraphContext from "../Graph/GraphContext";
 import GraphData from "../Graph/graph-data.json";
 import MiniMap from "../MiniMap/MiniMap";
+import "chartjs-adapter-luxon";
 
 function reducer(currentState, newData) {
   const now = DateTime.now();
@@ -24,6 +25,7 @@ function reducer(currentState, newData) {
     ) {
       currentState[key].pop();
     }
+    console.log(key, currentState[key]);
   }
   return currentState;
 }
