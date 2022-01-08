@@ -1,9 +1,7 @@
 import { Center, HStack, Text } from "@chakra-ui/react";
-import { useContext } from "react";
-import GraphContext from "../Graph/GraphContext";
 
 export default function PowerGraph(props) {
-  const graphData = useContext(GraphContext);
+  // const graphData = useContext(GraphContext);
   return (
     <HStack h="100%" align="stretch">
       <Text
@@ -17,8 +15,8 @@ export default function PowerGraph(props) {
       </Text>
       <Center flex={1}>
         Power Graph
-        <br />
-        {JSON.stringify(graphData?.motorPower)}
+        {/* <br />
+        {JSON.stringify(graphData?.motorPower)} */}
       </Center>
     </HStack>
   );

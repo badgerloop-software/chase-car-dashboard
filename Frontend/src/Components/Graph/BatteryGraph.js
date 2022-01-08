@@ -13,6 +13,8 @@ import {
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-luxon";
 import { DateTime, Duration } from "luxon";
+import { useContext } from "react";
+import GraphContext from "./GraphContext";
 
 ChartJS.register(
   CategoryScale,
@@ -26,22 +28,22 @@ ChartJS.register(
 );
 
 export default function BatteryGraph(props) {
+  const graphData = useContext(GraphContext);
   const startTime = useConst(DateTime.now());
   const data = {
-    labels: [0, 2, 1, 3, 6, 5, 4],
     datasets: [
       {
-        label: "Dataset 1",
-        data: [{ x: startTime, y: 0 }],
+        label: "Battery Group 1",
+        data: graphData.batteryGroup1,
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
-      {
-        label: "Dataset 2",
-        data: [{ x: startTime.plus(Duration.fromMillis(1000)), y: 13 }],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
+      // {
+      //   label: "Dataset 2",
+      //   data: [{ x: startTime.plus(Duration.fromMillis(1000)), y: 13 }],
+      //   borderColor: "rgb(53, 162, 235)",
+      //   backgroundColor: "rgba(53, 162, 235, 0.5)",
+      // },
     ],
   };
   const options = {
