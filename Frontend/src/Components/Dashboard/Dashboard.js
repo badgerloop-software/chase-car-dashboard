@@ -1,13 +1,27 @@
 import { Grid, GridItem, Select, VStack } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { DateTime } from "luxon";
+import React, { useEffect, useReducer, useState } from "react";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
+<<<<<<< HEAD
 import CustomGraph from "../Graph/CustomGraph";
+=======
+import GraphContext from "../Graph/GraphContext";
+>>>>>>> 9c5d326 (SHARED STATE BETWEEN COMPONENTS WOOOOO)
 import MiniMap from "../MiniMap/MiniMap";
+
+function reducer(currentState, newData) {
+  const now = DateTime.now();
+  for (const key in newData) {
+    if (!currentState[key]) currentState[key] = [];
+    currentState[key].unshift({ x: now, y: newData[key] });
+  }
+  return currentState;
+}
 
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
@@ -25,11 +39,14 @@ export default function Dashboard(props) {
     return body;
   };
 
+  const [queue, offerQueue] = useReducer(reducer, {});
+
   const [state, setState] = useState({ data: null });
   useEffect(() => {
     callBackendAPI()
       .then((res) => {
         setState({ data: res.response });
+        offerQueue(res.response);
         // console.log("api::", res.response);
       })
       .catch((err) => console.log(err));
@@ -253,66 +270,68 @@ export default function Dashboard(props) {
       </GridItem>
       <GridItem colStart={2} colSpan={1}>
         <Grid h="100vh" templateRows="repeat(3, 1fr)">
-          <VStack
-            h="100%"
-            align="stretch"
-            spacing={0}
-            borderColor="black"
-            borderWidth={1}
-          >
-            <Select
-              id="graphSelect1"
-              size="xs"
-              variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
-              value={graph1}
-              onChange={selectGraph}
+          <GraphContext.Provider value={queue}>
+            <VStack
+              h="100%"
+              align="stretch"
+              spacing={0}
+              borderColor="black"
+              borderWidth={1}
             >
-              <GraphOptions customGraphs={ customGraphData } />
-            </Select>
-            {switchGraph(graph1)}
-          </VStack>
-          <VStack
-            h="100%"
-            align="stretch"
-            spacing={0}
-            borderColor="black"
-            borderWidth={1}
-          >
-            <Select
-              id="graphSelect2"
-              size="xs"
-              variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
-              value={graph2}
-              onChange={selectGraph}
+              <Select
+                id="graphSelect1"
+                size="xs"
+                variant="filled"
+                bgColor="grey.300"
+                placeholder="Select option"
+                value={graph1}
+                onChange={selectGraph}
+              >
+                <GraphOptions />
+              </Select>
+              {switchGraph(graph1)}
+            </VStack>
+            <VStack
+              h="100%"
+              align="stretch"
+              spacing={0}
+              borderColor="black"
+              borderWidth={1}
             >
-              <GraphOptions customGraphs={ customGraphData } />
-            </Select>
-            {switchGraph(graph2)}
-          </VStack>
-          <VStack
-            h="100%"
-            align="stretch"
-            spacing={0}
-            borderColor="black"
-            borderWidth={1}
-          >
-            <Select
-              id="graphSelect3"
-              size="xs"
-              variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
-              value={graph3}
-              onChange={selectGraph}
+              <Select
+                id="graphSelect2"
+                size="xs"
+                variant="filled"
+                bgColor="grey.300"
+                placeholder="Select option"
+                value={graph2}
+                onChange={selectGraph}
+              >
+                <GraphOptions />
+              </Select>
+              {switchGraph(graph2)}
+            </VStack>
+            <VStack
+              h="100%"
+              align="stretch"
+              spacing={0}
+              borderColor="black"
+              borderWidth={1}
             >
-              <GraphOptions customGraphs={ customGraphData } />
-            </Select>
-            {switchGraph(graph3)}
-          </VStack>
+              <Select
+                id="graphSelect3"
+                size="xs"
+                variant="filled"
+                bgColor="grey.300"
+                placeholder="Select option"
+                value={graph3}
+                onChange={selectGraph}
+              >
+                <GraphOptions />
+              </Select>
+              {switchGraph(graph3)}
+            </VStack>
+          </GraphContext.Provider>
         </Grid>
       </GridItem>
     </Grid>
