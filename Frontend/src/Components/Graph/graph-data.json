@@ -1,0 +1,26 @@
+{
+  "categories": [
+    {
+      "category": "Motors",
+      "values": ["speed", "motorPower", "motorTemp", "motorControllerTemp"]
+    },
+    {
+      "category": "Battery",
+      "values": [
+        "charge",
+        "solarPower",
+        "batteryVoltage",
+        "batteryTemp",
+        "batteryCurrent",
+        "batteryGroup1",
+        "batteryGroup2",
+        "batteryGroup3",
+        "batteryGroup4"
+      ]
+    },
+    {
+      "category": "Tires",
+      "values": ["frontLeftTP", "frontRightTP", "backLeftTP", "backRightTP"]
+    }
+  ]
+}

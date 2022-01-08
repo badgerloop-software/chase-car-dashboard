@@ -1,13 +1,13 @@
-import { Grid, GridItem, VStack, Select } from "@chakra-ui/react";
-import React, { useState, useLayoutEffect } from "react";
+import { Grid, GridItem, Select, VStack } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
-import BatteryCells from "../BatteryCells/BatteryCells";
-import MiniMap from "../MiniMap/MiniMap";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
 import CustomGraph from "../Graph/CustomGraph";
+import MiniMap from "../MiniMap/MiniMap";
 
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
@@ -21,11 +21,12 @@ export default function Dashboard(props) {
       throw Error(body.message);
     }
 
+    // console.log("body", body);
     return body;
   };
 
   const [state, setState] = useState({ data: null });
-  useLayoutEffect(() => {
+  useEffect(() => {
     callBackendAPI()
       .then((res) => {
         setState({ data: res.response });
@@ -95,6 +96,7 @@ export default function Dashboard(props) {
       if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
+        // eslint-disable-next-line
         switch (event.target.value) {
           case document.getElementById("graphSelect2").value:
             setGraph2(graph1);
@@ -112,6 +114,7 @@ export default function Dashboard(props) {
       if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
+        // eslint-disable-next-line
         switch (event.target.value) {
           case document.getElementById("graphSelect1").value:
             setGraph1(graph2);
@@ -129,6 +132,7 @@ export default function Dashboard(props) {
       if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
+        // eslint-disable-next-line
         switch (event.target.value) {
           case document.getElementById("graphSelect1").value:
             setGraph1(graph3);
