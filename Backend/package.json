@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "luxon": "^2.3.0",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {

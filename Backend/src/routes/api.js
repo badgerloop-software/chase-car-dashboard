@@ -2,6 +2,7 @@ import { Router } from "express";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
+import { DateTime } from "luxon";
 
 const router = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -20,8 +21,6 @@ import { Socket } from "net";
 // const { Buffer } = require("buffer");
 const car_port = 4003;
 var client = new Socket();
-let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
-                   // data) to solarCarData
 
 client.connect(car_port, function () {
   console.log(`Connected to car server: localhost:${car_port}`);
@@ -49,13 +48,12 @@ client.on("error", (err) => {
  */
 function unpackData(data) {
   let buffOffset = 0; // Byte offset for the buffer array
-  const xAxisCap = 25; // The max number of data points to have in each array at one time
+  const xAxisCap = 100; // The max number of data points to have in each array at one time
   let timestamps = solarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
 
   // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
-  timestamps.unshift(timestamp);
-  timestamp ++;
-  if(timestamps.length > xAxisCap) {
+  timestamps.unshift(DateTime.now().toString());
+  if (timestamps.length > xAxisCap) {
     timestamps.pop();
   }
   solarCarData["timestamps"] = timestamps;
@@ -64,7 +62,7 @@ function unpackData(data) {
     let dataArray = []; // Holds the array of data specified by property that will be put in solarCarData
     let dataType = ""; // Data type specified in the data format
 
-    if(solarCarData.hasOwnProperty(property)) {
+    if (solarCarData.hasOwnProperty(property)) {
       dataArray = solarCarData[property];
     }
     dataType = DATA_FORMAT[property][1];
@@ -91,7 +89,7 @@ function unpackData(data) {
         break;
     }
     // Limit dataArray to a length specified by xAxisCap
-    if(dataArray.length > xAxisCap) {
+    if (dataArray.length > xAxisCap) {
       dataArray.pop();
     }
     // Write dataArray to solarCarData at the correct key

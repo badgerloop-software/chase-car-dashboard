@@ -1,24 +1,21 @@
-import { Box, Button, HStack, Stack, Text, useConst } from "@chakra-ui/react";
+import { Box, Button, HStack, Stack, Text } from "@chakra-ui/react";
 import {
-  CategoryScale,
   Chart as ChartJS,
   Legend,
   LinearScale,
   LineElement,
   PointElement,
-  Title,
   TimeScale,
+  Title,
   Tooltip,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
 import "chartjs-adapter-luxon";
-import { DateTime, Duration } from "luxon";
 import { useContext } from "react";
+import { Line } from "react-chartjs-2";
 import GraphContext from "./GraphContext";
-import GraphData from "./graph-data.json";
 
 ChartJS.register(
-  CategoryScale,
+  // CategoryScale,
   LinearScale,
   TimeScale,
   PointElement,
@@ -53,13 +50,22 @@ export default function BatteryGraph(props) {
         display: false,
       },
     },
+    animation: {
+      duration: 0,
+    },
     scales: {
       xAxis: {
         type: "time",
-        min: DateTime.now()
-          .minus(Duration.fromMillis(GraphData.historyLength))
-          .toString(),
-        suggestedMax: DateTime.now().toString(),
+        // min: DateTime.now()
+        //   .minus(Duration.fromMillis(GraphData.historyLength))
+        //   .toString(),
+        // suggestedMax: DateTime.now().toString(),
+      },
+    },
+    elements: {
+      line: {
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
       },
     },
   };
