@@ -33,7 +33,6 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import faker from "faker";
 import React, { useEffect } from "react";
 import { Line } from "react-chartjs-2";
 
@@ -269,9 +268,10 @@ export default function CustomGraph(props) {
       datasets.push({
         label: currentDatasets[i],
         // NOTE Remove faker from package.json when actual data is put in
-        data:
-          data[currentDatasets[i]] ??
-          labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+        data,
+        parsing: {
+          yAxisKey: currentDatasets[i],
+        },
         borderColor: "rgb(" + rgb + ")",
         backgroundColor: "rgba(" + rgb + ", 0.5)",
       });

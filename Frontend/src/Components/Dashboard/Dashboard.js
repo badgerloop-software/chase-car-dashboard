@@ -29,21 +29,33 @@ function reducer(currentState, newData) {
   // }
   // return currentState;
 
-  const output = {};
-  for (const key in newData) {
-    if (key === "timestamps") continue;
+  // const output = {};
+  // for (const key in newData) {
+  //   if (key === "timestamps") continue;
 
-    // output[key] = [];
-    // for (let i = 0; i < newData[key].length; i++) {
-    //   output[key].push({ x: newData["timestamps"][i], y: newData[key][i] });
-    // }
-    output[key] = newData[key].map((value, idx) => ({
-      x: newData["timestamps"][idx],
-      y: value,
-    }));
-    // console.log(key, output[key]);
+  //   // output[key] = [];
+  //   // for (let i = 0; i < newData[key].length; i++) {
+  //   //   output[key].push({ x: newData["timestamps"][i], y: newData[key][i] });
+  //   // }
+  //   output[key] = newData[key].map((value, idx) => ({
+  //     x: newData["timestamps"][idx],
+  //     y: value,
+  //   }));
+  //   // console.log(key, output[key]);
+  // }
+
+  // return output;
+
+  const output = [];
+  const len = newData.timestamps.length;
+  for (let i = 0; i < len; i++) {
+    const newElement = {};
+    for (const key in newData) {
+      newElement[key] = newData[key][i];
+    }
+    output.push(newElement);
   }
-
+  // console.log("new data:", output);
   return output;
 }
 
