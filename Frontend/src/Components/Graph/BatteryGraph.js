@@ -87,11 +87,19 @@ export default function BatteryGraph(props) {
         return state;
       case "toggle":
         // key: string
-        const toToggle = state.find((dataset) => dataset.key === key);
-        if (toToggle) {
-          toToggle.hidden = !toToggle.hidden;
-        }
-        return state;
+        // const toToggle = state.find((dataset) => dataset.key === key);
+        // if (toToggle) {
+        //   toToggle.hidden = !toToggle.hidden;
+        // }
+        // return state;
+        return state.map((dataset) => ({
+          key: dataset.key,
+          label: dataset.label,
+          data: graphData[dataset.key],
+          borderColor: dataset.borderColor,
+          backgroundColor: dataset.backgroundColor,
+          hidden: dataset.key === key ? !dataset.hidden : dataset.hidden,
+        }));
       case "set":
         // key: string[]
         return key.map((value) => ({
@@ -181,7 +189,34 @@ export default function BatteryGraph(props) {
           >
             <AddIcon />
           </Button>
-          <Box flex={1} borderColor="black" borderWidth={1}></Box>
+          <Box
+            flex={1}
+            borderColor="black"
+            borderWidth={1}
+            overflowX="scroll"
+            spacing={2}
+          >
+            {datasets.map((dataset) => (
+              <Button
+                key={dataset.key}
+                borderColor={dataset.borderColor}
+                borderWidth={2}
+                backgroundColor={
+                  dataset.hidden ? "transparent" : dataset.backgroundColor
+                }
+                textDecoration={dataset.hidden ? "line-through" : "none"}
+                onClick={() => {
+                  console.log("clicked", dataset.key);
+                  updateDatasets({ action: "toggle", key: dataset.key });
+                }}
+                mb={2}
+                mr={2}
+                size="xs"
+              >
+                {dataset.label}
+              </Button>
+            ))}
+          </Box>
         </Stack>
         <Center flex={1}>
           <Line data={data} options={options} />
