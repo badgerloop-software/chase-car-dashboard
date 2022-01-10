@@ -26,6 +26,7 @@ import { useContext, useEffect, useReducer } from "react";
 import { Line } from "react-chartjs-2";
 import GraphContext from "./GraphContext";
 import GraphData from "./graph-data.json";
+import { DateTime } from "luxon";
 
 ChartJS.register(
   LinearScale,
@@ -59,31 +60,53 @@ export default function BatteryGraph(props) {
   const graphData = useContext(GraphContext);
 
   const allDatasets = categories.flatMap((category) => category.values);
-  function reducer(state, { action, key }) {
+  function datasetReducer(state, { action, key }) {
     switch (action) {
       case "add":
         // key: string
+
         // console.log("Adding", key, "...");
-        const toAdd = allDatasets.find((dataset) => dataset.key === key);
+        // const toAdd = allDatasets.find((dataset) => dataset.key === key);
         // console.log("as", toAdd);
-        if (toAdd && !state.find((dataset) => dataset.key === key)) {
-          return state.concat({
-            key: toAdd.key,
-            label: toAdd.name,
-            data: graphData[toAdd.key],
-            borderColor: toAdd.color,
-            backgroundColor: toAdd.color + "B3",
-            hidden: false,
-          });
+        // if (toAdd && !state.find((dataset) => dataset.key === key)) {
+        //   return state.concat({
+        //     key: toAdd.key,
+        //     label: toAdd.name,
+        //     data: graphData[toAdd.key],
+        //     borderColor: toAdd.color,
+        //     backgroundColor: toAdd.color + "B3",
+        //     hidden: false,
+        //   });
+        // }
+
+        for (let i = 0; i < state.length; i++) {
+          if (state[i].key === key) {
+            state[i].hidden = false;
+            state[i].currentlyActive = true;
+            return state;
+          }
         }
+
+        // unable to find it
         return state;
       case "remove":
         // key: string
+        // for (let i = 0; i < state.length; i++) {
+        //   if (state[i].key === key) {
+        //     return state.slice(0, i).concat(state.slice(i + 1));
+        //   }
+        // }
+        // return state;
+
         for (let i = 0; i < state.length; i++) {
           if (state[i].key === key) {
-            return state.slice(0, i).concat(state.slice(i + 1));
+            state[i].hidden = true;
+            state[i].currentlyActive = false;
+            return state;
           }
         }
+
+        // unable to find it
         return state;
       case "toggle":
         // key: string
@@ -92,44 +115,77 @@ export default function BatteryGraph(props) {
         //   toToggle.hidden = !toToggle.hidden;
         // }
         // return state;
-        return state.map((dataset) => ({
-          key: dataset.key,
-          label: dataset.label,
-          data: graphData[dataset.key],
-          borderColor: dataset.borderColor,
-          backgroundColor: dataset.backgroundColor,
-          hidden: dataset.key === key ? !dataset.hidden : dataset.hidden,
-        }));
+
+        // return state.map((dataset) => ({
+        //   key: dataset.key,
+        //   label: dataset.label,
+        //   data: graphData[dataset.key],
+        //   borderColor: dataset.borderColor,
+        //   backgroundColor: dataset.backgroundColor,
+        //   hidden: dataset.key === key ? !dataset.hidden : dataset.hidden,
+        // }));
+
+        for (let i = 0; i < state.length; i++) {
+          if (state[i].key === key) {
+            state[i].hidden = !state[i].hidden;
+            return state;
+          }
+        }
+
+        // unable to find it
+        return state;
       case "set":
         // key: string[]
-        return key.map((value) => ({
-          key: toAdd.key,
-          label: value.name,
-          data: graphData[value.key],
-          borderColor: value.color,
-          backgroundColor: value.color + "B3",
-          hidden: false,
-        }));
+        // return key.map((value) => ({
+        //   key: value.key,
+        //   label: value.name,
+        //   data: graphData[value.key],
+        //   borderColor: value.color,
+        //   backgroundColor: value.color + "B3",
+        //   hidden: false,
+        // }));
+
+        for (let i = 0; i < state.length; i++) {
+          if (key.includes(state[i].key)) {
+            state[i].hidden = !state[i].hidden;
+          }
+        }
+        return state;
       case "update":
         // key: undefined
         // console.log("updating...");
-        return state.map((dataset) => ({
-          key: dataset.key,
-          label: dataset.label,
-          data: graphData[dataset.key],
-          borderColor: dataset.borderColor,
-          backgroundColor: dataset.backgroundColor,
-          hidden: dataset.hidden,
-        }));
+        // return state.map((dataset) => ({
+        //   key: dataset.key,
+        //   label: dataset.label,
+        //   data: graphData[dataset.key],
+        //   borderColor: dataset.borderColor,
+        //   backgroundColor: dataset.backgroundColor,
+        //   hidden: dataset.hidden,
+        // }));
+        for (let i = 0; i < state.length; i++) {
+          if (state[i].currentlyActive && !state[i].hidden)
+            state[i].data = graphData[state[i].key];
+        }
+        return state;
       default:
         console.warn("Unknown operation:", action);
     }
   }
 
-  const [datasets, updateDatasets] = useReducer(reducer, []);
+  const [datasets, updateDatasets] = useReducer(
+    datasetReducer,
+    allDatasets.map((dataset) => ({
+      key: dataset.key,
+      label: dataset.name,
+      data: [],
+      borderColor: dataset.color,
+      backgroundColor: dataset.color + "B3",
+      hidden: true,
+    }))
+  );
   useEffect(() => {
     updateDatasets({ action: "update" });
-    // console.log("new state:", datasets);
+    console.log("new state:", datasets);
   }, [graphData]);
 
   const data = { datasets };
@@ -138,7 +194,7 @@ export default function BatteryGraph(props) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        // display: false,
       },
     },
     animation: false,
@@ -148,7 +204,7 @@ export default function BatteryGraph(props) {
         // min: DateTime.now()
         //   .minus(Duration.fromMillis(GraphData.historyLength))
         //   .toString(),
-        // suggestedMax: DateTime.now().toString(),
+        max: DateTime.now().toString(),
       },
       yAxis: {
         suggestedMin: 0,
@@ -182,40 +238,37 @@ export default function BatteryGraph(props) {
             onClick={() =>
               updateDatasets({
                 action: "add",
-                key: allDatasets[Math.floor(Math.random() * allDatasets.length)]
-                  .key,
+                key: allDatasets.filter((dataset) => !dataset.currentlyActive)[
+                  Math.floor(Math.random() * allDatasets.length)
+                ].key,
               })
             }
           >
             <AddIcon />
           </Button>
-          <Box
-            flex={1}
-            borderColor="black"
-            borderWidth={1}
-            overflowX="scroll"
-            spacing={2}
-          >
-            {datasets.map((dataset) => (
-              <Button
-                key={dataset.key}
-                borderColor={dataset.borderColor}
-                borderWidth={2}
-                backgroundColor={
-                  dataset.hidden ? "transparent" : dataset.backgroundColor
-                }
-                textDecoration={dataset.hidden ? "line-through" : "none"}
-                onClick={() => {
-                  console.log("clicked", dataset.key);
-                  updateDatasets({ action: "toggle", key: dataset.key });
-                }}
-                mb={2}
-                mr={2}
-                size="xs"
-              >
-                {dataset.label}
-              </Button>
-            ))}
+          <Box flex={1} borderColor="black" borderWidth={1} spacing={2}>
+            {datasets
+              .filter((dataset) => dataset.currentlyActive)
+              .map((dataset) => (
+                <Button
+                  key={dataset.key}
+                  borderColor={dataset.borderColor}
+                  borderWidth={2}
+                  backgroundColor={
+                    dataset.hidden ? "transparent" : dataset.backgroundColor
+                  }
+                  textDecoration={dataset.hidden ? "line-through" : "none"}
+                  onClick={() => {
+                    console.log("clicked", dataset.key);
+                    updateDatasets({ action: "toggle", key: dataset.key });
+                  }}
+                  mb={1}
+                  mr={1}
+                  size="xs"
+                >
+                  {dataset.label}
+                </Button>
+              ))}
           </Box>
         </Stack>
         <Center flex={1}>
