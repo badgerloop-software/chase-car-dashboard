@@ -73,7 +73,7 @@ export default function BatteryGraph(props) {
             data: graphData[toAdd.key],
             borderColor: toAdd.color,
             backgroundColor: toAdd.color + "B3",
-            active: true,
+            hidden: false,
           });
         }
         return state;
@@ -81,8 +81,6 @@ export default function BatteryGraph(props) {
         // key: string
         for (let i = 0; i < state.length; i++) {
           if (state[i].key === key) {
-            // state.splice(i, 1);
-            // return state;
             return state.slice(0, i).concat(state.slice(i + 1));
           }
         }
@@ -91,7 +89,7 @@ export default function BatteryGraph(props) {
         // key: string
         const toToggle = state.find((dataset) => dataset.key === key);
         if (toToggle) {
-          toToggle.active = !toToggle.active;
+          toToggle.hidden = !toToggle.hidden;
         }
         return state;
       case "set":
@@ -102,43 +100,30 @@ export default function BatteryGraph(props) {
           data: graphData[value.key],
           borderColor: value.color,
           backgroundColor: value.color + "B3",
-          active: true,
+          hidden: false,
         }));
       case "update":
         // key: undefined
-        console.log("updating...");
+        // console.log("updating...");
         return state.map((dataset) => ({
           key: dataset.key,
           label: dataset.label,
           data: graphData[dataset.key],
           borderColor: dataset.borderColor,
           backgroundColor: dataset.backgroundColor,
-          active: dataset.active,
+          hidden: dataset.hidden,
         }));
       default:
         console.warn("Unknown operation:", action);
     }
   }
+
   const [datasets, updateDatasets] = useReducer(reducer, []);
   useEffect(() => {
     updateDatasets({ action: "update" });
+    // console.log("new state:", datasets);
   }, [graphData]);
-  // const data = {
-  //   datasets: [
-  //     {
-  //       label: "Battery Group 1",
-  //       data: graphData.batteryGroup1,
-  //       borderColor: "rgb(255, 99, 132)",
-  //       backgroundColor: "rgba(255, 99, 132, 0.5)",
-  //     },
-  //     {
-  //       label: "Battery Group 2 2",
-  //       data: graphData.batteryGroup2,
-  //       borderColor: "rgb(53, 162, 235)",
-  //       backgroundColor: "rgba(53, 162, 235, 0.5)",
-  //     },
-  //   ],
-  // };
+
   const data = { datasets };
   const options = {
     responsive: true,
