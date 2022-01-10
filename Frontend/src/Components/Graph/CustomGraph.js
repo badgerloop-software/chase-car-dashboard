@@ -24,20 +24,21 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import {
-  CategoryScale,
   Chart as ChartJS,
   Legend,
   LinearScale,
   LineElement,
   PointElement,
+  TimeScale,
   Tooltip,
 } from "chart.js";
+import "chartjs-adapter-luxon";
 import faker from "faker";
 import React, { useEffect } from "react";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
-  CategoryScale,
+  TimeScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -245,6 +246,9 @@ export default function CustomGraph(props) {
     scales: {
       y: {
         suggestedMin: 0,
+      },
+      x: {
+        type: "time",
       },
     },
     plugins: {

@@ -1,4 +1,15 @@
-import { Box, Button, HStack, Stack, Text } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Center,
+  HStack,
+  Stack,
+  Text,
+  VStack,
+  Icon,
+} from "@chakra-ui/react";
+import { FaSave } from "react-icons/fa";
 import {
   Chart as ChartJS,
   Legend,
@@ -15,7 +26,6 @@ import { Line } from "react-chartjs-2";
 import GraphContext from "./GraphContext";
 
 ChartJS.register(
-  // CategoryScale,
   LinearScale,
   TimeScale,
   PointElement,
@@ -45,6 +55,7 @@ export default function BatteryGraph(props) {
   };
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -60,6 +71,9 @@ export default function BatteryGraph(props) {
         //   .minus(Duration.fromMillis(GraphData.historyLength))
         //   .toString(),
         // suggestedMax: DateTime.now().toString(),
+      },
+      yAxis: {
+        suggestedMin: 0,
       },
     },
     elements: {
@@ -81,13 +95,20 @@ export default function BatteryGraph(props) {
       >
         Battery
       </Text>
-      <Stack p={2} flex={1}>
+      <VStack p={2} flex={1} align="stretch">
         <Stack direction="row">
-          <Button>Add</Button>
+          <Button>
+            <Icon as={FaSave} />
+          </Button>
+          <Button>
+            <AddIcon />
+          </Button>
           <Box flex={1} borderColor="black" borderWidth={1}></Box>
         </Stack>
-        <Line data={data} options={options} />
-      </Stack>
+        <Center flex={1}>
+          <Line data={data} options={options} />
+        </Center>
+      </VStack>
     </HStack>
   );
 }
