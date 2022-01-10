@@ -41,7 +41,7 @@ function reducer(currentState, newData) {
       x: newData["timestamps"][idx],
       y: value,
     }));
-    console.log(key, output[key]);
+    // console.log(key, output[key]);
   }
 
   return output;

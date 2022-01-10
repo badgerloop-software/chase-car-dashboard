@@ -2,25 +2,86 @@
   "categories": [
     {
       "category": "Motors",
-      "values": ["speed", "motorPower", "motorTemp", "motorControllerTemp"]
+      "values": [
+        {
+          "key": "speed",
+          "name": "Speed"
+        },
+        {
+          "key": "motorPower",
+          "name": "Motor Power"
+        },
+        {
+          "key": "motorTemp",
+          "name": "Motor Temperature"
+        },
+        {
+          "key": "motorControllerTemp",
+          "name": "Motor Controller Temperature"
+        }
+      ]
     },
     {
       "category": "Battery",
       "values": [
-        "charge",
-        "solarPower",
-        "batteryVoltage",
-        "batteryTemp",
-        "batteryCurrent",
-        "batteryGroup1",
-        "batteryGroup2",
-        "batteryGroup3",
-        "batteryGroup4"
+        {
+          "key": "charge",
+          "name": "Charge"
+        },
+        {
+          "key": "solarPower",
+          "name": "Solar Power"
+        },
+        {
+          "key": "batteryVoltage",
+          "name": "Battery Voltage"
+        },
+        {
+          "key": "batteryTemp",
+          "name": "Battery Temperature"
+        },
+        {
+          "key": "batteryCurrent",
+          "name": "Battery Current"
+        },
+        {
+          "key": "batteryGroup1",
+          "name": "Battery Group 1"
+        },
+        {
+          "key": "batteryGroup2",
+          "name": "Battery Group 2"
+        },
+        {
+          "key": "batteryGroup3",
+          "name": "Battery Group 3"
+        },
+        {
+          "key": "batteryGroup4",
+          "name": "Battery Group 4"
+        }
       ]
     },
     {
       "category": "Tires",
-      "values": ["frontLeftTP", "frontRightTP", "backLeftTP", "backRightTP"]
+      "values": [
+        {
+          "key": "frontLeftTP",
+          "name": "Front Left Tire Pressure"
+        },
+        {
+          "key": "frontRightTP",
+          "name": "Front Right Tire Pressure"
+        },
+        {
+          "key": "backLeftTP",
+          "name": "Back Left Tire Pressure"
+        },
+        {
+          "key": "backRightTP",
+          "name": "Back Right Tire Pressure"
+        }
+      ]
     }
   ],
   "historyLength": 60000

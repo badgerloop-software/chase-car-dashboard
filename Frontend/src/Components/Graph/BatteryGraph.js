@@ -8,6 +8,7 @@ import {
   Text,
   VStack,
   Icon,
+  useConst,
 } from "@chakra-ui/react";
 import { FaSave } from "react-icons/fa";
 import {
@@ -21,9 +22,10 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useContext } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { Line } from "react-chartjs-2";
 import GraphContext from "./GraphContext";
+import GraphData from "./graph-data.json";
 
 ChartJS.register(
   LinearScale,
@@ -35,24 +37,109 @@ ChartJS.register(
   Legend
 );
 
+function generateCategories() {
+  const output = [];
+  for (const category of GraphData.categories) {
+    const values = category.values.map((obj) => {
+      const colorNum = Math.floor(Math.random() * 0x3fffff + 0x3fffff);
+      const color = "#" + colorNum.toString(16);
+
+      const output = { key: obj.key, name: obj.name, color };
+      // console.log("Generated color for", obj, ":", output);
+      return output;
+    });
+    output.push({ category: category.category, values });
+  }
+
+  return output;
+}
+
 export default function BatteryGraph(props) {
+  const categories = useConst(generateCategories);
   const graphData = useContext(GraphContext);
-  const data = {
-    datasets: [
-      {
-        label: "Battery Group 1",
-        data: graphData.batteryGroup1,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      // {
-      //   label: "Dataset 2",
-      //   data: [{ x: startTime.plus(Duration.fromMillis(1000)), y: 13 }],
-      //   borderColor: "rgb(53, 162, 235)",
-      //   backgroundColor: "rgba(53, 162, 235, 0.5)",
-      // },
-    ],
-  };
+
+  const allDatasets = categories.flatMap((category) => category.values);
+  function reducer(state, { action, key }) {
+    switch (action) {
+      case "add":
+        // key: string
+        // console.log("Adding", key, "...");
+        const toAdd = allDatasets.find((dataset) => dataset.key === key);
+        // console.log("as", toAdd);
+        if (toAdd && !state.find((dataset) => dataset.key === key)) {
+          return state.concat({
+            key: toAdd.key,
+            label: toAdd.name,
+            data: graphData[toAdd.key],
+            borderColor: toAdd.color,
+            backgroundColor: toAdd.color + "B3",
+            active: true,
+          });
+        }
+        return state;
+      case "remove":
+        // key: string
+        for (let i = 0; i < state.length; i++) {
+          if (state[i].key === key) {
+            // state.splice(i, 1);
+            // return state;
+            return state.slice(0, i).concat(state.slice(i + 1));
+          }
+        }
+        return state;
+      case "toggle":
+        // key: string
+        const toToggle = state.find((dataset) => dataset.key === key);
+        if (toToggle) {
+          toToggle.active = !toToggle.active;
+        }
+        return state;
+      case "set":
+        // key: string[]
+        return key.map((value) => ({
+          key: toAdd.key,
+          label: value.name,
+          data: graphData[value.key],
+          borderColor: value.color,
+          backgroundColor: value.color + "B3",
+          active: true,
+        }));
+      case "update":
+        // key: undefined
+        console.log("updating...");
+        return state.map((dataset) => ({
+          key: dataset.key,
+          label: dataset.label,
+          data: graphData[dataset.key],
+          borderColor: dataset.borderColor,
+          backgroundColor: dataset.backgroundColor,
+          active: dataset.active,
+        }));
+      default:
+        console.warn("Unknown operation:", action);
+    }
+  }
+  const [datasets, updateDatasets] = useReducer(reducer, []);
+  useEffect(() => {
+    updateDatasets({ action: "update" });
+  }, [graphData]);
+  // const data = {
+  //   datasets: [
+  //     {
+  //       label: "Battery Group 1",
+  //       data: graphData.batteryGroup1,
+  //       borderColor: "rgb(255, 99, 132)",
+  //       backgroundColor: "rgba(255, 99, 132, 0.5)",
+  //     },
+  //     {
+  //       label: "Battery Group 2 2",
+  //       data: graphData.batteryGroup2,
+  //       borderColor: "rgb(53, 162, 235)",
+  //       backgroundColor: "rgba(53, 162, 235, 0.5)",
+  //     },
+  //   ],
+  // };
+  const data = { datasets };
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -61,9 +148,7 @@ export default function BatteryGraph(props) {
         display: false,
       },
     },
-    animation: {
-      duration: 0,
-    },
+    animation: false,
     scales: {
       xAxis: {
         type: "time",
@@ -100,7 +185,15 @@ export default function BatteryGraph(props) {
           <Button>
             <Icon as={FaSave} />
           </Button>
-          <Button>
+          <Button
+            onClick={() =>
+              updateDatasets({
+                action: "add",
+                key: allDatasets[Math.floor(Math.random() * allDatasets.length)]
+                  .key,
+              })
+            }
+          >
             <AddIcon />
           </Button>
           <Box flex={1} borderColor="black" borderWidth={1}></Box>
