@@ -19,17 +19,34 @@ export default router;
 import { Socket } from "net";
 // const { Buffer } = require("buffer");
 const car_port = 4003;
+const car_server = "192.168.1.1";
 var client = new Socket();
+//var client = net.createConnection(car_port, "192.168.1.1", function () {
+//  console.log(`Created connection with ${client.remoteAddress}:${car_port}`);
+//});
 let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
                    // data) to solarCarData
 
-client.connect(car_port, function () {
-  console.log(`Connected to car server: localhost:${car_port}`);
+client.connect(car_port, car_server, function () {
+  console.log(`Connected to car server: ${client.remoteAddress}:${car_port}`);
 });
 
+//client.on("connect", function () {
+//  console.log(`Connected to car server: localhost:${car_port}`);
+//});
+
+//client.on("lookup", function (host) {
+  //console.log("Received: ", data);
+//  console.log(data.toString());
+  //unpackData(data);
+  // client.destroy(); //kill client after server's response
+//});
+
 client.on("data", function (data) {
-  console.log("Received: ", data);
-  unpackData(data);
+  //console.log("Received: ", data);
+  console.log(data);
+  console.log(data.toString());
+  //unpackData(data);
   // client.destroy(); //kill client after server's response
 });
 
@@ -40,6 +57,13 @@ client.on("close", function () {
 client.on("error", (err) => {
   console.log("Client errored out:", err);
   client.destroy();
+  // If connection with the solar car was refused, try connecting to localhost (in lieu of having separate run scripts
+  // for testing with localhost and running with the pi's IP)
+  if(err.toString() === `Error: connect ECONNREFUSED ${car_server}:${car_port}`) {
+    client.connect(car_port, function () {
+      console.log(`Connected to car server: ${client.remoteAddress}:${car_port}`);
+    });
+  }
 });
 
 /**
