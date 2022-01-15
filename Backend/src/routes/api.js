@@ -41,17 +41,12 @@ client.connect(car_port, car_server, function () {
   //unpackData(data);
   // client.destroy(); //kill client after server's response
 //});
-let count = 0;
+
 client.on("data", function (data) {
   //console.log("Received: ", data);
   console.log(data);
   //console.log(data.toString());
-
-  if(count >= 1) {
-    unpackData(data);
-  } else {
-    count++;
-  }
+  unpackData(data);
 
   // client.destroy(); //kill client after server's response
 });
