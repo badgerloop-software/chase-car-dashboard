@@ -41,12 +41,18 @@ client.connect(car_port, car_server, function () {
   //unpackData(data);
   // client.destroy(); //kill client after server's response
 //});
-
+let count = 0;
 client.on("data", function (data) {
   //console.log("Received: ", data);
   console.log(data);
-  console.log(data.toString());
-  //unpackData(data);
+  //console.log(data.toString());
+
+  if(count >= 1) {
+    unpackData(data);
+  } else {
+    count++;
+  }
+
   // client.destroy(); //kill client after server's response
 });
 
@@ -101,7 +107,7 @@ function unpackData(data) {
         break;
       case "float":
         // Add the data to the front of dataArray
-        dataArray.unshift(data.readFloatBE(buffOffset));
+        dataArray.unshift(data.readFloatLE(buffOffset));
         break;
       case "char":
         // Add the data to the front of dataArray

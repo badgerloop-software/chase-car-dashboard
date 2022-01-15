@@ -64,7 +64,7 @@ const server = net.createServer((socket) => {
           buf1.writeUInt8(Math.round(nextValue), buffOffset);
           break;
         case "float":
-          buf1.writeFloatBE(Math.floor(nextValue) + 0.125, buffOffset);
+          buf1.writeFloatLE(Math.floor(nextValue) + 0.125, buffOffset);
           break;
         case "char":
           buf1.writeUInt8(Math.round(nextValue), buffOffset);
