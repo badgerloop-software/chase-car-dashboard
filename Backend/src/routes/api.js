@@ -19,7 +19,7 @@ export default router;
 import { Socket } from "net";
 // const { Buffer } = require("buffer");
 const car_port = 4003;
-const car_server = "192.168.1.1"; // TODO Replace with pi's IP address
+const car_server = "localhost"; // TODO Replace with pi's IP address
 var client = new Socket();
 let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
                    // data) to solarCarData
