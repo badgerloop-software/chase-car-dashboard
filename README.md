@@ -10,9 +10,7 @@
 
 0. If you don't already have an SSH key, [generate a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) (only the steps under "Generating a new SSH key" are required) and [add it to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
 1. Once you have an SSH key, clone the [sc1-data-format repository](https://github.com/badgerloop-software/sc1-data-format) to your computer. Make sure to clone it using SSH (when you go to copy the clone link, there will be an SSH option above the link).
-2. Next, `cd` into the `chase-car-dashboard` repository and run the following commands:
-   1. `git submodule init`
-   2. `git submodule update --remote`
+2. Next, `cd` into the `chase-car-dashboard` repository and run `git submodule init`.
 
 ## Running the Dashboard
 
@@ -38,9 +36,10 @@
    3. In the first, `cd` into `Backend` and, while the solar car dashboard is running, run the command `npm start`.
    4. With the other terminal, repeat the process with `Frontend`.
 7. If you want to test the engineering dashboard without the solar car dashboard, do the following:
-   1. Open up three separate terminals.
-   2. In the first, `cd` into `DataGenerator` and run the command `npm start`.
-   3. With the other two terminals, repeat the process with `Backend` and `Frontend`, in that order, after the previous has initialized and opened their port (4003 and 4001, respectively).
+   1. For quicker connection times, make sure the value of `car_server` in `Backend/src/routes/api.js` is "localhost".
+   2. Open up three separate terminals.
+   3. In the first, `cd` into `DataGenerator` and run the command `npm start`.
+   4. With the other two terminals, repeat the process with `Backend` and `Frontend`, in that order, after the previous has initialized and opened their port (4003 and 4001, respectively).
 8. Once you have finished making your necessary changes to your code, switch to a new branch that has a good name for the feature or names the Jira issue (e.g. `SW-23/skeleton`).
 9. Commit related changes to that branch and push to this repository. (Do this often so that it is easy to finely revert to a previous state!)
 10. Once you are happy with the state of your code, open a pull request and request someone to conduct a code review. It may be kicked back with some suggestions or edits, but when it is accepted, it will be merged with `main`. Congrats! Now it's just time to rinse and repeat.
