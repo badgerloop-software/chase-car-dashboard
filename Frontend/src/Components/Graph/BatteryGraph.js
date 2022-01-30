@@ -21,6 +21,20 @@ ChartJS.register(
 );
 
 export default function BatteryGraph(props) {
+    const plugin = [{
+        id: 'custom_canvas_background_color',
+        beforeDraw: (chart) => {
+            const ctx = chart.canvas.getContext('2d');
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, chart.width, chart.height);
+            ctx.restore();
+        }
+    }];
+
+    const gridColorStr = 'rgba(100,100,100,1)'; // TODO
+
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -29,15 +43,36 @@ export default function BatteryGraph(props) {
         },
         scales: {
             y: {
+                ticks: {
+                    color: '#FFFFFF',
+                },
+                grid: {
+                    color: gridColorStr,
+                    borderColor: gridColorStr,
+                    borderWidth: 2,
+                },
                 min: 0,
                 suggestedMax: 100
+            },
+            x: {
+                ticks: {
+                    color: '#FFFFFF',
+                },
+                grid: {
+                    color: gridColorStr,
+                    borderColor: gridColorStr,
+                    borderWidth: 2,
+                },
             }
         },
         plugins: {
             legend: {
+                labels: {
+                    color: '#FFFFFF',
+                },
                 position: 'top',
             }
-        },
+        }
     };
 
     const labels = props.data?.timestamps ?? [10,9,8,7,6,5,4,3,2,1];
@@ -67,7 +102,7 @@ export default function BatteryGraph(props) {
                 Battery
             </Text>
             <Center flex={1}>
-                <Line options={ options } data={ data } />
+                <Line options={ options } data={ data } plugins={ plugin } />
             </Center>
         </HStack>
     );

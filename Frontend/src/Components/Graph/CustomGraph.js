@@ -193,8 +193,8 @@ export default function CustomGraph(props) {
     // ------------- Datermine colors for the datasets ----------------
 
     const generateColors = () => {
-        const maxRGB = 225;
-        const minRGB = 100;
+        const maxRGB = 255;
+        const minRGB = 127;
         var r, g, b;
         const rgbIncrement = Math.floor((maxRGB - minRGB) / Math.floor(Math.cbrt(Object.keys(props.data ?? {"": null}).length)));
         let rgbStrings = [];
@@ -212,6 +212,20 @@ export default function CustomGraph(props) {
 
     // ------------- Graph options and data ------------------
 
+    const plugin = [{
+        id: 'custom_canvas_background_color',
+        beforeDraw: (chart) => {
+            const ctx = chart.canvas.getContext('2d');
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, chart.width, chart.height);
+            ctx.restore();
+        }
+    }];
+
+    const gridColorStr = 'rgba(100,100,100,1)'; // TODO
+
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -220,7 +234,25 @@ export default function CustomGraph(props) {
         },
         scales: {
             y: {
+                ticks: {
+                    color: '#FFFFFF',
+                },
+                grid: {
+                    color: gridColorStr,
+                    borderColor: gridColorStr,
+                    borderWidth: 2,
+                },
                 suggestedMin: 0
+            },
+            x: {
+                ticks: {
+                    color: '#FFFFFF',
+                },
+                grid: {
+                    color: gridColorStr,
+                    borderColor: gridColorStr,
+                    borderWidth: 2,
+                },
             }
         },
         plugins: {
@@ -302,7 +334,7 @@ export default function CustomGraph(props) {
                         </HStack>
                     </Grid>
                     <Center flex={1}>
-                        <Line options={ options } data={ generateData(props.data) } />
+                        <Line options={ options } data={ generateData(props.data) } plugins={ plugin } />
                     </Center>
                 </VStack>
             </HStack>
