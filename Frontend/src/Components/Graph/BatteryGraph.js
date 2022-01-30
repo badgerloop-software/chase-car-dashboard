@@ -21,6 +21,7 @@ ChartJS.register(
 );
 
 export default function BatteryGraph(props) {
+    /* TODO Remove if we don't customize our dark mode styles
     const plugin = [{
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
@@ -31,7 +32,7 @@ export default function BatteryGraph(props) {
             ctx.fillRect(0, 0, chart.width, chart.height);
             ctx.restore();
         }
-    }];
+    }];*/
 
     const gridColorStr = 'rgba(100,100,100,1)'; // TODO
 
@@ -102,7 +103,7 @@ export default function BatteryGraph(props) {
                 Battery
             </Text>
             <Center flex={1}>
-                <Line options={ options } data={ data } plugins={ plugin } />
+                <Line options={ options } data={ data } /*plugins={ plugin }*/ />
             </Center>
         </HStack>
     );

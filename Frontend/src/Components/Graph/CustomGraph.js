@@ -212,6 +212,7 @@ export default function CustomGraph(props) {
 
     // ------------- Graph options and data ------------------
 
+    /* TODO Remove if we don't customize our dark mode styles
     const plugin = [{
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
@@ -222,7 +223,7 @@ export default function CustomGraph(props) {
             ctx.fillRect(0, 0, chart.width, chart.height);
             ctx.restore();
         }
-    }];
+    }];*/
 
     const gridColorStr = 'rgba(100,100,100,1)'; // TODO
 
@@ -334,7 +335,7 @@ export default function CustomGraph(props) {
                         </HStack>
                     </Grid>
                     <Center flex={1}>
-                        <Line options={ options } data={ generateData(props.data) } plugins={ plugin } />
+                        <Line options={ options } data={ generateData(props.data) } /*plugins={ plugin }*/ />
                     </Center>
                 </VStack>
             </HStack>
