@@ -10,7 +10,7 @@ export default function BatteryCharge(props) {
                     h="20vh"
                     css={{
                         background: "linear-gradient(to top, white 5%, "
-                                    + ((props.charge <= 10) ? "red" : ((props.charge <= 25) ? "yellow" : "lime"))
+                                    + ((props.charge <= 20) ? "red" : ((props.charge <= 60) ? "yellow" : "lime"))
                                     + " 5% " + (5+(props.charge/100)*87) + "%, white "
                                     + (5+(props.charge/100)*87) + "% 100%)"
                     }}
