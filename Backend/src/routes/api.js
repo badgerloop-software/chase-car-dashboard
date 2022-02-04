@@ -17,51 +17,32 @@ export default router;
 //--------------TCP-------------------------
 
 import { Socket } from "net";
-// const { Buffer } = require("buffer");
-const car_port = 4003;
-const car_server = "localhost"; // TODO Replace with pi's IP address
+const car_port = 4003; // Port for TCP connection
+const car_server = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
 var client = new Socket();
 let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
                    // data) to solarCarData
 
+// Initiate connection
 client.connect(car_port, car_server, function () {
   console.log(`Connected to car server: ${client.remoteAddress}:${car_port}`);
 });
 
-//client.on("connect", function () {
-//  console.log(`Connected to car server: localhost:${car_port}`);
-//});
-
-//client.on("lookup", function (host) {
-  //console.log("Received: ", data);
-//  console.log(data.toString());
-  //unpackData(data);
-  // client.destroy(); //kill client after server's response
-//});
-
+// Data received listener: Log and unpack data when it's received
 client.on("data", function (data) {
-  //console.log("Received: ", data);
   console.log(data);
-  //console.log(data.toString());
   unpackData(data);
-
-  // client.destroy(); //kill client after server's response
 });
 
+// Socket closed listener: Log when connection is closed
 client.on("close", function () {
   console.log(`Connection to car server (${car_port}) is closed`);
 });
 
+// Error listener: Destroy the socket and log the error
 client.on("error", (err) => {
   console.log("Client errored out:", err);
   client.destroy();
-  // If connection with the solar car was refused or timed out, try connecting to localhost (in lieu of having separate
-  // start scripts for testing with localhost and running with the pi's IP)
-  if((err.toString() === `Error: connect ECONNREFUSED ${car_server}:${car_port}`) || (err.toString() === `Error: connect ETIMEDOUT ${car_server}:${car_port}`)){
-    client.connect(car_port, function () {
-      console.log(`Connected to car server: ${client.remoteAddress}:${car_port}`);
-    });
-  }
 });
 
 /**

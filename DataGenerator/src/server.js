@@ -1,21 +1,6 @@
-// const express = require("express");
-// const http = require("http");
-// const car = require("./car");
 const net = require("net");
-
-// const port = 4003;
-
-// const app = express()
-// const server = http.createServer(app);
-
-// const carSimulator = new Car()
-// carSimulator.start()
-
-// server.listen(port, () => console.log(`Listening on port ${port}`));
-
-//-----------TCP-------------
 import DATA_FORMAT from "../../Backend/Data/sc1-data-format/format.json";
-const port = 4003;
+const port = 4003; // Port for TCP connection
 
 // Calculate the number of bytes to allocate for the Buffer
 let bytes = 0;
@@ -32,12 +17,14 @@ const server = net.createServer((socket) => {
   console.log("New connection :)");
 
   let interval;
+  // stop writing data and destroy the socket
   function exit() {
     clearInterval(interval);
     socket.destroy();
     console.log("socket successfully destroyed");
   }
 
+  // Error, connection closed, and connection ended listener
   socket.on("error", (error) => {
     console.warn("socket errored", error);
     exit();
@@ -51,6 +38,7 @@ const server = net.createServer((socket) => {
     exit();
   });
 
+  // Pack and send a buffer at half second intervals
   interval = setInterval(() => {
     buffOffset = 0; // Offset when adding each value to buf1
 
@@ -86,15 +74,15 @@ const server = net.createServer((socket) => {
     }
 
     socket.write(buf1);
-    // socket.pipe(socket);
   }, 500);
 });
 
+// Error listener
 server.on("error", (err) => {
   console.warn("An error has occurred:", err);
 });
 
+// Listen for connections on specified port
 server.listen(port, () => {
   console.log("Waiting for connection ...");
-  // console.log("Data:",buf1)
 });
