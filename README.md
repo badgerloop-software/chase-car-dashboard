@@ -31,12 +31,12 @@
    1. To avoid pushing changes that use obsolete data, update the submodule before you `git push` your changes. If there are changes to the data format, run the dashboard to make sure your code still works.
 5. Run `npm i` to install the latest dependencies to your computer. You will also need to do this when you `git pull` to get the most recent changes of the code on your branch.
 6. If you want to test the engineering dashboard with the solar car dashboard, do the following:
-   1. Change the value of `car_server` in `Backend/src/routes/api.js` to the TCP server's address (either the Raspberry Pi's IP address or "localhost").
+   1. Change the value of `CAR_SERVER` in `Backend/src/routes/api.js` to the TCP server's address (either the Raspberry Pi's IP address or "localhost").
    2. Open up two separate terminals.
    3. In the first, `cd` into `Backend` and, while the solar car dashboard is running, run the command `npm start`.
    4. With the other terminal, repeat the process with `Frontend`.
 7. If you want to test the engineering dashboard without the solar car dashboard, do the following:
-   1. For quicker connection times, make sure the value of `car_server` in `Backend/src/routes/api.js` is "localhost".
+   1. Make sure the value of `CAR_SERVER` in `Backend/src/routes/api.js` is "localhost".
    2. Open up three separate terminals.
    3. In the first, `cd` into `DataGenerator` and run the command `npm start`.
    4. With the other two terminals, repeat the process with `Backend` and `Frontend`, in that order, after the previous has initialized and opened their port (4003 and 4001, respectively).

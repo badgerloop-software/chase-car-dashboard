@@ -1,6 +1,6 @@
-const net = require("net");
 import DATA_FORMAT from "../../Backend/Data/sc1-data-format/format.json";
-const port = 4003; // Port for TCP connection
+const NET = require("net");
+const PORT = 4003; // Port for TCP connection
 
 // Calculate the number of bytes to allocate for the Buffer
 let bytes = 0;
@@ -13,7 +13,7 @@ let buf1 = Buffer.alloc(bytes, 0); // Fill a buffer of the correct size with zer
 let nextValue = 1;
 let buffOffset = 0;
 
-const server = net.createServer((socket) => {
+const SERVER = NET.createServer((socket) => {
   console.log("New connection :)");
 
   let interval;
@@ -58,6 +58,8 @@ const server = net.createServer((socket) => {
           buf1.writeUInt8(Math.round(nextValue), buffOffset);
           break;
         case "bool":
+          // Using % 2, write 1 or 0 (true or false) to Buffer
+          // (i.e. writing true or false to Buffer based on whether nextValue (rounded) is odd or even)
           buf1.writeUInt8(Math.round(nextValue) % 2, buffOffset);
           break;
         default:
@@ -78,11 +80,11 @@ const server = net.createServer((socket) => {
 });
 
 // Error listener
-server.on("error", (err) => {
+SERVER.on("error", (err) => {
   console.warn("An error has occurred:", err);
 });
 
 // Listen for connections on specified port
-server.listen(port, () => {
+SERVER.listen(PORT, () => {
   console.log("Waiting for connection ...");
 });

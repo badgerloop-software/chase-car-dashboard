@@ -94,7 +94,7 @@ export default function CustomGraph(props) {
         setTitle(event.target.value);
     };
 
-    const isInvalidTitle = ((title === "") || (title === "custom") || (title === "Custom"));
+    const isInvalidTitle = ((title === "") || (title.toLowerCase() === "custom"));
 
     // ---------------- Cancel adding selected datasets -----------------
 
