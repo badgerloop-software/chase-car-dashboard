@@ -48,21 +48,15 @@ export default function TemperatureGraph(props) {
             {
                 label: 'Battery',
                 // NOTE Remove faker from package.json when actual data is put in
-                data: props.data?.batteryTemp ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                data: props.data?.pack_temp ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
             {
                 label: 'Motor',
-                data: props.data?.motorTemp ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                data: props.data?.motor_temp ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
                 borderColor: 'rgb(53, 162, 235)',
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            },
-            {
-                label: 'Motor Controller',
-                data: props.data?.motorControllerTemp ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
-                borderColor: 'rgb(255, 210, 100)',
-                backgroundColor: 'rgba(255, 210, 100, 0.5)',
             },
         ],
     };

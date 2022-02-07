@@ -48,7 +48,7 @@ export default function BatteryGraph(props) {
             {
                 label: 'Battery %',
                 // NOTE Remove faker from package.json when actual data is put in
-                data: props.data?.charge ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                data: props.data?.soc ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             }

@@ -48,7 +48,10 @@ export default function PowerGraph(props) {
             {
                 label: 'Net Power',
                 // NOTE Remove faker from package.json when actual data is put in
-                data: props.data?.batteryPower ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                // Multiplying each voltage in the array by its corresponding current to get array of net power values
+                data: props.data?.pack_voltage.map((voltage, idx) => { return (voltage * props.data?.pack_current[idx]) })
+                      ??
+                      labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
                 fill: {
                     above: 'rgba(255, 64, 64, 0.25)',
                     below: 'rgba(64, 255, 64, 0.25)',
@@ -59,17 +62,14 @@ export default function PowerGraph(props) {
             },
             {
                 label: 'Solar Power',
-                data: props.data?.solarPower ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+                // NOTE Remove faker from package.json when actual data is put in
+                // Multiplying each voltage in array by its corresponding MPPT current to get array of solar power values
+                data: props.data?.pack_voltage.map((voltage, idx) => { return (voltage * props.data?.mppt_current_out[idx]) })
+                      ??
+                      labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
                 fill: false,
                 borderColor: 'rgb(64, 255, 64)',
                 backgroundColor: 'rgba(64, 255, 64, 0.5)',
-            },
-            {
-                label: 'Motor Power',
-                data: props.data?.motorPower ?? labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
-                fill: false,
-                borderColor: 'rgb(127, 127, 127)',
-                backgroundColor: 'rgba(127, 127, 127, 0.5)',
             },
         ],
     };
