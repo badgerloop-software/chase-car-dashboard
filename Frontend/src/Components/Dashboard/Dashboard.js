@@ -7,6 +7,7 @@ import MiniMap from "../MiniMap/MiniMap";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
+import CustomGraph from "../Graph/CustomGraph";
 
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
@@ -90,8 +91,8 @@ export default function Dashboard(props) {
   // Update the value indicating which graph to display when an option is selected
   const selectGraph = (event) => {
     if (event.target.id === "graphSelect1") {
-      // Avoid duplicate graphs, unless they are both empty
-      if (event.target.value !== "") {
+      // Avoid duplicate graphs, unless they are both empty or custom
+      if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         switch (event.target.value) {
@@ -107,8 +108,8 @@ export default function Dashboard(props) {
       }
       setGraph1(event.target.value);
     } else if (event.target.id === "graphSelect2") {
-      // Avoid duplicate graphs, unless they are both empty
-      if (event.target.value !== "") {
+      // Avoid duplicate graphs, unless they are both empty or custom
+      if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         switch (event.target.value) {
@@ -124,8 +125,8 @@ export default function Dashboard(props) {
       }
       setGraph2(event.target.value);
     } else if (event.target.id === "graphSelect3") {
-      // Avoid duplicate graphs, unless they are both empty
-      if (event.target.value !== "") {
+      // Avoid duplicate graphs, unless they are both empty or custom
+      if ((event.target.value !== "") && (event.target.value !== "custom")) {
         // If trying to switch to a graph that is already being displayed in another
         // section, switch the graphs in this section and the other one
         switch (event.target.value) {
@@ -146,14 +147,42 @@ export default function Dashboard(props) {
   // Choose the graph to return/display based on the given option
   const switchGraph = (optionValue) => {
     if (optionValue === "battery") {
-      return <BatteryGraph />;
+      return <BatteryGraph data={ state.data } />;
     } else if (optionValue === "power") {
-      return <PowerGraph />;
+      return <PowerGraph data={ state.data } />;
     } else if (optionValue === "temperature") {
-      return <TemperatureGraph />;
-    } else {
-      return <VStack />;
+      return <TemperatureGraph data={ state.data } />;
+    } else if (optionValue === "custom") {
+      return <CustomGraph
+                id=""
+                data={ state.data }
+                title=""
+                buttons={[]}
+                datasets={[]}
+                save={ saveCustomGraph }
+             />;
+    } else if(optionValue in customGraphData) {
+      return <CustomGraph
+                id={ optionValue }
+                data={ state.data }
+                title={ optionValue }
+                buttons={ customGraphData[optionValue].buttons }
+                datasets={ customGraphData[optionValue].datasets }
+                save={ saveCustomGraph }
+             />;
     }
+  };
+
+  //------------------------- Saving custom graphs ----------------------------
+
+  const [customGraphData, setCustomGraphData] = React.useState({});
+
+  const saveCustomGraph = (data) => {
+    let graphData = customGraphData;
+
+    graphData[data.title] = data;
+
+    setCustomGraphData(graphData);
   };
 
   return (
@@ -229,7 +258,7 @@ export default function Dashboard(props) {
               value={graph1}
               onChange={selectGraph}
             >
-              <GraphOptions />
+              <GraphOptions customGraphs={ customGraphData } />
             </Select>
             {switchGraph(graph1)}
           </VStack>
@@ -249,7 +278,7 @@ export default function Dashboard(props) {
               value={graph2}
               onChange={selectGraph}
             >
-              <GraphOptions />
+              <GraphOptions customGraphs={ customGraphData } />
             </Select>
             {switchGraph(graph2)}
           </VStack>
@@ -269,7 +298,7 @@ export default function Dashboard(props) {
               value={graph3}
               onChange={selectGraph}
             >
-              <GraphOptions />
+              <GraphOptions customGraphs={ customGraphData } />
             </Select>
             {switchGraph(graph3)}
           </VStack>
@@ -290,11 +319,21 @@ function DataViewOptions(props) {
 }
 
 function GraphOptions(props) {
+  let customGraphs = [];
+
+  for(const title in props.customGraphs) {
+    customGraphs.push(
+        <option value={title} >{title}</option>
+    );
+  }
+
   return (
     <>
       <option value="battery">Battery</option>
       <option value="power">Power</option>
       <option value="temperature">Temperature</option>
+      {customGraphs}
+      <option value="custom">Custom</option>
     </>
   );
 }

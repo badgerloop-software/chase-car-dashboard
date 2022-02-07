@@ -1,31 +1,21 @@
 import { Box, Heading, HStack, Text } from "@chakra-ui/react";
-import TirePressure from "./TirePressure";
+import BatteryCharge from "./BatteryCharge";
 
 export default function DataView(props) {
   return (
     <div>
       <Heading>Data</Heading>
       <HStack>
+        <BatteryCharge charge={props.data?.soc[0]}/>
         <Box>
-          <Text>Speed: {props.data?.speed}</Text>
-          <Text>Charge: {props.data?.charge}</Text>
-          <Text>netPower: {(props.data?.batteryVoltage ?? 0) * (props.data?.batteryCurrent ?? 0)}</Text>
-          <Text>motorPower: {props.data?.motorPower}</Text>
-          <Text>milesLeft: {props.data?.milesLeft}</Text>
-          <Text>batteryTemp: {props.data?.batteryTemp}</Text>
-          <Text>motorTemp: {props.data?.motorTemp}</Text>
-          <Text>motorControllerTemp: {props.data?.motorControllerTemp}</Text>
-          <Text>state: {props.data?.state}</Text>
+          <Text>Speed: {props.data?.speed[0]}</Text>
+          <Text>Charge: {props.data?.soc[0]}</Text>
+          <Text>netPower: {(props.data?.pack_voltage[0] ?? 0) * (props.data?.pack_current[0] ?? 0)}</Text>
+          <Text>milesLeft: {/*props.data?.milesLeft[0]*/ 0}</Text>
+          <Text>batteryTemp: {props.data?.pack_temp[0]}</Text>
+          <Text>motorTemp: {props.data?.motor_temp[0]}</Text>
+          <Text>state: {props.data?.state[0]}</Text>
         </Box>
-        <TirePressure
-          size={10}
-          borderWidth={1}
-          borderColor="black"
-          frontLeftTP={props.data?.frontLeftTP}
-          frontRightTP={props.data?.frontRightTP}
-          backLeftTP={props.data?.backLeftTP}
-          backRightTP={props.data?.backRightTP}
-        />
       </HStack>
     </div>
   );
