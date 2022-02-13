@@ -32,11 +32,11 @@ export default ROUTER;
 //--------------TCP-------------------------
 
 import { Socket } from "net";
-const CAR_PORT = 4003; // Port for TCP connection
+const CAR_PORT = 4003; // Port for TCP connection to Car Datagenerator
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
 var client = new Socket();
 let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
-                   // data) to solarCarData
+// data) to solarCarData
 
 // Initiate connection
 client.connect(CAR_PORT, CAR_SERVER, function () {
@@ -45,16 +45,23 @@ client.connect(CAR_PORT, CAR_SERVER, function () {
 
 // Data received listener: Log and unpack data when it's received
 client.on("data", function (data) {
-  console.log(data);
+  
   // TODO ------------------------------------------------------------------------------------------
   // append to file
-  if(doRecord) {
+  // if (doRecord) {
     // TODO Replace example values with actual values
-    fs.appendFile("recordDirectory/runName.csv", data, err => {/*error handling*/});
-  }
+    fs.appendFile("recordedData/runName.csv", data + "\n", err => {/*error handling*/ });
+  // }
   // TODO ------------------------------------------------------------------------------------------
   unpackData(data);
 });
+
+
+//**Example for getting content from a file line by line  */
+// const allFileContents = fs.readFileSync('recordedData/runName.csv', 'utf-8');
+// allFileContents.split(/\r?\n/).forEach(line =>  {
+//   console.log(`Line from file: ${line}`);
+// });
 
 // Socket closed listener: Log when connection is closed
 client.on("close", function () {
@@ -79,8 +86,8 @@ function unpackData(data) {
 
   // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
   timestamps.unshift(timestamp);
-  timestamp ++;
-  if(timestamps.length > xAxisCap) {
+  timestamp++;
+  if (timestamps.length > xAxisCap) {
     timestamps.pop();
   }
   solarCarData["timestamps"] = timestamps;
@@ -89,7 +96,7 @@ function unpackData(data) {
     let dataArray = []; // Holds the array of data specified by property that will be put in solarCarData
     let dataType = ""; // Data type specified in the data format
 
-    if(solarCarData.hasOwnProperty(property)) {
+    if (solarCarData.hasOwnProperty(property)) {
       dataArray = solarCarData[property];
     }
     dataType = DATA_FORMAT[property][1];
@@ -118,7 +125,7 @@ function unpackData(data) {
         break;
     }
     // Limit dataArray to a length specified by xAxisCap
-    if(dataArray.length > xAxisCap) {
+    if (dataArray.length > xAxisCap) {
       dataArray.pop();
     }
     // Write dataArray to solarCarData at the correct key
