@@ -1,7 +1,10 @@
 import { Router } from "express";
+import * as fs from "fs";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
+// TODO ---------------------------------------------------------------------
+let doRecord = false; // Flag for whether we should be recording data or not
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -11,6 +14,18 @@ let solarCarData = INITIAL_SOLAR_CAR_DATA,
 ROUTER.get("/api", (req, res) => {
   res.send({ response: frontendData }).status(200);
 });
+
+// TODO ---------------------------------------------------------------------
+// Set recording flag to true
+ROUTER.get("/start-record", (req, res) => {
+  doRecord = true;
+});
+
+// Set recording flag to false
+ROUTER.get("/stop-record", (req, res) => {
+  doRecord = false;
+});
+// TODO ---------------------------------------------------------------------
 
 export default ROUTER;
 
@@ -31,6 +46,13 @@ client.connect(CAR_PORT, CAR_SERVER, function () {
 // Data received listener: Log and unpack data when it's received
 client.on("data", function (data) {
   console.log(data);
+  // TODO ------------------------------------------------------------------------------------------
+  // append to file
+  if(doRecord) {
+    // TODO Replace example values with actual values
+    fs.appendFile("recordDirectory/runName.csv", data, err => {/*error handling*/});
+  }
+  // TODO ------------------------------------------------------------------------------------------
   unpackData(data);
 });
 
