@@ -45,13 +45,18 @@ client.connect(CAR_PORT, CAR_SERVER, function () {
 
 // Data received listener: Log and unpack data when it's received
 client.on("data", function (data) {
-  
+  console.log(data);
   // TODO ------------------------------------------------------------------------------------------
-  // append to file
-  // if (doRecord) {
-    // TODO Replace example values with actual values
-    fs.appendFile("recordedData/runName.csv", data + "\n", err => {/*error handling*/ });
-  // }
+  //if(doRecord) {
+    // Add the most recent data to runName.bin
+    fs.appendFile("recordedData/runName.bin", data, (err) => {/*error handling*/});
+    fs.readFile("recordedData/runName.bin", (err, fData) => {
+      // Write the first speed value to runName.txt (should match the first value in runName.csv)
+      fs.appendFile("recordedData/runName.csv", fData.readUInt8(0) + "\n", (err) => {/*error handling*/});
+    })
+    // Write the most recent speed value to runName.csv
+    fs.appendFile("recordedData/runName.txt", data.readUInt8(0) + "\n", (err) => {/*error handling*/});
+  //}
   // TODO ------------------------------------------------------------------------------------------
   unpackData(data);
 });
