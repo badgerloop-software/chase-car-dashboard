@@ -1,4 +1,4 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -194,7 +194,7 @@ export default function BatteryGraph(props) {
               });
             }}
           >
-            <AddIcon />
+            <EditIcon />
           </Button>
           <Box
             flex={1}
