@@ -9,6 +9,14 @@ import {
   VStack,
   Icon,
   useConst,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { FaSave } from "react-icons/fa";
 import {
@@ -57,6 +65,7 @@ function generateCategories() {
 export default function BatteryGraph(props) {
   const categories = useConst(generateCategories);
   const graphData = useContext(GraphContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const allDatasets = categories.flatMap((category) => category.values);
   function reducer(state, { action, key }) {
@@ -163,72 +172,93 @@ export default function BatteryGraph(props) {
   };
 
   return (
-    <HStack h="100%" align="stretch" {...props}>
-      <Text
-        css={{ writingMode: "vertical-lr" }}
-        transform="rotate(180deg)"
-        borderLeftColor="grey.300"
-        borderLeftWidth={1}
-        textAlign="center"
-      >
-        Battery
-      </Text>
-      <VStack p={2} flex={1} align="stretch">
-        <Stack direction="row">
-          <Button>
-            <Icon as={FaSave} />
-          </Button>
-          <Button
-            onClick={() => {
-              console.log("allDatasets:", allDatasets);
-              console.log("datasets:", datasets);
-              const filtered = allDatasets
-                .map((dataset) => dataset.key)
-                .filter(
-                  (key) => !datasets.find((dataset) => dataset.key === key)
-                );
-              console.log("filtered:", filtered);
-              updateDatasets({
-                action: "add",
-                key: filtered[Math.floor(Math.random() * filtered.length)],
-              });
-            }}
-          >
-            <EditIcon />
-          </Button>
-          <Box
-            flex={1}
-            borderColor="black"
-            borderWidth={1}
-            overflowX="scroll"
-            spacing={2}
-          >
-            {datasets.map((dataset) => (
-              <Button
-                key={dataset.key}
-                borderColor={dataset.borderColor}
-                borderWidth={2}
-                backgroundColor={
-                  dataset.hidden ? "transparent" : dataset.backgroundColor
-                }
-                textDecoration={dataset.hidden ? "line-through" : "none"}
-                onClick={() => {
-                  console.log("clicked", dataset.key);
-                  updateDatasets({ action: "toggle", key: dataset.key });
-                }}
-                mb={2}
-                mr={2}
-                size="xs"
-              >
-                {dataset.label}
-              </Button>
-            ))}
-          </Box>
-        </Stack>
-        <Center flex={1}>
-          <Line data={data} options={options} />
-        </Center>
-      </VStack>
-    </HStack>
+    <>
+      <HStack h="100%" align="stretch" {...props}>
+        <Text
+          css={{ writingMode: "vertical-lr" }}
+          transform="rotate(180deg)"
+          borderLeftColor="grey.300"
+          borderLeftWidth={1}
+          textAlign="center"
+        >
+          Battery
+        </Text>
+        <VStack p={2} flex={1} align="stretch">
+          <Stack direction="row">
+            <Button>
+              <Icon as={FaSave} />
+            </Button>
+            <Button
+              // onClick={() => {
+              //   console.log("allDatasets:", allDatasets);
+              //   console.log("datasets:", datasets);
+              //   const filtered = allDatasets
+              //     .map((dataset) => dataset.key)
+              //     .filter(
+              //       (key) => !datasets.find((dataset) => dataset.key === key)
+              //     );
+              //   console.log("filtered:", filtered);
+              //   updateDatasets({
+              //     action: "add",
+              //     key: filtered[Math.floor(Math.random() * filtered.length)],
+              //   });
+              // }}
+              onClick={onOpen}
+            >
+              <EditIcon />
+            </Button>
+            <Box
+              flex={1}
+              borderColor="black"
+              borderWidth={1}
+              overflowX="scroll"
+              spacing={2}
+            >
+              {datasets.map((dataset) => (
+                <Button
+                  key={dataset.key}
+                  borderColor={dataset.borderColor}
+                  borderWidth={2}
+                  backgroundColor={
+                    dataset.hidden ? "transparent" : dataset.backgroundColor
+                  }
+                  textDecoration={dataset.hidden ? "line-through" : "none"}
+                  onClick={() => {
+                    console.log("clicked", dataset.key);
+                    updateDatasets({ action: "toggle", key: dataset.key });
+                  }}
+                  mb={2}
+                  mr={2}
+                  size="xs"
+                >
+                  {dataset.label}
+                </Button>
+              ))}
+            </Box>
+          </Stack>
+          <Center flex={1}>
+            <Line data={data} options={options} />
+          </Center>
+        </VStack>
+      </HStack>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Select Datasets</ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody>This is the body, beep boop</ModalBody>
+
+          <ModalFooter>
+            <Button bg="#008640" mr={3} onClick={onClose}>
+              Save
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
