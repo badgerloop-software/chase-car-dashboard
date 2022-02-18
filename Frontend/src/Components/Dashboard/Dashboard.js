@@ -1,17 +1,15 @@
 import { Grid, GridItem, Select, VStack } from "@chakra-ui/react";
-import { DateTime } from "luxon";
+import "chartjs-adapter-luxon";
 import React, { useEffect, useReducer, useState } from "react";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
 import BatteryGraph from "../Graph/BatteryGraph";
-import PowerGraph from "../Graph/PowerGraph";
-import TemperatureGraph from "../Graph/TemperatureGraph";
 import CustomGraph from "../Graph/CustomGraph";
 import GraphContext from "../Graph/GraphContext";
-import GraphData from "../Graph/graph-data.json";
+import PowerGraph from "../Graph/PowerGraph";
+import TemperatureGraph from "../Graph/TemperatureGraph";
 import MiniMap from "../MiniMap/MiniMap";
-import "chartjs-adapter-luxon";
 
 function reducer(currentState, newData) {
   // const now = DateTime.now();

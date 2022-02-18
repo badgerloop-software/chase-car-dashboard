@@ -63,9 +63,9 @@ export default function BatteryGraph(props) {
     switch (action) {
       case "add":
         // key: string
-        // console.log("Adding", key, "...");
+        console.log("Adding", key, "...");
         const toAdd = allDatasets.find((dataset) => dataset.key === key);
-        // console.log("as", toAdd);
+        console.log("as", toAdd);
         if (toAdd && !state.find((dataset) => dataset.key === key)) {
           return state.concat({
             key: toAdd.key,
@@ -179,13 +179,20 @@ export default function BatteryGraph(props) {
             <Icon as={FaSave} />
           </Button>
           <Button
-            onClick={() =>
+            onClick={() => {
+              console.log("allDatasets:", allDatasets);
+              console.log("datasets:", datasets);
+              const filtered = allDatasets
+                .map((dataset) => dataset.key)
+                .filter(
+                  (key) => !datasets.find((dataset) => dataset.key === key)
+                );
+              console.log("filtered:", filtered);
               updateDatasets({
                 action: "add",
-                key: allDatasets[Math.floor(Math.random() * allDatasets.length)]
-                  .key,
-              })
-            }
+                key: filtered[Math.floor(Math.random() * filtered.length)],
+              });
+            }}
           >
             <AddIcon />
           </Button>
