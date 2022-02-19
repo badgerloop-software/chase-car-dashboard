@@ -1,24 +1,16 @@
-import { AddIcon, EditIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Center,
   HStack,
+  Icon,
   Stack,
   Text,
-  VStack,
-  Icon,
   useConst,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
+  VStack,
 } from "@chakra-ui/react";
-import { FaSave } from "react-icons/fa";
 import {
   Chart as ChartJS,
   Legend,
@@ -32,8 +24,10 @@ import {
 import "chartjs-adapter-luxon";
 import { useContext, useEffect, useReducer } from "react";
 import { Line } from "react-chartjs-2";
-import GraphContext from "./GraphContext";
+import { FaSave } from "react-icons/fa";
 import GraphData from "./graph-data.json";
+import GraphContext from "./GraphContext";
+import GraphModal from "./GraphModal";
 
 ChartJS.register(
   LinearScale,
@@ -111,14 +105,17 @@ export default function BatteryGraph(props) {
         }));
       case "set":
         // key: string[]
-        return key.map((value) => ({
-          key: toAdd.key,
-          label: value.name,
-          data: graphData[value.key],
-          borderColor: value.color,
-          backgroundColor: value.color + "B3",
-          hidden: false,
-        }));
+        return key.map((key) => {
+          const value = allDatasets.find((dataset) => dataset.key === key);
+          return {
+            key: value.key,
+            label: value.name,
+            data: graphData[value.key],
+            borderColor: value.color,
+            backgroundColor: value.color + "B3",
+            hidden: false,
+          };
+        });
       case "update":
         // key: undefined
         // console.log("updating...");
@@ -241,24 +238,12 @@ export default function BatteryGraph(props) {
           </Center>
         </VStack>
       </HStack>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Select Datasets</ModalHeader>
-          <ModalCloseButton />
-
-          <ModalBody>This is the body, beep boop</ModalBody>
-
-          <ModalFooter>
-            <Button bg="#008640" mr={3} onClick={onClose}>
-              Save
-            </Button>
-            <Button variant="ghost" onClick={onClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <GraphModal
+        isOpen={isOpen}
+        onClose={onClose}
+        datasets={datasets}
+        onSave={(keys) => updateDatasets({ action: "set", key: keys })}
+      />
     </>
   );
 }
