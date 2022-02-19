@@ -64,30 +64,6 @@ export default function BatteryGraph(props) {
   const allDatasets = categories.flatMap((category) => category.values);
   function reducer(state, { action, key }) {
     switch (action) {
-      case "add":
-        // key: string
-        console.log("Adding", key, "...");
-        const toAdd = allDatasets.find((dataset) => dataset.key === key);
-        console.log("as", toAdd);
-        if (toAdd && !state.find((dataset) => dataset.key === key)) {
-          return state.concat({
-            key: toAdd.key,
-            label: toAdd.name,
-            data: graphData[toAdd.key],
-            borderColor: toAdd.color,
-            backgroundColor: toAdd.color + "B3",
-            hidden: false,
-          });
-        }
-        return state;
-      case "remove":
-        // key: string
-        for (let i = 0; i < state.length; i++) {
-          if (state[i].key === key) {
-            return state.slice(0, i).concat(state.slice(i + 1));
-          }
-        }
-        return state;
       case "toggle":
         // key: string
         // const toToggle = state.find((dataset) => dataset.key === key);
@@ -151,10 +127,6 @@ export default function BatteryGraph(props) {
     scales: {
       xAxis: {
         type: "time",
-        // min: DateTime.now()
-        //   .minus(Duration.fromMillis(GraphData.historyLength))
-        //   .toString(),
-        // suggestedMax: DateTime.now().toString(),
       },
       yAxis: {
         suggestedMin: 0,
@@ -185,23 +157,7 @@ export default function BatteryGraph(props) {
             <Button>
               <Icon as={FaSave} />
             </Button>
-            <Button
-              // onClick={() => {
-              //   console.log("allDatasets:", allDatasets);
-              //   console.log("datasets:", datasets);
-              //   const filtered = allDatasets
-              //     .map((dataset) => dataset.key)
-              //     .filter(
-              //       (key) => !datasets.find((dataset) => dataset.key === key)
-              //     );
-              //   console.log("filtered:", filtered);
-              //   updateDatasets({
-              //     action: "add",
-              //     key: filtered[Math.floor(Math.random() * filtered.length)],
-              //   });
-              // }}
-              onClick={onOpen}
-            >
+            <Button onClick={onOpen}>
               <EditIcon />
             </Button>
             <Box
