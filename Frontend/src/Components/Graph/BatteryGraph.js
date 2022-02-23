@@ -1,6 +1,5 @@
 import { EditIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Center,
   HStack,

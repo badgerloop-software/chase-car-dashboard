@@ -34,7 +34,7 @@ import {
 } from "chart.js";
 import "chartjs-adapter-luxon";
 import faker from "faker";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -57,17 +57,11 @@ export default function CustomGraph(props) {
     onOpen: onSaveOpen,
     onClose: onSaveClose,
   } = useDisclosure();
-  const [prevId, setPrevId] = React.useState("");
-  const [title, setTitle] = React.useState(props.title);
-  let [currentDatasets, setDatasets] = React.useState([]); //props.datasets);
-  let [currentColors, setColors] = React.useState([]);
-  let [currentDatasetButtons, setDatasetButtons] = React.useState([]); //props.buttons);
-
-  // -------- Update component when switching to another custom graph ----------
-
-  useEffect(() => {
-    initializeGraph();
-  }, [props.id]);
+  const [, setPrevId] = useState("");
+  const [title, setTitle] = useState(props.title);
+  let [currentDatasets, setDatasets] = useState([]); //props.datasets);
+  let [currentColors, setColors] = useState([]);
+  let [currentDatasetButtons, setDatasetButtons] = useState([]); //props.buttons);
 
   // ----------------------- Initialize a saved graph --------------------------
 
@@ -98,6 +92,12 @@ export default function CustomGraph(props) {
     setDatasets(datasets);
     setDatasetButtons(datasetButtons);
   };
+
+  // -------- Update component when switching to another custom graph ----------
+
+  useEffect(() => {
+    initializeGraph();
+  }, [props.id]);
 
   // ------------------------- Change/Validate title ---------------------------
 
