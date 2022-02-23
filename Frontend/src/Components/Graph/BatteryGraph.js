@@ -160,12 +160,13 @@ export default function BatteryGraph(props) {
             <Button onClick={onOpen}>
               <EditIcon />
             </Button>
-            <Box
+            <HStack
               flex={1}
               borderColor="black"
               borderWidth={1}
-              overflowX="scroll"
+              overflowX="auto"
               spacing={2}
+              px={2}
             >
               {datasets.map((dataset) => (
                 <Button
@@ -180,14 +181,12 @@ export default function BatteryGraph(props) {
                     console.log("clicked", dataset.key);
                     updateDatasets({ action: "toggle", key: dataset.key });
                   }}
-                  mb={2}
-                  mr={2}
                   size="xs"
                 >
                   {dataset.label}
                 </Button>
               ))}
-            </Box>
+            </HStack>
           </Stack>
           <Center flex={1}>
             <Line data={data} options={options} />
