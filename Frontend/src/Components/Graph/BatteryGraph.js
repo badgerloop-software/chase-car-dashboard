@@ -6,7 +6,6 @@ import {
   Icon,
   Stack,
   Text,
-  useConst,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
@@ -21,11 +20,9 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useContext, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
-import GraphData from "./graph-data.json";
-import GraphContext from "./GraphContext";
 import GraphModal from "./GraphModal";
 
 ChartJS.register(
@@ -38,23 +35,7 @@ ChartJS.register(
   Legend
 );
 
-function generateCategories() {
-  const output = [];
-  for (const category of GraphData.categories) {
-    const values = category.values.map((obj) => {
-      const colorNum = Math.floor(Math.random() * 0x3fffff + 0x3fffff);
-      const color = "#" + colorNum.toString(16);
-
-      const output = { key: obj.key, name: obj.name, color };
-      // console.log("Generated color for", obj, ":", output);
-      return output;
-    });
-    output.push({ category: category.category, values });
-  }
-
-  return output;
-}
-
+// the options fed into the graph object, save regardless of datasets
 const options = {
   responsive: true,
   maintainAspectRatio: false,
@@ -79,14 +60,39 @@ const options = {
       borderJoinStyle: "round",
     },
   },
+  datasets: {
+    line: {
+      pointBackgroundColor: "transparent",
+      pointBorderColor: "transparent",
+      pointRadius: 10,
+    },
+  },
 };
 
+/**
+ * Creates a customizable graph
+ *
+ * @param {any} props the props to pass to this graph; any {@link StackProps} will be passed to the overarching container
+ * @param {(name: string, datasets: string[]) => void} props.onSave the callback function for when the user attempts to save this graph
+ * @param {string} props.title the title that this graph has
+ * @param {{category: string, values: Dataset[]}[]} props.categories the color and other associated data for each dataset, organized in an object
+ * @param {Dataset[]} props.allDatasets a list of all datasets, including color data
+ * @param {any} props.queue the queue of data coming from the solar car
+ * @returns
+ */
 export default function BatteryGraph(props) {
-  const categories = useConst(generateCategories);
-  const graphData = useContext(GraphContext);
+  const {
+    onSave,
+    title,
+    categories,
+    allDatasets,
+    initialDatasets,
+    queue,
+    ...stackProps
+  } = props;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const allDatasets = categories.flatMap((category) => category.values);
   function reducer(state, { action, key }) {
     console.log("reducer called :(");
     switch (action) {
@@ -100,13 +106,10 @@ export default function BatteryGraph(props) {
         return state.map((dataset) => ({
           key: dataset.key,
           label: dataset.label,
-          data: graphData[dataset.key],
+          data: queue[dataset.key],
           borderColor: dataset.borderColor,
           backgroundColor: dataset.backgroundColor,
           hidden: dataset.key === key ? !dataset.hidden : dataset.hidden,
-          pointBackgroundColor: "transparent",
-          pointBorderColor: "transparent",
-          pointRadius: 10,
         }));
       case "set":
         // key: string[]
@@ -115,13 +118,10 @@ export default function BatteryGraph(props) {
           return {
             key: value.key,
             label: value.name,
-            data: graphData[value.key],
+            data: queue[value.key],
             borderColor: value.color,
             backgroundColor: value.color + "B3",
             hidden: false,
-            pointBackgroundColor: "transparent",
-            pointBorderColor: "transparent",
-            pointRadius: 10,
           };
         });
       case "update":
@@ -130,13 +130,10 @@ export default function BatteryGraph(props) {
         return state.map((dataset) => ({
           key: dataset.key,
           label: dataset.label,
-          data: graphData[dataset.key],
+          data: queue[dataset.key],
           borderColor: dataset.borderColor,
           backgroundColor: dataset.backgroundColor,
           hidden: dataset.hidden,
-          pointBackgroundColor: "transparent",
-          pointBorderColor: "transparent",
-          pointRadius: 10,
         }));
       default:
         console.warn("Unknown operation:", action);
@@ -150,13 +147,14 @@ export default function BatteryGraph(props) {
   useEffect(() => {
     updateDatasets({ action: "update" });
     // console.log("new state:", datasets);
-  }, [graphData]);
+  }, [queue]);
 
+  // the data to pass to the graph
   const data = { datasets };
 
   return (
     <>
-      <HStack w="100%" h="100%" align="stretch" {...props}>
+      <HStack w="100%" h="100%" align="stretch" {...stackProps}>
         <Text
           css={{ writingMode: "vertical-lr" }}
           transform="rotate(180deg)"

@@ -1,6 +1,5 @@
-import { Grid, GridItem, HStack, Select, VStack } from "@chakra-ui/react";
-import "chartjs-adapter-luxon";
-import React, { useEffect, useReducer, useState } from "react";
+import { Box, Grid, GridItem, HStack, Select, VStack } from "@chakra-ui/react";
+import { useEffect, useReducer, useState } from "react";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
@@ -24,7 +23,7 @@ function reducer(currentState, newData) {
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
 
-  const callBackendAPI = async () => {
+  async function callBackendAPI() {
     const response = await fetch("/api");
     const body = await response.json();
 
@@ -35,7 +34,7 @@ export default function Dashboard(props) {
 
     // console.log("body", body);
     return body;
-  };
+  }
 
   const [queue, updateQueue] = useReducer(reducer, {});
 
@@ -52,8 +51,8 @@ export default function Dashboard(props) {
 
   //------------------- Choosing data views using Select components -------------------
 
-  const [dataView1, setDataView1] = React.useState("");
-  const [dataView2, setDataView2] = React.useState("");
+  const [dataView1, setDataView1] = useState("");
+  const [dataView2, setDataView2] = useState("");
 
   // Update the value indicating which data view to display when an option is selected
   const selectDataView = (event) => {
@@ -94,7 +93,7 @@ export default function Dashboard(props) {
     } else if (optionValue === "minimap") {
       return <MiniMap />;
     } else {
-      return <VStack />;
+      return <Box />;
     }
   };
 
@@ -151,7 +150,7 @@ export default function Dashboard(props) {
           </VStack>
         </GridItem>
       </Grid>
-      <GraphContainer queue={queue} state={state} />
+      <GraphContainer queue={queue} />
     </HStack>
   );
 }

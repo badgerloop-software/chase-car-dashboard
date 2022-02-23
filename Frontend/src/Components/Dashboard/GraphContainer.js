@@ -1,140 +1,101 @@
-import { Select, VStack } from "@chakra-ui/react";
+import { Select, useConst, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import BatteryGraph from "../Graph/BatteryGraph";
-import CustomGraph from "../Graph/CustomGraph";
-import GraphContext from "../Graph/GraphContext";
-import PowerGraph from "../Graph/PowerGraph";
-import TemperatureGraph from "../Graph/TemperatureGraph";
+import GraphData from "../Graph/graph-data.json";
 
-export default function GraphContainer(props) {
-  const { queue, state } = props;
+function generateCategories() {
+  const output1 = [],
+    output2 = [];
+  for (const category of GraphData.categories) {
+    const values = category.values.map((obj) => {
+      const colorNum = Math.floor(Math.random() * 0x3fffff + 0x3fffff);
+      const color = "#" + colorNum.toString(16);
+
+      const output = { key: obj.key, name: obj.name, color };
+      output2.push(output);
+      // console.log("Generated color for", obj, ":", output);
+      return output;
+    });
+    output1.push({ category: category.category, values });
+  }
+
+  return [output1, output2];
+}
+
+/**
+ * Creates a new GraphContainer component
+ *
+ * @param {any} props the props to pass to this graph container
+ * @returns the graph-containing component
+ */
+export default function GraphContainer({ queue }) {
+  // fetch constants: categories and flatpacked categories
+  const [categories, allDatasets] = useConst(generateCategories);
 
   //------------------- Choosing graphs using Select components -------------------
+  // stores the list of graph names/id
+  const [graphTitles, setGraphTitles] = useState(["", "", ""]);
 
-  const [graph1, setGraph1] = useState("");
-  const [graph2, setGraph2] = useState("");
-  const [graph3, setGraph3] = useState("");
+  /**
+   * A function that makes the given graph display in the given place. If the graph is
+   * already being shown in a different place and cannot be duplicated, it will be
+   * swapped with the graph in the given index.
+   *
+   * @param {string} name the name of the graph to show
+   * @param {number} idx the index of the new place the graph should be
+   */
+  function showGraph(name, idx) {
+    // check for special values
+    if (name && name !== "Custom") {
+      const oldIdx = graphTitles.indexOf(name);
+      // found old position of graph, swap with new position
+      if (oldIdx !== -1) {
+        const temp = graphTitles[oldIdx];
+        graphTitles[oldIdx] = graphTitles[idx];
+        graphTitles[idx] = temp;
+        console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
 
-  // Update the value indicating which graph to display when an option is selected
-  const selectGraph = (event) => {
-    if (event.target.id === "graphSelect1") {
-      // Avoid duplicate graphs, unless they are both empty or custom
-      if (event.target.value !== "" && event.target.value !== "custom") {
-        // If trying to switch to a graph that is already being displayed in another
-        // section, switch the graphs in this section and the other one
-        // eslint-disable-next-line
-        switch (event.target.value) {
-          case document.getElementById("graphSelect2").value:
-            setGraph2(graph1);
-            break;
-          case document.getElementById("graphSelect3").value:
-            setGraph3(graph1);
-            break;
-          // default:
-          //   break;
-        }
+        setGraphTitles(graphTitles);
+        return;
       }
-      setGraph1(event.target.value);
-    } else if (event.target.id === "graphSelect2") {
-      // Avoid duplicate graphs, unless they are both empty or custom
-      if (event.target.value !== "" && event.target.value !== "custom") {
-        // If trying to switch to a graph that is already being displayed in another
-        // section, switch the graphs in this section and the other one
-        // eslint-disable-next-line
-        switch (event.target.value) {
-          case document.getElementById("graphSelect1").value:
-            setGraph1(graph2);
-            break;
-          case document.getElementById("graphSelect3").value:
-            setGraph3(graph2);
-            break;
-          // default:
-          //   break;
-        }
-      }
-      setGraph2(event.target.value);
-    } else if (event.target.id === "graphSelect3") {
-      // Avoid duplicate graphs, unless they are both empty or custom
-      if (event.target.value !== "" && event.target.value !== "custom") {
-        // If trying to switch to a graph that is already being displayed in another
-        // section, switch the graphs in this section and the other one
-        // eslint-disable-next-line
-        switch (event.target.value) {
-          case document.getElementById("graphSelect1").value:
-            setGraph1(graph3);
-            break;
-          case document.getElementById("graphSelect2").value:
-            setGraph2(graph3);
-            break;
-          // default:
-          //   break;
-        }
-      }
-      setGraph3(event.target.value);
     }
-  };
+
+    // default set: if new custom/empty graph or replacing new custom/empty graph
+    graphTitles[idx] = name;
+    // console.log(graphData, "[", idx, "] =", name, "=", graphData);
+    setGraphTitles(graphTitles);
+  }
 
   //------------------------- Saving custom graphs ----------------------------
-
   const [customGraphData, setCustomGraphData] = useState({});
 
-  const saveCustomGraph = (data) => {
-    let graphData = customGraphData;
-
-    graphData[data.title] = data;
-
-    setCustomGraphData(graphData);
-
-    console.log(customGraphData);
-    // console.log("Colors: ", data.colors, "\nDatasets: ", data.datasets, "\nButtons: ", data.buttons, "\nTitle: ", data.title);
-  };
-
-  // Choose the graph to return/display based on the given option
-  const switchGraph = (optionValue) => {
-    if (optionValue === "battery") {
-      return <BatteryGraph data={state.data} />;
-    } else if (optionValue === "power") {
-      return <PowerGraph data={state.data} />;
-    } else if (optionValue === "temperature") {
-      return <TemperatureGraph data={state.data} />;
-    } else if (optionValue === "custom") {
-      return (
-        <CustomGraph
-          id=""
-          data={state.data}
-          title=""
-          buttons={[]}
-          datasets={[]}
-          save={saveCustomGraph}
-        />
-      );
-    } else {
-      for (const title in customGraphData) {
-        if (optionValue === title) {
-          return (
-            <CustomGraph
-              id={title}
-              data={state.data}
-              title={title}
-              buttons={customGraphData[title].buttons}
-              datasets={customGraphData[title].datasets}
-              save={saveCustomGraph}
-            />
-          );
-        }
-      }
-    }
-  };
+  /**
+   * Saves the given graph's data (namely, the datasets that it is displaying)
+   *
+   * @param {string} title the title of the graph to ve saved
+   * @param {string[]} datasets collection of datasets that is associated with this graph
+   */
+  function onSave(title, datasets) {
+    customGraphData[title] = datasets;
+    setCustomGraphData(customGraphData);
+  }
 
   return (
     <VStack flex="2 2 0" maxW="67vw" align="stretch" spacing={0}>
-      <GraphContext.Provider value={queue}>
+      {graphTitles.map((graphTitle, index) => (
         <VStack
           align="stretch"
           spacing={0}
           borderColor="black"
           borderWidth={1}
           flex="1 1 0"
+          key={
+            graphTitle?.length
+              ? graphTitles[index].startsWith("Custom")
+                ? "Custom" + index
+                : graphTitles[index]
+              : index
+          }
         >
           <Select
             id="graphSelect1"
@@ -142,74 +103,54 @@ export default function GraphContainer(props) {
             variant="filled"
             bgColor="grey.300"
             placeholder="Select option"
-            value={graph1}
-            onChange={selectGraph}
+            value={graphTitles[index]}
+            onChange={(evt) => showGraph(evt.target.value, index)}
           >
-            <GraphOptions />
+            <GraphOptions titles={graphTitles} />
           </Select>
-          {switchGraph(graph1)}
+          {graphTitles[index] === "" ? null : graphTitles[index].startsWith(
+              "Custom"
+            ) ? (
+            <BatteryGraph
+              onSave={onSave}
+              title=""
+              categories={categories}
+              allDatasets={allDatasets}
+              queue={queue}
+            />
+          ) : (
+            <BatteryGraph
+              onSave={onSave}
+              title={graphTitles[index]}
+              categories={categories}
+              allDatasets={allDatasets}
+              queue={queue}
+            />
+          )}
         </VStack>
-        <VStack
-          h="100%"
-          align="stretch"
-          spacing={0}
-          borderColor="black"
-          borderWidth={1}
-          flex="1 1 0"
-        >
-          <Select
-            id="graphSelect2"
-            size="xs"
-            variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
-            value={graph2}
-            onChange={selectGraph}
-          >
-            <GraphOptions />
-          </Select>
-          {switchGraph(graph2)}
-        </VStack>
-        <VStack
-          h="100%"
-          align="stretch"
-          spacing={0}
-          borderColor="black"
-          borderWidth={1}
-          flex="1 1 0"
-        >
-          <Select
-            id="graphSelect3"
-            size="xs"
-            variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
-            value={graph3}
-            onChange={selectGraph}
-          >
-            <GraphOptions />
-          </Select>
-          {switchGraph(graph3)}
-        </VStack>
-      </GraphContext.Provider>
+      ))}
     </VStack>
   );
 }
 
-function GraphOptions(props) {
-  let customGraphs = [];
-
-  for (const title in props.customGraphs) {
-    customGraphs.push(<option value={title}>{title}</option>);
-  }
-
+/**
+ * Creates a component that contains all the given titles as well as "Custom" in a dropdown option list.
+ *
+ * @param {{titles: string[]}} props the props to pass to this component
+ * @param {string[]} props.titles the list of graph titles to display in the dropdown
+ * @returns a component containing all the given options and "Custom"
+ */
+function GraphOptions({ titles }) {
   return (
     <>
-      <option value="battery">Battery</option>
-      <option value="power">Power</option>
-      <option value="temperature">Temperature</option>
-      {customGraphs}
-      <option value="custom">Custom</option>
+      {titles
+        .filter((title) => title && title !== "Custom")
+        .map((title) => (
+          <option key={title} value={title}>
+            {title}
+          </option>
+        ))}
+      <option value="Custom">Custom</option>
     </>
   );
 }
