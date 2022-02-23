@@ -63,6 +63,7 @@ export default function BatteryGraph(props) {
 
   const allDatasets = categories.flatMap((category) => category.values);
   function reducer(state, { action, key }) {
+    console.log("reducer called :(");
     switch (action) {
       case "toggle":
         // key: string
@@ -78,6 +79,9 @@ export default function BatteryGraph(props) {
           borderColor: dataset.borderColor,
           backgroundColor: dataset.backgroundColor,
           hidden: dataset.key === key ? !dataset.hidden : dataset.hidden,
+          pointBackgroundColor: "transparent",
+          pointBorderColor: "transparent",
+          pointRadius: 10,
         }));
       case "set":
         // key: string[]
@@ -90,6 +94,9 @@ export default function BatteryGraph(props) {
             borderColor: value.color,
             backgroundColor: value.color + "B3",
             hidden: false,
+            pointBackgroundColor: "transparent",
+            pointBorderColor: "transparent",
+            pointRadius: 10,
           };
         });
       case "update":
@@ -102,6 +109,9 @@ export default function BatteryGraph(props) {
           borderColor: dataset.borderColor,
           backgroundColor: dataset.backgroundColor,
           hidden: dataset.hidden,
+          pointBackgroundColor: "transparent",
+          pointBorderColor: "transparent",
+          pointRadius: 10,
         }));
       default:
         console.warn("Unknown operation:", action);
@@ -109,6 +119,9 @@ export default function BatteryGraph(props) {
   }
 
   const [datasets, updateDatasets] = useReducer(reducer, []);
+  useEffect(() => {
+    console.log("datasets updated :]");
+  }, [datasets]);
   useEffect(() => {
     updateDatasets({ action: "update" });
     // console.log("new state:", datasets);
@@ -142,7 +155,7 @@ export default function BatteryGraph(props) {
 
   return (
     <>
-      <HStack h="100%" align="stretch" {...props}>
+      <HStack w="100%" h="100%" align="stretch" {...props}>
         <Text
           css={{ writingMode: "vertical-lr" }}
           transform="rotate(180deg)"
@@ -152,7 +165,13 @@ export default function BatteryGraph(props) {
         >
           Battery
         </Text>
-        <VStack p={2} flex={1} align="stretch">
+        <VStack
+          p={2}
+          flex={1}
+          align="stretch"
+          justify="stretch"
+          overflow="hidden"
+        >
           <Stack direction="row">
             <Button>
               <Icon as={FaSave} />
@@ -161,12 +180,13 @@ export default function BatteryGraph(props) {
               <EditIcon />
             </Button>
             <HStack
-              flex={1}
-              borderColor="black"
-              borderWidth={1}
-              overflowX="auto"
+              flex="1 1 0"
               spacing={2}
+              borderWidth={1}
+              borderColor="black"
+              overflowX="scroll"
               px={2}
+              // whiteSpace="nowrap"
             >
               {datasets.map((dataset) => (
                 <Button
@@ -181,6 +201,7 @@ export default function BatteryGraph(props) {
                     console.log("clicked", dataset.key);
                     updateDatasets({ action: "toggle", key: dataset.key });
                   }}
+                  flexShrink={0}
                   size="xs"
                 >
                   {dataset.label}

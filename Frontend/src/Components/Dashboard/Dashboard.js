@@ -1,4 +1,4 @@
-import { Grid, GridItem, Select, VStack } from "@chakra-ui/react";
+import { Grid, GridItem, HStack, Select, VStack } from "@chakra-ui/react";
 import "chartjs-adapter-luxon";
 import React, { useEffect, useReducer, useState } from "react";
 import BatteryCells from "../BatteryCells/BatteryCells";
@@ -240,127 +240,125 @@ export default function Dashboard(props) {
   };
 
   return (
-    <Grid templateColumns="1fr 2fr" h="100vh" w="100vw">
-      <GridItem colStart={1} colSpan={1}>
-        <Grid h="100vh" templateRows="1fr 3fr">
-          <GridItem
-            rowStart={1}
-            rowSpan={1}
+    <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
+      <Grid flex="1 1 0" templateRows="1fr 3fr">
+        <GridItem
+          rowStart={1}
+          rowSpan={1}
+          borderColor="black"
+          borderWidth={1}
+          p={2}
+        >
+          <FaultsView data={state.data} />
+        </GridItem>
+        <GridItem rowStart={2} rowSpan={1}>
+          <VStack
+            align="stretch"
+            spacing={0}
             borderColor="black"
             borderWidth={1}
-            p={2}
           >
-            <FaultsView data={state.data} />
-          </GridItem>
-          <GridItem rowStart={2} rowSpan={1}>
-            <VStack
-              align="stretch"
-              spacing={0}
-              borderColor="black"
-              borderWidth={1}
+            <Select
+              id="dataViewSelect1"
+              size="xs"
+              variant="filled"
+              bgColor="grey.300"
+              placeholder="Select option"
+              value={dataView1}
+              onChange={selectDataView}
             >
-              <Select
-                id="dataViewSelect1"
-                size="xs"
-                variant="filled"
-                bgColor="grey.300"
-                placeholder="Select option"
-                value={dataView1}
-                onChange={selectDataView}
-              >
-                <DataViewOptions />
-              </Select>
-              {switchDataView(dataView1)}
-            </VStack>
-            <VStack
-              align="stretch"
-              spacing={0}
-              borderColor="black"
-              borderWidth={1}
+              <DataViewOptions />
+            </Select>
+            {switchDataView(dataView1)}
+          </VStack>
+          <VStack
+            align="stretch"
+            spacing={0}
+            borderColor="black"
+            borderWidth={1}
+          >
+            <Select
+              id="dataViewSelect2"
+              size="xs"
+              variant="filled"
+              bgColor="grey.300"
+              placeholder="Select option"
+              value={dataView2}
+              onChange={selectDataView}
             >
-              <Select
-                id="dataViewSelect2"
-                size="xs"
-                variant="filled"
-                bgColor="grey.300"
-                placeholder="Select option"
-                value={dataView2}
-                onChange={selectDataView}
-              >
-                <DataViewOptions />
-              </Select>
-              {switchDataView(dataView2)}
-            </VStack>
-          </GridItem>
-        </Grid>
-      </GridItem>
-      <GridItem colStart={2} colSpan={1}>
-        <Grid h="100vh" templateRows="repeat(3, 1fr)">
-          <GraphContext.Provider value={queue}>
-            <VStack
-              h="100%"
-              align="stretch"
-              spacing={0}
-              borderColor="black"
-              borderWidth={1}
+              <DataViewOptions />
+            </Select>
+            {switchDataView(dataView2)}
+          </VStack>
+        </GridItem>
+      </Grid>
+      <VStack flex="2 2 0" maxW="67vw" align="stretch" spacing={0}>
+        <GraphContext.Provider value={queue}>
+          <VStack
+            align="stretch"
+            spacing={0}
+            borderColor="black"
+            borderWidth={1}
+            flex="1 1 0"
+          >
+            <Select
+              id="graphSelect1"
+              size="xs"
+              variant="filled"
+              bgColor="grey.300"
+              placeholder="Select option"
+              value={graph1}
+              onChange={selectGraph}
             >
-              <Select
-                id="graphSelect1"
-                size="xs"
-                variant="filled"
-                bgColor="grey.300"
-                placeholder="Select option"
-                value={graph1}
-                onChange={selectGraph}
-              >
-                <GraphOptions />
-              </Select>
-              {switchGraph(graph1)}
-            </VStack>
-            <VStack
-              h="100%"
-              align="stretch"
-              spacing={0}
-              borderColor="black"
-              borderWidth={1}
+              <GraphOptions />
+            </Select>
+            {switchGraph(graph1)}
+          </VStack>
+          <VStack
+            h="100%"
+            align="stretch"
+            spacing={0}
+            borderColor="black"
+            borderWidth={1}
+            flex="1 1 0"
+          >
+            <Select
+              id="graphSelect2"
+              size="xs"
+              variant="filled"
+              bgColor="grey.300"
+              placeholder="Select option"
+              value={graph2}
+              onChange={selectGraph}
             >
-              <Select
-                id="graphSelect2"
-                size="xs"
-                variant="filled"
-                bgColor="grey.300"
-                placeholder="Select option"
-                value={graph2}
-                onChange={selectGraph}
-              >
-                <GraphOptions />
-              </Select>
-              {switchGraph(graph2)}
-            </VStack>
-            <VStack
-              h="100%"
-              align="stretch"
-              spacing={0}
-              borderColor="black"
-              borderWidth={1}
+              <GraphOptions />
+            </Select>
+            {switchGraph(graph2)}
+          </VStack>
+          <VStack
+            h="100%"
+            align="stretch"
+            spacing={0}
+            borderColor="black"
+            borderWidth={1}
+            flex="1 1 0"
+          >
+            <Select
+              id="graphSelect3"
+              size="xs"
+              variant="filled"
+              bgColor="grey.300"
+              placeholder="Select option"
+              value={graph3}
+              onChange={selectGraph}
             >
-              <Select
-                id="graphSelect3"
-                size="xs"
-                variant="filled"
-                bgColor="grey.300"
-                placeholder="Select option"
-                value={graph3}
-                onChange={selectGraph}
-              >
-                <GraphOptions />
-              </Select>
-              {switchGraph(graph3)}
-            </VStack>
-          </GraphContext.Provider>
-        </Grid>
-      </GridItem>
-    </Grid>
+              <GraphOptions />
+            </Select>
+            {switchGraph(graph3)}
+          </VStack>
+        </GraphContext.Provider>
+      </VStack>
+    </HStack>
   );
 }
 
