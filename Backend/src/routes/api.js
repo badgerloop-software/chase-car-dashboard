@@ -1,8 +1,9 @@
 import { Router } from "express";
-import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
-import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
-import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 import { DateTime } from "luxon";
+import { Socket } from "net";
+import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
+import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
+import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 
 const router = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -17,7 +18,6 @@ export default router;
 
 //--------------TCP-------------------------
 
-import { Socket } from "net";
 // const { Buffer } = require("buffer");
 const car_port = 4003;
 var client = new Socket();

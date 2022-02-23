@@ -55,6 +55,32 @@ function generateCategories() {
   return output;
 }
 
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+  animation: false,
+  scales: {
+    xAxis: {
+      type: "time",
+      reverse: true,
+    },
+    yAxis: {
+      suggestedMin: 0,
+    },
+  },
+  elements: {
+    line: {
+      borderCapStyle: "round",
+      borderJoinStyle: "round",
+    },
+  },
+};
+
 export default function BatteryGraph(props) {
   const categories = useConst(generateCategories);
   const graphData = useContext(GraphContext);
@@ -127,30 +153,6 @@ export default function BatteryGraph(props) {
   }, [graphData]);
 
   const data = { datasets };
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    animation: false,
-    scales: {
-      xAxis: {
-        type: "time",
-      },
-      yAxis: {
-        suggestedMin: 0,
-      },
-    },
-    elements: {
-      line: {
-        borderCapStyle: "round",
-        borderJoinStyle: "round",
-      },
-    },
-  };
 
   return (
     <>

@@ -8,34 +8,14 @@ import MiniMap from "../MiniMap/MiniMap";
 import GraphContainer from "./GraphContainer";
 
 function reducer(currentState, newData) {
-  // const now = DateTime.now();
-  // for (const key in newData) {
-  //   if (!currentState[key]) currentState[key] = [];
-  //   currentState[key].unshift({ x: now, y: newData[key] });
-
-  //   while (
-  //     now.diff(currentState[key][currentState[key].length - 1].x).toMillis() >
-  //     GraphData.historyLength
-  //   ) {
-  //     currentState[key].pop();
-  //   }
-  //   console.log(key, currentState[key]);
-  // }
-  // return currentState;
-
   const output = {};
   for (const key in newData) {
     if (key === "timestamps") continue;
 
-    // output[key] = [];
-    // for (let i = 0; i < newData[key].length; i++) {
-    //   output[key].push({ x: newData["timestamps"][i], y: newData[key][i] });
-    // }
     output[key] = newData[key].map((value, idx) => ({
       x: newData["timestamps"][idx],
       y: value,
     }));
-    // console.log(key, output[key]);
   }
 
   return output;
