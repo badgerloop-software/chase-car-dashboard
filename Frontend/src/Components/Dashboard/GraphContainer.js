@@ -53,7 +53,7 @@ export default function GraphContainer({ queue, ...props }) {
         const temp = graphTitles[oldIdx];
         graphTitles[oldIdx] = graphTitles[idx];
         graphTitles[idx] = temp;
-        console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
+        // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
 
         setGraphTitles(graphTitles);
         return;
@@ -79,6 +79,19 @@ export default function GraphContainer({ queue, ...props }) {
     customGraphData[title] = datasets;
     setCustomGraphData(customGraphData);
   }
+
+  //----------------- Calculate all data that can be shown --------------------
+  const packedData = allDatasets.map((value) => {
+    const output = {
+      key: value.key,
+      label: value.name,
+      data: queue[value.key],
+      borderColor: value.color,
+      backgroundColor: value.color + "b3",
+    };
+    // console.log("packing:", output);
+    return output;
+  });
 
   return (
     <VStack align="stretch" spacing={0} {...props}>
@@ -115,16 +128,18 @@ export default function GraphContainer({ queue, ...props }) {
               onSave={onSave}
               title=""
               categories={categories}
+              packedData={packedData}
+              initialDatasets={[]}
               allDatasets={allDatasets}
-              queue={queue}
             />
           ) : (
             <CustomGraph
               onSave={onSave}
               title={graphTitles[index]}
               categories={categories}
+              packedData={packedData}
+              initialDatasets={[]}
               allDatasets={allDatasets}
-              queue={queue}
             />
           )}
         </VStack>

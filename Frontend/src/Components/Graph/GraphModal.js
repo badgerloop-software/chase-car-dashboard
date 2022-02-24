@@ -34,9 +34,9 @@ function GraphModal(props) {
     datasets.map((dataset) => dataset.key)
   );
 
-  useEffect(() => {
-    console.log("new keys:", dataKeys);
-  }, [dataKeys]);
+  // useEffect(() => {
+  //   console.log("new keys:", dataKeys);
+  // }, [dataKeys]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -55,7 +55,7 @@ function GraphModal(props) {
                     <Checkbox
                       defaultChecked={dataKeys.includes(value.key)}
                       onInput={(e) => {
-                        console.log(value.name, e.target.checked);
+                        // console.log(value.name, e.target.checked);
                         if (e.target.checked) {
                           changeDataKeys({ action: "add", key: value.key });
                         } else {
@@ -78,6 +78,7 @@ function GraphModal(props) {
             bg="#008640"
             mr={3}
             onClick={() => {
+              // console.log("Saving and exiting...");
               onSave(dataKeys);
               onClose();
             }}

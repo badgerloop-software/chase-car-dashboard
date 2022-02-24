@@ -20,7 +20,7 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useEffect, useReducer } from "react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphModal from "./GraphModal";
@@ -76,8 +76,9 @@ const options = {
  * @param {(name: string, datasets: string[]) => void} props.onSave the callback function for when the user attempts to save this graph
  * @param {string} props.title the title that this graph has
  * @param {{category: string, values: Dataset[]}[]} props.categories the color and other associated data for each dataset, organized in an object
- * @param {Dataset[]} props.allDatasets a list of all datasets, including color data
- * @param {any} props.queue the queue of data coming from the solar car
+ * @param {Dataset[]} props.allDatasets a list of all datasets, complete with ID and color information
+ * @param {string[]} props.initialDatasets a list of the IDs of the initial datasets
+ * @param {any} props.packed the queue of data, packed in Chart.js format, coming from the solar car
  * @returns
  */
 export default function CustomGraph(props) {
@@ -85,72 +86,47 @@ export default function CustomGraph(props) {
     onSave,
     title,
     categories,
-    allDatasets,
+    packedData,
     initialDatasets,
-    queue,
+    allDatasets,
     ...stackProps
   } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  function reducer(state, { action, key }) {
-    console.log("reducer called :(");
-    switch (action) {
-      case "toggle":
-        // key: string
-        // const toToggle = state.find((dataset) => dataset.key === key);
-        // if (toToggle) {
-        //   toToggle.hidden = !toToggle.hidden;
-        // }
-        // return state;
-        return state.map((dataset) => ({
-          key: dataset.key,
-          label: dataset.label,
-          data: queue[dataset.key],
-          borderColor: dataset.borderColor,
-          backgroundColor: dataset.backgroundColor,
-          hidden: dataset.key === key ? !dataset.hidden : dataset.hidden,
-        }));
-      case "set":
-        // key: string[]
-        return key.map((key) => {
-          const value = allDatasets.find((dataset) => dataset.key === key);
-          return {
-            key: value.key,
-            label: value.name,
-            data: queue[value.key],
-            borderColor: value.color,
-            backgroundColor: value.color + "B3",
-            hidden: false,
-          };
-        });
-      case "update":
-        // key: undefined
-        // console.log("updating...");
-        return state.map((dataset) => ({
-          key: dataset.key,
-          label: dataset.label,
-          data: queue[dataset.key],
-          borderColor: dataset.borderColor,
-          backgroundColor: dataset.backgroundColor,
-          hidden: dataset.hidden,
-        }));
-      default:
-        console.warn("Unknown operation:", action);
+  const [datasets, setDatasets] = useState(() => {
+    const output = {};
+    for (const dataset of initialDatasets) {
+      output[dataset] = true;
+    }
+    return output;
+  });
+  // useEffect(() => {
+  //   console.log("datasets updated :]", datasets);
+  // }, [datasets]);
+
+  // the data to pass to the graph
+  // const formattedDatasets = Object.keys(datasets)
+  //   .filter((key) => datasets[key])
+  //   .map((key) => {
+  //     const temp = packedData.find(
+  //       (packedDataset) => packedDataset.key === key
+  //     );
+  //     // console.log("adding", key, ":", temp);
+  //     return temp;
+  //   });
+  const formattedDatasets = [];
+  for (const key in datasets) {
+    const temp = packedData.find((packedDataset) => packedDataset.key === key);
+    if (temp) {
+      temp.hidden = !datasets[key];
+      formattedDatasets.push(temp);
     }
   }
 
-  const [datasets, updateDatasets] = useReducer(reducer, []);
-  useEffect(() => {
-    console.log("datasets updated :]");
-  }, [datasets]);
-  useEffect(() => {
-    updateDatasets({ action: "update" });
-    // console.log("new state:", datasets);
-  }, [queue]);
-
-  // the data to pass to the graph
-  const data = { datasets };
+  // console.log("formatted datasets:", formattedDatasets);
+  // console.log(datasets, "keys:", Object.keys(datasets));
+  const data = { datasets: formattedDatasets };
 
   return (
     <>
@@ -185,27 +161,34 @@ export default function CustomGraph(props) {
               borderColor="black"
               overflowX="scroll"
               px={2}
-              // whiteSpace="nowrap"
             >
-              {datasets.map((dataset) => (
-                <Button
-                  key={dataset.key}
-                  borderColor={dataset.borderColor}
-                  borderWidth={2}
-                  backgroundColor={
-                    dataset.hidden ? "transparent" : dataset.backgroundColor
-                  }
-                  textDecoration={dataset.hidden ? "line-through" : "none"}
-                  onClick={() => {
-                    console.log("clicked", dataset.key);
-                    updateDatasets({ action: "toggle", key: dataset.key });
-                  }}
-                  flexShrink={0}
-                  size="xs"
-                >
-                  {dataset.label}
-                </Button>
-              ))}
+              {Object.keys(datasets).map((key) => {
+                const dataset = formattedDatasets.find(
+                  (temp) => temp.key === key
+                );
+                // console.log("dataset", dataset, "for", key);
+                return (
+                  <Button
+                    key={key}
+                    borderColor={dataset.borderColor}
+                    borderWidth={2}
+                    backgroundColor={
+                      datasets[key] ? dataset.backgroundColor : "transparent"
+                    }
+                    textDecoration={datasets[key] ? "none" : "line-through"}
+                    onClick={() => {
+                      console.log("clicked", key);
+                      // updateDatasets({ action: "toggle", key: dataset.key });
+                      datasets[key] = !datasets[key];
+                      setDatasets(datasets);
+                    }}
+                    flexShrink={0}
+                    size="xs"
+                  >
+                    {dataset.label}
+                  </Button>
+                );
+              })}
             </HStack>
           </Stack>
           <Center flex={1}>
@@ -216,8 +199,18 @@ export default function CustomGraph(props) {
       <GraphModal
         isOpen={isOpen}
         onClose={onClose}
-        datasets={datasets}
-        onSave={(keys) => updateDatasets({ action: "set", key: keys })}
+        datasets={Object.keys(datasets)}
+        onSave={(keys) => {
+          // updateDatasets({ action: "set", key: keys })
+          // console.log("keys:", keys);
+
+          const newDatasets = {};
+          for (const key of keys) {
+            newDatasets[key] = datasets[key] ?? true;
+          }
+          // console.log("new datasets:", newDatasets);
+          setDatasets(newDatasets);
+        }}
       />
     </>
   );

@@ -7,6 +7,8 @@ import MiniMap from "../MiniMap/MiniMap";
 import GraphContainer from "./GraphContainer";
 
 function reducer(currentState, newData) {
+  // console.log("reducer called :~)", newData);
+
   const output = {};
   for (const key in newData) {
     if (key === "timestamps") continue;
