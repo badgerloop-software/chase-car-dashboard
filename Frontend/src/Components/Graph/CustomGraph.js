@@ -289,6 +289,12 @@ function GraphNameModal(props) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onKeyDown={(evt) => {
+                if (!isInvalid && evt.key === "Enter") {
+                  onSave(name);
+                  onClose();
+                }
+              }}
               required
             />
             {isInvalid ? (
@@ -306,6 +312,7 @@ function GraphNameModal(props) {
         <ModalFooter>
           <Button
             bg="#008640"
+            type="submit"
             mr={3}
             onClick={() => {
               // console.log("Saving and exiting...");
