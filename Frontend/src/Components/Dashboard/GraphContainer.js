@@ -45,14 +45,17 @@ export default function GraphContainer({ queue, ...props }) {
    * @param {number} idx the index of the new place the graph should be
    */
   function showGraph(name, idx) {
+    // save graph in old position, if needed
+    // if (graphTitles[idx] && graphTitles[idx] !== "Custom")
+    //   onSave(graphTitles[idx], datasets);
+
     // check for special values
-    if (name && name !== "Custom") {
+    if (name?.length && name !== "Custom") {
       const oldIdx = graphTitles.indexOf(name);
       // found old position of graph, swap with new position
       if (oldIdx !== -1) {
-        const temp = graphTitles[oldIdx];
         graphTitles[oldIdx] = graphTitles[idx];
-        graphTitles[idx] = temp;
+        graphTitles[idx] = name;
         // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
 
         setGraphTitles(graphTitles);
@@ -100,54 +103,56 @@ export default function GraphContainer({ queue, ...props }) {
 
   return (
     <VStack align="stretch" spacing={0} {...props}>
-      {graphTitles.map((graphTitle, index) => (
-        <VStack
-          align="stretch"
-          spacing={0}
-          borderColor="black"
-          borderWidth={1}
-          flex="1 1 0"
-          key={
-            graphTitle?.length
-              ? graphTitles === "Custom"
-                ? "Custom" + index
-                : graphTitles[index]
-              : index
-          }
-        >
-          <Select
-            id="graphSelect1"
-            size="xs"
-            variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
-            value={graphTitles[index]}
-            onChange={(evt) => showGraph(evt.target.value, index)}
+      {graphTitles.map((graphTitle, index) => {
+        const key = graphTitle?.length
+          ? graphTitle === "Custom"
+            ? "Custom" + index
+            : graphTitles[index]
+          : index;
+        // console.log(index, graphTitle, key);
+        return (
+          <VStack
+            align="stretch"
+            spacing={0}
+            borderColor="black"
+            borderWidth={1}
+            flex="1 1 0"
+            key={key}
           >
-            <GraphOptions titles={Object.keys(customGraphData)} />
-          </Select>
-          {graphTitles[index] === "" ? null : graphTitles[index] ===
-            "Custom" ? (
-            <CustomGraph
-              onSave={(title, datasets) => onSave(title, datasets, index)}
-              title=""
-              categories={categories}
-              packedData={packedData}
-              initialDatasets={[]}
-              allDatasets={allDatasets}
-            />
-          ) : (
-            <CustomGraph
-              onSave={(title, datasets) => onSave(title, datasets, index)}
-              title={graphTitles[index]}
-              categories={categories}
-              packedData={packedData}
-              initialDatasets={customGraphData[graphTitles[index]]}
-              allDatasets={allDatasets}
-            />
-          )}
-        </VStack>
-      ))}
+            <Select
+              id="graphSelect1"
+              size="xs"
+              variant="filled"
+              bgColor="grey.300"
+              placeholder="Select option"
+              value={graphTitles[index]}
+              onChange={(evt) => showGraph(evt.target.value, index)}
+            >
+              <GraphOptions titles={Object.keys(customGraphData)} />
+            </Select>
+            {graphTitles[index] === "" ? null : graphTitles[index] ===
+              "Custom" ? (
+              <CustomGraph
+                onSave={(title, datasets) => onSave(title, datasets, index)}
+                title=""
+                categories={categories}
+                packedData={packedData}
+                initialDatasets={[]}
+                allDatasets={allDatasets}
+              />
+            ) : (
+              <CustomGraph
+                onSave={(title, datasets) => onSave(title, datasets, index)}
+                title={graphTitles[index]}
+                categories={categories}
+                packedData={packedData}
+                initialDatasets={customGraphData[graphTitles[index]]}
+                allDatasets={allDatasets}
+              />
+            )}
+          </VStack>
+        );
+      })}
     </VStack>
   );
 }
