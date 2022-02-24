@@ -12,27 +12,35 @@ import {
   SimpleGrid,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import GraphData from "./graph-data.json";
 
+/**
+ * Creates a new graph selection modal component
+ *
+ * @param {any} props the props to pass this graph selection modal
+ * @param {boolean} props.isOpen whether this modal is to be open
+ * @param {() => void} props.onClose the function callback for when this modal closes
+ * @param {string[]} props.initialDatasets the initial list of datasets to use
+ * @param {(string[]) => void)} props.onSave the function callback for when the
+ * user clicks the "save and exit" button, with the selected datasets' keys as the argument
+ * @returns the modal component
+ */
 function GraphModal(props) {
-  const { isOpen, onClose, datasets, onSave } = props;
+  const { isOpen, onClose, initialDatasets, onSave } = props;
 
-  const [dataKeys, changeDataKeys] = useReducer(
-    (state, { action, key }) => {
-      switch (action) {
-        case "add":
-          return state.concat([key]);
-        case "remove":
-          const index = state.indexOf(key);
-          return state.slice(0, index).concat(state.slice(index + 1));
-        default:
-          console.warn("DEFAULT CASE REACHED IN GRAPH MODAL");
-          return [];
-      }
-    },
-    datasets.map((dataset) => dataset.key)
-  );
+  const [dataKeys, changeDataKeys] = useReducer((state, { action, key }) => {
+    switch (action) {
+      case "add":
+        return state.concat([key]);
+      case "remove":
+        const index = state.indexOf(key);
+        return state.slice(0, index).concat(state.slice(index + 1));
+      default:
+        console.warn("DEFAULT CASE REACHED IN GRAPH MODAL");
+        return [];
+    }
+  }, initialDatasets);
 
   // useEffect(() => {
   //   console.log("new keys:", dataKeys);

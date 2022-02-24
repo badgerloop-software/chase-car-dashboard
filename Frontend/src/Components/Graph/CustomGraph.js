@@ -2,8 +2,20 @@ import { EditIcon } from "@chakra-ui/icons";
 import {
   Button,
   Center,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
   HStack,
   Icon,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
   useDisclosure,
@@ -20,10 +32,10 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
-import GraphModal from "./GraphModal";
+import GraphSelectModal from "./GraphSelectModal";
 
 ChartJS.register(
   LinearScale,
@@ -82,6 +94,7 @@ const options = {
  * @returns
  */
 export default function CustomGraph(props) {
+  // destructure props
   const {
     onSave,
     title,
@@ -92,13 +105,28 @@ export default function CustomGraph(props) {
     ...stackProps
   } = props;
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // disclosure for the data selection modal
+  const {
+    isOpen: isDataSelectOpen,
+    onOpen: onDataSelectOpen,
+    onClose: onDataSelectClose,
+  } = useDisclosure();
+  // disclosure for the name modal
+  const {
+    isOpen: isNameModalOpen,
+    onOpen: onNameModalOpen,
+    onClose: onNameModalClose,
+  } = useDisclosure();
 
+  // an object that contains every selected dataset and a boolean to store whether it is enabled
   const [datasets, setDatasets] = useState(() => {
     const output = {};
     for (const dataset of initialDatasets) {
       output[dataset] = true;
     }
+
+    console.log("init datasets:", output, "from", initialDatasets);
+
     return output;
   });
   // useEffect(() => {
@@ -106,15 +134,6 @@ export default function CustomGraph(props) {
   // }, [datasets]);
 
   // the data to pass to the graph
-  // const formattedDatasets = Object.keys(datasets)
-  //   .filter((key) => datasets[key])
-  //   .map((key) => {
-  //     const temp = packedData.find(
-  //       (packedDataset) => packedDataset.key === key
-  //     );
-  //     // console.log("adding", key, ":", temp);
-  //     return temp;
-  //   });
   const formattedDatasets = [];
   for (const key in datasets) {
     const temp = packedData.find((packedDataset) => packedDataset.key === key);
@@ -148,12 +167,22 @@ export default function CustomGraph(props) {
           overflow="hidden"
         >
           <Stack direction="row">
-            <Button>
+            <Button
+              onClick={() => {
+                if (title.length) {
+                  onSave(title, Object.keys(datasets));
+                } else {
+                  onNameModalOpen();
+                }
+              }}
+            >
               <Icon as={FaSave} />
             </Button>
-            <Button onClick={onOpen}>
+
+            <Button onClick={onDataSelectOpen}>
               <EditIcon />
             </Button>
+
             <HStack
               flex="1 1 0"
               spacing={2}
@@ -191,15 +220,17 @@ export default function CustomGraph(props) {
               })}
             </HStack>
           </Stack>
+
           <Center flex={1}>
             <Line data={data} options={options} />
           </Center>
         </VStack>
       </HStack>
-      <GraphModal
-        isOpen={isOpen}
-        onClose={onClose}
-        datasets={Object.keys(datasets)}
+
+      <GraphSelectModal
+        isOpen={isDataSelectOpen}
+        onClose={onDataSelectClose}
+        initialDatasets={Object.keys(datasets)}
         onSave={(keys) => {
           // updateDatasets({ action: "set", key: keys })
           // console.log("keys:", keys);
@@ -212,6 +243,84 @@ export default function CustomGraph(props) {
           setDatasets(newDatasets);
         }}
       />
+
+      <GraphNameModal
+        isOpen={isNameModalOpen}
+        onClose={onNameModalClose}
+        onSave={(name) => onSave(name, Object.keys(datasets))}
+      />
     </>
+  );
+}
+
+/**
+ * Creates a new component that is a dialog that prompts the user for a name
+ * for a graph
+ *
+ * @param {any} props the props to pass this component
+ * @param {boolean} props.isOpen whether the dialog is to be open
+ * @param {() => void} props.onClose the function callback for when the modal
+ * is closed
+ * @param {(string) => void} props.onSave the function callback for when the
+ * user clicks "save and continue", with the new title as the argument
+ * @return the modal component
+ */
+function GraphNameModal(props) {
+  // destructure the props
+  const { isOpen, onClose, onSave } = props;
+
+  // the new name, stored as part of the state
+  const [name, setName] = useState("");
+
+  const isInvalid = !name.length || name === "Custom";
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Please enter a name for the graph</ModalHeader>
+        <ModalCloseButton />
+
+        <ModalBody>
+          <FormControl isInvalid={isInvalid}>
+            <FormLabel htmlFor="graphName">Name</FormLabel>
+            <Input
+              id="graphName"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            {isInvalid ? (
+              <FormErrorMessage>
+                A name for the graph is required, and it cannot be "Custom".
+              </FormErrorMessage>
+            ) : (
+              <FormHelperText>
+                Please enter a unique name to refer to the graph.
+              </FormHelperText>
+            )}
+          </FormControl>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button
+            bg="#008640"
+            mr={3}
+            onClick={() => {
+              // console.log("Saving and exiting...");
+              onSave(name);
+              onClose();
+            }}
+            isDisabled={isInvalid}
+          >
+            Save &amp; Continue
+          </Button>
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }

@@ -68,16 +68,21 @@ export default function GraphContainer({ queue, ...props }) {
 
   //------------------------- Saving custom graphs ----------------------------
   const [customGraphData, setCustomGraphData] = useState({});
+  // console.log("custom graph data:", customGraphData);
 
   /**
    * Saves the given graph's data (namely, the datasets that it is displaying)
    *
-   * @param {string} title the title of the graph to ve saved
+   * @param {string} title the title of the graph to be saved
    * @param {string[]} datasets collection of datasets that is associated with this graph
+   * @param {number} index the index of the graph that's being saved
    */
-  function onSave(title, datasets) {
+  function onSave(title, datasets, index) {
     customGraphData[title] = datasets;
     setCustomGraphData(customGraphData);
+
+    graphTitles[index] = title;
+    setGraphTitles(graphTitles);
   }
 
   //----------------- Calculate all data that can be shown --------------------
@@ -104,7 +109,7 @@ export default function GraphContainer({ queue, ...props }) {
           flex="1 1 0"
           key={
             graphTitle?.length
-              ? graphTitles[index].startsWith("Custom")
+              ? graphTitles === "Custom"
                 ? "Custom" + index
                 : graphTitles[index]
               : index
@@ -119,13 +124,12 @@ export default function GraphContainer({ queue, ...props }) {
             value={graphTitles[index]}
             onChange={(evt) => showGraph(evt.target.value, index)}
           >
-            <GraphOptions titles={graphTitles} />
+            <GraphOptions titles={Object.keys(customGraphData)} />
           </Select>
-          {graphTitles[index] === "" ? null : graphTitles[index].startsWith(
-              "Custom"
-            ) ? (
+          {graphTitles[index] === "" ? null : graphTitles[index] ===
+            "Custom" ? (
             <CustomGraph
-              onSave={onSave}
+              onSave={(title, datasets) => onSave(title, datasets, index)}
               title=""
               categories={categories}
               packedData={packedData}
@@ -134,11 +138,11 @@ export default function GraphContainer({ queue, ...props }) {
             />
           ) : (
             <CustomGraph
-              onSave={onSave}
+              onSave={(title, datasets) => onSave(title, datasets, index)}
               title={graphTitles[index]}
               categories={categories}
               packedData={packedData}
-              initialDatasets={[]}
+              initialDatasets={customGraphData[graphTitles[index]]}
               allDatasets={allDatasets}
             />
           )}
