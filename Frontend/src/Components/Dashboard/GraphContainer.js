@@ -1,6 +1,6 @@
 import { Select, useConst, VStack } from "@chakra-ui/react";
 import { useState } from "react";
-import BatteryGraph from "../Graph/BatteryGraph";
+import CustomGraph from "../Graph/CustomGraph";
 import GraphData from "../Graph/graph-data.json";
 
 function generateCategories() {
@@ -28,7 +28,7 @@ function generateCategories() {
  * @param {any} props the props to pass to this graph container
  * @returns the graph-containing component
  */
-export default function GraphContainer({ queue }) {
+export default function GraphContainer({ queue, ...props }) {
   // fetch constants: categories and flatpacked categories
   const [categories, allDatasets] = useConst(generateCategories);
 
@@ -81,7 +81,7 @@ export default function GraphContainer({ queue }) {
   }
 
   return (
-    <VStack flex="2 2 0" maxW="67vw" align="stretch" spacing={0}>
+    <VStack align="stretch" spacing={0} {...props}>
       {graphTitles.map((graphTitle, index) => (
         <VStack
           align="stretch"
@@ -111,7 +111,7 @@ export default function GraphContainer({ queue }) {
           {graphTitles[index] === "" ? null : graphTitles[index].startsWith(
               "Custom"
             ) ? (
-            <BatteryGraph
+            <CustomGraph
               onSave={onSave}
               title=""
               categories={categories}
@@ -119,7 +119,7 @@ export default function GraphContainer({ queue }) {
               queue={queue}
             />
           ) : (
-            <BatteryGraph
+            <CustomGraph
               onSave={onSave}
               title={graphTitles[index]}
               categories={categories}

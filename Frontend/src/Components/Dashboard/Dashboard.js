@@ -150,7 +150,7 @@ export default function Dashboard(props) {
           </VStack>
         </GridItem>
       </Grid>
-      <GraphContainer queue={queue} />
+      <GraphContainer queue={queue} flex="2 2 0" maxW="67vw" />
     </HStack>
   );
 }

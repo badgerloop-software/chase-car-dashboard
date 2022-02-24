@@ -80,7 +80,7 @@ const options = {
  * @param {any} props.queue the queue of data coming from the solar car
  * @returns
  */
-export default function BatteryGraph(props) {
+export default function CustomGraph(props) {
   const {
     onSave,
     title,
@@ -162,7 +162,7 @@ export default function BatteryGraph(props) {
           borderLeftWidth={1}
           textAlign="center"
         >
-          Battery
+          {title?.length ? title : "Custom"}
         </Text>
         <VStack
           p={2}
