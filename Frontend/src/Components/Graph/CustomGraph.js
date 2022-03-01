@@ -61,16 +61,18 @@ const options = {
     xAxis: {
       type: "time",
       reverse: true,
+      // ticks: {
+      //   source: "data",
+      // },
       bounds: "data", // ticks?
-      source: "auto",
       time: {
-        unit: 'second',
-        unitStepSize: 1,
+        unit: "second",
+        stepSize: 1,
         tooltipFormat: "h:mm:ss a",
         displayFormats: {
-          second: 'h:mm:ss a'
-        }
-      }
+          second: "h:mm:ss a",
+        },
+      },
     },
     yAxis: {
       suggestedMin: 0,
