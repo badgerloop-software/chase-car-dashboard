@@ -32,7 +32,7 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
@@ -137,21 +137,25 @@ export default function CustomGraph(props) {
       output[dataset] = true;
     }
 
-    console.log("init datasets:", output, "from", initialDatasets);
+    // console.log("init datasets:", output, "from", initialDatasets);
 
     return output;
   });
   // useEffect(() => {
-  //   console.log("datasets updated :]", datasets);
-  // }, [datasets]);
+  //   console.log(`datasets for "${title}" updated:`, datasets);
+  // }, [datasets, title]);
 
   // the data to pass to the graph
   const formattedDatasets = [];
   for (const key in datasets) {
     const temp = packedData.find((packedDataset) => packedDataset.key === key);
     if (temp) {
-      temp.hidden = !datasets[key];
-      formattedDatasets.push(temp);
+      const copy = Object.assign({}, temp);
+      copy.hidden = !datasets[key];
+      // console.log(`${title} pushed:`, copy);
+      formattedDatasets.push(copy);
+    } else {
+      console.warn(`unable to find ${key} for ${title}`);
     }
   }
 
@@ -220,8 +224,9 @@ export default function CustomGraph(props) {
                     onClick={() => {
                       console.log("clicked", key);
                       // updateDatasets({ action: "toggle", key: dataset.key });
-                      datasets[key] = !datasets[key];
-                      setDatasets(datasets);
+                      const temp = Object.assign({}, datasets);
+                      temp[key] = !temp[key];
+                      setDatasets(temp);
                     }}
                     flexShrink={0}
                     size="xs"
