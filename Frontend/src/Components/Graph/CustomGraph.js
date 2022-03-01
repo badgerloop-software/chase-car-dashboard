@@ -222,7 +222,7 @@ export default function CustomGraph(props) {
           </Stack>
 
           <Center flex={1}>
-            <Line data={data} options={options} />
+            <Line data={data} options={options} parsing="false" />
           </Center>
         </VStack>
       </HStack>
