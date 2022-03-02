@@ -1,22 +1,22 @@
-import { Text, VStack } from "@chakra-ui/react";
+import { Box, Text, VStack } from "@chakra-ui/react";
 
 export default function CellGroup(props) {
     return (
         <VStack
             borderWidth={1}
-            borderColor="black"
+            borderColor='black'
             spacing={0}
             padding={1}
         >
-            <Text as='u' fontSize='sm'>
-                Group {props.groupNum}
+            <Text as='u' fontSize='xs'>
+                Group{props.groupNum}
             </Text>
-            <Text fontSize='xs'>
-                V: {props.voltage}V
+            <Text fontSize='sm'>
+                {props.voltage.toFixed(2)}V
             </Text>
-            <Text fontSize='xs'>
-                T: {props.temperature}&deg;C
-            </Text>
+            <Box border='2px' borderRadius='md' w='3.5vw' h='2.5vh'>
+                {props.battery}
+            </Box>
         </VStack>
     );
 }
