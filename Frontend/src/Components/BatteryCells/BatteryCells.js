@@ -1,4 +1,4 @@
-import { Container, Box, Flex, Spacer, SimpleGrid, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Spacer, SimpleGrid, Heading, Text, VStack } from "@chakra-ui/react";
 import CellGroup from "./CellGroup";
 
 export default function BatteryCells(props) {
