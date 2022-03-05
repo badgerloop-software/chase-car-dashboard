@@ -32,7 +32,7 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
@@ -239,7 +239,9 @@ export default function CustomGraph(props) {
           </Stack>
 
           <Center flex={1}>
-            <Line data={data} options={options} parsing="false" />
+            {isNameModalOpen || isDataSelectOpen ? null : (
+              <Line data={data} options={options} parsing="false" />
+            )}
           </Center>
         </VStack>
       </HStack>

@@ -68,17 +68,24 @@
         },
         {
           "key": "rtc_sc",
-          "name": "rtc_sc",
+          "name": "RTC Second",
           "unit": "sec",
           "min": 0,
           "max": 59
         },
         {
           "key": "rtc_mn",
-          "name": "rtc_mn",
+          "name": "RTC Minute",
           "unit": "min",
           "min": 0,
           "max": 59
+        },
+        {
+          "key": "rtc_hr",
+          "name": "RTC Hour",
+          "unit": "hr",
+          "min": 1,
+          "max": 12
         }
       ]
     },

@@ -54,9 +54,39 @@ const server = net.createServer((socket) => {
   interval = setInterval(() => {
     buffOffset = 0; // Offset when adding each value to buf1
 
+    const time = new Date();
+    // console.log(time);
+
     // Fill buf1 with new data according to the data format file
     for (const property in DATA_FORMAT) {
-      nextValue = Math.abs(Math.sin(nextValue)) * 100; // Generate a new value
+      // special values: RTC timestamps
+      if (property === "rtc_hr") {
+        buf1.writeUInt8(time.getHours(), buffOffset);
+        // buf1.writeUInt8(7, buffOffset);
+
+        // Increment offset by amount specified in data format json
+        buffOffset += DATA_FORMAT[property][0];
+        continue;
+      }
+      if (property === "rtc_mn") {
+        buf1.writeUInt8(time.getMinutes(), buffOffset);
+        // buf1.writeUInt8(27, buffOffset);
+
+        // Increment offset by amount specified in data format json
+        buffOffset += DATA_FORMAT[property][0];
+        continue;
+      }
+      if (property === "rtc_sc") {
+        buf1.writeUInt8(time.getSeconds(), buffOffset);
+        // buf1.writeUInt8(27, buffOffset);
+
+        // Increment offset by amount specified in data format json
+        buffOffset += DATA_FORMAT[property][0];
+        continue;
+      }
+
+      // Generate a new value
+      nextValue = Math.abs(Math.sin(nextValue)) * 100;
 
       // Add the next value to the Buffer based on the data type
       switch (DATA_FORMAT[property][1]) {
