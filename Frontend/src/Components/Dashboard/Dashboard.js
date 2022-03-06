@@ -14,6 +14,9 @@ export default function Dashboard(props) {
 
   const callBackendAPI = async () => {
     const response = await fetch("/api");
+    const responseRD = await fetch("/get-recorded-data");
+    // localStorage.setItem("recordeData", JSON.stringify(responseRD.json()))
+    // console.log("RD:", responseRD.json())
     const body = await response.json();
 
     if (response.status !== 200) {
@@ -24,15 +27,31 @@ export default function Dashboard(props) {
     return body;
   };
 
+  const getRecordedData = async () => {
+    const response = await fetch("/get-recorded-data");
+    if (response.status == 200) {
+      const body = await response.json();
+      return body
+    }
+    return null;
+  };
+
   const [state, setState] = useState({ data: null });
+  const [recordedData, setRecordedData] = useState({ data: null });
+
   useLayoutEffect(() => {
-    callBackendAPI()
-      .then((res) => {
-        setState({ data: res.response });
-        // console.log("api::", res.response);
-      })
-      .catch((err) => console.log(err));
-  }, [state]);
+    callBackendAPI().then((res) => {
+      setState({ data: res.response });
+      // console.log("api::", res.response);
+    }).catch((err) => console.log(err));
+
+    getRecordedData().then((res) => {
+      setRecordedData({ data: res.response });
+      localStorage.setItem("recordeData", JSON.stringify(res.response))
+      // console.log("RD::", res.response);
+    }).catch((err) => console.log(err));
+  }, [state, recordedData]);
+
 
   //------------------- Choosing data views using Select components -------------------
 
@@ -45,7 +64,7 @@ export default function Dashboard(props) {
       // Avoid duplicate data views, unless they are both empty
       if (
         event.target.value ===
-          document.getElementById("dataViewSelect2").value &&
+        document.getElementById("dataViewSelect2").value &&
         event.target.value !== ""
       ) {
         // If trying to switch to a data view that is already being displayed in the other
@@ -58,7 +77,7 @@ export default function Dashboard(props) {
       // Avoid duplicate data views, unless they are both empty
       if (
         event.target.value ===
-          document.getElementById("dataViewSelect1").value &&
+        document.getElementById("dataViewSelect1").value &&
         event.target.value !== ""
       ) {
         // If trying to switch to a data view that is already being displayed in the other
@@ -147,29 +166,29 @@ export default function Dashboard(props) {
   // Choose the graph to return/display based on the given option
   const switchGraph = (optionValue) => {
     if (optionValue === "battery") {
-      return <BatteryGraph data={ state.data } />;
+      return <BatteryGraph data={state.data} />;
     } else if (optionValue === "power") {
-      return <PowerGraph data={ state.data } />;
+      return <PowerGraph data={state.data} />;
     } else if (optionValue === "temperature") {
-      return <TemperatureGraph data={ state.data } />;
+      return <TemperatureGraph data={state.data} />;
     } else if (optionValue === "custom") {
       return <CustomGraph
-                id=""
-                data={ state.data }
-                title=""
-                buttons={[]}
-                datasets={[]}
-                save={ saveCustomGraph }
-             />;
-    } else if(optionValue in customGraphData) {
+        id=""
+        data={state.data}
+        title=""
+        buttons={[]}
+        datasets={[]}
+        save={saveCustomGraph}
+      />;
+    } else if (optionValue in customGraphData) {
       return <CustomGraph
-                id={ optionValue }
-                data={ state.data }
-                title={ optionValue }
-                buttons={ customGraphData[optionValue].buttons }
-                datasets={ customGraphData[optionValue].datasets }
-                save={ saveCustomGraph }
-             />;
+        id={optionValue}
+        data={state.data}
+        title={optionValue}
+        buttons={customGraphData[optionValue].buttons}
+        datasets={customGraphData[optionValue].datasets}
+        save={saveCustomGraph}
+      />;
     }
   };
 
@@ -187,7 +206,7 @@ export default function Dashboard(props) {
 
   return (
     <Grid templateColumns="1fr 2fr" h="100vh" w="100vw">
-      <GridItem colStart={1} colSpan={1}>
+      {/* <GridItem colStart={1} colSpan={1}>
         <Grid h="100vh" templateRows="1fr 3fr">
           <GridItem
             rowStart={1}
@@ -303,7 +322,7 @@ export default function Dashboard(props) {
             {switchGraph(graph3)}
           </VStack>
         </Grid>
-      </GridItem>
+      </GridItem> */}
     </Grid>
   );
 }
@@ -321,9 +340,9 @@ function DataViewOptions(props) {
 function GraphOptions(props) {
   let customGraphs = [];
 
-  for(const title in props.customGraphs) {
+  for (const title in props.customGraphs) {
     customGraphs.push(
-        <option value={title} >{title}</option>
+      <option value={title} >{title}</option>
     );
   }
 
