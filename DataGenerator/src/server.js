@@ -45,6 +45,7 @@ const SERVER = NET.createServer((socket) => {
     // Fill buf1 with new data according to the data format file
     for (const property in DATA_FORMAT) {
       nextValue = Math.abs(Math.sin(nextValue)) * 100; // Generate a new value
+      // nextValue =  10.58; //Testing 
 
       // Add the next value to the Buffer based on the data type
       switch (DATA_FORMAT[property][1]) {
