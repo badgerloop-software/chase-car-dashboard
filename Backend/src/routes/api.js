@@ -10,22 +10,23 @@ const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
   frontendData = INITIAL_FRONTEND_DATA;
 
+let RecodedData = null
+
 // Send data to front-end
 ROUTER.get("/api", (req, res) => {
   res.send({ response: frontendData }).status(200);
 });
 
 // TODO ---------------------------------------------------------------------
-// Set recording flag to true
-ROUTER.get("/start-record", (req, res) => {
-  doRecord = true;
+// Set recording flag to true or false depeding on request
+ROUTER.post("/record-data", (req, res) => {
+  res.send({ response:  req.body}).status(200)
+  console.log("Record Status:", req.body)
 });
 
-// Set recording flag to false
-ROUTER.get("/stop-record", (req, res) => {
-  doRecord = false;
-});
-
+ROUTER.get("/get-recorded-data", (req, res) => {
+  res.send({ response: RecodedData }).status(200);
+})
 
 // TODO ---------------------------------------------------------------------
 
@@ -50,7 +51,6 @@ client.connect(CAR_PORT, CAR_SERVER, function () {
 // Data received listener: Log and unpack data when it's received
 let i = 1;
 client.on("data", function (data) {
-
   // recordData(data)
   // unpackData(data);
 
@@ -61,8 +61,7 @@ client.on("data", function (data) {
 function recordData(data) {
   fs.appendFile("recordedData/data.bin", data, (err) => {/*error handling*/ });
 }
-
-getrecordedData();
+// getrecordedData()
 
 function getrecordedData() {
   console.log("Geting record data")
@@ -70,36 +69,29 @@ function getrecordedData() {
   for (const property in DATA_FORMAT) {
     bytesOffset += DATA_FORMAT[property][0];
   }
-  let DataRecord = []
+  let RD = []
 
   fs.readFile('recordedData/data.bin', (err, data) => {
     let end = false;
     let indx = 0;
-
     let i = 1
-    // console.log(data)
-    end == false
+    end = false
     while (end == false) {
       let buff = data.slice(indx, bytesOffset + indx)
       if (buff <= 0) {
         end = true
         // Send recorded flag to false
-        ROUTER.get("/get-recorded-data", (req, res) => {
-          res.send({ response: DataRecord }).status(200);
-        });
-        console.log("END of buffer::" )
+        RecodedData = RD
+        console.log("END of recordedData buffer::")
         return
       }
 
       let unpackedSet = unpackBufferData(buff)
-      DataRecord.push(unpackedSet)
-      console.log(i, ") DATA Slice:");
+      RD.push(unpackedSet)
+      // console.log(i, ") DATA Slice:");
       indx += bytesOffset;
       i++;
     }
-
-
-    // console.log("DATA Buff:", Buffer.from(data).readUInt8(bytesOffset));
   });
 }
 
