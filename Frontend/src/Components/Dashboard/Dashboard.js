@@ -1,5 +1,5 @@
 import { Grid, GridItem, VStack, Select } from "@chakra-ui/react";
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
 import BatteryCells from "../BatteryCells/BatteryCells";
@@ -14,9 +14,6 @@ export default function Dashboard(props) {
 
   const callBackendAPI = async () => {
     const response = await fetch("/api");
-    const responseRD = await fetch("/get-recorded-data");
-    // localStorage.setItem("recordeData", JSON.stringify(responseRD.json()))
-    // console.log("RD:", responseRD.json())
     const body = await response.json();
 
     if (response.status !== 200) {
@@ -46,11 +43,28 @@ export default function Dashboard(props) {
     }).catch((err) => console.log(err));
 
     getRecordedData().then((res) => {
-      setRecordedData({ data: res.response });
-      localStorage.setItem("recordeData", JSON.stringify(res.response))
-      // console.log("RD::", res.response);
+      if (res.response) {
+        setRecordedData({ data: res.response });
+        localStorage.setItem("recordeData", JSON.stringify(res.response))
+        console.log("RD::", res);
+      }
     }).catch((err) => console.log(err));
   }, [state, recordedData]);
+
+
+  const recordCarData = (b) => {
+    fetch('http://localhost:4001/record-data', {
+      method: "POST",
+      body: JSON.stringify({ doRecord: b }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    }).then(function (response) {
+      console.log("res::", response)
+      // return response.json();
+    }).catch((e) => { console.log("Error:", e) });
+  }
 
 
   //------------------- Choosing data views using Select components -------------------
@@ -206,7 +220,10 @@ export default function Dashboard(props) {
 
   return (
     <Grid templateColumns="1fr 2fr" h="100vh" w="100vw">
-      {/* <GridItem colStart={1} colSpan={1}>
+
+      <button onClick={() => { recordCarData(true) }}>Test start recording</button>
+
+      <GridItem colStart={1} colSpan={1}>
         <Grid h="100vh" templateRows="1fr 3fr">
           <GridItem
             rowStart={1}
@@ -322,7 +339,7 @@ export default function Dashboard(props) {
             {switchGraph(graph3)}
           </VStack>
         </Grid>
-      </GridItem> */}
+      </GridItem>
     </Grid>
   );
 }
