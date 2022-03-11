@@ -1,6 +1,6 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
 
-export default function CellGroup(props) {
+export default function CellGroupR(props) {
     return (
         <VStack
             borderWidth={1}
