@@ -1,7 +1,8 @@
 import express from "express";
 import { createServer } from "http";
 import index from "./routes/api.js";
-var cors = require('cors');
+import cors from 'cors';
+// var cors = require('cors');
 
 
 const PORT = 4001;

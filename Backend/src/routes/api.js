@@ -53,7 +53,6 @@ let i = 1;
 client.on("data", function (data) {
   // recordData(data)
   // unpackData(data);
-
   // console.log(i++, ") Data::", data);
 });
 
@@ -163,13 +162,6 @@ function unpackBufferData(data) {
   // Update the data to be passed to the front-end
   // frontendData = solarCarData;
 }
-
-
-//**Example for getting content from a file line by line  */
-// const allFileContents = fs.readFileSync('recordedData/runName.csv', 'utf-8');
-// allFileContents.split(/\r?\n/).forEach(line =>  {
-//   console.log(`Line from file: ${line}`);
-// });
 
 // Socket closed listener: Log when connection is closed
 client.on("close", function () {
