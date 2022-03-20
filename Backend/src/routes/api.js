@@ -5,6 +5,7 @@ import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 // TODO ---------------------------------------------------------------------
 let doRecord = false; // Flag for whether we should be recording data or not
+let sessionFile = ""
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -18,14 +19,38 @@ ROUTER.get("/api", (req, res) => {
 });
 
 // TODO ---------------------------------------------------------------------
+ROUTER.post("/create-recording-session", (req, res) => {
+  if(req.body.fileName === ""){
+    res.send({ response: "Empty" }).status(200);
+    return
+  }
+  fs.writeFile('./recordedData/sessions/' + req.body.fileName + '.bin', '', { flag: 'w' }, function (err) {
+    if (err) {
+      res.send({ response: "Error" }).status(200);
+      return console.error(err);
+    }
+    res.send({ response: "Created" }).status(200)
+    sessionFile = req.body.fileName+".bin"
+  });
+  console.log('req:', req.body);
+});
+
+
 // Set recording flag to true or false depeding on request
 ROUTER.post("/record-data", (req, res) => {
-  res.send({ response:  req.body}).status(200)
+  if(sessionFile === ""){
+    res.send({ response: "NoFile" }).status(200)
+    return
+  } 
+  res.send({ response: "Recording" }).status(200)
+  doRecord = req.body.doRecord
   console.log("Record Status:", req.body)
 });
 
+
 ROUTER.get("/get-recorded-data", (req, res) => {
   res.send({ response: RecodedData }).status(200);
+
 })
 
 // TODO ---------------------------------------------------------------------
@@ -48,17 +73,19 @@ client.connect(CAR_PORT, CAR_SERVER, function () {
   console.log(`Connected to car server: ${client.remoteAddress}:${CAR_PORT}`);
 });
 
-// Data received listener: Log and unpack data when it's received
+// Data onreceived: Log and unpack data when it's received
 let i = 1;
 client.on("data", function (data) {
-  // recordData(data)
-  // unpackData(data);
+  unpackData(data);
+  if (doRecord) {
+    recordData(data)
+  }
   // console.log(i++, ") Data::", data);
 });
 
 
 function recordData(data) {
-  fs.appendFile("recordedData/data.bin", data, (err) => {/*error handling*/ });
+  fs.appendFile("recordedData/sessions/"+sessionFile, data, (err) => {/*error handling*/ });
 }
 // getrecordedData()
 

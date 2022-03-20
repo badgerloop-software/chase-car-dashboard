@@ -1,4 +1,16 @@
-import { Grid, GridItem, VStack, Select } from "@chakra-ui/react";
+import {
+  Grid, GridItem, VStack, HStack, Select, Button, ButtonGroup, Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Input,
+  FormLabel,
+  FormControl,
+  useDisclosure
+} from "@chakra-ui/react";
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
@@ -11,6 +23,9 @@ import CustomGraph from "../Graph/CustomGraph";
 
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const initialRef = React.useRef()
+  const finalRef = React.useRef()
 
   const callBackendAPI = async () => {
     const response = await fetch("/api");
@@ -26,7 +41,7 @@ export default function Dashboard(props) {
 
   const getRecordedData = async () => {
     const response = await fetch("/get-recorded-data");
-    if (response.status == 200) {
+    if (response.status === 200) {
       const body = await response.json();
       return body
     }
@@ -35,6 +50,9 @@ export default function Dashboard(props) {
 
   const [state, setState] = useState({ data: null });
   const [recordedData, setRecordedData] = useState({ data: null });
+  const [isRecording, setIsRecording] = useState(false);
+  const [isRecordingSessionCreated, setIsRecordingSessionCreated] = useState(false);
+  const [sessionFileName, setSessionFileName] = useState("");
 
   useLayoutEffect(() => {
     callBackendAPI().then((res) => {
@@ -52,18 +70,61 @@ export default function Dashboard(props) {
   }, [state, recordedData]);
 
 
-  const recordCarData = (b) => {
+  const recordCarData = () => {
     fetch('http://localhost:4001/record-data', {
       method: "POST",
-      body: JSON.stringify({ doRecord: b }),
+      body: JSON.stringify({ doRecord: !isRecording }),
       headers: {
         'Accept': 'application/json',
         'Content-type': 'application/json; charset=UTF-8',
       },
-    }).then(function (response) {
-      console.log("res::", response)
-      // return response.json();
-    }).catch((e) => { console.log("Error:", e) });
+    }).then(response => response.json()).then((data) => {
+      console.log("rcd res::", data)
+      if(data.response === "NoFile"){
+
+      }
+      if (data.response === "Recording") {
+        //Then Request is sent 
+        setIsRecording(!isRecording)
+      } else {
+        setIsRecording(false)
+        // Handle the error
+        alert("Something went wrong")
+      }
+
+    }).catch((e) => {
+      setIsRecording(false)
+      console.log("Error:", e)
+    })
+  }
+
+  const createRecordingSession = (fileName) => {
+    fetch('http://localhost:4001/create-recording-session', {
+      method: "POST",
+      body: JSON.stringify({ fileName: fileName }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    }).then(response => response.json()).then((data) => {
+      console.log("crs res::", data)
+      if(data.response === "Empty"){
+        alert("Empty feild")
+        return
+      }
+      if (data.response === "Created") {
+        alert("Session file has been created!!")
+        //Then Request is sent 
+      } else {
+        setIsRecordingSessionCreated(false)
+        // Handle the error
+        alert("Something went wrong")
+      }
+
+    }).catch((e) => {
+      setIsRecordingSessionCreated(false)
+      console.log("Error:", e)
+    });
   }
 
 
@@ -220,8 +281,46 @@ export default function Dashboard(props) {
 
   return (
     <Grid templateColumns="1fr 2fr" h="100vh" w="100vw">
+      {"(test) Is recording: " + isRecording}
+      <HStack>
+        <Button width={"15em"} colorScheme='blue' size='sm' onClick={onOpen}>(test) Create session file</Button>
+        <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => { recordCarData() }}>(test) {isRecording ? "Stop" : "Start"} recording session</Button>
+      </HStack>
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create recording session</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>File name</FormLabel>
+              <Input ref={initialRef} placeholder='File name' onChange={(e) => {
+                setSessionFileName(e.target.value)
+              }} />
+            </FormControl>
+          </ModalBody>
 
-      <button onClick={() => { recordCarData(true) }}>Test start recording</button>
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={() => {
+              if (sessionFileName == "") {
+                alert("Error: Empty feild")
+                return
+              }
+              createRecordingSession(sessionFileName);
+              onClose()
+            }}>
+              Create
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
 
       <GridItem colStart={1} colSpan={1}>
         <Grid h="100vh" templateRows="1fr 3fr">
@@ -294,7 +393,7 @@ export default function Dashboard(props) {
               value={graph1}
               onChange={selectGraph}
             >
-              <GraphOptions customGraphs={ customGraphData } />
+              <GraphOptions customGraphs={customGraphData} />
             </Select>
             {switchGraph(graph1)}
           </VStack>
@@ -314,7 +413,7 @@ export default function Dashboard(props) {
               value={graph2}
               onChange={selectGraph}
             >
-              <GraphOptions customGraphs={ customGraphData } />
+              <GraphOptions customGraphs={customGraphData} />
             </Select>
             {switchGraph(graph2)}
           </VStack>
@@ -334,7 +433,7 @@ export default function Dashboard(props) {
               value={graph3}
               onChange={selectGraph}
             >
-              <GraphOptions customGraphs={ customGraphData } />
+              <GraphOptions customGraphs={customGraphData} />
             </Select>
             {switchGraph(graph3)}
           </VStack>
