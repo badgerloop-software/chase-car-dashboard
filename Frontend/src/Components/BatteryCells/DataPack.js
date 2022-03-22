@@ -17,7 +17,6 @@ export default function DataPack(props) {
                     {props.dataValue.toFixed(3)}{props.dataUnit}
                 </Text>
             </Flex>
-
             <Box border='1px' w='15vw' h='0.7vh'>
                 {props.battery}
             </Box>

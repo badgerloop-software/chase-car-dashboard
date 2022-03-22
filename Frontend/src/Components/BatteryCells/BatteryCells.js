@@ -2,7 +2,6 @@ import { SimpleGrid, VStack } from "@chakra-ui/react";
 import DataPack from "./DataPack";
 import CellGroup from "./CellGroup";
 
-
 export default function BatteryCells(props) {
     return (
         <VStack>
