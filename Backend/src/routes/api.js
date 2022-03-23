@@ -52,11 +52,13 @@ function unpackData(data) {
   let timestamps = solarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
 
   // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
-  timestamps.unshift(DateTime.now().toString());
+  // timestamps.unshift(DateTime.now().toString());
+
+  // Add separators for timestamp to timestamps and limit array's length
+  timestamps.unshift("::.");
   if (timestamps.length > xAxisCap) {
     timestamps.pop();
   }
-  solarCarData["timestamps"] = timestamps;
 
   for (const property in DATA_FORMAT) {
     let dataArray = []; // Holds the array of data specified by property that will be put in solarCarData
@@ -69,13 +71,9 @@ function unpackData(data) {
 
     // Add the data from the buffer to solarCarData
     switch (dataType) {
-      case "uint8":
-        // Add the data to the front of dataArray
-        dataArray.unshift(data.readUInt8(buffOffset));
-        break;
       case "float":
         // Add the data to the front of dataArray
-        dataArray.unshift(data.readFloatBE(buffOffset));
+        dataArray.unshift(data.readFloatLE(buffOffset));
         break;
       case "char":
         // Add the data to the front of dataArray
@@ -85,19 +83,51 @@ function unpackData(data) {
         // Add the data to the front of dataArray
         dataArray.unshift(Boolean(data.readUInt8(buffOffset)));
         break;
+      case "uint8":
+        if (property === "tstamp_hr") {
+          timestamps[0] = data.readUInt8(buffOffset) + timestamps[0];
+          break;
+        }
+        if (property === "tstamp_mn") {
+          timestamps[0] = timestamps[0].replace("::", ":" + data.readUInt8(buffOffset) + ":");
+          break;
+        }
+        if (property === "tstamp_sc") {
+          timestamps[0] = timestamps[0].replace(":.", ":" + data.readUInt8(buffOffset) + ".");
+          break;
+        }
+        // Add the data to the front of dataArray
+        dataArray.unshift(data.readUInt8(buffOffset));
+        break;
+      case "uint16":
+        if (property === "tstamp_ms") {
+          timestamps[0] += data.readUInt16BE(buffOffset);
+          break;
+        }
+        // Add the data to the front of dataArray
+        dataArray.unshift(data.readUInt16BE(buffOffset));
+        break;
       default:
         break;
     }
-    // Limit dataArray to a length specified by xAxisCap
-    if (dataArray.length > xAxisCap) {
-      dataArray.pop();
+
+    if(!property.startsWith("tstamp")) {
+      // If property is not used for timestamps
+      // Limit dataArray to a length specified by xAxisCap
+      if (dataArray.length > xAxisCap) {
+        dataArray.pop();
+      }
+      // Write dataArray to solarCarData at the correct key
+      solarCarData[property] = dataArray;
     }
-    // Write dataArray to solarCarData at the correct key
-    solarCarData[property] = dataArray;
 
     // Increment offset by amount specified in data format
     buffOffset += DATA_FORMAT[property][0];
   }
+
+  // Update the timestamps array in solarCarData
+  solarCarData["timestamps"] = timestamps;
+
 
   // Update the data to be passed to the front-end
   frontendData = solarCarData;

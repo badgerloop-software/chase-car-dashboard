@@ -59,48 +59,43 @@ const server = net.createServer((socket) => {
 
     // Fill buf1 with new data according to the data format file
     for (const property in DATA_FORMAT) {
-      // special values: RTC timestamps
-      if (property === "rtc_hr") {
-        buf1.writeUInt8(time.getHours(), buffOffset);
-        // buf1.writeUInt8(7, buffOffset);
-
-        // Increment offset by amount specified in data format json
-        buffOffset += DATA_FORMAT[property][0];
-        continue;
-      }
-      if (property === "rtc_mn") {
-        buf1.writeUInt8(time.getMinutes(), buffOffset);
-        // buf1.writeUInt8(27, buffOffset);
-
-        // Increment offset by amount specified in data format json
-        buffOffset += DATA_FORMAT[property][0];
-        continue;
-      }
-      if (property === "rtc_sc") {
-        buf1.writeUInt8(time.getSeconds(), buffOffset);
-        // buf1.writeUInt8(27, buffOffset);
-
-        // Increment offset by amount specified in data format json
-        buffOffset += DATA_FORMAT[property][0];
-        continue;
-      }
-
       // Generate a new value
       nextValue = Math.abs(Math.sin(nextValue)) * 100;
 
       // Add the next value to the Buffer based on the data type
       switch (DATA_FORMAT[property][1]) {
-        case "uint8":
-          buf1.writeUInt8(Math.round(nextValue), buffOffset);
-          break;
         case "float":
-          buf1.writeFloatBE(Math.floor(nextValue) + 0.125, buffOffset);
+          buf1.writeFloatLE(Math.floor(nextValue) + 0.125, buffOffset);
           break;
         case "char":
           buf1.writeUInt8(Math.round(nextValue), buffOffset);
           break;
         case "bool":
           buf1.writeUInt8(Math.round(nextValue) % 2, buffOffset);
+          break;
+        case "uint8":
+          // special values: Solar car dashboard time received (hours, minutes, and seconds)
+          if (property === "tstamp_hr") {
+            buf1.writeUInt8(time.getHours(), buffOffset);
+            break;
+          }
+          if (property === "tstamp_mn") {
+            buf1.writeUInt8(time.getMinutes(), buffOffset);
+            break;
+          }
+          if (property === "tstamp_sc") {
+            buf1.writeUInt8(time.getSeconds(), buffOffset);
+            break;
+          }
+          buf1.writeUInt8(Math.round(nextValue), buffOffset);
+          break;
+        case "uint16":
+          // special value: Solar car dashboard time received (milliseconds)
+          if (property === "tstamp_ms") {
+            buf1.writeUInt16BE(time.getMilliseconds(), buffOffset);
+            break;
+          }
+          buf1.writeUInt16BE(Math.round(nextValue), buffOffset);
           break;
         default:
           // Fill the correct number of bytes with the next value if its type is not listed above
