@@ -8,11 +8,11 @@ export default function BatteryCells(props) {
             columns={2}
             rows={1}
             spacingX={'0.25vw'}
+            h="calc(100% - 26px)" // Calculate height of container (100%) - height of Select (24px) and border (2px)
         >
             <SimpleGrid
                 columns={1}
                 overflowY="scroll"
-                maxHeight="40vh"
             >
                 <DataPack
                     dataTitle="Power Input Voltage"
@@ -87,7 +87,6 @@ export default function BatteryCells(props) {
                 spacingX={'0.25vw'}
                 spacingY={'0.25vh'}
                 overflowY="scroll"
-                maxHeight="40vh"
             >
                 <CellGroup
                     groupNum={1}
