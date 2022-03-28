@@ -3,6 +3,7 @@ import React, { useState, useLayoutEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
 import BatteryCells from "../BatteryCells/BatteryCells";
+import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import MiniMap from "../MiniMap/MiniMap";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
@@ -77,7 +78,9 @@ export default function Dashboard(props) {
       return <BatteryCells data={state.data} />;
     } else if (optionValue === "minimap") {
       return <MiniMap />;
-    } else {
+    } else if (optionValue === "ppc_mppt") {
+      return <PPC_MPPT />
+    }else {
       return <VStack />;
     }
   };
@@ -314,6 +317,7 @@ function DataViewOptions(props) {
       <option value="general">General Data</option>
       <option value="battery">Battery Cells</option>
       <option value="minimap">Minimap</option>
+      <option value="ppc_mppt">PPC and MPPT</option>
     </>
   );
 }
