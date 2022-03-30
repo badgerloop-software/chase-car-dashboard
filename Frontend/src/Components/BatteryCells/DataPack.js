@@ -15,7 +15,7 @@ export default function DataPack(props) {
                 </Text>
                 <Spacer />
                 <Text fontSize='sm'>
-                    {props.dataValue.toFixed(3)} {props.dataUnit}
+                    {props.dataValue.toFixed(props.DecimalPoint)} {props.dataUnit}
                 </Text>
             </Flex>
         </Center>

@@ -18,66 +18,78 @@ export default function BatteryCells(props) {
                     dataValue={props.data?.bms_input_voltage[0] ?? -1.0}
                     dataUnit="V"
                     bg='#DDDDDD'
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack State of Charge"
                     dataValue={props.data?.soc[0] ?? -1.0}
                     dataUnit="%"
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Current"
                     dataValue={props.data?.pack_current[0] ?? -1.0}
                     dataUnit="A"
                     bg='#DDDDDD'
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Voltage"
                     dataValue={props.data?.pack_voltage[0] ?? -1.0}
                     dataUnit="V"
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Power Out"
                     dataValue={(props.data?.pack_voltage[0] * props.data?.pack_current[0]) ?? -1.0}
                     dataUnit="V"
                     bg='#DDDDDD'
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Temperature"
                     dataValue={props.data?.pack_temp[0] ?? -1.0}
                     dataUnit="&#8451;"
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Fan Speed"
                     dataValue={props.data?.fan_speed[0] ?? -1.0}
                     dataUnit=""
                     bg='#DDDDDD'
+                    DecimalPoint='0'
                 />
                 <DataPack
                     dataTitle="Pack Resistance"
                     dataValue={props.data?.pack_resistance[0] ?? -1.0}
                     dataUnit="m&#937;"
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Avg. Cell Int. Resist"
                     dataValue={props.data?.avg_cell_resistance[0] ?? -1.0}
                     dataUnit="m&#937;"
                     bg='#DDDDDD'
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Capacity"
                     dataValue={props.data?.pack_capacity[0] ?? -1.0}
                     dataUnit="Ah"
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Adap. Total Capacity"
                     dataValue={props.data?.adaptive_total_capacity[0] ?? -1.0}
                     dataUnit="Ah"
                     bg='#DDDDDD'
+                    DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack State of Health"
                     dataValue={props.data?.soh[0] ?? -1.0}
                     dataUnit="Ah"
+                    DecimalPoint='3'
                 />
             </Flex>
             <SimpleGrid
