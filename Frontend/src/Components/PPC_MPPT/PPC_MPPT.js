@@ -39,31 +39,22 @@ export default function PPC_MPPT(props) {
                     </Box>
                 </GridItem>
 
-                <GridItem colSpan={2} rowStart={7} rowSpan={3}>
+                <GridItem colSpan={2} rowStart={7}>
                     <Box w='100%' h='100%' bg='Tomato' borderWidth='1px' borderColor='black'>
-
+                        Cell String 1
+                    </Box>
+                </GridItem>
+                <GridItem colSpan={2} rowStart={8}>
+                    <Box w='100%' h='100%' bg='Tomato' borderWidth='1px' borderColor='black'>
+                        Cell String 2
+                    </Box>
+                </GridItem>
+                <GridItem colSpan={2} rowStart={9}>
+                    <Box w='100%' h='100%' bg='Tomato' borderWidth='1px' borderColor='black'>
+                        Cell String 3
                     </Box>
                 </GridItem>
             </Grid>
-            {/* <Flex h='100%'w='50%' direction = 'column' borderWidth='1px' borderColor='black'>  
-                <Flex h='30%' direction='column'>
-                    <Box w='100%' bg='#DDDDDD' borderWidth='1px' borderColor='black'>
-                        <Heading size = 'xs' textAlign = 'center'>Power Path Controller</Heading>
-                    </Box>
-                    <Flex direction = 'row'>
-                        <Box w='50%' bg='Tomato'> hi </Box>
-                        <Box w='50%' bg='Green'> hi </Box>
-                    </Flex>
-                </Flex>
-                <Flex h='70%' direction='column'>
-                    <Box w='100%' bg='#DDDDDD' borderWidth='1px' borderColor='black'>
-                        <Heading size = 'xs' textAlign = 'center'>Maximum Power Point Tracker</Heading>
-                    </Box>
-                    <Flex direction='column'>
-
-                    </Flex>
-                </Flex>
-            </Flex> */}
         </Flex>
     )
 }
