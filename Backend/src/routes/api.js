@@ -1,41 +1,41 @@
 import { Router } from "express";
-import { DateTime } from "luxon";
 import { Socket } from "net";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 
-const router = Router();
+const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
   frontendData = INITIAL_FRONTEND_DATA;
 
 // Send data to front-end
-router.get("/api", (req, res) => {
+ROUTER.get("/api", (req, res) => {
   res.send({ response: frontendData }).status(200);
 });
 
-export default router;
+export default ROUTER;
 
-//--------------TCP-------------------------
-
-// const { Buffer } = require("buffer");
-const car_port = 4003;
+const CAR_PORT = 4003; // Port for TCP connection
+const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
 var client = new Socket();
 
-client.connect(car_port, function () {
-  console.log(`Connected to car server: localhost:${car_port}`);
+// Initiate connection
+client.connect(CAR_PORT, CAR_SERVER, function () {
+  console.log(`Connected to car server: ${client.remoteAddress}:${CAR_PORT}`);
 });
 
+// Data received listener: Log and unpack data when it's received
 client.on("data", function (data) {
-  console.log("Received: ", data);
+  console.log(data);
   unpackData(data);
-  // client.destroy(); //kill client after server's response
 });
 
+// Socket closed listener: Log when connection is closed
 client.on("close", function () {
-  console.log(`Connection to car server (${car_port}) is closed`);
+  console.log(`Connection to car server (${CAR_PORT}) is closed`);
 });
 
+// Error listener: Destroy the socket and log the error
 client.on("error", (err) => {
   console.log("Client errored out:", err);
   client.destroy();
@@ -76,11 +76,11 @@ function unpackData(data) {
         dataArray.unshift(data.readFloatLE(buffOffset));
         break;
       case "char":
-        // Add the data to the front of dataArray
+        // Add char to the front of dataArray
         dataArray.unshift(String.fromCharCode(data.readUInt8(buffOffset)));
         break;
       case "bool":
-        // Add the data to the front of dataArray
+        // Add bool to the front of dataArray
         dataArray.unshift(Boolean(data.readUInt8(buffOffset)));
         break;
       case "uint8":
@@ -89,11 +89,17 @@ function unpackData(data) {
           break;
         }
         if (property === "tstamp_mn") {
-          timestamps[0] = timestamps[0].replace("::", ":" + data.readUInt8(buffOffset) + ":");
+          timestamps[0] = timestamps[0].replace(
+            "::",
+            ":" + data.readUInt8(buffOffset) + ":"
+          );
           break;
         }
         if (property === "tstamp_sc") {
-          timestamps[0] = timestamps[0].replace(":.", ":" + data.readUInt8(buffOffset) + ".");
+          timestamps[0] = timestamps[0].replace(
+            ":.",
+            ":" + data.readUInt8(buffOffset) + "."
+          );
           break;
         }
         // Add the data to the front of dataArray
@@ -108,10 +114,14 @@ function unpackData(data) {
         dataArray.unshift(data.readUInt16BE(buffOffset));
         break;
       default:
+        // Log if an unexpected type is specified in the data format
+        console.log(
+          `No case for unpacking type ${dataType} (type specified for ${property} in format.json)`
+        );
         break;
     }
 
-    if(!property.startsWith("tstamp")) {
+    if (!property.startsWith("tstamp")) {
       // If property is not used for timestamps
       // Limit dataArray to a length specified by xAxisCap
       if (dataArray.length > xAxisCap) {
@@ -127,7 +137,6 @@ function unpackData(data) {
 
   // Update the timestamps array in solarCarData
   solarCarData["timestamps"] = timestamps;
-
 
   // Update the data to be passed to the front-end
   frontendData = solarCarData;

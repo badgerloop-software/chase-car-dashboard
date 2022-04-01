@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, HStack, Select, VStack } from "@chakra-ui/react";
-import { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
@@ -111,45 +111,45 @@ export default function Dashboard(props) {
         >
           <FaultsView data={state.data} />
         </GridItem>
-        <GridItem rowStart={2} rowSpan={1}>
-          <VStack
-            align="stretch"
-            spacing={0}
-            borderColor="black"
-            borderWidth={1}
+        <GridItem
+          h="37.5vh"
+          rowStart={2}
+          rowSpan={1}
+          borderColor="black"
+          borderWidth={1}
+        >
+          <Select
+            id="dataViewSelect1"
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+            value={dataView1}
+            onChange={selectDataView}
           >
-            <Select
-              id="dataViewSelect1"
-              size="xs"
-              variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
-              value={dataView1}
-              onChange={selectDataView}
-            >
-              <DataViewOptions />
-            </Select>
-            {switchDataView(dataView1)}
-          </VStack>
-          <VStack
-            align="stretch"
-            spacing={0}
-            borderColor="black"
-            borderWidth={1}
+            <DataViewOptions />
+          </Select>
+          {switchDataView(dataView1)}
+        </GridItem>
+        <GridItem
+          h="37.5vh"
+          rowStart={3}
+          rowSpan={1}
+          borderColor="black"
+          borderWidth={1}
+        >
+          <Select
+            id="dataViewSelect2"
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+            value={dataView2}
+            onChange={selectDataView}
           >
-            <Select
-              id="dataViewSelect2"
-              size="xs"
-              variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
-              value={dataView2}
-              onChange={selectDataView}
-            >
-              <DataViewOptions />
-            </Select>
-            {switchDataView(dataView2)}
-          </VStack>
+            <DataViewOptions />
+          </Select>
+          {switchDataView(dataView2)}
         </GridItem>
       </Grid>
       <GraphContainer queue={queue} flex="2 2 0" maxW="67vw" />
