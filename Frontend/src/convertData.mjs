@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
-import SC1DataFormat from "../../Backend/Data/sc1-data-format/format.json";
-import OldGraphData from "../src/Components/Graph/graph-data.json";
+import SC1DataFormat from "../../Backend/Data/sc1-data-format/format.json" assert { type: "json" };
+import OldGraphData from "../src/Components/Graph/graph-data.json" assert { type: "json" };
 
 // flatpack the old graph data to easily access old data
 const allDatasets = OldGraphData.categories.flatMap(

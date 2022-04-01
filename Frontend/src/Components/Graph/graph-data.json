@@ -67,25 +67,32 @@
           "max": 5
         },
         {
-          "key": "rtc_sc",
-          "name": "RTC Second",
-          "unit": "sec",
+          "key": "tstamp_ms",
+          "name": "tstamp_ms",
+          "unit": "ms",
+          "min": 0,
+          "max": 999
+        },
+        {
+          "key": "tstamp_sc",
+          "name": "tstamp_sc",
+          "unit": "s",
           "min": 0,
           "max": 59
         },
         {
-          "key": "rtc_mn",
-          "name": "RTC Minute",
+          "key": "tstamp_mn",
+          "name": "tstamp_mn",
           "unit": "min",
           "min": 0,
           "max": 59
         },
         {
-          "key": "rtc_hr",
-          "name": "RTC Hour",
+          "key": "tstamp_hr",
+          "name": "tstamp_hr",
           "unit": "hr",
-          "min": 1,
-          "max": 12
+          "min": 0,
+          "max": 23
         }
       ]
     },
