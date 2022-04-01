@@ -32,7 +32,8 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useState } from "react";
+import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
@@ -146,22 +147,81 @@ export default function CustomGraph(props) {
   // }, [datasets, title]);
 
   // the data to pass to the graph
-  const formattedDatasets = [];
-  for (const key in datasets) {
-    const temp = packedData.find((packedDataset) => packedDataset.key === key);
-    if (temp) {
-      const copy = Object.assign({}, temp);
-      copy.hidden = !datasets[key];
-      // console.log(`${title} pushed:`, copy);
-      formattedDatasets.push(copy);
-    } else {
-      console.warn(`unable to find ${key} for ${title}`);
+  const [formattedDatasets, setFormattedDatasets] = useState([]);
+  // the keys of the dataset array
+  const [datasetKeys, setDatasetKeys] = useState(Object.keys(datasets));
+
+  useEffect(() => {
+    // console.log("yo, new datasets dropped:", datasetKeys);
+
+    // update dataset object {key: boolean}
+    // console.log("keys:", keys);
+    const newDatasets = {};
+    for (const key of datasetKeys) {
+      newDatasets[key] = datasets[key] ?? true;
     }
-  }
+    // console.log("new datasets:", newDatasets);
+    setDatasets(newDatasets);
+  }, [datasetKeys]);
+
+  useEffect(() => {
+    // update formatted datasets storage array if all datasets are updated
+    const formattedDatasets = [];
+    for (const key of datasetKeys) {
+      const temp = packedData.find(
+        (packedDataset) => packedDataset.key === key
+      );
+      if (temp) {
+        const copy = Object.assign({}, temp);
+        copy.hidden = !datasets[key];
+        // console.log(`${title} pushed:`, copy);
+        formattedDatasets.push(copy);
+      } else {
+        console.warn(`unable to find "${key}" for "${title}"`);
+      }
+    }
+    // console.log("formatted datasets:", formattedDatasets);
+
+    setFormattedDatasets(formattedDatasets);
+  }, [datasets, packedData]);
 
   // console.log("formatted datasets:", formattedDatasets);
-  // console.log(datasets, "keys:", Object.keys(datasets));
+  // console.log(datasets, "keys:", datasetKeys);
   const data = { datasets: formattedDatasets };
+
+  // const onSelectSave = (keys) => {
+  //   // updateDatasets({ action: "set", key: keys })
+  //   // console.log("keys:", keys);
+  //   const newDatasets = {};
+  //   for (const key of keys) {
+  //     newDatasets[key] = datasets[key] ?? true;
+  //   }
+  //   // console.log("new datasets:", newDatasets);
+  //   setDatasets(newDatasets);
+  // };
+  const onNameSave = (name) => onSave(name, datasetKeys);
+
+  const graphSelectModal = useMemo(
+    () => (
+      <GraphSelectModal
+        isOpen={isDataSelectOpen}
+        onClose={onDataSelectClose}
+        initialDatasets={datasetKeys}
+        onSave={setDatasetKeys}
+      />
+    ),
+    [isDataSelectOpen, onDataSelectClose, datasetKeys, setDatasetKeys]
+  );
+  const graphNameModal = useMemo(
+    () => (
+      <GraphNameModal
+        isOpen={isNameModalOpen}
+        onClose={onNameModalClose}
+        onSave={onNameSave}
+      />
+    ),
+    [isNameModalOpen, onNameModalClose, onNameSave]
+  );
 
   return (
     <>
@@ -186,7 +246,7 @@ export default function CustomGraph(props) {
             <Button
               onClick={() => {
                 if (title.length) {
-                  onSave(title, Object.keys(datasets));
+                  onSave(title, datasetKeys);
                 } else {
                   onNameModalOpen();
                 }
@@ -207,32 +267,34 @@ export default function CustomGraph(props) {
               overflowX="scroll"
               px={2}
             >
-              {Object.keys(datasets).map((key) => {
+              {datasetKeys.map((key) => {
                 const dataset = formattedDatasets.find(
                   (temp) => temp.key === key
                 );
                 // console.log("dataset", dataset, "for", key);
                 return (
-                  <Button
-                    key={key}
-                    borderColor={dataset.borderColor}
-                    borderWidth={2}
-                    backgroundColor={
-                      datasets[key] ? dataset.backgroundColor : "transparent"
-                    }
-                    textDecoration={datasets[key] ? "none" : "line-through"}
-                    onClick={() => {
-                      console.log("clicked", key);
-                      // updateDatasets({ action: "toggle", key: dataset.key });
-                      const temp = Object.assign({}, datasets);
-                      temp[key] = !temp[key];
-                      setDatasets(temp);
-                    }}
-                    flexShrink={0}
-                    size="xs"
-                  >
-                    {dataset.label}
-                  </Button>
+                  dataset && (
+                    <Button
+                      key={key}
+                      borderColor={dataset.borderColor}
+                      borderWidth={2}
+                      backgroundColor={
+                        datasets[key] ? dataset.backgroundColor : "transparent"
+                      }
+                      textDecoration={datasets[key] ? "none" : "line-through"}
+                      onClick={() => {
+                        console.log("clicked", key);
+                        // updateDatasets({ action: "toggle", key: dataset.key });
+                        const temp = Object.assign({}, datasets);
+                        temp[key] = !temp[key];
+                        setDatasets(temp);
+                      }}
+                      flexShrink={0}
+                      size="xs"
+                    >
+                      {dataset.label}
+                    </Button>
+                  )
                 );
               })}
             </HStack>
@@ -246,28 +308,8 @@ export default function CustomGraph(props) {
         </VStack>
       </HStack>
 
-      <GraphSelectModal
-        isOpen={isDataSelectOpen}
-        onClose={onDataSelectClose}
-        initialDatasets={Object.keys(datasets)}
-        onSave={(keys) => {
-          // updateDatasets({ action: "set", key: keys })
-          // console.log("keys:", keys);
-
-          const newDatasets = {};
-          for (const key of keys) {
-            newDatasets[key] = datasets[key] ?? true;
-          }
-          // console.log("new datasets:", newDatasets);
-          setDatasets(newDatasets);
-        }}
-      />
-
-      <GraphNameModal
-        isOpen={isNameModalOpen}
-        onClose={onNameModalClose}
-        onSave={(name) => onSave(name, Object.keys(datasets))}
-      />
+      {graphSelectModal}
+      {graphNameModal}
     </>
   );
 }

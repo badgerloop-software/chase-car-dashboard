@@ -12,7 +12,7 @@ import {
   SimpleGrid,
   VStack,
 } from "@chakra-ui/react";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import GraphData from "./graph-data.json";
 
 /**
@@ -41,6 +41,13 @@ function GraphModal(props) {
         return [];
     }
   }, initialDatasets);
+
+  // useEffect(() => {
+  //   console.log("GraphModal dialog updated");
+  // });
+  // useEffect(() => {
+  //   console.log("GraphModal should be updated");
+  // }, [isOpen, onClose, initialDatasets, onSave, dataKeys]);
 
   // useEffect(() => {
   //   console.log("new keys:", dataKeys);
