@@ -30,6 +30,7 @@ export default function Dashboard(props) {
   const callBackendAPI = async () => {
     const response = await fetch("/api");
     const body = await response.json();
+    // console.log("gen data",body)
 
     if (response.status !== 200) {
       console.error("api: error");
@@ -38,12 +39,21 @@ export default function Dashboard(props) {
 
     return body;
   };
-
+  const getSessionsList= async () => {
+    const response = await fetch("/getSessionList");
+    if (response.status === 200) {
+      const body = await response.json();
+      return body
+    }
+    return null;
+  };
   const getRecordedData = async () => {
     const response = await fetch("/get-recorded-data");
     if (response.status === 200) {
       const body = await response.json();
       return body
+    } else{
+      console.log("Error getting Rec data")
     }
     return null;
   };
@@ -58,16 +68,10 @@ export default function Dashboard(props) {
     callBackendAPI().then((res) => {
       setState({ data: res.response });
       // console.log("api::", res.response);
-    }).catch((err) => console.log(err));
+    }).catch((err) => console.log("/api error",err));
 
-    getRecordedData().then((res) => {
-      if (res.response) {
-        setRecordedData({ data: res.response });
-        localStorage.setItem("recordeData", JSON.stringify(res.response))
-        console.log("RD::", res);
-      }
-    }).catch((err) => console.log(err));
-  }, [state, recordedData]);
+   
+  }, [state]);
 
 
   const recordCarData = () => {
@@ -80,7 +84,7 @@ export default function Dashboard(props) {
       },
     }).then(response => response.json()).then((data) => {
       console.log("rcd res::", data)
-      if(data.response === "NoFile"){
+      if (data.response === "NoFile") {
 
       }
       if (data.response === "Recording") {
@@ -108,7 +112,7 @@ export default function Dashboard(props) {
       },
     }).then(response => response.json()).then((data) => {
       console.log("crs res::", data)
-      if(data.response === "Empty"){
+      if (data.response === "Empty") {
         alert("Empty feild")
         return
       }
@@ -283,6 +287,15 @@ export default function Dashboard(props) {
     <Grid templateColumns="1fr 2fr" h="100vh" w="100vw">
       {"(test) Is recording: " + isRecording}
       <HStack>
+      <Button width={"15em"} colorScheme='blue' size='sm' onClick={async () => {
+         getRecordedData().then((res) => {
+          if (res.response) {
+            setRecordedData({ data: res.response });
+            localStorage.setItem("recordeData", JSON.stringify(res.response))
+            console.log("Rec Data::", res);
+          }
+        }).catch((err) => console.log(err));
+      }}>(test)Get Rec Data</Button>
         <Button width={"15em"} colorScheme='blue' size='sm' onClick={onOpen}>(test) Create session file</Button>
         <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => { recordCarData() }}>(test) {isRecording ? "Stop" : "Start"} recording session</Button>
       </HStack>

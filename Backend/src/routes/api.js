@@ -1,47 +1,78 @@
 import { Router } from "express";
 import * as fs from "fs";
+const nReadlines = require('n-readlines');
+
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
+import SESSION_SOLAR_CAR_DATA from "../../Data/session_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 // TODO ---------------------------------------------------------------------
 let doRecord = false; // Flag for whether we should be recording data or not
-let sessionFile = ""
+let sessionFile = "demo1"
 
 const ROUTER = Router();
-let solarCarData = INITIAL_SOLAR_CAR_DATA,
-  frontendData = INITIAL_FRONTEND_DATA;
+let solarCarData = INITIAL_SOLAR_CAR_DATA
+let sessionSolarCarData = SESSION_SOLAR_CAR_DATA
+let frontendData = INITIAL_FRONTEND_DATA;
 
 let RecodedData = null
+let sessionsList = []
+
+const broadbandLines = new nReadlines('./recordedData/sessionsList.bin');
+let line;
+let lineNumber = 1;
+
+// Getting all the created sessions from sessionsList.bin
+while (line = broadbandLines.next()) {
+  // console.log(`Line ${lineNumber} has: ${line.toString('ascii')}`);
+  sessionsList.push(line.toString('utf8').replace('\r', ""))
+  lineNumber++;
+}
+console.log(sessionsList)
 
 // Send data to front-end
 ROUTER.get("/api", (req, res) => {
   res.send({ response: frontendData }).status(200);
 });
 
+ROUTER.get("/sessionsList", (req, res) => {
+  res.send({ response: sessionsList }).status(200);
+});
+
 // TODO ---------------------------------------------------------------------
 ROUTER.post("/create-recording-session", (req, res) => {
-  if(req.body.fileName === ""){
+  if (req.body.fileName === "") {
     res.send({ response: "Empty" }).status(200);
     return
   }
+
+  fs.appendFile('./recordedData/sessionsList.bin', req.body.fileName + "\n", (err) => {
+    if (err) {
+      res.send({ response: "Error" }).status(200);
+      return console.error(err);
+    };
+  });
+
   fs.writeFile('./recordedData/sessions/' + req.body.fileName + '.bin', '', { flag: 'w' }, function (err) {
     if (err) {
       res.send({ response: "Error" }).status(200);
       return console.error(err);
     }
     res.send({ response: "Created" }).status(200)
-    sessionFile = req.body.fileName+".bin"
+    sessionFile = req.body.fileName + ".bin"
   });
   console.log('req:', req.body);
 });
 
 
+
+
 // Set recording flag to true or false depeding on request
 ROUTER.post("/record-data", (req, res) => {
-  if(sessionFile === ""){
+  if (sessionFile === "") {
     res.send({ response: "NoFile" }).status(200)
     return
-  } 
+  }
   res.send({ response: "Recording" }).status(200)
   doRecord = req.body.doRecord
   console.log("Record Status:", req.body)
@@ -49,9 +80,10 @@ ROUTER.post("/record-data", (req, res) => {
 
 
 ROUTER.get("/get-recorded-data", (req, res) => {
+  getrecordedData()
   res.send({ response: RecodedData }).status(200);
-
 })
+
 
 // TODO ---------------------------------------------------------------------
 
@@ -77,6 +109,7 @@ client.connect(CAR_PORT, CAR_SERVER, function () {
 let i = 1;
 client.on("data", function (data) {
   unpackData(data);
+
   if (doRecord) {
     recordData(data)
   }
@@ -85,46 +118,61 @@ client.on("data", function (data) {
 
 
 function recordData(data) {
-  fs.appendFile("recordedData/sessions/"+sessionFile, data, (err) => {/*error handling*/ });
+  fs.appendFile("recordedData/sessions/" + sessionFile + ".bin", data, (err) => {/*error handling*/ });
 }
-// getrecordedData()
 
 function getrecordedData() {
   console.log("Geting record data")
-  let bytesOffset = 0;
-  for (const property in DATA_FORMAT) {
-    bytesOffset += DATA_FORMAT[property][0];
-  }
-  let RD = []
 
-  fs.readFile('recordedData/data.bin', (err, data) => {
+  fs.readFile('recordedData/sessions/' + sessionFile + '.bin', (err, data) => {
+
+
+    let bytesOffset = 0;
+    for (const property in DATA_FORMAT) {
+      bytesOffset += DATA_FORMAT[property][0];
+    }
+    let RD = []
+
     let end = false;
     let indx = 0;
     let i = 1
     end = false
-    while (end == false) {
-      let buff = data.slice(indx, bytesOffset + indx)
-      if (buff <= 0) {
-        end = true
-        // Send recorded flag to false
-        RecodedData = RD
-        console.log("END of recordedData buffer::")
-        return
+    if (data) {
+      // end == false
+      while (i < 5) {
+        let buff = data.slice(indx, bytesOffset + indx)
+        // console.log("on data::", buff)
+
+        if (buff <= 0) {
+          end = true
+          // Send recorded flag to false
+          RecodedData = RD
+          console.log("END of recordedData buffer::")
+          return
+        }
+
+        // let unpackedSet = unpackBufferData(buff)
+        RD.push(JSON.parse(JSON.stringify(unpackBufferData(buff))))
+        // console.log("unpack::", unpackBufferData(buff))
+
+        console.log("RD", RD)
+
+        // console.log(i, ") DATA Slice:");
+        indx += bytesOffset;
+        i++;
       }
 
-      let unpackedSet = unpackBufferData(buff)
-      RD.push(unpackedSet)
-      // console.log(i, ") DATA Slice:");
-      indx += bytesOffset;
-      i++;
     }
+
+
+
   });
 }
 
-function unpackBufferData(data) {
+function unpackBufferData(BufferData) {
   let buffOffset = 0; // Byte offset for the buffer array
   const xAxisCap = 25; // The max number of data points to have in each array at one time
-  let timestamps = solarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
+  let timestamps = sessionSolarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
 
   // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
   timestamps.unshift(timestamp);
@@ -135,14 +183,14 @@ function unpackBufferData(data) {
 
   // let fdata = [];
 
-  solarCarData["timestamps"] = timestamps;
+  sessionSolarCarData["timestamps"] = timestamps;
 
   for (const property in DATA_FORMAT) {
     let dataArray = []; // Holds the array of data specified by property that will be put in solarCarData
     let dataType = ""; // Data type specified in the data format
 
-    if (solarCarData.hasOwnProperty(property)) {
-      dataArray = solarCarData[property];
+    if (sessionSolarCarData.hasOwnProperty(property)) {
+      dataArray = sessionSolarCarData[property];
     }
     dataType = DATA_FORMAT[property][1];
 
@@ -150,23 +198,23 @@ function unpackBufferData(data) {
     switch (dataType) {
       case "uint8":
         // Add uint8 to the front of dataArray
-        dataArray.unshift(data.readUInt8(buffOffset));
+        dataArray.unshift(BufferData.readUInt8(buffOffset));
         break;
       case "float":
         // Add float to the front of dataArray
-        dataArray.unshift(data.readFloatLE(buffOffset));
+        dataArray.unshift(BufferData.readFloatLE(buffOffset));
         break;
       case "char":
         // Add char to the front of dataArray
-        dataArray.unshift(String.fromCharCode(data.readUInt8(buffOffset)));
+        dataArray.unshift(String.fromCharCode(BufferData.readUInt8(buffOffset)));
         break;
       case "bool":
         // Add bool to the front of dataArray
-        dataArray.unshift(Boolean(data.readUInt8(buffOffset)));
+        dataArray.unshift(Boolean(BufferData.readUInt8(buffOffset)));
         break;
       default:
         // Log if an unexpected type is specified in the data format
-        console.log(`No case for unpacking type ${dataType} (type specified for ${property} in format.json)`);
+        // console.log(`No case for unpacking type ${dataType} (type specified for ${property} in format.json)`);
         break;
     }
     // Limit dataArray to a length specified by xAxisCap
@@ -174,7 +222,7 @@ function unpackBufferData(data) {
       dataArray.pop();
     }
     // Write dataArray to solarCarData at the correct key
-    solarCarData[property] = dataArray;
+    sessionSolarCarData[property] = dataArray;
 
     // Increment offset by amount specified in data format
     buffOffset += DATA_FORMAT[property][0];
@@ -183,8 +231,8 @@ function unpackBufferData(data) {
     // console.log(solarCarData)
 
   }
-
-  return solarCarData
+  // console.log("Set::", sessionSolarCarData)
+  return sessionSolarCarData
 
   // Update the data to be passed to the front-end
   // frontendData = solarCarData;
@@ -248,7 +296,7 @@ function unpackData(data) {
         break;
       default:
         // Log if an unexpected type is specified in the data format
-        console.log(`No case for unpacking type ${dataType} (type specified for ${property} in format.json)`);
+        // console.log(`No case for unpacking type ${dataType} (type specified for ${property} in format.json)`);
         break;
     }
     // Limit dataArray to a length specified by xAxisCap
