@@ -118,6 +118,15 @@ export default function CustomGraph(props) {
     ...stackProps
   } = props;
 
+  // useEffect(() => {
+  //   console.log(
+  //     packedData
+  //       .find((data) => data.key === "speed")
+  //       .data.map((point) => point.x)
+  //       .join(", ")
+  //   );
+  // }, [packedData]);
+
   // disclosure for the data selection modal
   const {
     isOpen: isDataSelectOpen,
@@ -222,6 +231,10 @@ export default function CustomGraph(props) {
     ),
     [isNameModalOpen, onNameModalClose, onNameSave]
   );
+  const graph = useMemo(
+    () => <Line data={data} options={options} parsing="false" />,
+    [formattedDatasets]
+  );
 
   return (
     <>
@@ -301,9 +314,7 @@ export default function CustomGraph(props) {
           </Stack>
 
           <Center flex={1}>
-            {isNameModalOpen || isDataSelectOpen ? null : (
-              <Line data={data} options={options} parsing="false" />
-            )}
+            {isNameModalOpen || isDataSelectOpen ? null : graph}
           </Center>
         </VStack>
       </HStack>

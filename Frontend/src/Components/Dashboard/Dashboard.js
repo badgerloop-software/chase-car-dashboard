@@ -1,4 +1,5 @@
 import { Box, Grid, GridItem, HStack, Select, VStack } from "@chakra-ui/react";
+import { DateTime } from "luxon";
 import React, { useEffect, useReducer, useState } from "react";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";
@@ -9,12 +10,16 @@ import GraphContainer from "./GraphContainer";
 function reducer(currentState, newData) {
   // console.log("reducer called :~)", newData);
 
+  // const timestamps = newData.timestamps.map((timestamp) =>
+  //   DateTime.fromISO(timestamp)
+  // );
+
   const output = {};
   for (const key in newData) {
-    if (key === "timestamps") continue;
+    if (key === "timestamps" || key.startsWith("tstamp")) continue;
 
     output[key] = newData[key].map((value, idx) => ({
-      x: newData["timestamps"][idx],
+      x: newData.timestamps[idx],
       y: value,
     }));
   }

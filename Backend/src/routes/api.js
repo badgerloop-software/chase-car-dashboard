@@ -89,16 +89,18 @@ function unpackData(data) {
           break;
         }
         if (property === "tstamp_mn") {
+          const mins = data.readUInt8(buffOffset);
           timestamps[0] = timestamps[0].replace(
             "::",
-            ":" + data.readUInt8(buffOffset) + ":"
+            ":" + (mins < 10 ? "0" + mins : mins) + ":"
           );
           break;
         }
         if (property === "tstamp_sc") {
+          const secs = data.readUInt8(buffOffset);
           timestamps[0] = timestamps[0].replace(
             ":.",
-            ":" + data.readUInt8(buffOffset) + "."
+            ":" + (secs < 10 ? "0" + secs : secs) + "."
           );
           break;
         }
@@ -107,7 +109,22 @@ function unpackData(data) {
         break;
       case "uint16":
         if (property === "tstamp_ms") {
-          timestamps[0] += data.readUInt16BE(buffOffset);
+          const millis = data.readUInt16BE(buffOffset);
+          let millisStr;
+          if (millis >= 100) {
+            millisStr = millis;
+          } else if (millis >= 10) {
+            millisStr = "0" + millis;
+          } else {
+            millisStr = "00" + millis;
+          }
+          if (typeof millisStr === "undefined") {
+            console.warn(
+              `Millis value of ${millis} caused undefined millis value`
+            );
+          }
+
+          timestamps[0] += millisStr;
           break;
         }
         // Add the data to the front of dataArray

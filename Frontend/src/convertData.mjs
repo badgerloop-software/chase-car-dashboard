@@ -13,6 +13,9 @@ const categories = [];
 
 // go through every item in the data format
 for (const key of Object.keys(SC1DataFormat)) {
+  // skip timestamp data
+  if (key.startsWith("tstamp")) continue;
+
   // destructure the list stored in the data format
   const [, , unit, min, max, category] = SC1DataFormat[key];
 
