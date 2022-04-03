@@ -13,8 +13,6 @@ ROUTER.get("/api", (req, res) => {
   res.send({ response: frontendData }).status(200);
 });
 
-export default ROUTER;
-
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
 var client = new Socket();
@@ -158,3 +156,5 @@ function unpackData(data) {
   // Update the data to be passed to the front-end
   frontendData = solarCarData;
 }
+
+export default ROUTER;

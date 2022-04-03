@@ -12,7 +12,7 @@ import {
   SimpleGrid,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import GraphData from "./graph-data.json";
 
 /**

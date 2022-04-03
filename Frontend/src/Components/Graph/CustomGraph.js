@@ -32,7 +32,7 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
@@ -52,12 +52,17 @@ ChartJS.register(
 const options = {
   responsive: true,
   maintainAspectRatio: false,
+  indexAxis: "x",
+  animation: false,
   plugins: {
+    decimation: {
+      enabled: true,
+      algorithm: "lttb",
+    },
     legend: {
       display: false,
     },
   },
-  animation: false,
   scales: {
     xAxis: {
       type: "time",
@@ -159,8 +164,10 @@ export default function CustomGraph(props) {
   const [formattedDatasets, setFormattedDatasets] = useState([]);
   // the keys of the dataset array
   const [datasetKeys, setDatasetKeys] = useState(Object.keys(datasets));
-  const [onNameSave, setOnNameSave] = useState((name) =>
-    onSave(name, datasetKeys)
+  // called when the name is to be saved, memoized for performance
+  const onNameSave = useCallback(
+    (name) => onSave(name, datasetKeys),
+    [onSave, datasetKeys]
   );
 
   useEffect(() => {
@@ -174,9 +181,6 @@ export default function CustomGraph(props) {
     }
     // console.log("new datasets:", newDatasets);
     setDatasets(newDatasets);
-
-    // update onNameSave
-    setOnNameSave((name) => onSave(name, datasetKeys));
   }, [datasetKeys]);
 
   useEffect(() => {
@@ -202,7 +206,6 @@ export default function CustomGraph(props) {
 
   // console.log("formatted datasets:", formattedDatasets);
   // console.log(datasets, "keys:", datasetKeys);
-  const data = { datasets: formattedDatasets };
 
   // const onSelectSave = (keys) => {
   //   // updateDatasets({ action: "set", key: keys })
@@ -236,10 +239,15 @@ export default function CustomGraph(props) {
     ),
     [isNameModalOpen, onNameModalClose, onNameSave]
   );
-  const graph = useMemo(
-    () => <Line data={data} options={options} parsing="false" />,
-    [formattedDatasets]
-  );
+  const graph = useMemo(() => {
+    return (
+      <Line
+        data={{ datasets: formattedDatasets }}
+        options={options}
+        parsing="false"
+      />
+    );
+  }, [formattedDatasets]);
 
   return (
     <>

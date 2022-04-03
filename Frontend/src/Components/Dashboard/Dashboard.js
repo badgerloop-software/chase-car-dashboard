@@ -105,7 +105,7 @@ export default function Dashboard(props) {
 
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
-      <Grid flex="1 1 0" templateRows="1fr 3fr">
+      <Grid flex="1 1 0" templateRows="1fr 3fr 3fr">
         <GridItem
           rowStart={1}
           rowSpan={1}
@@ -116,7 +116,7 @@ export default function Dashboard(props) {
           <FaultsView data={state.data} />
         </GridItem>
         <GridItem
-          h="37.5vh"
+          // h="37.5vh"
           rowStart={2}
           rowSpan={1}
           borderColor="black"
@@ -136,7 +136,7 @@ export default function Dashboard(props) {
           {switchDataView(dataView1)}
         </GridItem>
         <GridItem
-          h="37.5vh"
+          // h="37.5vh"
           rowStart={3}
           rowSpan={1}
           borderColor="black"
