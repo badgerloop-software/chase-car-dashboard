@@ -1,5 +1,4 @@
-import { Box, Grid, GridItem, HStack, Select, VStack } from "@chakra-ui/react";
-import { DateTime } from "luxon";
+import { Box, Grid, GridItem, HStack, Select } from "@chakra-ui/react";
 import React, { useEffect, useReducer, useState } from "react";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";

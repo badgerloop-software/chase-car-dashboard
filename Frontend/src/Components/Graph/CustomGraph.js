@@ -159,6 +159,9 @@ export default function CustomGraph(props) {
   const [formattedDatasets, setFormattedDatasets] = useState([]);
   // the keys of the dataset array
   const [datasetKeys, setDatasetKeys] = useState(Object.keys(datasets));
+  const [onNameSave, setOnNameSave] = useState((name) =>
+    onSave(name, datasetKeys)
+  );
 
   useEffect(() => {
     // console.log("yo, new datasets dropped:", datasetKeys);
@@ -171,6 +174,9 @@ export default function CustomGraph(props) {
     }
     // console.log("new datasets:", newDatasets);
     setDatasets(newDatasets);
+
+    // update onNameSave
+    setOnNameSave((name) => onSave(name, datasetKeys));
   }, [datasetKeys]);
 
   useEffect(() => {
@@ -208,7 +214,6 @@ export default function CustomGraph(props) {
   //   // console.log("new datasets:", newDatasets);
   //   setDatasets(newDatasets);
   // };
-  const onNameSave = (name) => onSave(name, datasetKeys);
 
   const graphSelectModal = useMemo(
     () => (
@@ -313,9 +318,7 @@ export default function CustomGraph(props) {
             </HStack>
           </Stack>
 
-          <Center flex={1}>
-            {isNameModalOpen || isDataSelectOpen ? null : graph}
-          </Center>
+          <Center flex={1}>{graph}</Center>
         </VStack>
       </HStack>
 

@@ -480,14 +480,14 @@
       "values": [
         {
           "key": "driverIO_temp",
-          "name": "driverIO_temp",
+          "name": "Driver IO Temperature",
           "unit": "degC",
           "min": 0,
           "max": 100
         },
         {
           "key": "mainIO_temp",
-          "name": "mainIO_temp",
+          "name": "Main IO Temperature",
           "unit": "degC",
           "min": 0,
           "max": 100
@@ -515,14 +515,14 @@
         },
         {
           "key": "mainIO_current_in",
-          "name": "mainIO_current_in",
+          "name": "Main IO Current In",
           "unit": "A",
           "min": 0,
           "max": 100
         },
         {
           "key": "driverIO_current_in",
-          "name": "driverIO_current_in",
+          "name": "Driver IO Current In",
           "unit": "A",
           "min": 0,
           "max": 100
@@ -593,21 +593,21 @@
         },
         {
           "key": "string1_temp",
-          "name": "string1_temp",
+          "name": "String 1 Temperature",
           "unit": "degC",
           "min": 20,
           "max": 50
         },
         {
           "key": "string2_temp",
-          "name": "string2_temp",
+          "name": "String 2 Temperature",
           "unit": "degC",
           "min": 20,
           "max": 50
         },
         {
           "key": "string3_temp",
-          "name": "string3_temp",
+          "name": "String 3 Temperature",
           "unit": "degC",
           "min": 20,
           "max": 50
