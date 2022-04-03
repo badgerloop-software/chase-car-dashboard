@@ -15,6 +15,7 @@ ROUTER.get("/api", (req, res) => {
 
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
+const X_AXIS_CAP = 1_000; // The max number of data points to have in each array at one time
 var client = new Socket();
 
 // Initiate connection
@@ -46,7 +47,6 @@ client.on("error", (err) => {
  */
 function unpackData(data) {
   let buffOffset = 0; // Byte offset for the buffer array
-  const xAxisCap = 25; // The max number of data points to have in each array at one time
   let timestamps = solarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
 
   // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
@@ -54,7 +54,7 @@ function unpackData(data) {
 
   // Add separators for timestamp to timestamps and limit array's length
   timestamps.unshift("::.");
-  if (timestamps.length > xAxisCap) {
+  if (timestamps.length > X_AXIS_CAP) {
     timestamps.pop();
   }
 
@@ -139,7 +139,7 @@ function unpackData(data) {
     if (!property.startsWith("tstamp")) {
       // If property is not used for timestamps
       // Limit dataArray to a length specified by xAxisCap
-      if (dataArray.length > xAxisCap) {
+      if (dataArray.length > X_AXIS_CAP) {
         dataArray.pop();
       }
       // Write dataArray to solarCarData at the correct key

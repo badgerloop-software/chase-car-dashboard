@@ -57,7 +57,7 @@ const options = {
   plugins: {
     decimation: {
       enabled: true,
-      algorithm: "lttb",
+      algorithm: "min-max",
     },
     legend: {
       display: false,
