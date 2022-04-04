@@ -1,4 +1,4 @@
-import { Grid, GridItem, HStack, VStack, Select } from "@chakra-ui/react";
+import { Grid, GridItem, HStack, VStack, Select, Box } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
@@ -79,7 +79,7 @@ export default function Dashboard(props) {
     } else if (optionValue === "minimap") {
       return <MiniMap />;
     } else if (optionValue === "ppc_mppt") {
-      return <PPC_MPPT />
+      return <PPC_MPPT data={state.data}/>
     }else {
       return <VStack />;
     }
@@ -201,7 +201,7 @@ export default function Dashboard(props) {
         >
           <FaultsView data={state.data} />
         </GridItem>
-        <GridItem h="37.5vh" rowStart={2} rowSpan={1} borderColor="black" borderWidth={1} >
+        <GridItem h="37.5vh" rowStart={2} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
           <Select
             id="dataViewSelect1"
             size="xs"
@@ -215,7 +215,7 @@ export default function Dashboard(props) {
           </Select>
           {switchDataView(dataView1)}
         </GridItem>
-        <GridItem h="37.5vh" rowStart={3} rowSpan={1} borderColor="black" borderWidth={1} >
+        <GridItem h="37.5vh" rowStart={3} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
           <Select
             id="dataViewSelect2"
             size="xs"

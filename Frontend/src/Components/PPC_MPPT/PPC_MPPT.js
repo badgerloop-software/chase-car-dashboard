@@ -1,60 +1,68 @@
-import { Box, Flex, Spacer, Grid, GridItem, Heading, Text} from "@chakra-ui/react";
+import { Box, Flex, Spacer, Text, Heading, VStack} from "@chakra-ui/react";
+import PPC_Cell from "./PPC_Cell";
+import CellString from "./CellString";
+import MPPT_Cell from "./MPPT_Cell";
+import OutCurr_Cell from "./OutCurr_Cell";
+import Heading_Cell from "./Heading_Cell";
 
 export default function PPC_MPPT(props) {
     return (
-        <Flex h='100%' direction = 'row'> 
-            <Flex w='50%'> hi </Flex>
-            <Grid
-                templateRows='repeat(9, 1fr)'
-                templateColumns='repeat(2, 1fr)'
-                w='50%'
+        <Flex h='100%' direction = 'row' flex='1'> 
+            <Flex flex='1'>Placeholder</Flex>
+            <VStack 
+                flex='1'
+                align='stretch'
+                spacing={0}
+                borderLeft='1px'
             >
-                <GridItem colSpan={2} rowSpan={1}>
-                    <Box w='100%' h='100%' bg='#DDDDDD' borderWidth='1px' borderColor='black'>
-                            <Heading size = 'xs' textAlign = 'center'>Power Path Controller</Heading>
-                    </Box>
-                </GridItem>
-
-                <GridItem colStart={1} rowStart={2} rowSpan={2}>
-                    <Box w='100%' h='100%' bg='Tomato'> hi </Box>
-                </GridItem>
-                <GridItem colStart={2} rowStart={2} rowSpan={2}>
-                    <Box w='100%' h='100%' bg='Green'> hi </Box>
-                </GridItem>
-
-                <GridItem colSpan={2} rowStart={4}>
-                    <Box w='100%' h='100%' bg='#DDDDDD' borderWidth='1px' borderColor='black'>
-                            <Heading size = 'xs' textAlign = 'center'>Maximum Power Point Tracker</Heading>
-                    </Box>
-                </GridItem>
-
-                <GridItem colStart={1} rowStart={5} rowSpan={2}> 
-                    <Box w='100%' h='100%' borderWidth='1px' borderColor='black'>
-                        Output current
-                    </Box>
-                </GridItem>
-                <GridItem colStart={2} rowStart={5} rowSpan={2}>
-                    <Box w='100%' h='100%' borderWidth='1px' borderColor='black'>
-                        Charge + MPPT
-                    </Box>
-                </GridItem>
-
-                <GridItem colSpan={2} rowStart={7}>
-                    <Box w='100%' h='100%' bg='Tomato' borderWidth='1px' borderColor='black'>
-                        Cell String 1
-                    </Box>
-                </GridItem>
-                <GridItem colSpan={2} rowStart={8}>
-                    <Box w='100%' h='100%' bg='Tomato' borderWidth='1px' borderColor='black'>
-                        Cell String 2
-                    </Box>
-                </GridItem>
-                <GridItem colSpan={2} rowStart={9}>
-                    <Box w='100%' h='100%' bg='Tomato' borderWidth='1px' borderColor='black'>
-                        Cell String 3
-                    </Box>
-                </GridItem>
-            </Grid>
+                <Heading_Cell label='Power Path Controller'/>
+                <Flex flex='2' direction='column' p='1'>
+                    <Flex flex='1' direction='row'>
+                        <PPC_Cell
+                            boolean={props.data?.supplemental_valid}
+                            label='Supplemental Batter Pack'
+                        />
+                        <Spacer/>
+                        <PPC_Cell
+                            boolean={props.data?.dcdc_valid}
+                            label='Main Battery Pack'
+                        />
+                    </Flex>
+                </Flex>
+                <Heading_Cell label='Maximum Power Point Tracker'/>
+                <Flex flex = '8' direction='column' pb='1'>
+                    <Flex flex='2' direction='row' pl='2' pr='2' pt='1'>
+                        <OutCurr_Cell
+                            label='Output Current'
+                            current={props.data?.mppt_current_out[0] ?? -1.0}
+                        />
+                        <Spacer/>
+                        <Flex w='45%' direction='column'>
+                            <MPPT_Cell
+                                label='Charge'
+                                boolean={props.data?.mppt_mode}
+                            />
+                            <Spacer/>
+                            <MPPT_Cell
+                                label='MPPT'
+                                boolean={!props.data?.mppt_mode}
+                            />
+                        </Flex>
+                    </Flex>
+                    <CellString
+                        label='Cell String 1 Temp'
+                        temperature={props.data?.string1_temp[0] ?? -1.0}
+                    />
+                    <CellString
+                        label='Cell String 2 Temp'
+                        temperature={props.data?.string2_temp[0] ?? -1.0}
+                    />
+                    <CellString
+                        label='Cell String 2 Temp'
+                        temperature={props.data?.string3_temp[0] ?? -1.0}
+                    />
+                </Flex>
+            </VStack>
         </Flex>
     )
 }
