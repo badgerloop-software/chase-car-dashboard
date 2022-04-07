@@ -9,7 +9,7 @@ export default function MPPT_Cell(props){
             textAlign='center'
             lineHeight='1.6em'
         >
-            <Text as='b' fontSize='lg'>{props.label}</Text>
+            <Text as='b' fontSize='1.5vw'>{props.label}</Text>
         </Center>
     )
 

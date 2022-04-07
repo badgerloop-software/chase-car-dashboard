@@ -7,9 +7,9 @@ export default function PPC_Cell(props) {
             bg={props.boolean ? '#05FF00':'#FF010140'}
             border='2px' 
             textAlign='center' 
-            lineHeight='0.9em'
+            lineHeight='2vh'
         >
-            <Text as='b' fontSize='sm'>{props.label}</Text>
+            <Text as='b' fontSize='1vw'>{props.label}</Text>
         </Center>
     )
 }
