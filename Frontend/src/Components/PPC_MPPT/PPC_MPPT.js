@@ -19,19 +19,19 @@ export default function PPC_MPPT(props) {
                 <Flex flex='2' direction='column' p='1'>
                     <Flex flex='1' direction='row'>
                         <PPC_Cell
-                            boolean={props.data?.supplemental_valid}
-                            label='Supplemental Batter Pack'
+                            boolean={props.data?.supplemental_valid[0]}
+                            label='Supplemental Battery Pack'
                         />
                         <Spacer/>
                         <PPC_Cell
-                            boolean={props.data?.dcdc_valid}
+                            boolean={props.data?.dcdc_valid[0]}
                             label='Main Battery Pack'
                         />
                     </Flex>
                 </Flex>
                 <Heading_Cell label='Maximum Power Point Tracker'/>
                 <Flex flex = '8' direction='column' pb='1'>
-                    <Flex flex='2' direction='row' pl='2' pr='2' pt='1'>
+                    <Flex flex='1' direction='row' pl='2' pr='2' pt='1'>
                         <OutCurr_Cell
                             label='Output Current'
                             current={props.data?.mppt_current_out[0] ?? -1.0}
@@ -40,12 +40,12 @@ export default function PPC_MPPT(props) {
                         <Flex w='45%' direction='column'>
                             <MPPT_Cell
                                 label='Charge'
-                                boolean={props.data?.mppt_mode}
+                                boolean={props.data?.mppt_mode[0]}
                             />
                             <Spacer/>
                             <MPPT_Cell
                                 label='MPPT'
-                                boolean={!props.data?.mppt_mode}
+                                boolean={!props.data?.mppt_mode[0]}
                             />
                         </Flex>
                     </Flex>
