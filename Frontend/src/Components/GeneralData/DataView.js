@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Text } from "@chakra-ui/react";
+import { Box, Heading, HStack, Text, Flex, VStack } from "@chakra-ui/react";
 import BatteryCharge from "./BatteryCharge";
 
 export default function DataView(props) {
