@@ -1,8 +1,9 @@
-import { Grid, GridItem, VStack, Select } from "@chakra-ui/react";
+import { Grid, GridItem, HStack, VStack, Select, Box } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
 import BatteryCells from "../BatteryCells/BatteryCells";
+import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import MiniMap from "../MiniMap/MiniMap";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
@@ -77,7 +78,9 @@ export default function Dashboard(props) {
       return <BatteryCells data={state.data} />;
     } else if (optionValue === "minimap") {
       return <MiniMap />;
-    } else {
+    } else if (optionValue === "ppc_mppt") {
+      return <PPC_MPPT data={state.data}/>
+    }else {
       return <VStack />;
     }
   };
@@ -186,125 +189,110 @@ export default function Dashboard(props) {
   };
 
   return (
-    <Grid templateColumns="1fr 2fr" h="100vh" w="100vw">
-      <GridItem colStart={1} colSpan={1}>
-        <Grid h="100vh" templateRows="1fr 3fr">
-          <GridItem
-            rowStart={1}
-            rowSpan={1}
-            borderColor="black"
-            borderWidth={1}
-            p={2}
+    <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
+      <Grid flex="1 1 0" h="100vh" templateRows="2fr 3fr 3fr">
+        <GridItem
+          h="25vh"
+          rowStart={1}
+          rowSpan={1}
+          borderColor="black"
+          borderWidth={1}
+          p={2}
+        >
+          <FaultsView data={state.data} />
+        </GridItem>
+        <GridItem h="37.5vh" rowStart={2} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
+          <Select
+            id="dataViewSelect1"
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+            value={dataView1}
+            onChange={selectDataView}
           >
-            <FaultsView data={state.data} />
-          </GridItem>
-          <GridItem rowStart={2} rowSpan={1}>
-            <VStack
-              align="stretch"
-              spacing={0}
-              borderColor="black"
-              borderWidth={1}
-            >
-              <Select
-                id="dataViewSelect1"
-                size="xs"
-                variant="filled"
-                bgColor="grey.300"
-                placeholder="Select option"
-                value={dataView1}
-                onChange={selectDataView}
-              >
-                <DataViewOptions />
-              </Select>
-              {switchDataView(dataView1)}
-            </VStack>
-            <VStack
-              align="stretch"
-              spacing={0}
-              borderColor="black"
-              borderWidth={1}
-            >
-              <Select
-                id="dataViewSelect2"
-                size="xs"
-                variant="filled"
-                bgColor="grey.300"
-                placeholder="Select option"
-                value={dataView2}
-                onChange={selectDataView}
-              >
-                <DataViewOptions />
-              </Select>
-              {switchDataView(dataView2)}
-            </VStack>
-          </GridItem>
-        </Grid>
-      </GridItem>
-      <GridItem colStart={2} colSpan={1}>
-        <Grid h="100vh" templateRows="repeat(3, 1fr)">
-          <VStack
-            h="100%"
-            align="stretch"
-            spacing={0}
-            borderColor="black"
-            borderWidth={1}
+            <DataViewOptions />
+          </Select>
+          {switchDataView(dataView1)}
+        </GridItem>
+        <GridItem h="37.5vh" rowStart={3} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
+          <Select
+            id="dataViewSelect2"
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+            value={dataView2}
+            onChange={selectDataView}
           >
-            <Select
-              id="graphSelect1"
-              size="xs"
-              variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
-              value={graph1}
-              onChange={selectGraph}
-            >
-              <GraphOptions customGraphs={ customGraphData } />
-            </Select>
-            {switchGraph(graph1)}
-          </VStack>
-          <VStack
-            h="100%"
-            align="stretch"
-            spacing={0}
-            borderColor="black"
-            borderWidth={1}
+            <DataViewOptions />
+          </Select>
+          {switchDataView(dataView2)}
+        </GridItem>
+      </Grid>
+      <Grid flex="2 0 0" h="100vh" templateRows="repeat(3, 1fr)">
+        <VStack
+          h="100%"
+          align="stretch"
+          spacing={0}
+          borderColor="black"
+          borderWidth={1}
+        >
+          <Select
+            id="graphSelect1"
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+            value={graph1}
+            onChange={selectGraph}
           >
-            <Select
-              id="graphSelect2"
-              size="xs"
-              variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
-              value={graph2}
-              onChange={selectGraph}
-            >
-              <GraphOptions customGraphs={ customGraphData } />
-            </Select>
-            {switchGraph(graph2)}
-          </VStack>
-          <VStack
-            h="100%"
-            align="stretch"
-            spacing={0}
-            borderColor="black"
-            borderWidth={1}
+            <GraphOptions customGraphs={ customGraphData } />
+          </Select>
+          {switchGraph(graph1)}
+        </VStack>
+        <VStack
+          h="100%"
+          align="stretch"
+          spacing={0}
+          borderColor="black"
+          borderWidth={1}
+        >
+          <Select
+            id="graphSelect2"
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+            value={graph2}
+            onChange={selectGraph}
           >
-            <Select
-              id="graphSelect3"
-              size="xs"
-              variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
-              value={graph3}
-              onChange={selectGraph}
-            >
-              <GraphOptions customGraphs={ customGraphData } />
-            </Select>
-            {switchGraph(graph3)}
-          </VStack>
-        </Grid>
-      </GridItem>
-    </Grid>
+            <GraphOptions customGraphs={ customGraphData } />
+          </Select>
+          {switchGraph(graph2)}
+        </VStack>
+        <VStack
+          h="100%"
+          align="stretch"
+          spacing={0}
+          borderColor="black"
+          borderWidth={1}
+        >
+          <Select
+            id="graphSelect3"
+            size="xs"
+            variant="filled"
+            bgColor="grey.300"
+            placeholder="Select option"
+            value={graph3}
+            onChange={selectGraph}
+          >
+            <GraphOptions customGraphs={ customGraphData } />
+          </Select>
+          {switchGraph(graph3)}
+        </VStack>
+      </Grid>
+    </HStack>
   );
 }
 
@@ -314,6 +302,7 @@ function DataViewOptions(props) {
       <option value="general">General Data</option>
       <option value="battery">Battery Cells</option>
       <option value="minimap">Minimap</option>
+      <option value="ppc_mppt">PPC and MPPT</option>
     </>
   );
 }
