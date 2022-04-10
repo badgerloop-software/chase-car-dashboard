@@ -1,4 +1,4 @@
-import {Flex, Text, Spacer, Box, VStack} from "@chakra-ui/react"
+import {Flex, Text, Spacer, Box} from "@chakra-ui/react"
 
 export default function CellString(props){
     return(
