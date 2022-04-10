@@ -1,4 +1,4 @@
-import {Flex, Box, Text, Spacer} from "@chakra-ui/react";
+import {Flex, Box, Text} from "@chakra-ui/react";
 
 export default function OutCurr_Cell(props) {
     return (
