@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, Text, Heading, VStack, SimpleGrid, Image} from "@chakra-ui/react";
+import { Box, Flex, Spacer, Center, VStack, SimpleGrid, Image, Text, Grid, GridItem} from "@chakra-ui/react";
 import PPC_Cell from "./PPC_Cell";
 import CellString from "./CellString";
 import MPPT_Cell from "./MPPT_Cell";
@@ -12,7 +12,7 @@ import Right from "./DriverIcons/Right Turn.png"
 
 export default function PPC_MPPT(props) {
     return (
-        <Flex h='100%' direction = 'row' flex='1'> 
+        <Flex h='100%'> 
             <VStack
                 flex='1'
                 align='stretch'
@@ -43,16 +43,18 @@ export default function PPC_MPPT(props) {
                             unitType="&#8451;"
                         />
                     </Flex>
-                    <SimpleGrid flex='1' columns={2} pl='1'>
-                        <Box border='1px' borderRadius='md' textAlign='center' verticalAlign=''>
-                            <Text>D</Text>
-                        </Box>
-                        <Image src={Headlights}/>
-                        <Image src={Hazards}/>
-                        <Image src={Cruise}/>
-                        <Image src={Left}/>
-                        <Image src={Right}/>
-
+                    <SimpleGrid columns={2} pl='1'>
+                        {props.data?.state[0] ?
+                            <Box borderColor='black' borderWidth='2px' borderRadius='md' textAlign='center'>
+                                <Center h='100%'><Text as='b' fontSize='3vh'>D</Text></Center>
+                            </Box> 
+                            :<Center>D</Center>
+                        }
+                        {props.data?.headlights[0] ? <Center><Image src={Headlights}/></Center> : <Center>D</Center>}
+                        {props.data?.hazards[0] ? <Center><Image src={Hazards}/></Center> : <Center>D</Center>}
+                        {props.data?.cruise[0] ? <Center><Image src={Cruise}/></Center> : <Center>D</Center>}
+                        {props.data?.left_turn[0] ? <Center><Image src={Left}/></Center> : <Center>D</Center>}
+                        {props.data?.right_turn[0] ? <Center><Image src={Right}/></Center> : <Center>D</Center>}
                     </SimpleGrid>
                 </Flex>
                 <Heading_Cell label='Communication'/>
