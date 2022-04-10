@@ -1,14 +1,66 @@
-import { Box, Flex, Spacer, Text, Heading, VStack} from "@chakra-ui/react";
+import { Box, Flex, Spacer, Text, Heading, VStack, SimpleGrid, Image} from "@chakra-ui/react";
 import PPC_Cell from "./PPC_Cell";
 import CellString from "./CellString";
 import MPPT_Cell from "./MPPT_Cell";
 import OutCurr_Cell from "./OutCurr_Cell";
 import Heading_Cell from "./Heading_Cell";
+import Headlights from "./DriverIcons/Headlights.png"
+import Hazards from "./DriverIcons/Hazards.png"
+import Cruise from "./DriverIcons/Cruise.png"
+import Left from "./DriverIcons/Left Turn.png"
+import Right from "./DriverIcons/Right Turn.png"
 
 export default function PPC_MPPT(props) {
     return (
         <Flex h='100%' direction = 'row' flex='1'> 
-            <Flex flex='1'>Placeholder</Flex>
+            <VStack
+                flex='1'
+                align='stretch'
+                spacing={0}
+            >
+                <Heading_Cell label='Driver / Cabin'/>
+                <Flex flex='3' pt='1' pb='1'>
+                    <Flex flex='1.5' direction='column'>
+                        <CellString
+                            fontSize='0.85vw'
+                            label='Speed'
+                            dataType={props.data?.speed[0] ?? -1.0}
+                            digits={0}
+                            unitType=" mph"
+                        />
+                        <CellString
+                            fontSize='0.85vw'
+                            label='Accelerator'
+                            dataType={props.data?.accelerator[0] ?? -1.0}
+                            digits={0}
+                            unitType="%"
+                        />
+                        <CellString
+                            fontSize='0.85vw'
+                            label='Cabin Temp'
+                            dataType={props.data?.cabin_temp[0] ?? -1.0}
+                            digits={0}
+                            unitType="&#8451;"
+                        />
+                    </Flex>
+                    <SimpleGrid flex='1' columns={2} pl='1'>
+                        <Box border='1px' borderRadius='md' textAlign='center'>
+                            <Text>D</Text>
+                        </Box>
+
+                        <Image src={Headlights}/>
+                        <Image src={Hazards}/>
+                        <Image src={Cruise}/>
+                        <Image src={Left}/>
+                        <Image src={Right}/>
+
+                    </SimpleGrid>
+                </Flex>
+                <Heading_Cell label='Communication'/>
+                <Flex flex='3'>
+                
+                </Flex>
+            </VStack>
             <VStack 
                 flex='1'
                 align='stretch'
@@ -50,16 +102,25 @@ export default function PPC_MPPT(props) {
                         </Flex>
                     </Flex>
                     <CellString
+                        fontSize='1vw'
                         label='Cell String 1 Temp'
-                        temperature={props.data?.string1_temp[0] ?? -1.0}
+                        dataType={props.data?.string1_temp[0] ?? -1.0}
+                        digits={3}
+                        unitType="&#8451;"
                     />
                     <CellString
+                        fontSize='1vw'
                         label='Cell String 2 Temp'
-                        temperature={props.data?.string2_temp[0] ?? -1.0}
+                        dataType={props.data?.string2_temp[0] ?? -1.0}
+                        digits={3}
+                        unitType="&#8451;"
                     />
                     <CellString
+                        fontSize='1vw'
                         label='Cell String 2 Temp'
-                        temperature={props.data?.string3_temp[0] ?? -1.0}
+                        dataType={props.data?.string3_temp[0] ?? -1.0}
+                        digits={3}
+                        unitType="&#8451;"
                     />
                 </Flex>
             </VStack>
