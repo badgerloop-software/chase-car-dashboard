@@ -21,11 +21,30 @@ import PowerGraph from "../Graph/PowerGraph";
 import TemperatureGraph from "../Graph/TemperatureGraph";
 import CustomGraph from "../Graph/CustomGraph";
 
+// Importing toastify module
+import { toast } from 'react-toastify';
+
+// Import toastify css file
+import 'react-toastify/dist/ReactToastify.css';
+
+// toast-configuration method,
+// it is compulsory method.
+toast.configure()
+
+
+/**
+ *ToDo: 
+ *  Handling empty parems sent to the back end
+ *  Making get data experience more user frendly
+ * Fixing unexpected getSessionsList error (Usually happens when app is left idal) 
+ */
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
   const { isOpen, onOpen, onClose } = useDisclosure()
   const initialRef = React.useRef()
   const finalRef = React.useRef()
+
+  const [sessionsList, setSessionsList] = useState({ data: null });
 
   const callBackendAPI = async () => {
     const response = await fetch("/api");
@@ -39,40 +58,87 @@ export default function Dashboard(props) {
 
     return body;
   };
-  const getSessionsList= async () => {
-    const response = await fetch("/getSessionList");
-    if (response.status === 200) {
-      const body = await response.json();
-      return body
+  const getSessionsList = async () => {
+    const response = await fetch("/sessionsList");
+    const body = await response.json();
+    if (response.status !== 200) {
+      console.error("sessionList: error");
+      // throw Error(body.message);
+      return
     }
-    return null;
-  };
-  const getRecordedData = async () => {
-    const response = await fetch("/get-recorded-data");
-    if (response.status === 200) {
-      const body = await response.json();
-      return body
-    } else{
-      console.log("Error getting Rec data")
-    }
-    return null;
+    return body;
   };
 
+
+
+  const getSessionData = (session) => {
+    fetch('http://localhost:4001/get-recorded-data/x', {
+      method: "POST",
+      body: JSON.stringify({ fileName: session }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    }).then(response => response.json()).then((data) => {
+      console.log("session res::", data)
+
+    }).catch((e) => {
+      setIsRecording(false)
+      console.log("Error:", e)
+    })
+  }
+
   const [state, setState] = useState({ data: null });
+  const [framePointer, setFramePointer] = useState(0);
+  let frameIntervalId;
+
+  const [currentSession, setCurrentSession] = useState("");
   const [recordedData, setRecordedData] = useState({ data: null });
   const [isRecording, setIsRecording] = useState(false);
   const [isRecordingSessionCreated, setIsRecordingSessionCreated] = useState(false);
   const [sessionFileName, setSessionFileName] = useState("");
 
-  useLayoutEffect(() => {
-    callBackendAPI().then((res) => {
-      setState({ data: res.response });
-      // console.log("api::", res.response);
-    }).catch((err) => console.log("/api error",err));
 
-   
+  useLayoutEffect(() => {
+    //-------
+    callBackendAPI().then((res) => {
+      setState({ data: res.response })
+    }).catch((err) => console.log("/api error", err));
+
   }, [state]);
 
+  useLayoutEffect(() => {
+    //-------
+    // console.log("Running once")
+    getSessionsList().then((res) => {
+      setSessionsList({ data: res.response });
+    }).catch((err) => console.log("error", err));
+  }, []);
+
+
+  const PlayData = (speed = 1) => {
+    let time = 1000 * speed
+    // check if already an interval has been set up
+    if (!frameIntervalId) {
+      frameIntervalId = setInterval(() => {
+        //What to do during the interval 
+
+      }, time);
+    }
+
+
+  };
+
+  const getRecordedData = async () => {
+    const response = await fetch("/get-recorded-data");
+    if (response.status === 200) {
+      const body = await response.json();
+      return body
+    } else {
+      console.log("Error getting Rec data")
+    }
+    return null;
+  };
 
   const recordCarData = () => {
     fetch('http://localhost:4001/record-data', {
@@ -85,7 +151,7 @@ export default function Dashboard(props) {
     }).then(response => response.json()).then((data) => {
       console.log("rcd res::", data)
       if (data.response === "NoFile") {
-
+        //ToDo
       }
       if (data.response === "Recording") {
         //Then Request is sent 
@@ -100,6 +166,32 @@ export default function Dashboard(props) {
       setIsRecording(false)
       console.log("Error:", e)
     })
+  }
+
+  const setCurrentRecordingSession = (fileName) => {
+    fetch('http://localhost:4001/current-recording-session', {
+      method: "POST",
+      body: JSON.stringify({ fileName: fileName }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    }).then(response => response.json()).then((data) => {
+      console.log("crs res::", data)
+      if (data.response == -1) {
+        toast("Empty name")
+        return
+      }
+      if (data.response == 200) {
+        setCurrentSession(fileName)
+        toast("Current recording session is set !!")
+      } else {
+        // Handle the error
+        toast("Something went wrong")
+      }
+    }).catch((e) => {
+      console.log("Error:", e)
+    });
   }
 
   const createRecordingSession = (fileName) => {
@@ -117,7 +209,15 @@ export default function Dashboard(props) {
         return
       }
       if (data.response === "Created") {
-        alert("Session file has been created!!")
+        // Get the updated sessions list
+        getSessionsList().then((res) => {
+          // console.log("Getting")
+          setSessionsList({ data: res.response });
+        }).catch((err) => console.log("error", err));
+        setCurrentSession(fileName)
+
+        // alert("Session file has been created!!")
+        toast("Session file has been created!!")
         //Then Request is sent 
       } else {
         setIsRecordingSessionCreated(false)
@@ -287,18 +387,39 @@ export default function Dashboard(props) {
     <Grid templateColumns="1fr 2fr" h="100vh" w="100vw">
       {"(test) Is recording: " + isRecording}
       <HStack>
-      <Button width={"15em"} colorScheme='blue' size='sm' onClick={async () => {
-         getRecordedData().then((res) => {
-          if (res.response) {
-            setRecordedData({ data: res.response });
-            localStorage.setItem("recordeData", JSON.stringify(res.response))
-            console.log("Rec Data::", res);
+        <Select
+          width={"15em"}
+          placeholder={"Select session to view"}
+          value={currentSession}
+
+          onChange={(e) => {
+            setCurrentRecordingSession(e.target.value)
+          }}>
+          {sessionsList?.data?.map((name, i) => {
+            return (<option key={i} value={name}>{name}</option>)
+          })}
+
+        </Select>
+        <Button width={"15em"} colorScheme='blue' size='sm' onClick={async () => {
+          if (currentSession) {
+            getRecordedData().then((res) => {
+              if (res.response) {
+                setRecordedData({ data: res.response });
+                console.log("Rec Data::", res);
+                localStorage.setItem("recordeData", JSON.stringify(res.response))
+              }
+            }).catch((err) => console.log(err));
+          } else {
+            alert("Please select a session to get the data from")
           }
-        }).catch((err) => console.log(err));
-      }}>(test)Get Rec Data</Button>
+
+        }}>(test) Get session data</Button>
+        <Button width={"15em"} colorScheme='blue' size='sm' >(test) Play</Button>
+        <Button width={"15em"} colorScheme='blue' size='sm' >(test) Pause</Button>
         <Button width={"15em"} colorScheme='blue' size='sm' onClick={onOpen}>(test) Create session file</Button>
-        <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => { recordCarData() }}>(test) {isRecording ? "Stop" : "Start"} recording session</Button>
+        <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => { if (currentSession) { recordCarData() } else { alert("No session created or selected") } }}>(test) {isRecording ? "Stop" : "Start"} recording session</Button>
       </HStack>
+      {/* Create new session popup */}
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}

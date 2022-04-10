@@ -8,7 +8,7 @@ import SESSION_SOLAR_CAR_DATA from "../../Data/session_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 // TODO ---------------------------------------------------------------------
 let doRecord = false; // Flag for whether we should be recording data or not
-let sessionFileName = "demo1"
+let currentSession = ""
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA
@@ -39,6 +39,7 @@ ROUTER.get("/sessionsList", (req, res) => {
   res.send({ response: sessionsList }).status(200);
 });
 
+
 // TODO ---------------------------------------------------------------------
 ROUTER.post("/create-recording-session", (req, res) => {
   if (req.body.fileName === "") {
@@ -47,6 +48,7 @@ ROUTER.post("/create-recording-session", (req, res) => {
   }
 
   fs.appendFile('./recordedData/sessionsList.bin', req.body.fileName + "\n", (err) => {
+    sessionsList.push(req.body.fileName)
     if (err) {
       res.send({ response: "Error" }).status(200);
       return console.error(err);
@@ -59,8 +61,20 @@ ROUTER.post("/create-recording-session", (req, res) => {
       return console.error(err);
     }
     res.send({ response: "Created" }).status(200)
-    sessionFileName = req.body.fileName 
+    currentSession = req.body.fileName
   });
+  console.log('req:', req.body);
+});
+// TODO ---------------------------------------------------------------------
+ROUTER.post("/current-recording-session", (req, res) => {
+  if (req.body.fileName === "") {
+    res.send({ response: -1 }).status(200);
+    return
+  }
+
+  res.send({ response: 200 }).status(200)
+  currentSession = req.body.fileName
+
   console.log('req:', req.body);
 });
 
@@ -69,7 +83,7 @@ ROUTER.post("/create-recording-session", (req, res) => {
 
 // Set recording flag to true or false depeding on request
 ROUTER.post("/record-data", (req, res) => {
-  if (sessionFileName === "") {
+  if (currentSession === "") {
     res.send({ response: "NoFile" }).status(200)
     return
   }
@@ -78,8 +92,24 @@ ROUTER.post("/record-data", (req, res) => {
   console.log("Record Status:", req.body)
 });
 
+ROUTER.post("/get-recorded-data/x", async (req, res) => {
+  currentSession = req.body.fileName
+  if (currentSession === "") {
+    res.send({ response: "NoFile" }).status(200)
+    return
+  }
+
+  console.log("Sess:", req.body)
+  // await getrecordedData()
+  // res.send({ response: RecodedData }).status(200)
+});
+
 
 ROUTER.get("/get-recorded-data", (req, res) => {
+  if (currentSession == "") {
+    res.send({ response: "NoFileSelected" }).status(200);
+    return
+  }
   getrecordedData()
   res.send({ response: RecodedData }).status(200);
 })
@@ -118,13 +148,13 @@ client.on("data", function (data) {
 
 
 function recordData(data) {
-  fs.appendFile("recordedData/sessions/" + sessionFileName+ ".bin" , data, (err) => {/*error handling*/ });
+  fs.appendFile("recordedData/sessions/" + currentSession + ".bin", data, (err) => {/*error handling*/ });
 }
 
-function getrecordedData() {
-  console.log("Getting record data")
+async function getrecordedData() {
 
-  fs.readFile('recordedData/sessions/' + sessionFileName+ ".bin", (err, data) => {
+
+  fs.readFile('recordedData/sessions/' + currentSession + ".bin", (err, data) => {
     let bytesOffset = 0;
     for (const property in DATA_FORMAT) {
       bytesOffset += DATA_FORMAT[property][0];
@@ -138,6 +168,7 @@ function getrecordedData() {
     if (data) {
       // end == false
       while (end == false) {
+        console.log("Getting record data")
         let buff = data.slice(indx, bytesOffset + indx)
         // console.log("on data::", buff)
         if (buff <= 0) {
@@ -151,11 +182,14 @@ function getrecordedData() {
         // console.log("unpack::", unpackBufferData(buff))
         // console.log(i, ") DATA Slice:");
         indx += bytesOffset;
-        i++;
+        // i++;
       }
     }
   });
+
 }
+
+
 
 function unpackBufferData(BufferData) {
   let buffOffset = 0; // Byte offset for the buffer array
