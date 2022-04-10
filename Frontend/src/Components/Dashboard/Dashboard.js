@@ -1,8 +1,9 @@
-import { Grid, GridItem, HStack, VStack, Select } from "@chakra-ui/react";
+import { Grid, GridItem, HStack, VStack, Select, Box } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
 import BatteryCells from "../BatteryCells/BatteryCells";
+import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import MiniMap from "../MiniMap/MiniMap";
 import BatteryGraph from "../Graph/BatteryGraph";
 import PowerGraph from "../Graph/PowerGraph";
@@ -77,7 +78,9 @@ export default function Dashboard(props) {
       return <BatteryCells data={state.data} />;
     } else if (optionValue === "minimap") {
       return <MiniMap />;
-    } else {
+    } else if (optionValue === "ppc_mppt") {
+      return <PPC_MPPT data={state.data}/>
+    }else {
       return <VStack />;
     }
   };
@@ -198,7 +201,7 @@ export default function Dashboard(props) {
         >
           <FaultsView data={state.data} />
         </GridItem>
-        <GridItem h="37.5vh" rowStart={2} rowSpan={1} borderColor="black" borderWidth={1} >
+        <GridItem h="37.5vh" rowStart={2} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
           <Select
             id="dataViewSelect1"
             size="xs"
@@ -212,7 +215,7 @@ export default function Dashboard(props) {
           </Select>
           {switchDataView(dataView1)}
         </GridItem>
-        <GridItem h="37.5vh" rowStart={3} rowSpan={1} borderColor="black" borderWidth={1} >
+        <GridItem h="37.5vh" rowStart={3} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
           <Select
             id="dataViewSelect2"
             size="xs"
@@ -299,6 +302,7 @@ function DataViewOptions(props) {
       <option value="general">General Data</option>
       <option value="battery">Battery Cells</option>
       <option value="minimap">Minimap</option>
+      <option value="ppc_mppt">PPC and MPPT</option>
     </>
   );
 }
