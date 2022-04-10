@@ -7,7 +7,7 @@ import Heading_Cell from "./Heading_Cell";
 
 export default function PPC_MPPT(props) {
     return (
-        <Flex h='100%' direction = 'row' flex='1'>
+        <Flex h='100%' >
             <Flex flex='1'>Placeholder</Flex>
             <VStack
                 flex='1'
