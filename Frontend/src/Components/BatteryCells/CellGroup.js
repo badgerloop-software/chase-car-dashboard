@@ -8,13 +8,13 @@ export default function CellGroup(props) {
             spacing={0}
             padding={1}
         >
-            <Text as='u' fontSize='xs'>
-                Group{props.groupNum}
+            <Text as='u' fontSize='sm'>
+                Group {props.groupNum}
             </Text>
             <Text fontSize='sm'>
-                {props.voltage.toFixed(2)}V
+                {props.voltage.toFixed(2)} V
             </Text>
-            <Box border='2px' borderRadius='md' w='3.5vw' h='2.5vh'>
+            <Box border='2px' borderRadius='md' w='90%' h='1.5vh'>
                 {props.battery}
             </Box>
         </VStack>
