@@ -44,10 +44,9 @@ export default function PPC_MPPT(props) {
                         />
                     </Flex>
                     <SimpleGrid flex='1' columns={2} pl='1'>
-                        <Box border='1px' borderRadius='md' textAlign='center'>
+                        <Box border='1px' borderRadius='md' textAlign='center' verticalAlign=''>
                             <Text>D</Text>
                         </Box>
-
                         <Image src={Headlights}/>
                         <Image src={Hazards}/>
                         <Image src={Cruise}/>
