@@ -60,29 +60,27 @@ export default function PPC_MPPT(props) {
                 
                 </Flex>
             </VStack>
-            <VStack 
+            <VStack
                 flex='1'
                 align='stretch'
                 spacing={0}
                 borderLeft='1px'
             >
                 <Heading_Cell label='Power Path Controller'/>
-                <Flex flex='2' direction='column' p='1'>
-                    <Flex flex='1' direction='row'>
-                        <PPC_Cell
-                            boolean={props.data?.supplemental_valid[0]}
-                            label='Supplemental Battery Pack'
-                        />
-                        <Spacer/>
-                        <PPC_Cell
-                            boolean={props.data?.dcdc_valid[0]}
-                            label='Main Battery Pack'
-                        />
-                    </Flex>
+                <Flex flex='2' p='1'>
+                      <PPC_Cell
+                          boolean={props.data?.supplemental_valid[0]}
+                          label='Supplemental Battery Pack'
+                      />
+                      <Spacer/>
+                      <PPC_Cell
+                          boolean={props.data?.dcdc_valid[0]}
+                          label='Main Battery Pack'
+                      />
                 </Flex>
                 <Heading_Cell label='Maximum Power Point Tracker'/>
                 <Flex flex = '8' direction='column' pb='1'>
-                    <Flex flex='1' direction='row' pl='2' pr='2' pt='1'>
+                    <Flex pl='2' pr='2' pt='1'>
                         <OutCurr_Cell
                             label='Output Current'
                             current={props.data?.mppt_current_out[0] ?? -1.0}
