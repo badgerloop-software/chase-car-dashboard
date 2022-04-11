@@ -180,70 +180,70 @@ export default function Faults(props) {
                   <Image src={MPPTContactorImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {!(props.data?.low_contactor[0] ?? true) ?
               <Tooltip label={"Low contactor is open"} >
                    <Image src={LowContactorImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {!(props.data?.motor_controller_contactor[0] ?? true) ?
               <Tooltip label={"Motor controller contactor is open"} >
                   <Image src={MotorControllerContactorImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {(props.data?.battery_eStop[0] || props.data?.driver_eStop[0] || props.data?.external_eStop[0]) ?
               <Tooltip label={getEStopString()} >
                   <Image src={EStopImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {!(props.data?.door[0] ?? true) ?
               <Tooltip label={"Door is open"} >
                   <Image src={DoorImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {props.data?.crash[0] ?
               <Tooltip label={"Solar car has crashed"} >
                   <Image src={CrashImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {props.data?.mcu_check[0] ?
               <Tooltip label={"MCU check failed"} >
                   <Image src={MCUCheckImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {props.data?.imd_status[0] ?
               <Tooltip label={"IMD status (battery isolation) fault"} >
                   <Image src={IMDStatusImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {checkBMSFailsafes() ?
               <Tooltip label={getBMSFailsafeString()} >
                   <Image src={BatteryFailsafeImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {props.data?.bps_fault[0] ?
               <Tooltip label={"BPS fault"} >
                    <Image src={BPSFaultImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {/*<Tooltip label={"Power warnings"} >
               {true ? <Image src={PowerWarningImage}/> : <Box></Box>}
@@ -253,7 +253,7 @@ export default function Faults(props) {
                   <Image src={LowBatteryImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {(props.data?.mppt_current_out[0] > 7) ?
               <Tooltip label={"High MPPT current"} >
@@ -265,7 +265,7 @@ export default function Faults(props) {
                       <Image src={MPPTCurrentImage}/>
                   </Tooltip>
                   :
-                  <Box></Box>
+                  <Box h="70px" />
           }
           {(props.data?.pack_current[0] > 75) ?
               <Tooltip label={"High battery pack current"} >
@@ -277,7 +277,7 @@ export default function Faults(props) {
                       <Image src={LowCurrentImage}/>
                   </Tooltip>
                   :
-                  <Box></Box>
+                  <Box h="70px" />
           }
           {(props.data?.pack_voltage[0] > 108) ?
               <Tooltip label={"High battery pack voltage"} >
@@ -289,14 +289,14 @@ export default function Faults(props) {
                       <Image src={LowVoltageImage}/>
                   </Tooltip>
                   :
-                  <Box></Box>
+                  <Box h="70px" />
           }
           {true ? // TODO Use packet delays to determine if there is a wireless comms issue
               <Tooltip label={"Lost communication with the solar car"} >
                   <Image src={WirelessCommsLostImage} />
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
           {props.data?.bms_canbus_failure[0] ?
               !(props.data?.mainIO_heartbeat[0] ?? true) ?
@@ -313,7 +313,7 @@ export default function Faults(props) {
                       <Image src={PhysicalConnectionImage}/>
                   </Tooltip>
                   :
-                  <Box></Box>
+                  <Box h="70px" />
           }
           {(props.data?.bms_input_voltage[0] > 24) ?
               <Tooltip label={"High BMS input voltage"} >
@@ -325,14 +325,14 @@ export default function Faults(props) {
                       <Image src={BMSInputVoltageImage}/>
                   </Tooltip>
                   :
-                  <Box></Box>
+                  <Box h="70px" />
           }
           {checkTemps() ?
               <Tooltip label={getTempString()} >
                   <Image src={HighTemperatureImage}/>
               </Tooltip>
               :
-              <Box></Box>
+              <Box h="70px" />
           }
       </SimpleGrid>
   );
