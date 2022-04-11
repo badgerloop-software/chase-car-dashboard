@@ -21,21 +21,21 @@ export default function Driver_Comms(props) {
                 <Flex flex='3' pt='1' pb='1'>
                     <Flex flex='1.5' direction='column' pl='2' pr='2'>
                         <Range_Cell
-                            fontSize='0.85vw'
+                            fontSize='2vh'
                             label='Speed'
                             dataType={props.data?.speed[0] ?? -1.0}
                             digits={0}
                             unitType=" mph"
                         />
                         <Range_Cell
-                            fontSize='0.85vw'
+                            fontSize='2vh'
                             label='Accelerator'
                             dataType={props.data?.accelerator[0] ?? -1.0}
                             digits={0}
                             unitType="%"
                         />
                         <Range_Cell
-                            fontSize='0.85vw'
+                            fontSize='2vh'
                             label='Cabin Temp'
                             dataType={props.data?.cabin_temp[0] ?? -1.0}
                             digits={0}
