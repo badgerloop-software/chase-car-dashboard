@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, Center, VStack, SimpleGrid, Image, Text, Grid, GridItem} from "@chakra-ui/react";
+import { Box, Flex, Center, VStack, SimpleGrid, Image, Text} from "@chakra-ui/react";
 import CellString from "./CellString";
 import Heading_Cell from "./Heading_Cell";
 import Headlights from "./DriverIcons/Headlights.png"
@@ -9,7 +9,7 @@ import Right from "./DriverIcons/Right Turn.png"
 import Check_Mark from "./DriverIcons/Check Mark.png"
 import Cross_Mark from "./DriverIcons/Cross Mark.png"
 
-export default function PPC_MPPT(props) {
+export default function Driver_Comms(props) {
     return (
         <Flex h='100%'> 
             <VStack
