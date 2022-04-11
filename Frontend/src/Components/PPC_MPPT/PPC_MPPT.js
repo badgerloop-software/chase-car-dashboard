@@ -1,9 +1,9 @@
-import { Box, Flex, Spacer, Center, VStack, SimpleGrid, Image, Text, Grid, GridItem} from "@chakra-ui/react";
+import {Flex, Spacer, VStack} from "@chakra-ui/react";
 import PPC_Cell from "./PPC_Cell";
-import CellString from "./CellString";
 import MPPT_Cell from "./MPPT_Cell";
 import OutCurr_Cell from "./OutCurr_Cell";
 import Heading_Cell from "./Heading_Cell";
+import Range_Cell from "../GeneralData/Range_Cell";
 
 
 export default function PPC_MPPT(props) {
@@ -53,21 +53,21 @@ export default function PPC_MPPT(props) {
                             />
                         </Flex>
                     </Flex>
-                    <CellString
+                    <Range_Cell
                         fontSize='1vw'
                         label='Cell String 1 Temp'
                         dataType={props.data?.string1_temp[0] ?? -1.0}
                         digits={3}
                         unitType="&#8451;"
                     />
-                    <CellString
+                    <Range_Cell
                         fontSize='1vw'
                         label='Cell String 2 Temp'
                         dataType={props.data?.string2_temp[0] ?? -1.0}
                         digits={3}
                         unitType="&#8451;"
                     />
-                    <CellString
+                    <Range_Cell
                         fontSize='1vw'
                         label='Cell String 2 Temp'
                         dataType={props.data?.string3_temp[0] ?? -1.0}

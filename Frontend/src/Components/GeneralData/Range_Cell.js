@@ -1,6 +1,6 @@
 import {Flex, Text, Spacer, Box} from "@chakra-ui/react"
 
-export default function CellString(props){
+export default function Range_Cell(props){
     return(
         <Flex flex='2' pl='1' pr='1' direction='column'>
             <Flex flex='0.4'>
