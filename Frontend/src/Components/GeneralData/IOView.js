@@ -3,6 +3,7 @@ import Heading_Cell from "../PPC_MPPT/Heading_Cell";
 import RangeBar from "../PPC_MPPT/RangeBar";
 
 export default function IOView(props) {
+    const fss = "1.0em";
     const fs = "1.2em"
 
     return (
@@ -17,14 +18,14 @@ export default function IOView(props) {
           pb="0.75vh"
           >
           <Flex>
-            <Text fontSize={fs}>12V Bus</Text>
+            <Text fontSize={fss}>12V Bus</Text>
             <Spacer />
-            <Text fontSize={fs}>{props.data?.bus_12V[0]?.toFixed(2) ?? "?"} V</Text>
+            <Text fontSize={fss}>{props.data?.bus_12V[0]?.toFixed(2) ?? "?"} V</Text>
           </Flex>
           <Flex>
-            <Text fontSize={fs}>5V Bus</Text>
+            <Text fontSize={fss}>5V Bus</Text>
             <Spacer />
-            <Text fontSize={fs}>{props.data?.bus_5V[0]?.toFixed(2) ?? "?"} V</Text>
+            <Text fontSize={fss}>{props.data?.bus_5V[0]?.toFixed(2) ?? "?"} V</Text>
           </Flex>
           <RangeBar val={props.data?.bus_12V[0] ?? 0} min={0} max={12} w="7.375vw" />
           <RangeBar val={props.data?.bus_5V[0] ?? 0} min={0} max={5} w="7.375vw" />
