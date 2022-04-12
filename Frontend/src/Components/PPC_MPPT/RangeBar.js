@@ -13,10 +13,10 @@ export default class RangeBar extends React.Component {
         <>
             <Box
                 border="2px"
-                w={this.props.w ?? "30vh"}
-                h={this.props.h ?? "1.5vh"}
+                w={this.props.w ?? "15vw"}
+                h={this.props.h ?? "1.25vh"}
                 css={{
-                    background: "linear-gradient(to right, green " + valp + "%, white " + valp + "% 100%)"
+                    background: "linear-gradient(to right, #52FF00 " + valp + "%, #FFFFFF " + valp + "% 100%)"
                 }}
              />
         </>

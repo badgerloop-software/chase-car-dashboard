@@ -5,6 +5,7 @@ import IOView from "./IOView"
 export default function DataView(props) {
   return (
     <SimpleGrid
+        h={"100%"}
       columns={2}
       rows={1}
     >
@@ -24,9 +25,9 @@ export default function DataView(props) {
         </HStack>
       </div>
 
-      <Box>
+
         <IOView data={props.data}/>
-      </Box>
+
     </SimpleGrid>
   );
 }
