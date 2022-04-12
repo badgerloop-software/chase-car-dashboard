@@ -1,6 +1,4 @@
-
-import React from "react";
-import { Box, Flex, Spacer, VStack, SimpleGrid, Text } from "@chakra-ui/react";
+import { Flex, Spacer, SimpleGrid, Text } from "@chakra-ui/react";
 import Heading_Cell from "../PPC_MPPT/Heading_Cell";
 import RangeBar from "../PPC_MPPT/RangeBar";
 
@@ -11,6 +9,7 @@ export default function IOView(props) {
       <Flex direction="column" align="center" borderLeft="1px">
         <Heading_Cell label="I/O Boards" />
         <SimpleGrid
+          flex={1}
           columns={2}
           rows={2}
           spacingX='0.75vw' // TODO Change this and other width/horizontal values to vw
@@ -32,7 +31,7 @@ export default function IOView(props) {
         </SimpleGrid>
 
         <Heading_Cell label="Driver I/O" />
-        <Flex flex={1} direction={"column"} align="stretch" pt={"0.5vh"} pb={"0.75vh"}>
+        <Flex flex={2} direction={"column"} align="stretch" pt={"0.5vh"} pb={"0.75vh"}>
           <Flex>
             <Text fontSize={fs}>Driver I/O Temp</Text>
             <Spacer />
@@ -48,7 +47,7 @@ export default function IOView(props) {
         </Flex>
 
         <Heading_Cell label="Main I/O" />
-        <Flex direction={"column"} flex={1} align="stretch" pt={"0.5vh"} pb={"0.75vh"} >
+        <Flex direction={"column"} flex={2} align="stretch" pt={"0.5vh"} pb={"0.75vh"} >
           <Flex>
             <Text fontSize={fs}>Main I/O Temp</Text>
             <Spacer />
