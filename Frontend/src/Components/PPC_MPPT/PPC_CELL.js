@@ -1,6 +1,6 @@
 import {Text, Center} from "@chakra-ui/react";
 
-export default function PPC_Cell(props) {
+export default function PPC_CELL(props) {
     return (
         <Center
             w='47%'
