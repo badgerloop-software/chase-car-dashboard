@@ -38,7 +38,7 @@ export default function DriverComms(props) {
                             fontSize='2vh'
                             label='Cabin Temp'
                             dataType={props.data?.cabin_temp[0] ?? -1.0}
-                            digits={0}
+                            digits={1}
                             unitType="&#8451;"
                         />
                     </Flex>
