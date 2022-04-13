@@ -44,13 +44,9 @@ export default function DriverComms(props) {
                     </Flex>
                     <Center w='30%'>
                         <SimpleGrid columns={2} rows={3} alignItems='center' spacing={2}>
-                            {props.data?.state[0] ?
-                                <Center h='35px' w='35px' borderColor='black' borderWidth='2px' borderRadius='md' textAlign='center'>
-                                    <Text as='b' fontSize='2.3vh'>{props.data?.state[0]}</Text>
-                                </Center>
-                                :
-                                <Center h='35px'></Center>
-                            }
+                            <Center h='35px' w='35px' borderColor='black' borderWidth='2px' borderRadius='md' textAlign='center'>
+                                <Text as='b' fontSize='2.3vh'>{props.data?.state[0] ?? "?"}</Text>
+                            </Center>
                             <IconCell
                                 boolean={props.data?.headlights[0]}
                                 boxSize='35px'
