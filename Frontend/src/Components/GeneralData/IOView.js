@@ -56,7 +56,7 @@ export default function IOView(props) {
         </Flex>
 
         <HeadingCell fontSize='2.2vh' label='Main I/O' />
-        <Flex direction='column' flex={2} align='stretch' pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+        <Flex direction='column' flex={2} pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
             <RangeCell
                 fontSize={fs}
                 label='Main I/O Temp'
