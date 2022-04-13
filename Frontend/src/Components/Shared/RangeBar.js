@@ -11,7 +11,7 @@ export default function RangeBar(props) {
     <Box
       border="2px"
       w={props.w}
-      h={props.h ?? "1.25vh"}
+      h="1.25vh"
       css={{ background: "linear-gradient(to right, #52FF00 " + valp + "%, #FFFFFF " + valp + "% 100%)" }}
       />
   );
