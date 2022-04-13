@@ -18,7 +18,7 @@ export default function IOView(props) {
                 digits={2}
                 unit=' V'
                 min={0}
-                max={12}
+                max={100}
             />
             <Spacer/>
             <RangeCell
@@ -29,7 +29,7 @@ export default function IOView(props) {
                 digits={2}
                 unit=' V'
                 min={0}
-                max={5}
+                max={100}
             />
         </Flex>
 
