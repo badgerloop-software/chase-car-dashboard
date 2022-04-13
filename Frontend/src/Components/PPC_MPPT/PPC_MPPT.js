@@ -2,8 +2,8 @@ import {Flex, Spacer, VStack} from "@chakra-ui/react";
 import PPC_CELL from "./PPC_CELL";
 import MPPT_CELL from "./MPPT_CELL";
 import OutputCurrent from "./OutputCurrent";
-import HeadingCell from "../GeneralData/HeadingCell";
-import RangeCell from "../GeneralData/RangeCell";
+import HeadingCell from "../Shared/HeadingCell";
+import RangeCell from "../Shared/RangeCell";
 
 
 export default function PPC_MPPT(props) {
@@ -34,8 +34,8 @@ export default function PPC_MPPT(props) {
                       />
                 </Flex>
                 <HeadingCell fontSize='1.1vw' label='Maximum Power Point Tracker'/>
-                <Flex flex = '8' direction='column' pb='1'>
-                    <Flex pl='2' pr='2' pt='1'>
+                <Flex flex = '8' direction='column' pb='1' pl='2' pr='2'>
+                    <Flex pt='1'>
                         <OutputCurrent
                             label='Output Current'
                             current={props.data?.mppt_current_out[0] ?? -1.0}

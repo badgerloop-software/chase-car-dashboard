@@ -1,68 +1,81 @@
+import { Flex, Spacer, VStack } from "@chakra-ui/react";
+import HeadingCell from "../Shared/HeadingCell";
+import RangeCell from "../Shared/RangeCell";
 
-import React from "react";
-import { Box, Heading, VStack, HStack, SimpleGrid, Text, Progress } from "@chakra-ui/react";
-import RangeBar from "./RangeBar"
+export default function IOView(props) {
+    const fss = "1.0em";
+    const fs = "1.2em";
 
-export default class IOView extends React.Component {
-  clamp = (x, a, b) => Math.max(a, Math.min(x, b));
-
-  tempToPercentage = (temp, minTemp = 0, maxTemp = 100) => 100 * this.clamp(temp / (maxTemp - minTemp), 0, 1);
-
-  currentToPercentage = (cur, maxCur = 5) => 100 * this.clamp(cur / maxCur, 0, 1);
-
-  voltageToPercentage = (voltage, maxVoltage = 5) =>100 * this.clamp(voltage / maxVoltage, 0, 1);
-
-  rangeBar = (val, doubleWidth = false) => <RangeBar val={val} w={doubleWidth ? "30vh" : "15vh"} />;
-
-  render() {
     return (
-      <VStack align="flex-start" margin="10px">
-        <Box>
-          <Heading>I/O Boards</Heading>
-          <SimpleGrid
-            columns={2}
-            rows={1}
-            spacingX={'0.25vw'}
-            >
-            <Box>
-              <Text>12V Bus: {this.props.data?.bus_12V[0]?.toFixed(2) ?? "?"} V</Text>
-              {this.rangeBar(this.voltageToPercentage(this.props.data?.bus_12V[0] ?? 0, 15))}
-            </Box>
-            <Box>
-              <Text>5V Bus: {this.props.data?.bus_5V[0]?.toFixed(2) ?? "?"} V</Text>
-              {this.rangeBar(this.voltageToPercentage(this.props.data?.bus_5V[0] ?? 0, 10))}
-            </Box>
-          </SimpleGrid>
-        </Box>
+      <VStack align='stretch' spacing={0} borderLeft='1px'>
+        <HeadingCell fontSize='2.2vh' label='I/O Boards' />
+          <Flex pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+            <RangeCell
+                w='7.5vw'
+                fontSize={fss}
+                label='12V Bus'
+                data={props.data?.bus_12V[0] ?? -1}
+                digits={2}
+                unit=' V'
+                min={0}
+                max={100}
+            />
+            <Spacer/>
+            <RangeCell
+                w='7.5vw'
+                fontSize={fss}
+                label='5V Bus'
+                data={props.data?.bus_5V[0] ?? -1}
+                digits={2}
+                unit=' V'
+                min={0}
+                max={100}
+            />
+        </Flex>
 
-        <Box>
-          <Heading>Driver I/O</Heading>
-          <VStack align="flex-start">
-            <Box>
-              <Text>Driver I/O Temp: {this.props.data?.driverIO_temp[0]?.toFixed(2) ?? "?"} &#x2103;</Text>
-              {this.rangeBar(this.tempToPercentage(this.props.data?.driverIO_temp[0] ?? 0, 0, 100), true)}
-            </Box>
-            <Box>
-              <Text>Driver I/O Current In: {this.props.data?.driverIO_current_in[0]?.toFixed(2) ?? "?"} A</Text>
-              {this.rangeBar(this.currentToPercentage(this.props.data?.driverIO_current_in[0] ?? 0, 5), true)}
-            </Box>
-          </VStack>
-        </Box>
+        <HeadingCell fontSize='2.2vh' label='Driver I/O' />
+        <Flex flex={2} direction='column' pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+            <RangeCell
+                fontSize={fs}
+                label='Driver I/O Temp'
+                data={props.data?.driverIO_temp[0] ?? -1}
+                digits={2}
+                unit='&#x2103;'
+                min={0}
+                max={100}
+            />
+            <RangeCell
+                fontSize={fs}
+                label='Driver I/O Current In'
+                data={props.data?.driverIO_current_in[0] ?? -1}
+                digits={2}
+                unit=' A'
+                min={0}
+                max={100}
+            />
+        </Flex>
 
-        <Box>
-          <Heading>Main I/O</Heading>
-          <VStack align="flex-start">
-            <Box>
-              <Text>Main I/O Temp: {this.props.data?.mainIO_temp[0]?.toFixed(2) ?? "?"} &#x2103;</Text>
-              {this.rangeBar(this.tempToPercentage(this.props.data?.mainIO_temp[0] ?? 0, 0, 100), true)}
-            </Box>
-            <Box>
-              <Text>Main I/O Current In: {this.props.data?.mainIO_current_in[0]?.toFixed(2) ?? "?"} A</Text>
-              {this.rangeBar(this.currentToPercentage(this.props.data?.mainIO_current_in[0] ?? 0, 5), true)}
-            </Box>
-          </VStack>
-        </Box>
+        <HeadingCell fontSize='2.2vh' label='Main I/O' />
+        <Flex direction='column' flex={2} pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+            <RangeCell
+                fontSize={fs}
+                label='Main I/O Temp'
+                data={props.data?.mainIO_temp[0] ?? -1}
+                digits={2}
+                unit='&#x2103;'
+                min={0}
+                max={100}
+            />
+            <RangeCell
+                fontSize={fs}
+                label='Main I/O Current In'
+                data={props.data?.mainIO_current_in[0] ?? -1}
+                digits={2}
+                unit=' A'
+                min={0}
+                max={100}
+            />
+        </Flex>
       </VStack>
     );
-  }
 }
