@@ -1,11 +1,11 @@
-import {Box, Text, Center} from "@chakra-ui/react"
+import {Text, Center} from "@chakra-ui/react"
 
-export default function MPPT_Cell(props){
+export default function MPPT_CELL(props){
     return (
-        <Center 
-            h='45%' 
+        <Center
+            h='45%'
             bg={props.boolean? '#05FF00':'#FF010140'}
-            border='2px' 
+            border='2px'
             lineHeight='1.6em'
         >
             <Text as='b' fontSize='1.3vw'>{props.label}</Text>

@@ -1,67 +1,82 @@
-import { Flex, Spacer, SimpleGrid, Text } from "@chakra-ui/react";
-import Heading_Cell from "../PPC_MPPT/Heading_Cell";
+import { Flex, Spacer, VStack } from "@chakra-ui/react";
+import HeadingCell from "./HeadingCell";
 import RangeBar from "../PPC_MPPT/RangeBar";
+import RangeCell from "./RangeCell";
 
 export default function IOView(props) {
     const fss = "1.0em";
-    const fs = "1.2em"
+    const fs = "1.2em";
 
     return (
-      <Flex direction="column" align="center" borderLeft="1px">
-        <Heading_Cell label="I/O Boards" />
-        <SimpleGrid
-          flex={1}
-          columns={2}
-          rows={2}
-          spacingX='0.75vw' // TODO Change this and other width/horizontal values to vw
-          pt="0.5vh"
-          pb="0.75vh"
-          >
-          <Flex>
-            <Text fontSize={fss}>12V Bus</Text>
-            <Spacer />
-            <Text fontSize={fss}>{props.data?.bus_12V[0]?.toFixed(2) ?? "?"} V</Text>
-          </Flex>
-          <Flex>
-            <Text fontSize={fss}>5V Bus</Text>
-            <Spacer />
-            <Text fontSize={fss}>{props.data?.bus_5V[0]?.toFixed(2) ?? "?"} V</Text>
-          </Flex>
-          <RangeBar val={props.data?.bus_12V[0] ?? 0} min={0} max={12} w="7.375vw" />
-          <RangeBar val={props.data?.bus_5V[0] ?? 0} min={0} max={5} w="7.375vw" />
-        </SimpleGrid>
-
-        <Heading_Cell label="Driver I/O" />
-        <Flex flex={2} direction={"column"} align="stretch" pt={"0.5vh"} pb={"0.75vh"}>
-          <Flex>
-            <Text fontSize={fs}>Driver I/O Temp</Text>
-            <Spacer />
-            <Text fontSize={fs}>{props.data?.driverIO_temp[0]?.toFixed(2) ?? "?"} &#x2103;</Text>
-          </Flex>
-          <RangeBar val={props.data?.driverIO_temp[0] ?? 0} min={0} max={100} w="15.5vw" />
-          <Flex>
-            <Text fontSize={fs}>Driver I/O Current In</Text>
-            <Spacer />
-            <Text fontSize={fs}>{props.data?.driverIO_current_in[0]?.toFixed(2) ?? "?"} A</Text>
-          </Flex>
-          <RangeBar val={props.data?.driverIO_current_in[0] ?? 0} min={0} max={150} w="15.5vw" />
+      <VStack align='stretch' spacing={0} borderLeft='1px'>
+        <HeadingCell fontSize='2.2vh' label='I/O Boards' />
+          <Flex pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+            <RangeCell
+                w='7.5vw'
+                fontSize={fss}
+                label='12V Bus'
+                data={props.data?.bus_12V[0] ?? -1}
+                digits={2}
+                unit=' V'
+                min={0}
+                max={12}
+            />
+            <Spacer/>
+            <RangeCell
+                w='7.5vw'
+                fontSize={fss}
+                label='5V Bus'
+                data={props.data?.bus_5V[0] ?? -1}
+                digits={2}
+                unit=' V'
+                min={0}
+                max={5}
+            />
         </Flex>
 
-        <Heading_Cell label="Main I/O" />
-        <Flex direction={"column"} flex={2} align="stretch" pt={"0.5vh"} pb={"0.75vh"} >
-          <Flex>
-            <Text fontSize={fs}>Main I/O Temp</Text>
-            <Spacer />
-            <Text fontSize={fs}>{props.data?.mainIO_temp[0]?.toFixed(2) ?? "?"} &#x2103;</Text>
-          </Flex>
-          <RangeBar val={props.data?.mainIO_temp[0] ?? 0} min={0} max={100} w="15.5vw" />
-          <Flex>
-            <Text fontSize={fs}>Main I/O Current In</Text>
-            <Spacer />
-            <Text fontSize={fs}>{props.data?.mainIO_current_in[0]?.toFixed(2) ?? "?"} A</Text>
-          </Flex>
-          <RangeBar val={props.data?.mainIO_current_in[0] ?? 0} min={0} max={100} w="15.5vw" />
+        <HeadingCell fontSize='2.2vh' label='Driver I/O' />
+        <Flex flex={2} direction='column' pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+            <RangeCell
+                fontSize={fs}
+                label='Driver I/O Temp'
+                data={props.data?.driverIO_temp[0] ?? -1}
+                digits={2}
+                unit='&#x2103;'
+                min={0}
+                max={100}
+            />
+            <RangeCell
+                fontSize={fs}
+                label='Driver I/O Current In'
+                data={props.data?.driverIO_current_in[0] ?? -1}
+                digits={2}
+                unit=' A'
+                min={0}
+                max={100}
+            />
         </Flex>
-      </Flex>
+
+        <HeadingCell fontSize='2.2vh' label='Main I/O' />
+        <Flex direction='column' flex={2} align='stretch' pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+            <RangeCell
+                fontSize={fs}
+                label='Main I/O Temp'
+                data={props.data?.mainIO_temp[0] ?? -1}
+                digits={2}
+                unit='&#x2103;'
+                min={0}
+                max={100}
+            />
+            <RangeCell
+                fontSize={fs}
+                label='Main I/O Current In'
+                data={props.data?.mainIO_current_in[0] ?? -1}
+                digits={2}
+                unit=' A'
+                min={0}
+                max={100}
+            />
+        </Flex>
+      </VStack>
     );
 }
