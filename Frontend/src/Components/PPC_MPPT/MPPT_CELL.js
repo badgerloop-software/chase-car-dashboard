@@ -1,6 +1,6 @@
 import {Text, Center} from "@chakra-ui/react"
 
-export default function MPPT_Cell(props){
+export default function MPPT_CELL(props){
     return (
         <Center
             h='45%'
