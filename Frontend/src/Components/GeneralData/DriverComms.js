@@ -56,13 +56,13 @@ export default function DriverComms(props) {
                 </Flex>
                 <HeadingCell fontSize='2.2vh' label='Communication'/>
                 <Flex flex='3' direction='column' pt='1' pl='2' pb='1'>
-                    <Flex flex='1' direction='column'>
+                    <VStack spacing={0} align='left' marginBottom='5px'>
                         <CommsLabel
                             boolean={true}
                             label='Solar Car'
                         />
                         <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: 00.00</Text>
-                    </Flex>
+                    </VStack>
                     <CommsLabel
                         boolean={props.data?.mainIO_heartbeat[0]}
                         label='Driver I/O - Main I/O'
