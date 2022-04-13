@@ -9,7 +9,7 @@ import Cruise from "./DriverIcons/Cruise.png"
 import Left from "./DriverIcons/Left Turn.png"
 import Right from "./DriverIcons/Right Turn.png"
 
-export default function Driver_Comms(props) {
+export default function DriverComms(props) {
     return (
         <Flex h='100%'>
             <VStack
