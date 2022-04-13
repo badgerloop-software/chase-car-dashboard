@@ -1,6 +1,6 @@
 import {Flex, Center, VStack, SimpleGrid, Text, Image, Box} from "@chakra-ui/react";
-import RangeCell from "./RangeCell";
-import HeadingCell from "./HeadingCell";
+import RangeCell from "../Shared/RangeCell";
+import HeadingCell from "../Shared/HeadingCell";
 import CommsLabel from "./CommsLabel";
 import Headlights from "./DriverIcons/Headlights.png"
 import Hazards from "./DriverIcons/Hazards.png"

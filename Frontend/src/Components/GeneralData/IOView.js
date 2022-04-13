@@ -1,7 +1,6 @@
 import { Flex, Spacer, VStack } from "@chakra-ui/react";
-import HeadingCell from "./HeadingCell";
-import RangeBar from "../PPC_MPPT/RangeBar";
-import RangeCell from "./RangeCell";
+import HeadingCell from "../Shared/HeadingCell";
+import RangeCell from "../Shared/RangeCell";
 
 export default function IOView(props) {
     const fss = "1.0em";

@@ -1,5 +1,5 @@
 import {Flex, Text, Spacer} from "@chakra-ui/react"
-import RangeBar from "../PPC_MPPT/RangeBar"
+import RangeBar from "./RangeBar"
 
 export default function RangeCell(props){
     return(
@@ -14,9 +14,8 @@ export default function RangeCell(props){
                 min={props.min ?? -1}
                 max={props.max ?? -1}
                 w={props.w}
-                h={props.barHeight}
             />
         </Flex>
-    )
+    );
 
 }

@@ -2,8 +2,8 @@ import {Flex, Spacer, VStack} from "@chakra-ui/react";
 import PPC_CELL from "./PPC_CELL";
 import MPPT_CELL from "./MPPT_CELL";
 import OutputCurrent from "./OutputCurrent";
-import HeadingCell from "../GeneralData/HeadingCell";
-import RangeCell from "../GeneralData/RangeCell";
+import HeadingCell from "../Shared/HeadingCell";
+import RangeCell from "../Shared/RangeCell";
 
 
 export default function PPC_MPPT(props) {
