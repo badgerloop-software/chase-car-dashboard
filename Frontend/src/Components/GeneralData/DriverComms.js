@@ -1,7 +1,7 @@
 import {Flex, Center, VStack, SimpleGrid, Text, Image, Box} from "@chakra-ui/react";
-import Range_Cell from "./RangeCell";
-import Heading_Cell from "./HeadingCell";
-import Comms_Cell from "./CommsCell";
+import RangeCell from "./RangeCell";
+import HeadingCell from "./HeadingCell";
+import CommsLabel from "./CommsLabel";
 import Headlights from "./DriverIcons/Headlights.png"
 import Hazards from "./DriverIcons/Hazards.png"
 import Cruise from "./DriverIcons/Cruise.png"
@@ -16,24 +16,24 @@ export default function DriverComms(props) {
                 align='stretch'
                 spacing={0}
             >
-                <Heading_Cell fontSize='2.2vh' label='Driver / Cabin'/>
+                <HeadingCell fontSize='2.2vh' label='Driver / Cabin'/>
                 <Flex flex='3' pt='1' pb='1'>
                     <Flex flex='1.5' direction='column' pl='2' pr='2'>
-                        <Range_Cell
+                        <RangeCell
                             fontSize='2vh'
                             label='Speed'
                             data={props.data?.speed[0] ?? -1.0}
                             digits={0}
                             unit=" mph"
                         />
-                        <Range_Cell
+                        <RangeCell
                             fontSize='2vh'
                             label='Accelerator'
                             data={props.data?.accelerator[0] ?? -1.0}
                             digits={0}
                             unit="%"
                         />
-                        <Range_Cell
+                        <RangeCell
                             fontSize='2vh'
                             label='Cabin Temp'
                             data={props.data?.cabin_temp[0] ?? -1.0}
@@ -54,20 +54,20 @@ export default function DriverComms(props) {
                         </SimpleGrid>
                     </Center>
                 </Flex>
-                <Heading_Cell fontSize='2.2vh' label='Communication'/>
+                <HeadingCell fontSize='2.2vh' label='Communication'/>
                 <Flex flex='3' direction='column' pt='1' pl='2' pb='1'>
                     <Flex flex='1' direction='column'>
-                        <Comms_Cell
+                        <CommsLabel
                             boolean={true}
                             label='Solar Car'
                         />
                         <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: 00.00</Text>
                     </Flex>
-                    <Comms_Cell
+                    <CommsLabel
                         boolean={props.data?.mainIO_heartbeat[0]}
                         label='Driver I/O - Main I/O'
                     />
-                    <Comms_Cell
+                    <CommsLabel
                         boolean={props.data?.bms_canbus_failure[0]}
                         label='BMS CANBUS'
                     />

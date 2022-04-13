@@ -1,6 +1,6 @@
 import {Flex, Box, Text} from "@chakra-ui/react";
 
-export default function OutCurr_Cell(props) {
+export default function OutputCurrent(props) {
     return (
         <Flex w='50%' direction='column'>
             <Box flex='1' border='1px'  borderBottom='0px'  textAlign='center'>
