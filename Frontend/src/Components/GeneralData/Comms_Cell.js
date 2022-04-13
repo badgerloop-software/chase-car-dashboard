@@ -1,6 +1,6 @@
 import {Flex, Image, Text} from "@chakra-ui/react";
-import Check_Mark from "./DriverIcons/Check Mark.png"
-import Cross_Mark from "./DriverIcons/Cross Mark.png"
+import CheckMark from "./DriverIcons/Check Mark.png"
+import CrossMark from "./DriverIcons/Cross Mark.png"
 
 export default function Comms_Cell(props) {
     return(
