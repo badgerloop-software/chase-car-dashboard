@@ -2,8 +2,8 @@ import {Flex, Spacer, VStack} from "@chakra-ui/react";
 import PPC_Cell from "./PPC_Cell";
 import MPPT_Cell from "./MPPT_Cell";
 import OutCurr_Cell from "./OutCurr_Cell";
-import Heading_Cell from "../GeneralData/Heading_Cell";
-import Range_Cell from "../GeneralData/Range_Cell";
+import HeadingCell from "../GeneralData/HeadingCell";
+import RangeCell from "../GeneralData/RangeCell";
 
 
 export default function PPC_MPPT(props) {
@@ -21,7 +21,7 @@ export default function PPC_MPPT(props) {
                 spacing={0}
                 borderLeft='1px'
             >
-                <Heading_Cell fontSize='1.1vw' label='Power Path Controller'/>
+                <HeadingCell fontSize='1.1vw' label='Power Path Controller'/>
                 <Flex flex='2' p='1'>
                       <PPC_Cell
                           boolean={props.data?.supplemental_valid[0]}
@@ -33,7 +33,7 @@ export default function PPC_MPPT(props) {
                           label='Main Battery Pack'
                       />
                 </Flex>
-                <Heading_Cell fontSize='1.1vw' label='Maximum Power Point Tracker'/>
+                <HeadingCell fontSize='1.1vw' label='Maximum Power Point Tracker'/>
                 <Flex flex = '8' direction='column' pb='1'>
                     <Flex pl='2' pr='2' pt='1'>
                         <OutCurr_Cell
@@ -53,26 +53,26 @@ export default function PPC_MPPT(props) {
                             />
                         </Flex>
                     </Flex>
-                    <Range_Cell
+                    <RangeCell
                         fontSize='1vw'
                         label='Cell String 1 Temp'
-                        dataType={props.data?.string1_temp[0] ?? -1.0}
+                        data={props.data?.string1_temp[0] ?? -1.0}
                         digits={3}
-                        unitType="&#8451;"
+                        unit="&#8451;"
                     />
-                    <Range_Cell
+                    <RangeCell
                         fontSize='1vw'
                         label='Cell String 2 Temp'
-                        dataType={props.data?.string2_temp[0] ?? -1.0}
+                        data={props.data?.string2_temp[0] ?? -1.0}
                         digits={3}
-                        unitType="&#8451;"
+                        unit="&#8451;"
                     />
-                    <Range_Cell
+                    <RangeCell
                         fontSize='1vw'
                         label='Cell String 2 Temp'
-                        dataType={props.data?.string3_temp[0] ?? -1.0}
+                        data={props.data?.string3_temp[0] ?? -1.0}
                         digits={3}
-                        unitType="&#8451;"
+                        unit="&#8451;"
                     />
                 </Flex>
             </VStack>

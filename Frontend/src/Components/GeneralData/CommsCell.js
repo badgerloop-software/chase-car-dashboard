@@ -5,7 +5,7 @@ import CrossMark from "./DriverIcons/Cross Mark.png"
 export default function CommsCell(props) {
     return(
         <Flex alignItems='center'>
-            {props.boolean ? <Image boxSize='2vh' src={Check_Mark}/> : <Image boxSize='2vh' src={Cross_Mark}/>}
+            {props.boolean ? <Image boxSize='2vh' src={CheckMark}/> : <Image boxSize='2vh' src={CrossMark}/>}
             <Text fontSize='2vh'>&#160;{props.label}</Text>
         </Flex>
     );

@@ -1,8 +1,7 @@
-import {Flex, Center, VStack, SimpleGrid, Text} from "@chakra-ui/react";
-import Range_Cell from "./Range_Cell";
-import Heading_Cell from "./Heading_Cell";
-import IconCell from "./IconCell";
-import Comms_Cell from "./Comms_Cell";
+import {Flex, Center, VStack, SimpleGrid, Text, Image, Box} from "@chakra-ui/react";
+import Range_Cell from "./RangeCell";
+import Heading_Cell from "./HeadingCell";
+import Comms_Cell from "./CommsCell";
 import Headlights from "./DriverIcons/Headlights.png"
 import Hazards from "./DriverIcons/Hazards.png"
 import Cruise from "./DriverIcons/Cruise.png"
@@ -23,23 +22,23 @@ export default function DriverComms(props) {
                         <Range_Cell
                             fontSize='2vh'
                             label='Speed'
-                            dataType={props.data?.speed[0] ?? -1.0}
+                            data={props.data?.speed[0] ?? -1.0}
                             digits={0}
-                            unitType=" mph"
+                            unit=" mph"
                         />
                         <Range_Cell
                             fontSize='2vh'
                             label='Accelerator'
-                            dataType={props.data?.accelerator[0] ?? -1.0}
+                            data={props.data?.accelerator[0] ?? -1.0}
                             digits={0}
-                            unitType="%"
+                            unit="%"
                         />
                         <Range_Cell
                             fontSize='2vh'
                             label='Cabin Temp'
-                            dataType={props.data?.cabin_temp[0] ?? -1.0}
+                            data={props.data?.cabin_temp[0] ?? -1.0}
                             digits={1}
-                            unitType="&#8451;"
+                            unit="&#8451;"
                         />
                     </Flex>
                     <Center w='30%'>
@@ -47,31 +46,11 @@ export default function DriverComms(props) {
                             <Center h='35px' w='35px' borderColor='black' borderWidth='2px' borderRadius='md' textAlign='center'>
                                 <Text as='b' fontSize='2.3vh'>{props.data?.state[0] ?? "?"}</Text>
                             </Center>
-                            <IconCell
-                                boolean={props.data?.headlights[0]}
-                                boxSize='35px'
-                                image={Headlights}
-                            />
-                            <IconCell
-                                boolean={props.data?.hazards[0]}
-                                boxSize='35px'
-                                image={Hazards}
-                            />
-                            <IconCell
-                                boolean={props.data?.cruise[0]}
-                                boxSize='35px'
-                                image={Cruise}
-                            />
-                            <IconCell
-                                boolean={props.data?.left_turn[0]}
-                                boxSize='35px'
-                                image={Left}
-                            />
-                            <IconCell
-                                boolean={props.data?.right_turn[0]}
-                                boxSize='35px'
-                                image={Right}
-                            />
+                            <>{props.data?.headlights[0] ? <Image boxSize='35px' src={Headlights}/> : <Box h='35px'/>}</>
+                            <>{props.data?.hazards[0] ? <Image boxSize='35px' src={Hazards}/> : <Box h='35px'/>}</>
+                            <>{props.data?.cruise[0] ? <Image boxSize='35px' src={Cruise}/> : <Box h='35px'/>}</>
+                            <>{props.data?.left_turn[0] ? <Image boxSize='35px' src={Left}/> : <Box h='35px'/>}</>
+                            <>{props.data?.right_turn[0] ? <Image boxSize='35px' src={Right}/> : <Box h='35px'/>}</>
                         </SimpleGrid>
                     </Center>
                 </Flex>
