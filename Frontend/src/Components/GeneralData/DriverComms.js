@@ -31,7 +31,7 @@ export default function DriverComms(props) {
                             label='Accelerator'
                             data={props.data?.accelerator[0] ?? -1.0}
                             digits={0}
-                            unit="%"
+                            unit="V"
                         />
                         <RangeCell
                             fontSize='2vh'
