@@ -46,11 +46,11 @@ export default function DriverComms(props) {
                             <Center h='35px' w='35px' borderColor='black' borderWidth='2px' borderRadius='md' textAlign='center'>
                                 <Text as='b' fontSize='2.3vh'>{props.data?.state[0] ?? "?"}</Text>
                             </Center>
-                            <>{props.data?.headlights[0] ? <Image boxSize='35px' src={Headlights}/> : <Box h='35px'/>}</>
-                            <>{props.data?.hazards[0] ? <Image boxSize='35px' src={Hazards}/> : <Box h='35px'/>}</>
-                            <>{props.data?.cruise[0] ? <Image boxSize='35px' src={Cruise}/> : <Box h='35px'/>}</>
-                            <>{props.data?.left_turn[0] ? <Image boxSize='35px' src={Left}/> : <Box h='35px'/>}</>
-                            <>{props.data?.right_turn[0] ? <Image boxSize='35px' src={Right}/> : <Box h='35px'/>}</>
+                            {props.data?.headlights[0] ? <Image boxSize='35px' src={Headlights}/> : <Box h='35px'/>}
+                            {props.data?.hazards[0] ? <Image boxSize='35px' src={Hazards}/> : <Box h='35px'/>}
+                            {props.data?.cruise[0] ? <Image boxSize='35px' src={Cruise}/> : <Box h='35px'/>}
+                            {props.data?.left_turn[0] ? <Image boxSize='35px' src={Left}/> : <Box h='35px'/>}
+                            {props.data?.right_turn[0] ? <Image boxSize='35px' src={Right}/> : <Box h='35px'/>}
                         </SimpleGrid>
                     </Center>
                 </Flex>

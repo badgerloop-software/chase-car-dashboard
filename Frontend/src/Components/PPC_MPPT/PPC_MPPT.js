@@ -1,6 +1,6 @@
 import {Flex, Spacer, VStack} from "@chakra-ui/react";
-import PPC_Cell from "./PPC_Cell";
-import MPPT_Cell from "./MPPT_Cell";
+import PPC_CELL from "./PPC_CELL";
+import MPPT_CELL from "./MPPT_CELL";
 import OutputCurrent from "./OutputCurrent";
 import HeadingCell from "../GeneralData/HeadingCell";
 import RangeCell from "../GeneralData/RangeCell";
@@ -23,12 +23,12 @@ export default function PPC_MPPT(props) {
             >
                 <HeadingCell fontSize='1.1vw' label='Power Path Controller'/>
                 <Flex flex='2' p='1'>
-                      <PPC_Cell
+                      <PPC_CELL
                           boolean={props.data?.supplemental_valid[0]}
                           label='Supplemental Battery Pack'
                       />
                       <Spacer/>
-                      <PPC_Cell
+                      <PPC_CELL
                           boolean={props.data?.dcdc_valid[0]}
                           label='Main Battery Pack'
                       />
@@ -42,12 +42,12 @@ export default function PPC_MPPT(props) {
                         />
                         <Spacer/>
                         <Flex w='45%' direction='column'>
-                            <MPPT_Cell
+                            <MPPT_CELL
                                 label='Charge'
                                 boolean={props.data?.mppt_mode[0]}
                             />
                             <Spacer/>
-                            <MPPT_Cell
+                            <MPPT_CELL
                                 label='MPPT'
                                 boolean={!props.data?.mppt_mode[0]}
                             />
