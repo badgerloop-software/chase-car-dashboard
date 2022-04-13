@@ -25,6 +25,7 @@ let timestamp = 0; // TODO This is just a variable to test adding an array of ti
 
 // Initiate connection
 client.connect(CAR_PORT, CAR_SERVER, function () {
+  frontendData.solar_car_connection = true;
   console.log(`Connected to car server: ${client.remoteAddress}:${CAR_PORT}`);
 });
 
@@ -32,15 +33,18 @@ client.connect(CAR_PORT, CAR_SERVER, function () {
 client.on("data", function (data) {
   console.log(data);
   unpackData(data);
+  frontendData.solar_car_connection = true;
 });
 
 // Socket closed listener: Log when connection is closed
 client.on("close", function () {
+  frontendData.solar_car_connection = false;
   console.log(`Connection to car server (${CAR_PORT}) is closed`);
 });
 
 // Error listener: Destroy the socket and log the error
 client.on("error", (err) => {
+  frontendData.solar_car_connection = false;
   console.log("Client errored out:", err);
   client.destroy();
 });

@@ -1,27 +1,27 @@
 import { Box, Tooltip, Image, SimpleGrid } from "@chakra-ui/react";
-import MPPTContactorImage from "./MPPT Contactor.png";
-import LowContactorImage from "./Low Contactor.png";
-import MotorControllerContactorImage from "./Motor Controller Contactor.png";
-import DoorImage from "./Door.png";
-import BatteryFailsafeImage from "./Battery Failsafe.png";
-import BPSFaultImage from "./BPS Fault.png";
-import EStopImage from "./E-Stop.png";
-import IMDStatusImage from "./IMD Status.png";
-import CrashImage from "./Crash.png";
-import HighCurrentImage from "./High Current.png";
-import HighVoltageImage from "./High Voltage.png";
-import HighVoltageCurrentImage from "./High Voltage Current.png";
-import LowCurrentImage from "./Low Current.png";
-import LowVoltageImage from "./Low Voltage.png";
-import LowVoltageCurrentImage from "./Low Voltage Current.png";
-import LowBatteryImage from "./Low Battery.png";
-import MCUCheckImage from "./MCU Check.png";
-import MPPTCurrentImage from "./MPPT Current.png";
-import PowerWarningImage from "./Power Warning.png";
-import BMSInputVoltageImage from "./BMS Input Voltage.png";
-import PhysicalConnectionImage from "./Physical Connection Lost.png";
-import WirelessCommsLostImage from "./Wireless Comms Lost.png";
-import HighTemperatureImage from "./High Temperature.png";
+import MPPTContactorImage from "./Images/MPPT Contactor.png";
+import LowContactorImage from "./Images/Low Contactor.png";
+import MotorControllerContactorImage from "./Images/Motor Controller Contactor.png";
+import DoorImage from "./Images/Door.png";
+import BatteryFailsafeImage from "./Images/Battery Failsafe.png";
+import BPSFaultImage from "./Images/BPS Fault.png";
+import EStopImage from "./Images/E-Stop.png";
+import IMDStatusImage from "./Images/IMD Status.png";
+import CrashImage from "./Images/Crash.png";
+import HighCurrentImage from "./Images/High Current.png";
+import HighVoltageImage from "./Images/High Voltage.png";
+import HighVoltageCurrentImage from "./Images/High Voltage Current.png";
+import LowCurrentImage from "./Images/Low Current.png";
+import LowVoltageImage from "./Images/Low Voltage.png";
+import LowVoltageCurrentImage from "./Images/Low Voltage Current.png";
+import LowBatteryImage from "./Images/Low Battery.png";
+import MCUCheckImage from "./Images/MCU Check.png";
+import MPPTCurrentImage from "./Images/MPPT Current.png";
+import PowerWarningImage from "./Images/Power Warning.png";
+import BMSInputVoltageImage from "./Images/BMS Input Voltage.png";
+import PhysicalConnectionImage from "./Images/Physical Connection Lost.png";
+import WirelessCommsLostImage from "./Images/Wireless Comms Lost.png";
+import HighTemperatureImage from "./Images/High Temperature.png";
 
 export default function Faults(props) {
     const getEStopString = () => {
@@ -56,7 +56,7 @@ export default function Faults(props) {
     }
 
     const getBMSFailsafeString = () => {
-        let failsafeStrings = []; // TODO Rename
+        let failsafeStrings = [];
 
         if(props.data?.voltage_failsafe[0]) {
             failsafeStrings.push("Voltage");
@@ -291,7 +291,7 @@ export default function Faults(props) {
                   :
                   <Box h="70px" />
           }
-          {true ? // TODO Use packet delays to determine if there is a wireless comms issue
+          {!(props.data?.solar_car_connection ?? false) ?
               <Tooltip label={"Lost communication with the solar car"} >
                   <Image src={WirelessCommsLostImage} />
               </Tooltip>
@@ -299,7 +299,7 @@ export default function Faults(props) {
               <Box h="70px" />
           }
           {props.data?.bms_canbus_failure[0] ?
-              !(props.data?.mainIO_heartbeat[0] ?? true) ?
+              !props.data?.mainIO_heartbeat[0] ?
                   <Tooltip label={"BMS CANBUS failure and Driver IO/Main IO connection lost"} >
                       <Image src={PhysicalConnectionImage}/>
                   </Tooltip>
