@@ -2,7 +2,6 @@ import { Grid, GridItem, HStack, VStack, Select, Box } from "@chakra-ui/react";
 import React, { useState, useLayoutEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
-import Driver_Comms from "../GeneralData/Driver_Comms"
 import BatteryCells from "../BatteryCells/BatteryCells";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import MiniMap from "../MiniMap/MiniMap";
@@ -74,7 +73,7 @@ export default function Dashboard(props) {
   // Choose the data view to return/display based on the given option
   const switchDataView = (optionValue) => {
     if (optionValue === "general") {
-      return <Driver_Comms data={state.data} />;
+      return <DataView data={state.data} />;
     } else if (optionValue === "battery") {
       return <BatteryCells data={state.data} />;
     } else if (optionValue === "minimap") {

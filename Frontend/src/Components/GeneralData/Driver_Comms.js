@@ -11,7 +11,7 @@ import Right from "./DriverIcons/Right Turn.png"
 
 export default function Driver_Comms(props) {
     return (
-        <Flex h='100%'> 
+        <Flex h='100%'>
             <VStack
                 flex='1'
                 align='stretch'
@@ -47,8 +47,8 @@ export default function Driver_Comms(props) {
                             {props.data?.state[0] ?
                                 <Center h='35px' w='35px' borderColor='black' borderWidth='2px' borderRadius='md' textAlign='center'>
                                     <Text as='b' fontSize='2.3vh'>{props.data?.state[0]}</Text>
-                                </Center> 
-                                : 
+                                </Center>
+                                :
                                 <Center h='35px'></Center>
                             }
                             <IconCell
@@ -97,13 +97,6 @@ export default function Driver_Comms(props) {
                         label='BMS CANBUS'
                     />
                 </Flex>
-            </VStack>
-            <VStack
-                flex='1'
-                align='stretch'
-                spacing={0}
-                borderLeft='1px'
-            >
             </VStack>
         </Flex>
     )
