@@ -1,0 +1,417 @@
+{
+    "speed": {
+        "UNIT": "mph",
+        "MIN": 0,
+        "MAX": 70
+    },
+    "driver_eStop": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "external_eStop": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "battery_eStop": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "crash": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "door": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "mcu_check": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "imd_status": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "state": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 256
+    },
+    "motor_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "driverIO_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "mainIO_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "cabin_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "cruise": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "left_turn": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "right_turn": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "hazards": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "headlights": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "mainIO_heartbeat": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "accelerator": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 5
+    },
+    "bus_5V": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "bus_12V": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "mainIO_current_in": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "driverIO_current_in": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "mps_enable": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "mppt_contactor": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "motor_controller_contactor": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "low_contactor": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "dcdc_valid": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "supplemental_valid": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "mppt_mode": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "mppt_current_out": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 7
+    },
+    "string1_temp": {
+        "UNIT": "degC",
+        "MIN": 20,
+        "MAX": 50
+    },
+    "string2_temp": {
+        "UNIT": "degC",
+        "MIN": 20,
+        "MAX": 50
+    },
+    "string3_temp": {
+        "UNIT": "degC",
+        "MIN": 20,
+        "MAX": 50
+    },
+    "pack_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 60
+    },
+    "pack_current": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "pack_voltage": {
+        "UNIT": "V",
+        "MIN": 69,
+        "MAX": 108
+    },
+    "cell_group1_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group2_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group3_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group4_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group5_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group6_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group7_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group8_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group9_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group10_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group11_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group12_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group13_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group14_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group15_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group16_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group17_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group18_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group19_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group20_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group21_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group22_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group23_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group24_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group25_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group26_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group27_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group28_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group29_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "cell_group30_voltage": {
+        "UNIT": "V",
+        "MIN": 6.4,
+        "MAX": 7.2
+    },
+    "soc": {
+        "UNIT": "%",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "soh": {
+        "UNIT": "Ah",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "pack_capacity": {
+        "UNIT": "Ah",
+        "MIN": 57,
+        "MAX": 57
+    },
+    "adaptive_total_capacity": {
+        "UNIT": "Ah",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "bps_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "fan_speed": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 6
+    },
+    "voltage_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "current_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "supply_power_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "memory_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "relay_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "bms_canbus_failure": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "pack_resistance": {
+        "UNIT": "mOhm",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "avg_cell_resistance": {
+        "UNIT": "mOhm",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "bms_input_voltage": {
+        "UNIT": "V",
+        "MIN": 12,
+        "MAX": 24
+    }
+}

@@ -26,7 +26,8 @@
     "start": "./node_modules/.bin/react-scripts start",
     "build": "./node_modules/.bin/react-scripts build",
     "test": "./node_modules/.bin/react-scripts test",
-    "eject": "./node_modules/.bin/react-scripts eject"
+    "eject": "./node_modules/.bin/react-scripts eject",
+    "update-data-constants": "node --experimental-json-modules ./src/CustomScripts/updateDataConstants.mjs"
   },
   "eslintConfig": {
     "extends": [
