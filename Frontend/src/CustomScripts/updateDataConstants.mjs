@@ -8,7 +8,7 @@ for(const property in DATA_FORMAT) {
     // If the current property is timestamp data, skip it
     if (property.startsWith("tstamp")) continue;
 
-    // Get list of info for current property
+    // Get list of info for current property/piece of data
     const [, , unit, min, max,] = DATA_FORMAT[property];
 
     // Add current property and its list of info/constants to JSON
@@ -19,4 +19,5 @@ for(const property in DATA_FORMAT) {
     };
 }
 
+// Write JSON to file
 writeFileSync("./src/data-constants.json", JSON.stringify(constantsJson, null, 4));
