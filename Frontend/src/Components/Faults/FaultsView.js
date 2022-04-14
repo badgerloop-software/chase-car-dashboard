@@ -245,9 +245,6 @@ export default function Faults(props) {
               :
               <Box h="70px" />
           }
-          {/*<Tooltip label={"Power warnings"} >
-              {true ? <Image src={PowerWarningImage}/> : <Box></Box>}
-          </Tooltip>*/}
           {(props.data?.soc[0] < 5) ?
               <Tooltip label={"Battery charge is low (<5%)"} >
                   <Image src={LowBatteryImage}/>
