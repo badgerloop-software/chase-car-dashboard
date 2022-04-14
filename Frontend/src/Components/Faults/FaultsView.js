@@ -15,7 +15,6 @@ import LowVoltageImage from "./Images/Low Voltage.png";
 import LowBatteryImage from "./Images/Low Battery.png";
 import MCUCheckImage from "./Images/MCU Check.png";
 import MPPTCurrentImage from "./Images/MPPT Current.png";
-import PowerWarningImage from "./Images/Power Warning.png";
 import BMSInputVoltageImage from "./Images/BMS Input Voltage.png";
 import PhysicalConnectionImage from "./Images/Physical Connection Lost.png";
 import WirelessCommsLostImage from "./Images/Wireless Comms Lost.png";
