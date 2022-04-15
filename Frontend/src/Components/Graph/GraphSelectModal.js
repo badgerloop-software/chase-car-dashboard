@@ -45,17 +45,17 @@ const dataKeysReducer = (state, { action, key }) => {
  * All the time lengths that are selectible by the slider
  */
 const timeLengths = [
-  { label: "5 seconds", seconds: 5 },
-  { label: "10 seconds", seconds: 10 },
-  { label: "20 seconds", seconds: 20 },
-  { label: "30 seconds", seconds: 30 },
-  { label: "45 seconds", seconds: 45 },
-  { label: "1 minute", seconds: 60 },
-  { label: "2 minutes", seconds: 120 },
-  { label: "3 minutes", seconds: 180 },
-  { label: "5 minutes", seconds: 300 },
-  { label: "7 minutes", seconds: 420 },
-  { label: "10 minutes", seconds: 600 },
+  { label: "5s", seconds: 5 },
+  { label: "10s", seconds: 10 },
+  { label: "20s", seconds: 20 },
+  { label: "30s", seconds: 30 },
+  { label: "45s", seconds: 45 },
+  { label: "1m", seconds: 60 },
+  { label: "2m", seconds: 120 },
+  { label: "3m", seconds: 180 },
+  { label: "5m", seconds: 300 },
+  { label: "7m", seconds: 420 },
+  { label: "10m", seconds: 600 },
 ];
 
 /**
@@ -124,7 +124,7 @@ function GraphModal(props) {
                 </SimpleGrid>
               </VStack>
             ))}
-            <VStack align="stretch">
+            <VStack align="stretch" pb={5}>
               <Heading size="md">History Length</Heading>
               <Slider
                 aria-label="Time history length slider"

@@ -49,62 +49,65 @@ ChartJS.register(
 );
 
 // the options fed into the graph object, save regardless of datasets
-const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  indexAxis: "x",
-  animation: false,
-  plugins: {
-    decimation: {
-      enabled: true,
-      algorithm: "min-max",
-    },
-    legend: {
-      display: false,
-    },
-  },
-  scales: {
-    x: {
-      type: "time",
-      reverse: true,
-      // ticks: {
-      //   source: "data",
-      // },
-      bounds: "data", // ticks?
-      time: {
-        unit: "second",
-        stepSize: 1,
-        tooltipFormat: "h:mm:ss a",
-        displayFormats: {
-          second: "h:mm:ss a",
-        },
+function getOptions(secondsRetained) {
+  const now = DateTime.now();
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: "x",
+    animation: false,
+    plugins: {
+      decimation: {
+        enabled: true,
+        algorithm: "min-max",
       },
-      min: DateTime.now().toISO(),
-      max: DateTime.now().plus(1000).toISO(),
+      legend: {
+        display: false,
+      },
     },
-    y: {
-      suggestedMin: 0,
+    scales: {
+      x: {
+        type: "time",
+        reverse: true,
+        // ticks: {
+        //   source: "data",
+        // },
+        bounds: "data", // ticks?
+        time: {
+          unit: "second",
+          stepSize: 1,
+          tooltipFormat: "h:mm:ss a",
+          displayFormats: {
+            second: "h:mm:ss a",
+          },
+        },
+        max: now.toISO(),
+        min: now.minus(secondsRetained * 1000).toISO(),
+      },
+      y: {
+        suggestedMin: 0,
+      },
     },
-  },
-  elements: {
-    line: {
-      borderCapStyle: "round",
-      borderJoinStyle: "round",
+    elements: {
+      line: {
+        borderCapStyle: "round",
+        borderJoinStyle: "round",
+      },
     },
-  },
-  interaction: {
-    mode: "nearest",
-    axis: "x",
-    intersect: false,
-  },
-  datasets: {
-    line: {
-      pointBackgroundColor: "transparent",
-      pointBorderColor: "transparent",
-      pointRadius: 10,
+    interaction: {
+      mode: "nearest",
+      axis: "x",
+      intersect: false,
     },
-  },
-};
+    datasets: {
+      line: {
+        pointBackgroundColor: "transparent",
+        pointBorderColor: "transparent",
+        pointRadius: 10,
+      },
+    },
+  };
+}
 
 /**
  * Creates a customizable graph
@@ -238,6 +241,7 @@ export default function CustomGraph(props) {
         isOpen={isDataSelectOpen}
         onClose={onDataSelectClose}
         initialDatasets={datasetKeys}
+        initialHistoryLength={historyLength}
         onSave={onSelectSave}
       />
     );
@@ -247,6 +251,7 @@ export default function CustomGraph(props) {
     datasetKeys,
     setDatasetKeys,
     setHistoryLength,
+    historyLength,
   ]);
   const graphNameModal = useMemo(
     () => (
@@ -264,7 +269,7 @@ export default function CustomGraph(props) {
     return (
       <Line
         data={{ datasets: formattedDatasets }}
-        options={options}
+        options={getOptions(historyLength)}
         parsing="false"
       />
     );
