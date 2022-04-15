@@ -202,7 +202,9 @@ export default function CustomGraph(props) {
     (name) => onSave(name, datasetKeys),
     [onSave, datasetKeys]
   );
-  const [historyLength, setHistoryLength] = useState(secondsRetained ?? 60);
+  const [historyLength, setHistoryLength] = useState(
+    secondsRetained ?? GraphData.defaultHistoryLength
+  );
 
   useEffect(() => {
     // console.log("yo, new datasets dropped:", datasetKeys);

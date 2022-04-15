@@ -621,5 +621,6 @@
         }
       ]
     }
-  ]
+  ],
+  "defaultHistoryLength": 60
 }

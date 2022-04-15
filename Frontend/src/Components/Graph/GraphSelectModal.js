@@ -129,7 +129,7 @@ function GraphModal(props) {
               <Slider
                 aria-label="Time history length slider"
                 defaultValue={timeLengths.findIndex(
-                  (time) => time.seconds === (initialHistoryLength ?? 60)
+                  (time) => time.seconds === initialHistoryLength
                 )}
                 min={0}
                 max={timeLengths.length - 1}
