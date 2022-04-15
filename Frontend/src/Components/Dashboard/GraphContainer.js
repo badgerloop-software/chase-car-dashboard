@@ -50,45 +50,30 @@ export default function GraphContainer({ queue, ...props }) {
       // if (graphTitles[idx] && graphTitles[idx] !== "Custom")
       //   onSave(graphTitles[idx], datasets);
 
+      // duplicate the graph titles
+      const copy = graphTitles.slice();
+
       // check for special values
       if (name?.length && name !== "Custom") {
         const oldIdx = graphTitles.indexOf(name);
 
         // found old position of graph, swap with new position
         if (oldIdx !== -1) {
-          // graphTitles[oldIdx] = graphTitles[idx];
-          // graphTitles[idx] = name;
-          // // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
-
-          // setGraphTitles(graphTitles);
-
           // see https://jsbench.me/snl20xx1g9/1 for reasoning behind this algorithm
-          const [minIdx, maxIdx] =
-            idx <= oldIdx ? [idx, oldIdx] : [oldIdx, idx];
-          const copySwapped = [
-            ...graphTitles.splice(0, minIdx),
-            graphTitles[maxIdx],
-            ...graphTitles.splice(minIdx + 1, maxIdx),
-            graphTitles[minIdx],
-            ...graphTitles.splice(maxIdx + 1),
-          ];
+          copy[oldIdx] = copy[idx];
+          copy[idx] = name;
+          // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
 
-          setGraphTitles(copySwapped);
+          setGraphTitles(copy);
           return;
         }
       }
 
       // default set: if new custom/empty graph or replacing new custom/empty graph
-      // graphTitles[idx] = name;
-      // // console.log(graphData, "[", idx, "] =", name, "=", graphData);
-      // setGraphTitles(graphTitles);
-
       // see https://jsbench.me/vsl20xqpso/1 for reasoning behind this algorithm
-      setGraphTitles([
-        ...graphTitles.splice(0, idx),
-        name,
-        ...graphTitles.splice(idx + 1),
-      ]);
+      copy[idx] = name;
+      // console.log(graphData, "[", idx, "] =", name, "=", graphData);
+      setGraphTitles(graphTitles);
     },
     [graphTitles, setGraphTitles]
   );
@@ -106,15 +91,15 @@ export default function GraphContainer({ queue, ...props }) {
    */
   const onSave = useCallback(
     (title, datasets, index) => {
+      // set new graph data assigned to this graph
       const tempData = Object.assign({}, customGraphData);
       tempData[title] = datasets;
       setCustomGraphData(tempData);
 
-      setGraphTitles([
-        ...graphTitles.slice(0, index),
-        title,
-        ...graphTitles.slice(index + 1),
-      ]);
+      // update the graph title
+      const tempTitles = graphTitles.slice();
+      tempTitles[index] = title;
+      setGraphTitles(tempTitles);
     },
     [setCustomGraphData, setGraphTitles, customGraphData, graphTitles]
   );

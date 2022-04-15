@@ -26,21 +26,25 @@ function reducer(currentState, newData) {
   return output;
 }
 
+/**
+ * Requests the API endpoint and returns the response
+ * @returns the JSON response from the API
+ */
+async function callBackendAPI() {
+  const response = await fetch("/api");
+  const body = await response.json();
+
+  if (response.status !== 200) {
+    console.error("api: error");
+    throw Error(body.message);
+  }
+
+  // console.log("body", body);
+  return body;
+}
+
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
-
-  async function callBackendAPI() {
-    const response = await fetch("/api");
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      console.error("api: error");
-      throw Error(body.message);
-    }
-
-    // console.log("body", body);
-    return body;
-  }
 
   const [queue, updateQueue] = useReducer(reducer, {});
 
