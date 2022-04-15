@@ -32,8 +32,8 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-luxon";
-import { useCallback, useMemo } from "react";
-import { useEffect, useState } from "react";
+import { DateTime } from "luxon";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
@@ -64,7 +64,7 @@ const options = {
     },
   },
   scales: {
-    xAxis: {
+    x: {
       type: "time",
       reverse: true,
       // ticks: {
@@ -79,8 +79,10 @@ const options = {
           second: "h:mm:ss a",
         },
       },
+      min: DateTime.now().toISO(),
+      max: DateTime.now().plus(1000).toISO(),
     },
-    yAxis: {
+    y: {
       suggestedMin: 0,
     },
   },
@@ -89,6 +91,11 @@ const options = {
       borderCapStyle: "round",
       borderJoinStyle: "round",
     },
+  },
+  interaction: {
+    mode: "nearest",
+    axis: "x",
+    intersect: false,
   },
   datasets: {
     line: {
@@ -108,7 +115,8 @@ const options = {
  * @param {{category: string, values: Dataset[]}[]} props.categories the color and other associated data for each dataset, organized in an object
  * @param {Dataset[]} props.allDatasets a list of all datasets, complete with ID and color information
  * @param {string[]} props.initialDatasets a list of the IDs of the initial datasets
- * @param {any} props.packed the queue of data, packed in Chart.js format, coming from the solar car
+ * @param {any} props.packedData the queue of data, packed in Chart.js format, coming from the solar car
+ * @param {number} props.secondsRetained the number of seconds to retain a point on this grpah
  * @returns
  */
 export default function CustomGraph(props) {
@@ -120,6 +128,7 @@ export default function CustomGraph(props) {
     packedData,
     initialDatasets,
     allDatasets,
+    secondsRetained,
     ...stackProps
   } = props;
 
@@ -169,6 +178,7 @@ export default function CustomGraph(props) {
     (name) => onSave(name, datasetKeys),
     [onSave, datasetKeys]
   );
+  const [historyLength, setHistoryLength] = useState(secondsRetained ?? 60);
 
   useEffect(() => {
     // console.log("yo, new datasets dropped:", datasetKeys);
@@ -218,17 +228,26 @@ export default function CustomGraph(props) {
   //   setDatasets(newDatasets);
   // };
 
-  const graphSelectModal = useMemo(
-    () => (
+  const graphSelectModal = useMemo(() => {
+    const onSelectSave = (newDatasetKeys, newHistoryLength) => {
+      setDatasetKeys(newDatasetKeys);
+      setHistoryLength(newHistoryLength);
+    };
+    return (
       <GraphSelectModal
         isOpen={isDataSelectOpen}
         onClose={onDataSelectClose}
         initialDatasets={datasetKeys}
-        onSave={setDatasetKeys}
+        onSave={onSelectSave}
       />
-    ),
-    [isDataSelectOpen, onDataSelectClose, datasetKeys, setDatasetKeys]
-  );
+    );
+  }, [
+    isDataSelectOpen,
+    onDataSelectClose,
+    datasetKeys,
+    setDatasetKeys,
+    setHistoryLength,
+  ]);
   const graphNameModal = useMemo(
     () => (
       <GraphNameModal
@@ -240,6 +259,8 @@ export default function CustomGraph(props) {
     [isNameModalOpen, onNameModalClose, onNameSave]
   );
   const graph = useMemo(() => {
+    // const min = DateTime.now().minus(historyLength * 1_000);
+
     return (
       <Line
         data={{ datasets: formattedDatasets }}
@@ -247,7 +268,7 @@ export default function CustomGraph(props) {
         parsing="false"
       />
     );
-  }, [formattedDatasets]);
+  }, [formattedDatasets, historyLength]);
 
   return (
     <>
