@@ -20,7 +20,7 @@
         {
           "key": "cabin_temp",
           "name": "Cabin Temperature",
-          "unit": "degC",
+          "unit": "°C",
           "min": 0,
           "max": 100
         },
@@ -128,7 +128,7 @@
         {
           "key": "pack_temp",
           "name": "Pack Temperature",
-          "unit": "degC",
+          "unit": "°C",
           "min": 0,
           "max": 60
         },
@@ -469,7 +469,7 @@
         {
           "key": "motor_temp",
           "name": "Motor Temperature",
-          "unit": "degC",
+          "unit": "°C",
           "min": 0,
           "max": 100
         }
@@ -481,14 +481,14 @@
         {
           "key": "driverIO_temp",
           "name": "Driver IO Temperature",
-          "unit": "degC",
+          "unit": "°C",
           "min": 0,
           "max": 100
         },
         {
           "key": "mainIO_temp",
           "name": "Main IO Temperature",
-          "unit": "degC",
+          "unit": "°C",
           "min": 0,
           "max": 100
         },
@@ -532,6 +532,13 @@
     {
       "category": "MPS",
       "values": [
+        {
+          "key": "mps_enable",
+          "name": "mps_enable",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
         {
           "key": "mppt_contactor",
           "name": "mppt_contactor",
@@ -594,21 +601,21 @@
         {
           "key": "string1_temp",
           "name": "String 1 Temperature",
-          "unit": "degC",
+          "unit": "°C",
           "min": 20,
           "max": 50
         },
         {
           "key": "string2_temp",
           "name": "String 2 Temperature",
-          "unit": "degC",
+          "unit": "°C",
           "min": 20,
           "max": 50
         },
         {
           "key": "string3_temp",
           "name": "String 3 Temperature",
-          "unit": "degC",
+          "unit": "°C",
           "min": 20,
           "max": 50
         }

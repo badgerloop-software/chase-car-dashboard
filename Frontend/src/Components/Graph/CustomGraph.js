@@ -37,6 +37,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
+import GraphData from "./graph-data.json";
 
 ChartJS.register(
   LinearScale,
@@ -47,6 +48,16 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+/**
+ * Stores all the units in the graph-data json file as key: value pairs
+ */
+const units = {};
+for (const category of GraphData.categories) {
+  for (const dataset of category.values) {
+    units[dataset.key] = dataset.unit;
+  }
+}
 
 // the options fed into the graph object, save regardless of datasets
 function getOptions(secondsRetained) {
@@ -63,6 +74,16 @@ function getOptions(secondsRetained) {
       },
       legend: {
         display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: (item) => {
+            // console.log(item);
+            return `${item.dataset.label}: ${item.formattedValue}${
+              units[item.dataset.key]
+            }`;
+          },
+        },
       },
     },
     scales: {
