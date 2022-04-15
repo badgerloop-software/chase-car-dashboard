@@ -1,5 +1,5 @@
 import { Select, useConst, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import CustomGraph from "../Graph/CustomGraph";
 import GraphData from "../Graph/graph-data.json";
 
@@ -44,30 +44,54 @@ export default function GraphContainer({ queue, ...props }) {
    * @param {string} name the name of the graph to show
    * @param {number} idx the index of the new place the graph should be
    */
-  function showGraph(name, idx) {
-    // save graph in old position, if needed
-    // if (graphTitles[idx] && graphTitles[idx] !== "Custom")
-    //   onSave(graphTitles[idx], datasets);
+  const showGraph = useCallback(
+    (name, idx) => {
+      // save graph in old position, if needed
+      // if (graphTitles[idx] && graphTitles[idx] !== "Custom")
+      //   onSave(graphTitles[idx], datasets);
 
-    // check for special values
-    if (name?.length && name !== "Custom") {
-      const oldIdx = graphTitles.indexOf(name);
-      // found old position of graph, swap with new position
-      if (oldIdx !== -1) {
-        graphTitles[oldIdx] = graphTitles[idx];
-        graphTitles[idx] = name;
-        // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
+      // check for special values
+      if (name?.length && name !== "Custom") {
+        const oldIdx = graphTitles.indexOf(name);
 
-        setGraphTitles(graphTitles);
-        return;
+        // found old position of graph, swap with new position
+        if (oldIdx !== -1) {
+          // graphTitles[oldIdx] = graphTitles[idx];
+          // graphTitles[idx] = name;
+          // // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
+
+          // setGraphTitles(graphTitles);
+
+          // see https://jsbench.me/snl20xx1g9/1 for reasoning behind this algorithm
+          const [minIdx, maxIdx] =
+            idx <= oldIdx ? [idx, oldIdx] : [oldIdx, idx];
+          const copySwapped = [
+            ...graphTitles.splice(0, minIdx),
+            graphTitles[maxIdx],
+            ...graphTitles.splice(minIdx + 1, maxIdx),
+            graphTitles[minIdx],
+            ...graphTitles.splice(maxIdx + 1),
+          ];
+
+          setGraphTitles(copySwapped);
+          return;
+        }
       }
-    }
 
-    // default set: if new custom/empty graph or replacing new custom/empty graph
-    graphTitles[idx] = name;
-    // console.log(graphData, "[", idx, "] =", name, "=", graphData);
-    setGraphTitles(graphTitles);
-  }
+      // default set: if new custom/empty graph or replacing new custom/empty graph
+      // graphTitles[idx] = name;
+      // // console.log(graphData, "[", idx, "] =", name, "=", graphData);
+      // setGraphTitles(graphTitles);
+
+      // see https://jsbench.me/vsl20xqpso/1 for reasoning behind this algorithm
+      setGraphTitles([
+        ...graphTitles.splice(0, idx),
+        name,
+        ...graphTitles.splice(idx + 1),
+      ]);
+    },
+    [graphTitles, setGraphTitles]
+  );
 
   //------------------------- Saving custom graphs ----------------------------
   const [customGraphData, setCustomGraphData] = useState({});
@@ -80,26 +104,38 @@ export default function GraphContainer({ queue, ...props }) {
    * @param {string[]} datasets collection of datasets that is associated with this graph
    * @param {number} index the index of the graph that's being saved
    */
-  function onSave(title, datasets, index) {
-    customGraphData[title] = datasets;
-    setCustomGraphData(customGraphData);
+  const onSave = useCallback(
+    (title, datasets, index) => {
+      const tempData = Object.assign({}, customGraphData);
+      tempData[title] = datasets;
+      setCustomGraphData(tempData);
 
-    graphTitles[index] = title;
-    setGraphTitles(graphTitles);
-  }
+      setGraphTitles([
+        ...graphTitles.slice(0, index),
+        title,
+        ...graphTitles.slice(index + 1),
+      ]);
+    },
+    [setCustomGraphData, setGraphTitles, customGraphData, graphTitles]
+  );
 
   //----------------- Calculate all data that can be shown --------------------
-  const packedData = allDatasets.map((value) => {
-    const output = {
-      key: value.key,
-      label: value.name,
-      data: queue[value.key],
-      borderColor: value.color,
-      backgroundColor: value.color + "b3",
-    };
-    // console.log("packing:", output);
-    return output;
-  });
+  const packedData = useMemo(() => {
+    // console.log("memo invoked");
+    return allDatasets.map((value) => {
+      const output = {
+        key: value.key,
+        label: value.name,
+        data: queue[value.key],
+        borderColor: value.color,
+        backgroundColor: value.color + "b3",
+      };
+      // console.log("packing:", output);
+      return output;
+    });
+  }, [allDatasets, queue]);
+
+  // console.log("graph container propaganda");
 
   return (
     <VStack align="stretch" spacing={0} {...props}>
