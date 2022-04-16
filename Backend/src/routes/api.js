@@ -14,40 +14,65 @@ ROUTER.get("/api", (req, res) => {
 
 export default ROUTER;
 
-//--------------TCP-------------------------
+//----------------------------------------------------- TCP ----------------------------------------------------------
 
-import { Socket } from "net";
+import net from "net";
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
-var client = new Socket();
 let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
                    // data) to solarCarData
 
-// Initiate connection
-client.connect(CAR_PORT, CAR_SERVER, function () {
-  frontendData.solar_car_connection = true;
-  console.log(`Connected to car server: ${client.remoteAddress}:${CAR_PORT}`);
-});
+/**
+ * Creates a connection with the TCP server at port CAR_PORT and address CAR_SERVER. Then, sets listeners for connect,
+ * data, close, and error events. In the event of an error, the client will attempt to re-open the socket at
+ * regular intervals.
+ */
+function openSocket() {
+  // Establish connection with server
+  var client = net.connect(CAR_PORT, CAR_SERVER); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
+  client.setKeepAlive(true);
 
-// Data received listener: Log and unpack data when it's received
-client.on("data", function (data) {
-  console.log(data);
-  unpackData(data);
-  frontendData.solar_car_connection = true;
-});
+  // Connection established listener
+  client.on("connect", () => {
+    console.log(`Connected to car server: ${client.remoteAddress}:${CAR_PORT}`);
+  });
 
-// Socket closed listener: Log when connection is closed
-client.on("close", function () {
-  frontendData.solar_car_connection = false;
-  console.log(`Connection to car server (${CAR_PORT}) is closed`);
-});
+  // Data received listener
+  client.on("data", (data) => {
+    console.log(data);
+    unpackData(data);
+  });
 
-// Error listener: Destroy the socket and log the error
-client.on("error", (err) => {
-  frontendData.solar_car_connection = false;
-  console.log("Client errored out:", err);
-  client.destroy();
-});
+  // Socket closed listener
+  client.on("close", function () {
+    // Pull the most recent solar_car_connection values to false if connection was previously established
+    if(solarCarData.solar_car_connection.length > 0) {
+      solarCarData.solar_car_connection[0] = false;
+      frontendData.solar_car_connection[0] = false;
+    }
+
+    console.log(`Connection to car server (${CAR_PORT}) is closed`);
+  });
+
+  // Socket error listener
+  client.on('error', (err) => {
+    // Log error
+    console.log("Client errored out:", err);
+
+    // Kill socket
+    client.destroy();
+    client.unref();
+
+    // Pull the most recent solar_car_connection values to false if connection was previously established
+    if(solarCarData.solar_car_connection.length > 0) {
+      solarCarData.solar_car_connection[0] = false;
+      frontendData.solar_car_connection[0] = false;
+    }
+
+    // Attempt to re-open socket
+    setTimeout(openSocket, 1000);
+  });
+}
 
 /**
  * Unpacks a Buffer and updates the data to be passed to the front-end
@@ -58,14 +83,21 @@ function unpackData(data) {
   let buffOffset = 0; // Byte offset for the buffer array
   const xAxisCap = 25; // The max number of data points to have in each array at one time
   let timestamps = solarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
+  // Array values indicate the status of the connection to the solar car. These will always be true when unpacking data
+  let solar_car_connection = solarCarData["solar_car_connection"];
 
   // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
   timestamps.unshift(timestamp);
   timestamp ++;
-  if(timestamps.length > xAxisCap) {
+  if(timestamps.length > xAxisCap)
     timestamps.pop();
-  }
   solarCarData["timestamps"] = timestamps;
+
+  // Repeat with solar_car_connection
+  solar_car_connection.unshift(true);
+  if(solar_car_connection.length > xAxisCap)
+    solar_car_connection.pop();
+  solarCarData["solar_car_connection"] = solar_car_connection;
 
   for (const property in DATA_FORMAT) {
     let dataArray = []; // Holds the array of data specified by property that will be put in solarCarData
@@ -113,3 +145,6 @@ function unpackData(data) {
   // Update the data to be passed to the front-end
   frontendData = solarCarData;
 }
+
+// Create new socket
+openSocket();

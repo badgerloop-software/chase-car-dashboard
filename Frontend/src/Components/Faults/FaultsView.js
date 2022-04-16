@@ -1,4 +1,4 @@
-import { Box, Tooltip, Image, Text /*TODO Remove*/, SimpleGrid } from "@chakra-ui/react";
+import { Box, Tooltip, Image, SimpleGrid } from "@chakra-ui/react";
 import MPPTContactorImage from "./Images/MPPT Contactor.png";
 import LowContactorImage from "./Images/Low Contactor.png";
 import MotorControllerContactorImage from "./Images/Motor Controller Contactor.png";
@@ -339,7 +339,7 @@ export default function Faults(props) {
                   :
                   <Box h="70px" />
           }
-          {!(props.data?.solar_car_connection ?? false) ? // TODO
+          {!(props.data?.solar_car_connection[0] ?? false) ?
               <Tooltip label={"Lost communication with the solar car"} >
                   <Image src={WirelessCommsLostImage} />
               </Tooltip>
