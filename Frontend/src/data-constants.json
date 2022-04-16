@@ -1,7 +1,7 @@
 {
     "speed": {
         "UNIT": "mph",
-        "MIN": 0,
+        "MIN": 45,
         "MAX": 70
     },
     "driver_eStop": {
@@ -46,23 +46,23 @@
     },
     "motor_temp": {
         "UNIT": "degC",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "driverIO_temp": {
         "UNIT": "degC",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "mainIO_temp": {
         "UNIT": "degC",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "cabin_temp": {
         "UNIT": "degC",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "cruise": {
         "UNIT": "",
@@ -101,23 +101,23 @@
     },
     "bus_5V": {
         "UNIT": "V",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "bus_12V": {
         "UNIT": "V",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "mainIO_current_in": {
         "UNIT": "A",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "driverIO_current_in": {
         "UNIT": "A",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "mps_enable": {
         "UNIT": "",
@@ -156,8 +156,8 @@
     },
     "mppt_current_out": {
         "UNIT": "A",
-        "MIN": 0,
-        "MAX": 7
+        "MIN": 45,
+        "MAX": 55
     },
     "string1_temp": {
         "UNIT": "degC",
@@ -176,18 +176,18 @@
     },
     "pack_temp": {
         "UNIT": "degC",
-        "MIN": 0,
-        "MAX": 60
+        "MIN": 50,
+        "MAX": 55
     },
     "pack_current": {
         "UNIT": "A",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "pack_voltage": {
         "UNIT": "V",
-        "MIN": 69,
-        "MAX": 108
+        "MIN": 45,
+        "MAX": 55
     },
     "cell_group1_voltage": {
         "UNIT": "V",
@@ -341,13 +341,13 @@
     },
     "soc": {
         "UNIT": "%",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "soh": {
         "UNIT": "Ah",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "pack_capacity": {
         "UNIT": "Ah",
@@ -356,8 +356,8 @@
     },
     "adaptive_total_capacity": {
         "UNIT": "Ah",
-        "MIN": 0,
-        "MAX": 100
+        "MIN": 45,
+        "MAX": 55
     },
     "bps_fault": {
         "UNIT": "",
@@ -402,16 +402,16 @@
     "pack_resistance": {
         "UNIT": "mOhm",
         "MIN": 0,
-        "MAX": 100
+        "MAX": 55
     },
     "avg_cell_resistance": {
         "UNIT": "mOhm",
         "MIN": 0,
-        "MAX": 100
+        "MAX": 55
     },
     "bms_input_voltage": {
         "UNIT": "V",
-        "MIN": 12,
-        "MAX": 24
+        "MIN": 45,
+        "MAX": 55
     }
 }
