@@ -73,7 +73,7 @@ export default function GraphContainer({ queue, ...props }) {
       // see https://jsbench.me/vsl20xqpso/1 for reasoning behind this algorithm
       copy[idx] = name;
       // console.log(graphData, "[", idx, "] =", name, "=", graphData);
-      setGraphTitles(graphTitles);
+      setGraphTitles(copy);
     },
     [graphTitles, setGraphTitles]
   );
