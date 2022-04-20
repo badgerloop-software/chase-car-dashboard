@@ -22,6 +22,20 @@ import HighTemperatureImage from "./Images/High Temperature.png";
 import CONSTANTS from "../../data-constants.json";
 
 export default function Faults(props) {
+
+    const _formFaultString = (strArr, singularEndStr, pluralEndStr) => {
+        if(strArr.length > 0) {
+            if(strArr.length > 2) {
+                return strArr[0] + ", " + strArr[1].toLowerCase() + ", and " + strArr[2].toLowerCase() + pluralEndStr;
+            } else if(strArr.length > 1) {
+                return strArr[0] + " and " + strArr[1].toLowerCase() + pluralEndStr;
+            } else {
+                return strArr[0] + singularEndStr;
+            }
+        }
+        return "";
+    }
+
     const getEStopString = () => {
         let eStopStrings = [];
 
@@ -35,16 +49,7 @@ export default function Faults(props) {
             eStopStrings.push("External");
         }
 
-        if(eStopStrings.length > 0) {
-            if(eStopStrings.length > 2) {
-                return eStopStrings[0] + ", " + eStopStrings[1].toLowerCase() + ", and " + eStopStrings[2].toLowerCase() + " E-stops were pressed";
-            } else if(eStopStrings.length > 1) {
-                return eStopStrings[0] + " and " + eStopStrings[1].toLowerCase() + " E-stops were pressed";
-            } else {
-                return eStopStrings[0] + " E-stop was pressed";
-            }
-        }
-        return "";
+        return _formFaultString(eStopStrings, " E-stop was pressed", " E-stops were pressed");
     }
 
     const checkBMSFailsafes = () => {
@@ -72,16 +77,7 @@ export default function Faults(props) {
             failsafeStrings.push("Relay");
         }
 
-        if(failsafeStrings.length > 0) {
-            if(failsafeStrings.length > 2) {
-                return failsafeStrings[0] + ", " + failsafeStrings[1].toLowerCase() + ", and " + failsafeStrings[2].toLowerCase() + " failsafes";
-            } else if(failsafeStrings.length > 1) {
-                return failsafeStrings[0] + " and " + failsafeStrings[1].toLowerCase() + " failsafes";
-            } else {
-                return failsafeStrings[0] + " failsafe";
-            }
-        }
-        return "";
+        return _formFaultString(failsafeStrings, " fialsafe", " failsafes");
     }
 
     const checkTemps = () => {
@@ -153,39 +149,8 @@ export default function Faults(props) {
         let highTempString = "";
         let lowTempString = "";
 
-        if(highTempStrings.length > 0) {
-            if(highTempStrings.length == 1) {
-                highTempString = highTempStrings[0] + " temp is high";
-            } else if(highTempStrings.length == 2) {
-                highTempString = highTempStrings[0] + " and " + highTempStrings[1] + " temps are high";
-            } else {
-                highTempString = highTempStrings[0];
-                for(let i=1; i < highTempStrings.length - 1; i++) {
-                    highTempString += ", " + highTempStrings[i];
-                }
-                highTempString += ", and " + highTempStrings[highTempStrings.length - 1] + " temps are high";
-            }
-        }
-        if(lowTempStrings.length > 0) {
-            /* TODO
-            if(highTempStrings.length > 0) {
-                lowTempString = ". ";
-            }*/
-
-            if(lowTempStrings.length == 1) {
-                lowTempString += lowTempStrings[0] + " temp is low";
-            } else if(lowTempStrings.length == 2) {
-                lowTempString += lowTempStrings[0] + " and " + lowTempStrings[1] + " temps are low";
-            } else {
-                lowTempString += lowTempStrings[0];
-                for(let i=1; i < lowTempStrings.length - 1; i++) {
-                    lowTempString += ", " + lowTempStrings[i];
-                }
-                lowTempString += ", and " + lowTempStrings[lowTempStrings.length - 1] + " temps are low";
-            }
-        }
-
-        // TODO Remove the "is/are high" and "is/are low" at the end of the strings
+        highTempString = _formFaultString(highTempStrings, " temp", " temps");
+        lowTempString = _formFaultString(lowTempStrings, " temp", " temps");
 
         return <>
                 {(highTempString != "") ? <>High: {highTempString}<br/></> : ""}
