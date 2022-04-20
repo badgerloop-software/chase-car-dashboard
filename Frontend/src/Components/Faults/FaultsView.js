@@ -80,8 +80,12 @@ export default function Faults(props) {
         return _formFaultString(failsafeStrings, " fialsafe", " failsafes");
     }
 
+    /**
+     * Checks all of the temperatures against their nominal minimum and maximum values.
+     *
+     * @returns {boolean} true if any of the temperatures are outside or their nominal ranges; false otherwise
+     */
     const checkTemps = () => {
-        // TODO Go back through these and see which ones are only concerned with max temperatures (e.g. pack temp is only concerned about temp>60)
         return (props.data?.motor_temp[0] > CONSTANTS.motor_temp.MAX) ||
                (props.data?.motor_temp[0] < CONSTANTS.motor_temp.MIN) ||
                (props.data?.driverIO_temp[0] > CONSTANTS.driverIO_temp.MAX) ||
@@ -96,17 +100,31 @@ export default function Faults(props) {
                (props.data?.string2_temp[0] < CONSTANTS.string2_temp.MIN) ||
                (props.data?.string3_temp[0] > CONSTANTS.string3_temp.MAX) ||
                (props.data?.string3_temp[0] < CONSTANTS.string3_temp.MIN) ||
-               (props.data?.pack_temp[0] > CONSTANTS.pack_temp.MAX) ||
-               (props.data?.pack_temp[0] < CONSTANTS.pack_temp.MIN);
+               (props.data?.pack_temp[0] > CONSTANTS.pack_temp.MAX);
+    }
+
+    
+    const _updateTempArrays = (lowArray, highArray, dataLabel, uppercaseLabel, lowercaseLabel) => {
+        if(props.data[dataLabel][0] > CONSTANTS[dataLabel].MAX) {
+            highArray.push((highArray.length == 0) ? uppercaseLabel : lowercaseLabel);
+        } else if(props.data[dataLabel][0] < CONSTANTS[dataLabel].MIN) {
+            lowArray.push((lowArray.length == 0) ? uppercaseLabel : lowercaseLabel);
+        }
     }
 
     const getTempString = () => {
         let highTempStrings = [];
         let lowTempStrings = [];
 
-        // TODO A lot of repetitive stuff. See if I can just loop through these
-        //      I could probably make a private function and pass the data, min, max, uppercase string, and lowercase string
-        // TODO Go back through these and see which ones are only concerned with max temperatures (e.g. pack temp is only concerned about temp>60)
+        _updateTempArrays(lowTempStrings, highTempStrings, "motor_temp", "Motor", "motor");
+        _updateTempArrays(lowTempStrings, highTempStrings, "driverIO_temp", "Driver IO", "driver IO");
+        _updateTempArrays(lowTempStrings, highTempStrings, "mainIO_temp", "Main IO", "main IO");
+        _updateTempArrays(lowTempStrings, highTempStrings, "cabin_temp", "Cabin", "cabin");
+        _updateTempArrays(lowTempStrings, highTempStrings, "string1_temp", "Cell string 1", "cell string 1");
+        _updateTempArrays(lowTempStrings, highTempStrings, "string2_temp", "Cell string 2", "cell string 2");
+        _updateTempArrays(lowTempStrings, highTempStrings, "string3_temp", "Cell string 3", "cell string 3");
+
+        /* TODO
         if(props.data?.motor_temp[0] > CONSTANTS.motor_temp.MAX) {
             highTempStrings.push("Motor");
         } else if(props.data?.motor_temp[0] < CONSTANTS.motor_temp.MIN) {
@@ -141,7 +159,7 @@ export default function Faults(props) {
             highTempStrings.push((highTempStrings.length == 0) ? "Cell string 3" : "cell string 3");
         } else if(props.data?.string3_temp[0] < CONSTANTS.string3_temp.MIN) {
             lowTempStrings.push((lowTempStrings.length == 0) ? "Cell string 3" : "cell string 3");
-        }
+        }*/
         if(props.data?.pack_temp[0] > CONSTANTS.pack_temp.MAX) {
             highTempStrings.push((highTempStrings.length == 0) ? "Battery pack" : "battery pack");
         }
