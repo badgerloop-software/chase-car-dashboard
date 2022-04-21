@@ -22,7 +22,19 @@ import HighTemperatureImage from "./Images/High Temperature.png";
 import CONSTANTS from "../../data-constants.json";
 
 export default function Faults(props) {
-
+    /**
+     * Takes in an array of strings pertaining to a certain type of fault (like an array of devices with temperatures
+     * outside of their nominal ranges) and converts it into a formatted string listing all of the array elements as
+     * they pertain to the particular type of fault
+     *
+     * @param strArr Array of specific troublesome devices/failsafes/whatever went wrong
+     * @param singularEndStr String to follow a single issue (like " was pressed"), just to give some color to the warning
+     * @param pluralEndStr String to follow multiple issues (like " were pressed"). Again, just to give some color to
+     *                     the warning, but this time it's a bigger deal
+     * @returns {string|*} A formatted string listing all of the specific issues/items pertaining to a fault. An empty
+     *                     string is returned if this list is empty
+     * @private
+     */
     const _formFaultString = (strArr, singularEndStr, pluralEndStr) => {
         if(strArr.length > 0) {
             if(strArr.length > 2) {
@@ -36,6 +48,11 @@ export default function Faults(props) {
         return "";
     }
 
+    /**
+     * Creates a string of all E-stops that have been triggered
+     *
+     * @returns {string|*} A string listing all of the E-stops that are currently triggered
+     */
     const getEStopString = () => {
         let eStopStrings = [];
 
@@ -52,12 +69,22 @@ export default function Faults(props) {
         return _formFaultString(eStopStrings, " E-stop was pressed", " E-stops were pressed");
     }
 
+    /**
+     * Checks all of the BMS failsafe statuses.
+     *
+     * @returns {boolean} true if any of the BMS failsafe statuses are true; false otherwise
+     */
     const checkBMSFailsafes = () => {
         return (props.data?.voltage_failsafe[0]) || (props.data?.current_failsafe[0]) ||
                (props.data?.supply_power_failsafe[0]) || (props.data?.memory_failsafe[0]) ||
                (props.data?.relay_failsafe[0]);
     }
 
+    /**
+     * Creates a string of all BMS failsafes that have been triggered
+     *
+     * @returns {string|*} A string listing all of the BMS failsafes that are currently triggered
+     */
     const getBMSFailsafeString = () => {
         let failsafeStrings = [];
 
@@ -103,7 +130,28 @@ export default function Faults(props) {
                (props.data?.pack_temp[0] > CONSTANTS.pack_temp.MAX);
     }
 
-    
+    /**
+     * A function for which more time was spent working to get a reference to the data format file in the method header
+     * than was actually spent making function. In the end, I gave up on linking to the actual file, so I just linked
+     * to the sc1-data-format repo on GitHub (see the link in the dataLabel parameter description). If you know how to
+     * link to the file so that it opens in the IDE when you click on it in the method header, or if you know that it
+     * isn't possible, DM on teams. My name is listed in the "Author" section of this method header.
+     * <p>This function adds the provided uppercaseLabel/lowercaseLabel to lowArray or highArray if the value specified
+     * by dataLabel is below its nominal minimum value or above its nominal maximum value, respectively. If no other
+     * elements have been added to the array, uppercaseLabel is added; otherwise, lowercaseLabel is added.</p>
+     *
+     * @param lowArray Array of devices/items with low temperatures
+     * @param highArray Same thing but with high temperatures
+     * @param dataLabel Name of the specific temperature/piece of data (found in the
+     *                  <a href="https://github.com/badgerloop-software/sc1-data-format/blob/main/format.json">data format</a>)
+     *                  whose value is being checked
+     * @param uppercaseLabel A more user-friendly label for the device/item whose temperature might be high or low.
+     *                       Starts with an uppercase letter (in case this is the first item in one of the lists)
+     * @param lowercaseLabel A more user-friendly label for the device/item whose temperature might be high or low.
+     *                       Starts with a lowercase letter (in case this is not the first item in one of the lists)
+     * @author James Vollmer
+     * @private
+     */
     const _updateTempArrays = (lowArray, highArray, dataLabel, uppercaseLabel, lowercaseLabel) => {
         if(props.data[dataLabel][0] > CONSTANTS[dataLabel].MAX) {
             highArray.push((highArray.length == 0) ? uppercaseLabel : lowercaseLabel);
@@ -112,6 +160,14 @@ export default function Faults(props) {
         }
     }
 
+    /**
+     * Creates and returns lists containing items that are overtemperature or undertemperature.
+     *
+     * @returns {JSX.Element} Two lines or text, each with a string listing temperature-related issues. On the top line,
+     *                        there is a string listing all items with high temperatures. On the bottom line, there is
+     *                        a string listing all item with low temperatures. If either list is empty, that line of
+     *                        text will not be included.
+     */
     const getTempString = () => {
         let highTempStrings = [];
         let lowTempStrings = [];
@@ -164,16 +220,13 @@ export default function Faults(props) {
             highTempStrings.push((highTempStrings.length == 0) ? "Battery pack" : "battery pack");
         }
 
-        let highTempString = "";
-        let lowTempString = "";
-
-        highTempString = _formFaultString(highTempStrings, " temp", " temps");
-        lowTempString = _formFaultString(lowTempStrings, " temp", " temps");
+        const highTempString = _formFaultString(highTempStrings, " temp", " temps");
+        const lowTempString = _formFaultString(lowTempStrings, " temp", " temps");
 
         return <>
-                {(highTempString != "") ? <>High: {highTempString}<br/></> : ""}
-                {(lowTempString != "") ? "Low: " + lowTempString : ""}
-            </>;
+                 {(highTempString != "") ? <>High: {highTempString}<br/></> : ""}
+                 {(lowTempString != "") ? "Low: " + lowTempString : ""}
+               </>;
     }
 
   return (
