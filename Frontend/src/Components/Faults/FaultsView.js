@@ -33,7 +33,7 @@ export default function Faults(props) {
      * @private
      */
     const _checkBooleanData = (dataLabel) => {
-        return (props.data[dataLabel][0] ?? CONSTANTS[dataLabel].MIN) != CONSTANTS[dataLabel].MIN;
+        return (props.data?.[dataLabel][0] ?? CONSTANTS[dataLabel].MIN) != CONSTANTS[dataLabel].MIN;
     }
 
     /**
@@ -180,10 +180,10 @@ export default function Faults(props) {
      * @private
      */
     const _updateTempArrays = (lowArray, highArray, dataLabel, uppercaseLabel, lowercaseLabel) => {
-        if(props.data[dataLabel][0] > CONSTANTS[dataLabel].MAX) {
+        if(props.data?.[dataLabel][0] > CONSTANTS[dataLabel].MAX) {
             // Item is overtemperature. If highArray is empty, add uppercaseLabel; otherwise, add lowercaseLabel
             highArray.push((highArray.length == 0) ? uppercaseLabel : lowercaseLabel);
-        } else if(props.data[dataLabel][0] < CONSTANTS[dataLabel].MIN) {
+        } else if(props.data?.[dataLabel][0] < CONSTANTS[dataLabel].MIN) {
             // Item is undertemperature. If lowArray is empty, add uppercaseLabel; otherwise, add lowercaseLabel
             lowArray.push((lowArray.length == 0) ? uppercaseLabel : lowercaseLabel);
         }
