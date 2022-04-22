@@ -22,6 +22,9 @@ import HighTemperatureImage from "./Images/High Temperature.png";
 import CONSTANTS from "../../data-constants.json";
 
 export default function Faults(props) {
+    const fitType="scale-down";
+    const imageHeight="7vh";
+
     /**
      * Checks the boolean value specified by dataLabel against its nominal value. Returns true if the boolean value
      * indicates a fault (i.e. if the value is not equal to its nominal value).
@@ -234,160 +237,160 @@ export default function Faults(props) {
       >
           {_checkBooleanData("mppt_contactor") ?
               <Tooltip label={"MPPT contactor is open"} >
-                  <Image src={MPPTContactorImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={MPPTContactorImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {_checkBooleanData("low_contactor") ?
               <Tooltip label={"Low contactor is open"} >
-                   <Image src={LowContactorImage}/>
+                   <Image fit={fitType} boxSize={imageHeight} src={LowContactorImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {_checkBooleanData("motor_controller_contactor") ?
               <Tooltip label={"Motor controller contactor is open"} >
-                  <Image src={MotorControllerContactorImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={MotorControllerContactorImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {(_checkBooleanData("battery_eStop") || _checkBooleanData("driver_eStop") ||
             _checkBooleanData("external_eStop")) ?
               <Tooltip label={getEStopString()} >
-                  <Image src={EStopImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={EStopImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {_checkBooleanData("door") ?
               <Tooltip label={"Door is open"} >
-                  <Image src={DoorImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={DoorImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {_checkBooleanData("crash") ?
               <Tooltip label={"Solar car has crashed"} >
-                  <Image src={CrashImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={CrashImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {_checkBooleanData("mcu_check") ?
               <Tooltip label={"MCU check failed"} >
-                  <Image src={MCUCheckImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={MCUCheckImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {_checkBooleanData("imd_status") ?
               <Tooltip label={"IMD status (battery isolation) fault"} >
-                  <Image src={IMDStatusImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={IMDStatusImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {checkBMSFailsafes() ?
               <Tooltip label={getBMSFailsafeString()} >
-                  <Image src={BatteryFailsafeImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={BatteryFailsafeImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {_checkBooleanData("bps_fault") ?
               <Tooltip label={"BPS fault"} >
-                   <Image src={BPSFaultImage}/>
+                   <Image fit={fitType} boxSize={imageHeight} src={BPSFaultImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {(props.data?.soc[0] < (CONSTANTS.soc.MIN + 5)) ?
               <Tooltip label={"Battery charge is low (<5%)"} >
-                  <Image src={LowBatteryImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={LowBatteryImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {(props.data?.mppt_current_out[0] > CONSTANTS.mppt_current_out.MAX) ?
               <Tooltip label={"High MPPT current"} >
-                  <Image src={MPPTCurrentImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={MPPTCurrentImage}/>
               </Tooltip>
               :
               (props.data?.mppt_current_out[0] < CONSTANTS.mppt_current_out.MIN) ?
                   <Tooltip label={"MPPT current is negative"} >
-                      <Image src={MPPTCurrentImage}/>
+                      <Image fit={fitType} boxSize={imageHeight} src={MPPTCurrentImage}/>
                   </Tooltip>
                   :
-                  <Box h="70px" />
+                  <Box h={imageHeight} />
           }
           {(props.data?.pack_current[0] > CONSTANTS.pack_current.MAX) ?
               <Tooltip label={"High battery pack current"} >
-                  <Image src={HighCurrentImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={HighCurrentImage}/>
               </Tooltip>
               :
               (props.data?.pack_current[0] < CONSTANTS.pack_current.MIN) ?
                   <Tooltip label={"Low battery pack current"} >
-                      <Image src={LowCurrentImage}/>
+                      <Image fit={fitType} boxSize={imageHeight} src={LowCurrentImage}/>
                   </Tooltip>
                   :
-                  <Box h="70px" />
+                  <Box h={imageHeight} />
           }
           {(props.data?.pack_voltage[0] > CONSTANTS.pack_voltage.MAX) ?
               <Tooltip label={"High battery pack voltage"} >
-                  <Image src={HighVoltageImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={HighVoltageImage}/>
               </Tooltip>
               :
               (props.data?.pack_voltage[0] < CONSTANTS.pack_voltage.MIN) ?
                   <Tooltip label={"Low battery pack voltage"} >
-                      <Image src={LowVoltageImage}/>
+                      <Image fit={fitType} boxSize={imageHeight} src={LowVoltageImage}/>
                   </Tooltip>
                   :
-                  <Box h="70px" />
+                  <Box h={imageHeight} />
           }
           {!(props.data?.solar_car_connection[0] ?? false) ?
               <Tooltip label={"Lost communication with the solar car"} >
-                  <Image src={WirelessCommsLostImage} />
+                  <Image fit={fitType} boxSize={imageHeight} src={WirelessCommsLostImage} />
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
           {_checkBooleanData("bms_canbus_failure") ?
               _checkBooleanData("mainIO_heartbeat") ?
                   <Tooltip label={"BMS CANBUS failure and Driver IO/Main IO connection lost"} >
-                      <Image src={PhysicalConnectionImage}/>
+                      <Image fit={fitType} boxSize={imageHeight} src={PhysicalConnectionImage}/>
                   </Tooltip>
                   :
                   <Tooltip label={"BMS CANBUS failure"} >
-                      <Image src={PhysicalConnectionImage}/>
+                      <Image fit={fitType} boxSize={imageHeight} src={PhysicalConnectionImage}/>
                   </Tooltip>
               :
               _checkBooleanData("mainIO_heartbeat") ?
                   <Tooltip label={"Driver IO/Main IO connection lost"} >
-                      <Image src={PhysicalConnectionImage}/>
+                      <Image fit={fitType} boxSize={imageHeight} src={PhysicalConnectionImage}/>
                   </Tooltip>
                   :
-                  <Box h="70px" />
+                  <Box h={imageHeight} />
           }
           {(props.data?.bms_input_voltage[0] > CONSTANTS.bms_input_voltage.MAX) ?
               <Tooltip label={"High BMS input voltage"} >
-                  <Image src={BMSInputVoltageImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={BMSInputVoltageImage}/>
               </Tooltip>
               :
               (props.data?.bms_input_voltage[0] < CONSTANTS.bms_input_voltage.MIN) ?
                   <Tooltip label={"Low BMS input voltage"} >
-                      <Image src={BMSInputVoltageImage}/>
+                      <Image fit={fitType} boxSize={imageHeight} src={BMSInputVoltageImage}/>
                   </Tooltip>
                   :
-                  <Box h="70px" />
+                  <Box h={imageHeight} />
           }
           {checkTemps() ?
               <Tooltip label={getTempString()} shouldWrapChildren size={"5"} >
-                  <Image src={HighTemperatureImage}/>
+                  <Image fit={fitType} boxSize={imageHeight} src={HighTemperatureImage}/>
               </Tooltip>
               :
-              <Box h="70px" />
+              <Box h={imageHeight} />
           }
       </SimpleGrid>
     );
