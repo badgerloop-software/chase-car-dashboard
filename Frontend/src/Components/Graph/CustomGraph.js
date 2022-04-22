@@ -68,6 +68,7 @@ function getOptions(secondsRetained) {
     indexAxis: "x",
     animation: false,
     plugins: {
+      // unknown if decimation is functional
       decimation: {
         enabled: true,
         algorithm: "min-max",
@@ -79,6 +80,9 @@ function getOptions(secondsRetained) {
         callbacks: {
           label: (item) => {
             // console.log(item);
+
+            // custom dataset label
+            // name: value unit
             return `${item.dataset.label}: ${item.formattedValue}${
               units[item.dataset.key]
             }`;
@@ -102,6 +106,8 @@ function getOptions(secondsRetained) {
             second: "h:mm:ss a",
           },
         },
+
+        // show the last secondsRetained seconds
         max: now.toISO(),
         min: now.minus(secondsRetained * 1000).toISO(),
       },
@@ -206,11 +212,12 @@ export default function CustomGraph(props) {
     secondsRetained ?? GraphData.defaultHistoryLength
   );
 
+  // side-effects for when new datasets are chosen
   useEffect(() => {
     // console.log("yo, new datasets dropped:", datasetKeys);
+    // console.log("keys:", keys);
 
     // update dataset object {key: boolean}
-    // console.log("keys:", keys);
     const newDatasets = {};
     for (const key of datasetKeys) {
       newDatasets[key] = datasets[key] ?? true;
@@ -235,8 +242,8 @@ export default function CustomGraph(props) {
         console.warn(`unable to find "${key}" for "${title}"`);
       }
     }
-    // console.log("formatted datasets:", formattedDatasets);
 
+    // console.log("formatted datasets:", formattedDatasets);
     setFormattedDatasets(formattedDatasets);
   }, [datasets, packedData]);
 
@@ -254,6 +261,7 @@ export default function CustomGraph(props) {
   //   setDatasets(newDatasets);
   // };
 
+  // the modal that appears when the user wants to update the datasets that are shown
   const graphSelectModal = useMemo(() => {
     const onSelectSave = (newDatasetKeys, newHistoryLength) => {
       setDatasetKeys(newDatasetKeys);
@@ -276,6 +284,9 @@ export default function CustomGraph(props) {
     setHistoryLength,
     historyLength,
   ]);
+
+  // the modal that appears when the user saves the graph,
+  // but the graph has no name associated with it
   const graphNameModal = useMemo(
     () => (
       <GraphNameModal
@@ -286,6 +297,8 @@ export default function CustomGraph(props) {
     ),
     [isNameModalOpen, onNameModalClose, onNameSave]
   );
+
+  // the actual graph shown to the user
   const graph = useMemo(() => {
     // const min = DateTime.now().minus(historyLength * 1_000);
 
@@ -404,6 +417,7 @@ function GraphNameModal(props) {
   // the new name, stored as part of the state
   const [name, setName] = useState("");
 
+  // whether the currently chosen name is valid
   const isInvalid = !name.length || name === "Custom";
 
   return (

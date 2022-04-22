@@ -3,23 +3,57 @@ import { useCallback, useMemo, useState } from "react";
 import CustomGraph from "../Graph/CustomGraph";
 import GraphData from "../Graph/graph-data.json";
 
+/**
+ * Generates color data for all categories/datasets and packs the data nicely
+ *
+ * The data is in this format:
+ * ```
+ * [
+ * [
+ *   {
+ *     category: string,
+ *     values: [
+ *       {
+ *         key: string,
+ *         name: string,
+ *         color: string
+ *       }
+ *     ]
+ *   }
+ * ],
+ * [
+ *   {
+ *     key: string,
+ *     name: string,
+ *     color: string
+ *   }
+ * ]
+ * ]```
+ *
+ * where `category` is the name of a category,
+ * `key` is the internally-used string used to identify the dataset,
+ * `name` is the human-readable name of this dataset, and `color` is the
+ * (CSS-compatible) hex color code assigned to this dataset.
+ *
+ * @returns a list of categories taken from the JSON file with randomly generated colors
+ */
 function generateCategories() {
-  const output1 = [],
-    output2 = [];
+  const categories = [],
+    allDatasets = [];
   for (const category of GraphData.categories) {
     const values = category.values.map((obj) => {
       const colorNum = Math.floor(Math.random() * 0x3fffff + 0x3fffff);
       const color = "#" + colorNum.toString(16);
 
       const output = { key: obj.key, name: obj.name, color };
-      output2.push(output);
+      allDatasets.push(output);
       // console.log("Generated color for", obj, ":", output);
       return output;
     });
-    output1.push({ category: category.category, values });
+    categories.push({ category: category.category, values });
   }
 
-  return [output1, output2];
+  return [categories, allDatasets];
 }
 
 /**

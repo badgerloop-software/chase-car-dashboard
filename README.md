@@ -2,6 +2,7 @@
 
 ## Libraries
 
+- [node.js and npm](https://nodejs.org/en/) - Package manager and server workhorse (minimum **version 17**)
 - [React](https://reactjs.org/) - Front-end library
 - [Chakra UI](https://chakra-ui.com/) - Component library
 - [Chart.js](https://www.chartjs.org/) & [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2) - Graph library & React wrapper
@@ -11,6 +12,12 @@
 0. If you don't already have an SSH key, [generate a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) (only the steps under "Generating a new SSH key" are required) and [add it to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
 1. Once you have an SSH key, clone the [sc1-data-format repository](https://github.com/badgerloop-software/sc1-data-format) to your computer. Make sure to clone it using SSH (when you go to copy the clone link, there will be an SSH option above the link).
 2. Next, `cd` into the `chase-car-dashboard` repository and run `git submodule update --init`.
+
+## Updating the Submodule
+
+0. This step assumes that the repository has been initialized as above.
+1. Update the submodule in the `Data-Generator` directory with `git submodule update --init`.
+2. `cd` into the `Frontend` directory and run the command `npm run update-graph-data`. (If the command fails to run, make sure you have the most recent version of `npm` installed onto your computer).
 
 ## Running the Dashboard
 

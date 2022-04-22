@@ -72,13 +72,16 @@ const timeLengths = [
  * @returns the modal component
  */
 function GraphModal(props) {
+  // unpack props
   const { isOpen, onClose, initialDatasets, initialHistoryLength, onSave } =
     props;
 
+  // a state variable that keeps track of which datasets are selected to be shown
   const [dataKeys, changeDataKeys] = useReducer(
     dataKeysReducer,
     initialDatasets
   );
+  // a state variable that keeps track of the history length that the user wants to show
   const [historyLength, setHistoryLength] = useState(initialHistoryLength);
 
   // useEffect(() => {
@@ -111,8 +114,10 @@ function GraphModal(props) {
                       onInput={(e) => {
                         // console.log(value.name, e.target.checked);
                         if (e.target.checked) {
+                          // checked => add to checked datasets
                           changeDataKeys({ action: "add", key: value.key });
                         } else {
+                          // unchecked => remove from checked datasets
                           changeDataKeys({ action: "remove", key: value.key });
                         }
                       }}
