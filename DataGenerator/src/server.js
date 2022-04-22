@@ -101,7 +101,7 @@ const SERVER = NET.createServer((socket) => {
     }
 
     socket.write(buf1);
-  }, 100);
+  }, 34);
 });
 
 // Error listener

@@ -15,7 +15,7 @@ ROUTER.get("/api", (req, res) => {
 
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
-const X_AXIS_CAP = 1_000; // The max number of data points to have in each array at one time
+const X_AXIS_CAP = 18_000; // The max number of data points to have in each array at one time
 var client = new Socket();
 
 // Initiate connection
