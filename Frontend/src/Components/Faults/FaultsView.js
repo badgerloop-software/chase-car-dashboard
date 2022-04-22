@@ -23,6 +23,20 @@ import CONSTANTS from "../../data-constants.json";
 
 export default function Faults(props) {
     /**
+     * Checks the boolean value specified by dataLabel against its nominal value. Returns true if the boolean value
+     * indicates a fault (i.e. if the value is not equal to its nominal value).
+     *
+     * @param dataLabel Name of the specific boolean/piece of data (found in the
+     *                  <a href="https://github.com/badgerloop-software/sc1-data-format/blob/main/format.json">data
+     *                  format</a>) whose value is being checked
+     * @returns {boolean} true if the specified boolean value is NOT equal to its nominal value; false otherwise
+     * @private
+     */
+    const _checkBooleanData = (dataLabel) => {
+        return (props.data[dataLabel][0] ?? CONSTANTS[dataLabel].MIN) != CONSTANTS[dataLabel].MIN;
+    }
+
+    /**
      * Takes in an array of strings pertaining to a certain type of fault (like an array of devices with temperatures
      * outside of their nominal ranges) and converts it into a formatted string listing all of the array elements as
      * they pertain to the particular type of fault
@@ -37,14 +51,23 @@ export default function Faults(props) {
      */
     const _formFaultString = (strArr, singularEndStr, pluralEndStr) => {
         if(strArr.length > 0) {
+            // There is at least one item in the list. Format the list according to the number of items
             if(strArr.length > 2) {
-                return strArr[0] + ", " + strArr[1].toLowerCase() + ", and " + strArr[2].toLowerCase() + pluralEndStr;
+                // There are 3 or more items in the list
+                let retStr = "";
+                for(var i=0; i < strArr.length - 1; i++) {
+                    retStr += strArr[i] + ", ";
+                }
+                return retStr + "and " + strArr[strArr.length - 1] + pluralEndStr;
             } else if(strArr.length > 1) {
+                // There are 2 items in the list
                 return strArr[0] + " and " + strArr[1].toLowerCase() + pluralEndStr;
             } else {
+                // There is only 1 item in the list
                 return strArr[0] + singularEndStr;
             }
         }
+        // There are no specific faults/items in the list
         return "";
     }
 
@@ -56,16 +79,18 @@ export default function Faults(props) {
     const getEStopString = () => {
         let eStopStrings = [];
 
-        if(props.data?.battery_eStop[0] != CONSTANTS.battery_eStop.MIN) {
+        // Add any pressed E-stops to eStopStrings
+        if(_checkBooleanData("battery_eStop")) {
             eStopStrings.push("Battery");
         }
-        if(props.data?.driver_eStop[0] != CONSTANTS.driver_eStop.MIN) {
-            eStopStrings.push("Driver");
+        if(_checkBooleanData("driver_eStop")) {
+            eStopStrings.push((eStopStrings.length == 0) ? "Driver" : "driver");
         }
-        if(props.data?.external_eStop[0] != CONSTANTS.external_eStop.MIN) {
-            eStopStrings.push("External");
+        if(_checkBooleanData("external_eStop")) {
+            eStopStrings.push((eStopStrings.length == 0) ? "External" : "external");
         }
 
+        // Create and return a formatted string containing a list of pressed E-stops
         return _formFaultString(eStopStrings, " E-stop was pressed", " E-stops were pressed");
     }
 
@@ -75,9 +100,9 @@ export default function Faults(props) {
      * @returns {boolean} true if any of the BMS failsafe statuses are true; false otherwise
      */
     const checkBMSFailsafes = () => {
-        return (props.data?.voltage_failsafe[0]) || (props.data?.current_failsafe[0]) ||
-               (props.data?.supply_power_failsafe[0]) || (props.data?.memory_failsafe[0]) ||
-               (props.data?.relay_failsafe[0]);
+        return _checkBooleanData("voltage_failsafe") || _checkBooleanData("current_failsafe") ||
+               _checkBooleanData("supply_power_failsafe") || _checkBooleanData("memory_failsafe") ||
+               _checkBooleanData("relay_failsafe");
     }
 
     /**
@@ -88,23 +113,25 @@ export default function Faults(props) {
     const getBMSFailsafeString = () => {
         let failsafeStrings = [];
 
-        if(props.data?.voltage_failsafe[0]) {
+        // Add any triggered BMS failsafes to failsafeStrings
+        if(_checkBooleanData("voltage_failsafe")) {
             failsafeStrings.push("Voltage");
         }
-        if(props.data?.current_failsafe[0]) {
-            failsafeStrings.push("Current");
+        if(_checkBooleanData("current_failsafe")) {
+            failsafeStrings.push((failsafeStrings.length == 0) ? "Current" : "current");
         }
-        if(props.data?.supply_power_failsafe[0]) {
-            failsafeStrings.push("Supply");
+        if(_checkBooleanData("supply_power_failsafe")) {
+            failsafeStrings.push((failsafeStrings.length == 0) ? "Supply" : "supply");
         }
-        if(props.data?.memory_failsafe[0]) {
-            failsafeStrings.push("Memory");
+        if(_checkBooleanData("memory_failsafe")) {
+            failsafeStrings.push((failsafeStrings.length == 0) ? "Memory" : "memory");
         }
-        if(props.data?.relay_failsafe[0]) {
-            failsafeStrings.push("Relay");
+        if(_checkBooleanData("relay_failsafe")) {
+            failsafeStrings.push((failsafeStrings.length == 0) ? "Relay" : "relay");
         }
 
-        return _formFaultString(failsafeStrings, " fialsafe", " failsafes");
+        // Create and return a formatted string containing a list of the triggered BMS failsafes
+        return _formFaultString(failsafeStrings, " failsafe", " failsafes");
     }
 
     /**
@@ -143,8 +170,8 @@ export default function Faults(props) {
      * @param lowArray Array of devices/items with low temperatures
      * @param highArray Same thing but with high temperatures
      * @param dataLabel Name of the specific temperature/piece of data (found in the
-     *                  <a href="https://github.com/badgerloop-software/sc1-data-format/blob/main/format.json">data format</a>)
-     *                  whose value is being checked
+     *                  <a href="https://github.com/badgerloop-software/sc1-data-format/blob/main/format.json">data
+     *                  format</a>) whose value is being checked
      * @param uppercaseLabel A more user-friendly label for the device/item whose temperature might be high or low.
      *                       Starts with an uppercase letter (in case this is the first item in one of the lists)
      * @param lowercaseLabel A more user-friendly label for the device/item whose temperature might be high or low.
@@ -154,8 +181,10 @@ export default function Faults(props) {
      */
     const _updateTempArrays = (lowArray, highArray, dataLabel, uppercaseLabel, lowercaseLabel) => {
         if(props.data[dataLabel][0] > CONSTANTS[dataLabel].MAX) {
+            // Item is overtemperature. If highArray is empty, add uppercaseLabel; otherwise, add lowercaseLabel
             highArray.push((highArray.length == 0) ? uppercaseLabel : lowercaseLabel);
         } else if(props.data[dataLabel][0] < CONSTANTS[dataLabel].MIN) {
+            // Item is undertemperature. If lowArray is empty, add uppercaseLabel; otherwise, add lowercaseLabel
             lowArray.push((lowArray.length == 0) ? uppercaseLabel : lowercaseLabel);
         }
     }
@@ -172,6 +201,7 @@ export default function Faults(props) {
         let highTempStrings = [];
         let lowTempStrings = [];
 
+        // Add any items with non-nominal temperatures to the appropriate array
         _updateTempArrays(lowTempStrings, highTempStrings, "motor_temp", "Motor", "motor");
         _updateTempArrays(lowTempStrings, highTempStrings, "driverIO_temp", "Driver IO", "driver IO");
         _updateTempArrays(lowTempStrings, highTempStrings, "mainIO_temp", "Main IO", "main IO");
@@ -179,57 +209,22 @@ export default function Faults(props) {
         _updateTempArrays(lowTempStrings, highTempStrings, "string1_temp", "Cell string 1", "cell string 1");
         _updateTempArrays(lowTempStrings, highTempStrings, "string2_temp", "Cell string 2", "cell string 2");
         _updateTempArrays(lowTempStrings, highTempStrings, "string3_temp", "Cell string 3", "cell string 3");
-
-        /* TODO
-        if(props.data?.motor_temp[0] > CONSTANTS.motor_temp.MAX) {
-            highTempStrings.push("Motor");
-        } else if(props.data?.motor_temp[0] < CONSTANTS.motor_temp.MIN) {
-            lowTempStrings.push("Motor");
-        }
-        if(props.data?.driverIO_temp[0] > CONSTANTS.driverIO_temp.MAX) {
-            highTempStrings.push((highTempStrings.length == 0) ? "Driver IO" : "driver IO");
-        } else if(props.data?.driverIO_temp[0] < CONSTANTS.driverIO_temp.MIN) {
-            lowTempStrings.push((lowTempStrings.length == 0) ? "Driver IO" : "driver IO");
-        }
-        if(props.data?.mainIO_temp[0] > CONSTANTS.mainIO_temp.MAX) {
-            highTempStrings.push((highTempStrings.length == 0) ? "Main IO" : "main IO");
-        } else if(props.data?.mainIO_temp[0] < CONSTANTS.mainIO_temp.MIN) {
-            lowTempStrings.push((lowTempStrings.length == 0) ? "Main IO" : "main IO");
-        }
-        if(props.data?.cabin_temp[0] > CONSTANTS.cabin_temp.MAX) {
-            highTempStrings.push((highTempStrings.length == 0) ? "Cabin" : "cabin");
-        } else if(props.data?.cabin_temp[0] < CONSTANTS.cabin_temp.MIN) {
-            lowTempStrings.push((lowTempStrings.length == 0) ? "Cabin" : "cabin");
-        }
-        if(props.data?.string1_temp[0] > CONSTANTS.string1_temp.MAX) {
-            highTempStrings.push((highTempStrings.length == 0) ? "Cell string 1" : "cell string 1");
-        } else if(props.data?.string1_temp[0] < CONSTANTS.string1_temp.MIN) {
-            lowTempStrings.push((lowTempStrings.length == 0) ? "Cell string 1" : "cell string 1");
-        }
-        if(props.data?.string2_temp[0] > CONSTANTS.string2_temp.MAX) {
-            highTempStrings.push((highTempStrings.length == 0) ? "Cell string 2" : "cell string 2");
-        } else if(props.data?.string2_temp[0] < CONSTANTS.string2_temp.MIN) {
-            lowTempStrings.push((lowTempStrings.length == 0) ? "Cell string 2" : "cell string 2");
-        }
-        if(props.data?.string3_temp[0] > CONSTANTS.string3_temp.MAX) {
-            highTempStrings.push((highTempStrings.length == 0) ? "Cell string 3" : "cell string 3");
-        } else if(props.data?.string3_temp[0] < CONSTANTS.string3_temp.MIN) {
-            lowTempStrings.push((lowTempStrings.length == 0) ? "Cell string 3" : "cell string 3");
-        }*/
         if(props.data?.pack_temp[0] > CONSTANTS.pack_temp.MAX) {
             highTempStrings.push((highTempStrings.length == 0) ? "Battery pack" : "battery pack");
         }
 
+        // Create formatted strings containing lists of items with high and low temperatures
         const highTempString = _formFaultString(highTempStrings, " temp", " temps");
         const lowTempString = _formFaultString(lowTempStrings, " temp", " temps");
 
+        // Add each string to its own line (if the string is not empty) and return the resulting lines for the tooltip
         return <>
                  {(highTempString != "") ? <>High: {highTempString}<br/></> : ""}
                  {(lowTempString != "") ? "Low: " + lowTempString : ""}
                </>;
     }
 
-  return (
+    return (
       <SimpleGrid
           columns={6}
           rows={3}
@@ -237,56 +232,57 @@ export default function Faults(props) {
           spacingY="0.5vh"
           alignItems="center"
       >
-          {!(props.data?.mppt_contactor[0] ?? true) ?
+          {_checkBooleanData("mppt_contactor") ?
               <Tooltip label={"MPPT contactor is open"} >
                   <Image src={MPPTContactorImage}/>
               </Tooltip>
               :
               <Box h="70px" />
           }
-          {!(props.data?.low_contactor[0] ?? true) ?
+          {_checkBooleanData("low_contactor") ?
               <Tooltip label={"Low contactor is open"} >
                    <Image src={LowContactorImage}/>
               </Tooltip>
               :
               <Box h="70px" />
           }
-          {!(props.data?.motor_controller_contactor[0] ?? true) ?
+          {_checkBooleanData("motor_controller_contactor") ?
               <Tooltip label={"Motor controller contactor is open"} >
                   <Image src={MotorControllerContactorImage}/>
               </Tooltip>
               :
               <Box h="70px" />
           }
-          {(props.data?.battery_eStop[0] || props.data?.driver_eStop[0] || props.data?.external_eStop[0]) ?
+          {(_checkBooleanData("battery_eStop") || _checkBooleanData("driver_eStop") ||
+            _checkBooleanData("external_eStop")) ?
               <Tooltip label={getEStopString()} >
                   <Image src={EStopImage}/>
               </Tooltip>
               :
               <Box h="70px" />
           }
-          {!(props.data?.door[0] ?? true) ?
+          {_checkBooleanData("door") ?
               <Tooltip label={"Door is open"} >
                   <Image src={DoorImage}/>
               </Tooltip>
               :
               <Box h="70px" />
           }
-          {props.data?.crash[0] ?
+          {_checkBooleanData("crash") ?
               <Tooltip label={"Solar car has crashed"} >
                   <Image src={CrashImage}/>
               </Tooltip>
               :
               <Box h="70px" />
           }
-          {props.data?.mcu_check[0] ?
+          {_checkBooleanData("mcu_check") ?
               <Tooltip label={"MCU check failed"} >
                   <Image src={MCUCheckImage}/>
               </Tooltip>
               :
               <Box h="70px" />
           }
-          {props.data?.imd_status[0] ?
+          {_checkBooleanData("imd_status") ?
               <Tooltip label={"IMD status (battery isolation) fault"} >
                   <Image src={IMDStatusImage}/>
               </Tooltip>
@@ -300,14 +296,14 @@ export default function Faults(props) {
               :
               <Box h="70px" />
           }
-          {props.data?.bps_fault[0] ?
+          {_checkBooleanData("bps_fault") ?
               <Tooltip label={"BPS fault"} >
                    <Image src={BPSFaultImage}/>
               </Tooltip>
               :
               <Box h="70px" />
           }
-          {(props.data?.soc[0] < (CONSTANTS.soc.MIN + 5)) ? // TODO Do I want to just change the minimum of soc to 5 and not use addition here????
+          {(props.data?.soc[0] < (CONSTANTS.soc.MIN + 5)) ?
               <Tooltip label={"Battery charge is low (<5%)"} >
                   <Image src={LowBatteryImage}/>
               </Tooltip>
@@ -357,8 +353,8 @@ export default function Faults(props) {
               :
               <Box h="70px" />
           }
-          {props.data?.bms_canbus_failure[0] ? // TODO
-              !props.data?.mainIO_heartbeat[0] ?
+          {_checkBooleanData("bms_canbus_failure") ?
+              _checkBooleanData("mainIO_heartbeat") ?
                   <Tooltip label={"BMS CANBUS failure and Driver IO/Main IO connection lost"} >
                       <Image src={PhysicalConnectionImage}/>
                   </Tooltip>
@@ -367,7 +363,7 @@ export default function Faults(props) {
                       <Image src={PhysicalConnectionImage}/>
                   </Tooltip>
               :
-              !(props.data?.mainIO_heartbeat[0] ?? true) ? // TODO
+              _checkBooleanData("mainIO_heartbeat") ?
                   <Tooltip label={"Driver IO/Main IO connection lost"} >
                       <Image src={PhysicalConnectionImage}/>
                   </Tooltip>
@@ -394,5 +390,5 @@ export default function Faults(props) {
               <Box h="70px" />
           }
       </SimpleGrid>
-  );
+    );
 }
