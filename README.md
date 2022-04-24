@@ -16,8 +16,7 @@
 ## Updating the Submodule
 
 0. This step assumes that the repository has been initialized as above.
-1. Update the submodule in the `Data-Generator` directory with `git submodule update --init`.
-2. `cd` into the `Frontend` directory and run the command `npm run update-graph-constants`. (If the command fails to run, make sure you have the most recent version of `npm` installed onto your computer).
+1. Run the command `npm run update-data`. This should take care of updating the submodule and JSON files in the frontend. (If the command fails to run, make sure you have the most recent dependencies and version of `npm` installed onto your computer).
 
 ## Running the Dashboard
 
