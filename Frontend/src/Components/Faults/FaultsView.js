@@ -53,25 +53,25 @@ export default function Faults(props) {
      * @private
      */
     const _formFaultString = (strArr, singularEndStr, pluralEndStr) => {
-        if(strArr.length > 0) {
-            // There is at least one item in the list. Format the list according to the number of items
-            if(strArr.length > 2) {
-                // There are 3 or more items in the list
-                let retStr = "";
-                for(var i=0; i < strArr.length - 1; i++) {
-                    retStr += strArr[i] + ", ";
-                }
-                return retStr + "and " + strArr[strArr.length - 1] + pluralEndStr;
-            } else if(strArr.length > 1) {
-                // There are 2 items in the list
-                return strArr[0] + " and " + strArr[1].toLowerCase() + pluralEndStr;
-            } else {
-                // There is only 1 item in the list
-                return strArr[0] + singularEndStr;
+        // Check if the list of specific faults/items is empty. If so, return an empty string
+        if(strArr.length == 0)
+            return "";
+
+        // There is at least one item in the list. Format the list according to the number of items
+        if(strArr.length == 1) {
+            // There is only 1 item in the list
+            return strArr[0] + singularEndStr;
+        } else if(strArr.length == 2) {
+            // There are 2 items in the list
+            return strArr[0] + " and " + strArr[1] + pluralEndStr;
+        } else {
+            // There are 3 or more items in the list
+            let retStr = "";
+            for(let i=0; i < strArr.length - 1; i++) {
+                retStr += strArr[i] + ", ";
             }
+            return retStr + "and " + strArr[strArr.length - 1] + pluralEndStr;
         }
-        // There are no specific faults/items in the list
-        return "";
     }
 
     /**
@@ -83,6 +83,8 @@ export default function Faults(props) {
         let eStopStrings = [];
 
         // Add any pressed E-stops to eStopStrings
+        // The first element pushed to eStopStrings/added to the list of E-stops should be capitalized, and any
+        // additional E-stops should not be capitalized
         if(_checkBooleanData("battery_eStop")) {
             eStopStrings.push("Battery");
         }
@@ -117,6 +119,8 @@ export default function Faults(props) {
         let failsafeStrings = [];
 
         // Add any triggered BMS failsafes to failsafeStrings
+        // The first element pushed to failsafeStrings/added to the list of failsafes should be capitalized, and any
+        // additional failsafes should not be capitalized
         if(_checkBooleanData("voltage_failsafe")) {
             failsafeStrings.push("Voltage");
         }
@@ -205,6 +209,8 @@ export default function Faults(props) {
         let lowTempStrings = [];
 
         // Add any items with non-nominal temperatures to the appropriate array
+        // The first element pushed to each array/added to each of the lists should be capitalized, and any additional
+        // items should not be capitalized
         _updateTempArrays(lowTempStrings, highTempStrings, "motor_temp", "Motor", "motor");
         _updateTempArrays(lowTempStrings, highTempStrings, "driverIO_temp", "Driver IO", "driver IO");
         _updateTempArrays(lowTempStrings, highTempStrings, "mainIO_temp", "Main IO", "main IO");
