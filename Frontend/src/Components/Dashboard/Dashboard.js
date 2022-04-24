@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, HStack, Select } from "@chakra-ui/react";
-import React, { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
@@ -119,13 +119,8 @@ export default function Dashboard(props) {
         >
           <FaultsView data={state.data} />
         </GridItem>
-        <GridItem
-          // h="37.5vh"
-          rowStart={2}
-          rowSpan={1}
-          borderColor="black"
-          borderWidth={1}
-        >
+        <GridItem 
+         rowStart={2} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
           <Select
             id="dataViewSelect1"
             size="xs"
@@ -139,13 +134,8 @@ export default function Dashboard(props) {
           </Select>
           {switchDataView(dataView1)}
         </GridItem>
-        <GridItem
-          // h="37.5vh"
-          rowStart={3}
-          rowSpan={1}
-          borderColor="black"
-          borderWidth={1}
-        >
+        <GridItem 
+         rowStart={3} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
           <Select
             id="dataViewSelect2"
             size="xs"
@@ -171,6 +161,7 @@ function DataViewOptions(props) {
       <option value="general">General Data</option>
       <option value="battery">Battery Cells</option>
       <option value="minimap">Minimap</option>
+      <option value="ppc_mppt">PPC and MPPT</option>
     </>
   );
 }

@@ -9,7 +9,8 @@
     "install-data-generator": "cd DataGenerator && npm i",
     "install-backend": "cd Backend && npm i",
     "install-frontend": "cd Frontend && npm i",
-    "postinstall": "run-p install-data-generator install-backend install-frontend"
+    "postinstall": "run-p install-data-generator install-backend install-frontend",
+    "update-data-constants": "git submodule update --recursive && cd Frontend && npm run update-data-constants"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",
