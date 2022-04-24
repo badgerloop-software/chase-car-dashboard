@@ -1,5 +1,5 @@
 import {
-  Grid, GridItem, VStack, HStack, Select, Button, ButtonGroup, Modal,
+  Grid, GridItem, VStack, HStack, Select, Button, ButtonGroup, Modal, Box,
   ModalOverlay,
   ModalContent,
   ModalHeader,
@@ -11,6 +11,11 @@ import {
   FormControl,
   useDisclosure
 } from "@chakra-ui/react";
+
+import { FaPlay, FaPause, FaStop } from 'react-icons/fa';
+import { BsFillRecordCircleFill } from 'react-icons/bs';
+
+
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
@@ -45,6 +50,19 @@ export default function Dashboard(props) {
   const finalRef = React.useRef()
 
   const [sessionsList, setSessionsList] = useState({ data: null });
+
+
+  const [state, setState] = useState({ data: null });
+  const [framePointer, setFramePointer] = useState(0);
+  let [frameIntervalId, setframeIntervalId] = useState(null);
+  const [playMode, setPlayMode] = useState(false)
+
+  const [currentSession, setCurrentSession] = useState("");
+  const [recordedData, setRecordedData] = useState({ data: null });
+  const [isRecording, setIsRecording] = useState(false);
+  const [isRecordingSessionCreated, setIsRecordingSessionCreated] = useState(false);
+  const [sessionFileName, setSessionFileName] = useState("");
+
 
   const callBackendAPI = async () => {
     const response = await fetch("/api");
@@ -88,23 +106,22 @@ export default function Dashboard(props) {
     })
   }
 
-  const [state, setState] = useState({ data: null });
-  const [framePointer, setFramePointer] = useState(0);
-  let [frameIntervalId, setframeIntervalId] = useState(null);
-  const [playMode, setPlayMode] = useState(false)
 
-  const [currentSession, setCurrentSession] = useState("");
-  const [recordedData, setRecordedData] = useState({ data: null });
-  const [isRecording, setIsRecording] = useState(false);
-  const [isRecordingSessionCreated, setIsRecordingSessionCreated] = useState(false);
-  const [sessionFileName, setSessionFileName] = useState("");
 
 
   useLayoutEffect(() => {
     //-------
     if (playMode) {
-      setState((prev) => prev.data= recordedData.data[framePointer])
-      console.log("frame:", recordedData.data[framePointer])
+      if (framePointer >= recordedData.data.length) {
+        clearInterval(frameIntervalId)
+        setFramePointer(0)
+        console.log("End of frames")
+        toast("End of frames!!")
+
+      } else {
+        setState((prev) => prev.data = recordedData.data[framePointer])
+      }
+      console.log("frame:", framePointer)
     } else {
       callBackendAPI().then((res) => {
         setState({ data: res.response })
@@ -112,7 +129,7 @@ export default function Dashboard(props) {
     }
 
 
-  }, [state,framePointer]);
+  }, [state, framePointer]);
 
   useLayoutEffect(() => {
     //-------
@@ -124,10 +141,16 @@ export default function Dashboard(props) {
 
 
   const playData = (speed = 1) => {
-    let time = 1000 * speed
+    let time = 1000 * speed // 1000 = 1000ms = 1sec
     // check if already an interval has been set up
+    if (!recordedData.data || recordedData.data === null && recordedData.data?.length == 0) {
+      console.log("No data")
+      toast("No session data found.")
+      return
+    }
+
+    console.log("paying...", recordedData.data)
     setPlayMode(true)
-    console.log("paying...")
     if (!frameIntervalId) {
       setframeIntervalId(setInterval(() => {
         //What to do during the interval 
@@ -137,6 +160,12 @@ export default function Dashboard(props) {
   };
 
   const pause = () => {
+    console.log("stopping:", frameIntervalId)
+    clearInterval(frameIntervalId)
+    setframeIntervalId(null)
+  }
+
+  const stop = () => {
     console.log("stopping:", frameIntervalId)
     clearInterval(frameIntervalId)
     setframeIntervalId(null)
@@ -399,77 +428,6 @@ export default function Dashboard(props) {
 
   return (
     <Grid templateColumns="1fr 2fr" h="100vh" w="100vw">
-      {"(test) Is recording: " + isRecording}
-      <HStack>
-        <Select
-          width={"15em"}
-          placeholder={"Select session to view"}
-          value={currentSession}
-
-          onChange={(e) => {
-            setCurrentRecordingSession(e.target.value)
-          }}>
-          {sessionsList?.data?.map((name, i) => {
-            return (<option key={i} value={name}>{name}</option>)
-          })}
-
-        </Select>
-        <Button width={"15em"} colorScheme='blue' size='sm' onClick={async () => {
-          if (currentSession) {
-            getRecordedData().then((res) => {
-              if (res.response) {
-                setRecordedData({ data: res.response });
-                console.log("Rec Data::", res.response);
-                localStorage.setItem("recordeData", JSON.stringify(res.response))
-              }
-            }).catch((err) => console.log(err));
-          } else {
-            alert("Please select a session to get the data from")
-          }
-
-        }}>(test) Get session data</Button>
-        <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => playData()} >(test) Play [{framePointer}]</Button>
-        <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => pause()}>(test) Pause</Button>
-        <Button width={"15em"} colorScheme='blue' size='sm' onClick={onOpen}>(test) Create session file</Button>
-        <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => { if (currentSession) { recordCarData() } else { alert("No session created or selected") } }}>(test) {isRecording ? "Stop" : "Start"} recording session</Button>
-      </HStack>
-      {/* Create new session popup */}
-      <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create recording session</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>File name</FormLabel>
-              <Input ref={initialRef} placeholder='File name' onChange={(e) => {
-                setSessionFileName(e.target.value)
-              }} />
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={() => {
-              if (sessionFileName == "") {
-                alert("Error: Empty feild")
-                return
-              }
-              createRecordingSession(sessionFileName);
-              onClose()
-            }}>
-              Create
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-
       <GridItem colStart={1} colSpan={1}>
         <Grid h="100vh" templateRows="1fr 3fr">
           <GridItem
@@ -479,9 +437,119 @@ export default function Dashboard(props) {
             borderWidth={1}
             p={2}
           >
+            <VStack>
+
+              <HStack style={{ marginBottom: "0.5em" }}>
+                <Select
+                  width={"15em"}
+                  placeholder={"Select session to view"}
+                  value={currentSession}
+
+                  onChange={(e) => {
+                    setCurrentRecordingSession(e.target.value)
+                  }}>
+                  {sessionsList?.data?.map((name, i) => {
+                    return (<option key={i} value={name}>{name}</option>)
+                  })}
+
+                </Select>
+                <Button width={"auto"} colorScheme='blue' size='sm' onClick={onOpen}>+ Create</Button>
+              </HStack>
+              {
+                currentSession ?
+                  <>
+
+                    <HStack>
+                      <Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
+                        if (currentSession) {
+                          getRecordedData().then((res) => {
+                            if (res.response) {
+                              setRecordedData({ data: res.response });
+                              console.log("Rec Data::", res.response);
+                              localStorage.setItem("recordeData", JSON.stringify(res.response))
+                            }
+                          }).catch((err) => console.log(err));
+                        } else {
+                          alert("Please select a session to get the data from")
+                        }
+
+                      }}> Get session data</Button>
+
+                      <Button width={"auto"} colorScheme='blue' size='sm'
+                        onClick={() => { if (currentSession) { recordCarData() } else { alert("No session created or selected") } }}>
+                        <BsFillRecordCircleFill color={isRecording ? "red" : null} />
+                      </Button>
+
+                    </HStack>
+
+                    {
+                      recordedData.data ?
+                        <>
+                          <HStack>
+                            <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => playData()} > <FaPlay /> </Button>
+                            <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => pause()}><FaPause /> </Button>
+                            <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => stop()}><FaStop /></Button>
+
+                          </HStack>
+                          <Box><span>Data Frames: {framePointer}/{recordedData.data?.length}</span></Box>
+                        </>
+                        : null
+                    }
+
+                  </>
+                  : null
+              }
+            </VStack>
+
+
+            {/* Create new session popup */}
+            <Modal
+              initialFocusRef={initialRef}
+              finalFocusRef={finalRef}
+              isOpen={isOpen}
+              onClose={onClose}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Create recording session</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                  <FormControl>
+                    <FormLabel>File name</FormLabel>
+                    <Input ref={initialRef} placeholder='File name' onChange={(e) => {
+                      setSessionFileName(e.target.value)
+                    }} />
+                  </FormControl>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button colorScheme='blue' mr={3} onClick={() => {
+                    if (sessionFileName == "") {
+                      alert("Error: Empty feild")
+                      return
+                    }
+                    createRecordingSession(sessionFileName);
+                    onClose()
+                  }}>
+                    Create
+                  </Button>
+                  <Button onClick={onClose}>Cancel</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </GridItem>
+
+          <GridItem
+            rowStart={2}
+            rowSpan={1}
+            borderColor="black"
+            borderWidth={1}
+            // height={"20%"}
+            p={2}
+          >
             <FaultsView data={state.data} />
           </GridItem>
-          <GridItem rowStart={2} rowSpan={1}>
+          <GridItem rowStart={3} rowSpan={1}>
             <VStack
               align="stretch"
               spacing={0}
@@ -499,6 +567,7 @@ export default function Dashboard(props) {
               >
                 <DataViewOptions />
               </Select>
+
               {switchDataView(dataView1)}
             </VStack>
             <VStack
