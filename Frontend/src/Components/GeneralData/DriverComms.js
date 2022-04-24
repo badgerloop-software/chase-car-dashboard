@@ -53,7 +53,7 @@ export default function DriverComms(props) {
             <Flex flex='3' direction='column' pt='1' pl='2' pb='1'>
                 <VStack spacing={0} align='left' marginBottom='5px'>
                     <CommsLabel
-                        boolean={true}
+                        boolean={props.data?.solar_car_connection[0]}
                         label='Solar Car'
                     />
                     <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: 00.00</Text>
