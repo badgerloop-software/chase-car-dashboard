@@ -8,6 +8,7 @@ export default function Faults(props) {
         <Text>Driver E-Stop {props.data?.driver_eStop[0].toString()}</Text>
         <Text>BPS Fault {props.data?.bps_fault[0].toString()}</Text>
       </HStack>
+      
     </VStack>
   );
 }

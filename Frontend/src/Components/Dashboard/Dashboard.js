@@ -90,7 +90,8 @@ export default function Dashboard(props) {
 
   const [state, setState] = useState({ data: null });
   const [framePointer, setFramePointer] = useState(0);
-  let frameIntervalId;
+  let [frameIntervalId, setframeIntervalId] = useState(null);
+  const [playMode, setPlayMode] = useState(false)
 
   const [currentSession, setCurrentSession] = useState("");
   const [recordedData, setRecordedData] = useState({ data: null });
@@ -101,11 +102,17 @@ export default function Dashboard(props) {
 
   useLayoutEffect(() => {
     //-------
-    callBackendAPI().then((res) => {
-      setState({ data: res.response })
-    }).catch((err) => console.log("/api error", err));
+    if (playMode) {
+      setState((prev) => prev.data= recordedData.data[framePointer])
+      console.log("frame:", recordedData.data[framePointer])
+    } else {
+      callBackendAPI().then((res) => {
+        setState({ data: res.response })
+      }).catch((err) => console.log("/api error", err));
+    }
 
-  }, [state]);
+
+  }, [state,framePointer]);
 
   useLayoutEffect(() => {
     //-------
@@ -116,18 +123,25 @@ export default function Dashboard(props) {
   }, []);
 
 
-  const PlayData = (speed = 1) => {
+  const playData = (speed = 1) => {
     let time = 1000 * speed
     // check if already an interval has been set up
+    setPlayMode(true)
+    console.log("paying...")
     if (!frameIntervalId) {
-      frameIntervalId = setInterval(() => {
+      setframeIntervalId(setInterval(() => {
         //What to do during the interval 
-
-      }, time);
+        setFramePointer(prev => prev + 1)
+      }, time))
     }
-
-
   };
+
+  const pause = () => {
+    console.log("stopping:", frameIntervalId)
+    clearInterval(frameIntervalId)
+    setframeIntervalId(null)
+    setFramePointer(0)
+  }
 
   const getRecordedData = async () => {
     const response = await fetch("/get-recorded-data");
@@ -405,7 +419,7 @@ export default function Dashboard(props) {
             getRecordedData().then((res) => {
               if (res.response) {
                 setRecordedData({ data: res.response });
-                console.log("Rec Data::", res);
+                console.log("Rec Data::", res.response);
                 localStorage.setItem("recordeData", JSON.stringify(res.response))
               }
             }).catch((err) => console.log(err));
@@ -414,8 +428,8 @@ export default function Dashboard(props) {
           }
 
         }}>(test) Get session data</Button>
-        <Button width={"15em"} colorScheme='blue' size='sm' >(test) Play</Button>
-        <Button width={"15em"} colorScheme='blue' size='sm' >(test) Pause</Button>
+        <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => playData()} >(test) Play [{framePointer}]</Button>
+        <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => pause()}>(test) Pause</Button>
         <Button width={"15em"} colorScheme='blue' size='sm' onClick={onOpen}>(test) Create session file</Button>
         <Button width={"15em"} colorScheme='blue' size='sm' onClick={() => { if (currentSession) { recordCarData() } else { alert("No session created or selected") } }}>(test) {isRecording ? "Stop" : "Start"} recording session</Button>
       </HStack>
