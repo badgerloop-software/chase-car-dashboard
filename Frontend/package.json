@@ -31,7 +31,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "update-data-constants": "node --experimental-json-modules ./src/CustomScripts/updateDataConstants.mjs"
+    "update-data-constants": "node --experimental-json-modules ./src/CustomScripts/updateDataConstants.mjs",
+    "update-graph-data": "node --experimental-json-modules ./src/CustomScripts/convertData.mjs"
   },
   "eslintConfig": {
     "extends": [

@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
-import SC1DataFormat from "../../Backend/Data/sc1-data-format/format.json" assert { type: "json" };
-import OldGraphData from "../src/Components/Graph/graph-data.json" assert { type: "json" };
+import SC1DataFormat from "../../../Backend/Data/sc1-data-format/format.json" assert { type: "json" };
+import OldGraphData from "../Components/Graph/graph-data.json" assert { type: "json" };
 
 /**
  * Processes the unit values taken directly from the data format JSON to a more human-readable format.
