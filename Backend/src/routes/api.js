@@ -11,13 +11,16 @@ let solarCarData = INITIAL_SOLAR_CAR_DATA,
 
 // Send data to front-end
 ROUTER.get("/api", (req, res) => {
-  res.send({ response: frontendData }).status(200);
+  console.time("send http");
+  const temp = res.send({ response: frontendData }).status(200);
+  temp.addListener("finish", () => console.timeEnd("send http"));
 });
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
-const X_AXIS_CAP = 18_000; // The max number of data points to have in each array at one time
+// const X_AXIS_CAP = 18_000; // The max number of data points to have in each array at one time
+const X_AXIS_CAP = 1_000; // The max number of data points to have in each array at one time
 var client = new Socket();
 
 /**
@@ -37,8 +40,10 @@ function openSocket() {
 
   // Data received listener
   client.on("data", (data) => {
-    console.log(data);
+    // console.log(data);
+    console.time("update data");
     unpackData(data);
+    console.timeEnd("update data");
   });
 
   // Socket closed listener

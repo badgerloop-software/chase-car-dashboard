@@ -62,7 +62,7 @@ function generateCategories() {
  * @param {any} props the props to pass to this graph container
  * @returns the graph-containing component
  */
-export default function GraphContainer({ queue, ...props }) {
+export default function GraphContainer({ queue, latestTime, ...props }) {
   // fetch constants: categories and flatpacked categories
   const [categories, allDatasets] = useConst(generateCategories);
 
@@ -141,7 +141,8 @@ export default function GraphContainer({ queue, ...props }) {
   //----------------- Calculate all data that can be shown --------------------
   const packedData = useMemo(() => {
     // console.log("memo invoked");
-    return allDatasets.map((value) => {
+    console.time("unpack graph data");
+    const temp = allDatasets.map((value) => {
       const output = {
         key: value.key,
         label: value.name,
@@ -152,6 +153,8 @@ export default function GraphContainer({ queue, ...props }) {
       // console.log("packing:", output);
       return output;
     });
+    console.timeEnd("unpack graph data");
+    return temp;
   }, [allDatasets, queue]);
 
   // console.log("graph container propaganda");
@@ -194,6 +197,7 @@ export default function GraphContainer({ queue, ...props }) {
                 packedData={packedData}
                 initialDatasets={[]}
                 allDatasets={allDatasets}
+                latestTime={latestTime}
               />
             ) : (
               <CustomGraph
@@ -203,6 +207,7 @@ export default function GraphContainer({ queue, ...props }) {
                 packedData={packedData}
                 initialDatasets={customGraphData[graphTitles[index]]}
                 allDatasets={allDatasets}
+                latestTime={latestTime}
               />
             )}
           </VStack>

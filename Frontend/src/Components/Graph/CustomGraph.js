@@ -60,8 +60,7 @@ for (const category of GraphData.categories) {
 }
 
 // the options fed into the graph object, save regardless of datasets
-function getOptions(secondsRetained) {
-  const now = DateTime.now();
+function getOptions(now, secondsRetained) {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -159,6 +158,7 @@ export default function CustomGraph(props) {
     initialDatasets,
     allDatasets,
     secondsRetained,
+    latestTime,
     ...stackProps
   } = props;
 
@@ -301,15 +301,17 @@ export default function CustomGraph(props) {
   // the actual graph shown to the user
   const graph = useMemo(() => {
     // const min = DateTime.now().minus(historyLength * 1_000);
-
-    return (
+    console.time("graph update");
+    const temp = (
       <Line
         data={{ datasets: formattedDatasets }}
-        options={getOptions(historyLength)}
+        options={getOptions(new DateTime(latestTime), historyLength)}
         parsing="false"
       />
     );
-  }, [formattedDatasets, historyLength]);
+    console.timeEnd("graph update");
+    return temp;
+  }, [formattedDatasets, historyLength, latestTime]);
 
   return (
     <>

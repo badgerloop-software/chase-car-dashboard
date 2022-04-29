@@ -6,7 +6,10 @@ import DataView from "../GeneralData/DataView";
 import MiniMap from "../MiniMap/MiniMap";
 import GraphContainer from "./GraphContainer";
 
-function reducer(currentState, newData) {
+// prevent accidental reloading/closing
+window.onbeforeunload = () => true;
+
+function reducer([currentQueue, lastTime], newData) {
   // console.log("reducer called :~)", newData);
 
   // const timestamps = newData.timestamps.map((timestamp) =>
@@ -23,7 +26,7 @@ function reducer(currentState, newData) {
     }));
   }
 
-  return output;
+  return [output, newData.timestamps[0]];
 }
 
 /**
@@ -31,14 +34,19 @@ function reducer(currentState, newData) {
  * @returns the JSON response from the API
  */
 async function callBackendAPI() {
+  console.time("http call");
+
   const response = await fetch("/api");
+  console.timeLog("http call", "fetch finished");
   const body = await response.json();
+  console.timeLog("http call", "json extracted");
 
   if (response.status !== 200) {
     console.error("api: error");
     throw Error(body.message);
   }
 
+  console.timeEnd("http call");
   // console.log("body", body);
   return body;
 }
@@ -46,15 +54,26 @@ async function callBackendAPI() {
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
 
-  const [queue, updateQueue] = useReducer(reducer, {});
+  const [[queue, latestTimestamp], updateQueue] = useReducer(reducer, [
+    {},
+    null,
+  ]);
+
+  // useEffect(() => {
+  //   console.log("recieved", latestTimestamp);
+  // }, latestTimestamp);
 
   const [state, setState] = useState({ data: null });
   useEffect(() => {
     callBackendAPI()
       .then((res) => {
+        console.time("update react");
+
         setState({ data: res.response });
         updateQueue(res.response);
         // console.log("api::", res.response);
+
+        console.timeEnd("update react");
       })
       .catch((err) => console.log(err));
   }, [state]);
@@ -119,8 +138,14 @@ export default function Dashboard(props) {
         >
           <FaultsView data={state.data} />
         </GridItem>
-        <GridItem 
-         rowStart={2} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
+        <GridItem
+          rowStart={2}
+          rowSpan={1}
+          borderColor="black"
+          borderWidth={1}
+          display="flex"
+          flexDir="column"
+        >
           <Select
             id="dataViewSelect1"
             size="xs"
@@ -134,8 +159,14 @@ export default function Dashboard(props) {
           </Select>
           {switchDataView(dataView1)}
         </GridItem>
-        <GridItem 
-         rowStart={3} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
+        <GridItem
+          rowStart={3}
+          rowSpan={1}
+          borderColor="black"
+          borderWidth={1}
+          display="flex"
+          flexDir="column"
+        >
           <Select
             id="dataViewSelect2"
             size="xs"
@@ -150,7 +181,12 @@ export default function Dashboard(props) {
           {switchDataView(dataView2)}
         </GridItem>
       </Grid>
-      <GraphContainer queue={queue} flex="2 2 0" maxW="67vw" />
+      <GraphContainer
+        queue={queue}
+        latestTime={latestTimestamp}
+        flex="2 2 0"
+        maxW="67vw"
+      />
     </HStack>
   );
 }
