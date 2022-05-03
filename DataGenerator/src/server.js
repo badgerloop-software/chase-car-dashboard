@@ -43,7 +43,8 @@ const SERVER = NET.createServer((socket) => {
   interval = setInterval(() => {
     buffOffset = 0; // Offset when adding each value to buf1
 
-    const time = DateTime.now().minus(30_000); // thirty seconds in the past
+    // const time = DateTime.now().minus(30_000); // thirty seconds in the past
+    const time = DateTime.now();
     // console.log(time);
 
     // Fill buf1 with new data according to the data format file
