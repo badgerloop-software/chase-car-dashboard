@@ -61,6 +61,9 @@ for (const category of GraphData.categories) {
 
 // the options fed into the graph object, save regardless of datasets
 function getOptions(now, secondsRetained) {
+  // console.log("now:", now);
+  // console.log("diff:", DateTime.now().diff(now).toHuman());
+
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -68,10 +71,10 @@ function getOptions(now, secondsRetained) {
     animation: false,
     plugins: {
       // unknown if decimation is functional
-      decimation: {
-        enabled: true,
-        algorithm: "min-max",
-      },
+      // decimation: {
+      //   enabled: true,
+      //   algorithm: "min-max",
+      // },
       legend: {
         display: false,
       },
@@ -305,7 +308,10 @@ export default function CustomGraph(props) {
     const temp = (
       <Line
         data={{ datasets: formattedDatasets }}
-        options={getOptions(new DateTime(latestTime), historyLength)}
+        options={getOptions(
+          DateTime.fromFormat(latestTime, "HH:mm:ss.SSS"),
+          historyLength
+        )}
         parsing="false"
       />
     );

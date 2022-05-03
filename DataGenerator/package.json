@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "luxon": "^2.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.3",

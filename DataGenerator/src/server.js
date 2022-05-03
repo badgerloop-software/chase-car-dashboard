@@ -1,4 +1,5 @@
 import DATA_FORMAT from "../../Backend/Data/sc1-data-format/format.json";
+import { DateTime } from "luxon";
 const NET = require("net");
 const PORT = 4003; // Port for TCP connection
 
@@ -42,7 +43,7 @@ const SERVER = NET.createServer((socket) => {
   interval = setInterval(() => {
     buffOffset = 0; // Offset when adding each value to buf1
 
-    const time = new Date();
+    const time = DateTime.now().minus(30_000); // thirty seconds in the past
     // console.log(time);
 
     // Fill buf1 with new data according to the data format file
@@ -66,15 +67,15 @@ const SERVER = NET.createServer((socket) => {
         case "uint8":
           // special values: Solar car dashboard time received (hours, minutes, and seconds)
           if (property === "tstamp_hr") {
-            buf1.writeUInt8(time.getHours(), buffOffset);
+            buf1.writeUInt8(time.get("hour"), buffOffset);
             break;
           }
           if (property === "tstamp_mn") {
-            buf1.writeUInt8(time.getMinutes(), buffOffset);
+            buf1.writeUInt8(time.get("minute"), buffOffset);
             break;
           }
           if (property === "tstamp_sc") {
-            buf1.writeUInt8(time.getSeconds(), buffOffset);
+            buf1.writeUInt8(time.get("second"), buffOffset);
             break;
           }
           buf1.writeUInt8(Math.round(nextValue), buffOffset);
@@ -82,7 +83,7 @@ const SERVER = NET.createServer((socket) => {
         case "uint16":
           // special value: Solar car dashboard time received (milliseconds)
           if (property === "tstamp_ms") {
-            buf1.writeUInt16BE(time.getMilliseconds(), buffOffset);
+            buf1.writeUInt16BE(time.get("millisecond"), buffOffset);
             break;
           }
           buf1.writeUInt16BE(Math.round(nextValue), buffOffset);
