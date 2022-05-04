@@ -71,9 +71,10 @@ export default function RangeBar(props) {
 
   return (
     <Box
-      border="2px"
+      border={props.border ?? "2px"}
+      borderRadius={props.borderRadius}
       w={props.w}
-      h="1.25vh"
+      h={props.h ?? "1.25vh"}
       css={{ background: "linear-gradient(to right, " + colorStr + valp + "%, #FFFFFF " + valp + "% 100%)" }}
       />
   );

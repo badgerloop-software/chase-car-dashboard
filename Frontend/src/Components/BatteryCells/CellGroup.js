@@ -1,5 +1,6 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
 import CONSTANTS from "../../data-constants.json";
+import RangeBar from "../Shared/RangeBar";
 
 export default function CellGroup(props) {
     const voltageConstants = CONSTANTS[`cell_group${props.groupNum}_voltage`];
@@ -20,9 +21,8 @@ export default function CellGroup(props) {
             <Text fontSize='sm'>
                 {props.voltage.toFixed(2)} {voltageConstants.UNIT}
             </Text>
-            <Box border='2px' borderRadius='md' w='90%' h='1.5vh'>
-                {props.battery}
-            </Box>
+            <RangeBar val={props.battery} min={voltageConstants.MIN} max={voltageConstants.MAX} 
+                w='99%' h='1.5vh' borderRadius='md' />
         </VStack>
     );
 }
