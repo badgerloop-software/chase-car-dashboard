@@ -142,7 +142,7 @@ function getOptions(now, secondsRetained) {
  * Creates a customizable graph
  *
  * @param {any} props the props to pass to this graph; any {@link StackProps} will be passed to the overarching container
- * @param {(name: string, datasets: string[]) => void} props.onSave the callback function for when the user attempts to save this graph
+ * @param {(name: string, isNew: boolean, datasets: string[]) => void} props.onSave the callback function for when the user attempts to save this graph
  * @param {string} props.title the title that this graph has
  * @param {{category: string, values: Dataset[]}[]} props.categories the color and other associated data for each dataset, organized in an object
  * @param {Dataset[]} props.allDatasets a list of all datasets, complete with ID and color information
@@ -208,7 +208,7 @@ export default function CustomGraph(props) {
   const [datasetKeys, setDatasetKeys] = useState(Object.keys(datasets));
   // called when the name is to be saved, memoized for performance
   const onNameSave = useCallback(
-    (name) => onSave(name, datasetKeys),
+    (name, isNew) => onSave(name, isNew, datasetKeys),
     [onSave, datasetKeys]
   );
   const [historyLength, setHistoryLength] = useState(
@@ -342,7 +342,7 @@ export default function CustomGraph(props) {
             <Button
               onClick={() => {
                 if (title.length) {
-                  onSave(title, datasetKeys);
+                  onSave(title, false, datasetKeys);
                 } else {
                   onNameModalOpen();
                 }
@@ -414,8 +414,9 @@ export default function CustomGraph(props) {
  * @param {boolean} props.isOpen whether the dialog is to be open
  * @param {() => void} props.onClose the function callback for when the modal
  * is closed
- * @param {(string) => void} props.onSave the function callback for when the
- * user clicks "save and continue", with the new title as the argument
+ * @param {(name: string, isNew: boolean) => boolean} props.onSave the function callback for when the
+ * user clicks "save and continue", with the new title (and true) as the argument,
+ * and returns whether the operation was successful
  * @return the modal component
  */
 function GraphNameModal(props) {
@@ -426,7 +427,11 @@ function GraphNameModal(props) {
   const [name, setName] = useState("");
 
   // whether the currently chosen name is valid
-  const isInvalid = !name.length || name === "Custom";
+  // const isInvalid = !name.length || name === "Custom";
+  const [isInvalid, setInvalid] = useState(true);
+  useEffect(() => {
+    setInvalid(!name.length || name === "Custom");
+  }, [name]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -445,15 +450,19 @@ function GraphNameModal(props) {
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(evt) => {
                 if (!isInvalid && evt.key === "Enter") {
-                  onSave(name);
-                  onClose();
+                  if (onSave(name, true)) {
+                    onClose();
+                  } else {
+                    setInvalid(true);
+                  }
                 }
               }}
               required
             />
             {isInvalid ? (
               <FormErrorMessage>
-                A name for the graph is required, and it cannot be "Custom".
+                A unique name for the graph is required, and it cannot be
+                "Custom".
               </FormErrorMessage>
             ) : (
               <FormHelperText>
@@ -470,8 +479,8 @@ function GraphNameModal(props) {
             mr={3}
             onClick={() => {
               // console.log("Saving and exiting...");
-              onSave(name);
-              onClose();
+              if (onSave(name, true)) onClose();
+              else setInvalid(true);
             }}
             isDisabled={isInvalid}
           >

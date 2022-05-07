@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { Socket } from "net";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
@@ -19,9 +18,10 @@ ROUTER.get("/api", (req, res) => {
 //----------------------------------------------------- TCP ----------------------------------------------------------
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
-// const X_AXIS_CAP = 18_000; // The max number of data points to have in each array at one time
-const X_AXIS_CAP = 1_000; // The max number of data points to have in each array at one time
-var client = new Socket();
+
+// The max number of data points to have in each array at one time
+// equivalent to 10 minutes' worth of data being sent 30 Hz
+const X_AXIS_CAP = 18_000;
 
 /**
  * Creates a connection with the TCP server at port CAR_PORT and address CAR_SERVER. Then, sets listeners for connect,

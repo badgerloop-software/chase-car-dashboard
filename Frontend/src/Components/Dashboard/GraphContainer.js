@@ -124,7 +124,13 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
    * @param {number} index the index of the graph that's being saved
    */
   const onSave = useCallback(
-    (title, datasets, index) => {
+    (title, isNew, datasets, index) => {
+      // check duplicates if new
+      if (isNew && Object.keys(customGraphData).includes(title)) {
+        console.warn("No\n", title, "is in", customGraphData);
+        return false;
+      }
+
       // set new graph data assigned to this graph
       const tempData = Object.assign({}, customGraphData);
       tempData[title] = datasets;
@@ -134,6 +140,9 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
       const tempTitles = graphTitles.slice();
       tempTitles[index] = title;
       setGraphTitles(tempTitles);
+
+      // go ahead with saving
+      return true;
     },
     [setCustomGraphData, setGraphTitles, customGraphData, graphTitles]
   );
@@ -191,7 +200,9 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
             {graphTitles[index] === "" ? null : graphTitles[index] ===
               "Custom" ? (
               <CustomGraph
-                onSave={(title, datasets) => onSave(title, datasets, index)}
+                onSave={(title, isNew, datasets) =>
+                  onSave(title, isNew, datasets, index)
+                }
                 title=""
                 categories={categories}
                 packedData={packedData}
@@ -201,7 +212,9 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
               />
             ) : (
               <CustomGraph
-                onSave={(title, datasets) => onSave(title, datasets, index)}
+                onSave={(title, isNew, datasets) =>
+                  onSave(title, isNew, datasets, index)
+                }
                 title={graphTitles[index]}
                 categories={categories}
                 packedData={packedData}

@@ -2,7 +2,7 @@
 
 ## Libraries
 
-- [node.js and npm](https://nodejs.org/en/) - Package manager and server workhorse (minimum **version 17**)
+- [node.js and npm](https://nodejs.org/en/) - Package manager and server workhorse (node version **>16**)
 - [React](https://reactjs.org/) - Front-end library
 - [Chakra UI](https://chakra-ui.com/) - Component library
 - [Chart.js](https://www.chartjs.org/) & [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2) - Graph library & React wrapper
@@ -13,7 +13,7 @@
 1. Once you have an SSH key, clone the [sc1-data-format repository](https://github.com/badgerloop-software/sc1-data-format) to your computer. Make sure to clone it using SSH (when you go to copy the clone link, there will be an SSH option above the link).
 2. Next, `cd` into the `chase-car-dashboard` repository and run `git submodule update --init`.
 
-## Updating the Submodule
+## Updating Data
 
 0. This step assumes that the repository has been initialized as above.
 1. Run the command `npm run update-data`. This should take care of updating the submodule and JSON files in the frontend. (If the command fails to run, make sure you have the most recent dependencies and version of `npm` installed onto your computer).
