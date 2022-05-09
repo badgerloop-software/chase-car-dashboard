@@ -66,12 +66,12 @@ const timeLengths = [
  * @param {() => void} props.onClose the function callback for when this modal closes
  * @param {string[]} props.initialDatasets the initial list of datasets to use
  * @param {number} props.initialHistoryLength the initial history length to use
- * @param {(string[], number) => void)} props.onSave the function callback for when the
+ * @param {(string[], number) => void} props.onSave the function callback for when the
  * user clicks the "save and exit" button, with the selected datasets' keys and the
  * new history length as the argument
  * @returns the modal component
  */
-function GraphModal(props) {
+function GraphSelectModal(props) {
   // unpack props
   const { isOpen, onClose, initialDatasets, initialHistoryLength, onSave } =
     props;
@@ -176,4 +176,4 @@ function GraphModal(props) {
   );
 }
 
-export default GraphModal;
+export default GraphSelectModal;

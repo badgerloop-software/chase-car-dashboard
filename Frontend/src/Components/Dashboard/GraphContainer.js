@@ -30,7 +30,6 @@ function generateCategories() {
       const color = "#" + colorNum.toString(16);
 
       const output = { key: obj.key, name: obj.name, color };
-      allDatasets.push(output);
       // console.log("Generated color for", obj, ":", output);
       return output;
     });
@@ -96,20 +95,22 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
 
   //------------------------- Saving custom graphs ----------------------------
   // a state variable that stores all saved custom graphs' data
-  // the key is the name of the graph, and the value contains the selected datasets, which are hidden, and the visible history length
-  // format: {[name: string]: string[]}
+  // the key is the name of the graph, and the value contains the selected datasets and the visible history length
+  // format: {[name: string]: {datasets: string[], historyLength: number}}
   const [customGraphData, setCustomGraphData] = useState({});
   // console.log("custom graph data:", customGraphData);
 
   /**
-   * Saves the given graph's data (namely, the datasets that it is displaying)
+   * Saves the given graph's data (namely, the datasets that it is displaying and its "history length")
    *
    * @param {string} title the title of the graph to be saved
-   * @param {string[]} datasets collection of datasets that is associated with this graph
+   * @param {{datasets: string[], historyLength: number}} data all the data associated with the graph that is supposed to be saved
+   * @param {string[]} data.datasets the datasets that are displayed in the graph to be saved
+   * @param {number} data.historyLength the length of history, in seconds, to display to the user
    * @param {number} index the index of the graph that's being saved
    */
   const onSave = useCallback(
-    (title, isNew, datasets, index) => {
+    (title, isNew, data, index) => {
       // check duplicates if new
       if (isNew && Object.keys(customGraphData).includes(title)) {
         console.warn("No\n", title, "is in", customGraphData);
@@ -118,7 +119,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
 
       // set new graph data assigned to this graph
       const tempData = Object.assign({}, customGraphData);
-      tempData[title] = datasets;
+      tempData[title] = data;
       setCustomGraphData(tempData);
 
       // update the graph title
@@ -201,8 +202,8 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
             {graphTitles[index] === "" ? null : graphTitles[index] ===
               "Custom" ? (
               <CustomGraph
-                onSave={(title, isNew, datasets) =>
-                  onSave(title, isNew, datasets, index)
+                onSave={(title, isNew, data) =>
+                  onSave(title, isNew, data, index)
                 }
                 title=""
                 // categories={categories}
@@ -213,13 +214,16 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
               />
             ) : (
               <CustomGraph
-                onSave={(title, isNew, datasets) =>
-                  onSave(title, isNew, datasets, index)
+                onSave={(title, isNew, data) =>
+                  onSave(title, isNew, data, index)
                 }
                 title={graphTitles[index]}
                 // categories={categories}
                 packedData={packedData}
-                initialDatasets={customGraphData[graphTitles[index]]}
+                initialDatasets={customGraphData[graphTitles[index]].datasets}
+                secondsRetained={
+                  customGraphData[graphTitles[index]].historyLength
+                }
                 // allDatasets={allDatasets}
                 latestTime={latestTime}
               />

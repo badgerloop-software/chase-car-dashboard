@@ -127,7 +127,9 @@ function unpackData(data) {
         break;
       case "uint8":
         if (property === "tstamp_hr") {
-          timestamps[0] = data.readUInt8(buffOffset) + timestamps[0];
+          const hours = data.readUInt8(buffOffset);
+          if (hours < 10) hours = "0" + hours;
+          timestamps[0] = hours + timestamps[0];
           break;
         }
         if (property === "tstamp_mn") {

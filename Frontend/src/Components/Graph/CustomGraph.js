@@ -142,7 +142,7 @@ function getOptions(now, secondsRetained) {
  * Creates a customizable graph.
  *
  * @param {any} props the props to pass to this graph; any {@link StackProps} will be passed to the overarching container
- * @param {(name: string, isNew: boolean, datasets: string[]) => void} props.onSave the callback function for when the user attempts to save this graph
+ * @param {(name: string, isNew: boolean, data: {datasets: string[], historyLength: number}) => void} props.onSave the callback function for when the user attempts to save this graph
  * @param {string} props.title the title that this graph has
  * @param {string[]} props.initialDatasets a list of the IDs of the initial datasets
  * @param {any} props.packedData the queue of data, packed in Chart.js format, coming from the solar car
@@ -154,10 +154,8 @@ export default function CustomGraph(props) {
   const {
     onSave,
     title,
-    // categories,
     packedData,
     initialDatasets,
-    // allDatasets,
     secondsRetained,
     latestTime,
     ...stackProps
@@ -200,17 +198,19 @@ export default function CustomGraph(props) {
   //   console.log(`datasets for "${title}" updated:`, datasets);
   // }, [datasets, title]);
 
+  // a state variable that stores how many seconds' worth of data to display on the graph
+  const [historyLength, setHistoryLength] = useState(
+    secondsRetained ?? GraphData.defaultHistoryLength
+  );
+
   // the data to pass to the graph
   const [formattedDatasets, setFormattedDatasets] = useState([]);
   // the keys of the dataset array
   const [datasetKeys, setDatasetKeys] = useState(Object.keys(datasets));
   // called when the name is to be saved for the first time, memoized for performance
   const onNewSave = useCallback(
-    (name) => onSave(name, true, datasetKeys),
-    [onSave, datasetKeys]
-  );
-  const [historyLength, setHistoryLength] = useState(
-    secondsRetained ?? GraphData.defaultHistoryLength
+    (name) => onSave(name, true, { datasets: datasetKeys, historyLength }),
+    [onSave, datasetKeys, historyLength]
   );
 
   // side-effects for when new datasets are chosen
@@ -251,17 +251,6 @@ export default function CustomGraph(props) {
 
   // console.log("formatted datasets:", formattedDatasets);
   // console.log(datasets, "keys:", datasetKeys);
-
-  // const onSelectSave = (keys) => {
-  //   // updateDatasets({ action: "set", key: keys })
-  //   // console.log("keys:", keys);
-  //   const newDatasets = {};
-  //   for (const key of keys) {
-  //     newDatasets[key] = datasets[key] ?? true;
-  //   }
-  //   // console.log("new datasets:", newDatasets);
-  //   setDatasets(newDatasets);
-  // };
 
   // the modal that appears when the user wants to update the datasets that are shown
   const graphSelectModal = useMemo(() => {
@@ -308,7 +297,7 @@ export default function CustomGraph(props) {
       <Line
         data={{ datasets: formattedDatasets }}
         options={getOptions(
-          DateTime.fromFormat(latestTime, "HH:mm:ss.SSS"),
+          DateTime.fromFormat(latestTime, "HH:mm:ss.SSS") ?? DateTime.now(),
           historyLength
         )}
         parsing="false"
@@ -341,7 +330,10 @@ export default function CustomGraph(props) {
             <Button
               onClick={() => {
                 if (title.length) {
-                  onSave(title, false, datasetKeys);
+                  onSave(title, false, {
+                    datasets: datasetKeys,
+                    historyLength,
+                  });
                 } else {
                   onNameModalOpen();
                 }
