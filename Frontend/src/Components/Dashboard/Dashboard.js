@@ -9,6 +9,12 @@ import GraphContainer from "./GraphContainer";
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
 
+/**
+ * The reducer used for the main queue of data from the database
+ * @param {[any, string]} param0 the previous queue and last time data
+ * @param {any} newData the new data that is recieved directly from the backend
+ * @returns the new queue of data to use
+ */
 function reducer([currentQueue, lastTime], newData) {
   // console.log("reducer called :~)", newData);
 
@@ -51,6 +57,11 @@ async function callBackendAPI() {
   return body;
 }
 
+/**
+ * The Dashboard component
+ * @param {any} props the props to pass this dashboard component (none are used)
+ * @returns the dashboard component
+ */
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
 
