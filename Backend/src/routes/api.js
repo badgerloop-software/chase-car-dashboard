@@ -126,30 +126,31 @@ function unpackData(data) {
         dataArray.unshift(Boolean(data.readUInt8(buffOffset)));
         break;
       case "uint8":
-        if (property === "tstamp_hr") {
-          const hours = data.readUInt8(buffOffset);
-          if (hours < 10) hours = "0" + hours;
-          timestamps[0] = hours + timestamps[0];
-          break;
+        switch (property) {
+          case "tstamp_hr":
+            const hours = data.readUInt8(buffOffset);
+            if (hours < 10) hours = "0" + hours;
+            timestamps[0] = hours + timestamps[0];
+            break;
+          case "tstamp_mn":
+            const mins = data.readUInt8(buffOffset);
+            timestamps[0] = timestamps[0].replace(
+              "::",
+              ":" + (mins < 10 ? "0" + mins : mins) + ":"
+            );
+            break;
+          case "tstamp_sc":
+            const secs = data.readUInt8(buffOffset);
+            timestamps[0] = timestamps[0].replace(
+              ":.",
+              ":" + (secs < 10 ? "0" + secs : secs) + "."
+            );
+            break;
+          default:
+            // Add the data to the front of dataArray
+            dataArray.unshift(data.readUInt8(buffOffset));
+            break;
         }
-        if (property === "tstamp_mn") {
-          const mins = data.readUInt8(buffOffset);
-          timestamps[0] = timestamps[0].replace(
-            "::",
-            ":" + (mins < 10 ? "0" + mins : mins) + ":"
-          );
-          break;
-        }
-        if (property === "tstamp_sc") {
-          const secs = data.readUInt8(buffOffset);
-          timestamps[0] = timestamps[0].replace(
-            ":.",
-            ":" + (secs < 10 ? "0" + secs : secs) + "."
-          );
-          break;
-        }
-        // Add the data to the front of dataArray
-        dataArray.unshift(data.readUInt8(buffOffset));
         break;
       case "uint16":
         if (property === "tstamp_ms") {

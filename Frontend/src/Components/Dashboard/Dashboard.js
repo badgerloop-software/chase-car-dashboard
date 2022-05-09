@@ -11,11 +11,12 @@ window.onbeforeunload = () => true;
 
 /**
  * The reducer used for the main queue of data from the database
- * @param {[any, string]} param0 the previous queue and last time data
+ * @param {[any[], string]} prevData the previous queue and last time data
+ * @param {any[]} prevData[0] the queued data
  * @param {any} newData the new data that is recieved directly from the backend
  * @returns the new queue of data to use
  */
-function reducer([currentQueue, lastTime], newData) {
+function reducer([currentQueue], newData) {
   // console.log("reducer called :~)", newData);
 
   // const timestamps = newData.timestamps.map((timestamp) =>

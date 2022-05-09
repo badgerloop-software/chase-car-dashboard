@@ -54,6 +54,17 @@ for (const key of Object.keys(SC1DataFormat)) {
   }
 }
 
+// add solar_car_connection dataset
+categories
+  .find((category) => category.category === "General")
+  .values.push({
+    key: "solar_car_connection",
+    name: "Solar Car Connection",
+    unit: "",
+    min: 0,
+    max: 1,
+  });
+
 // the default history length, in seconds
 const defaultHistoryLength = OldGraphData.defaultHistoryLength ?? 60;
 

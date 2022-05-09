@@ -65,6 +65,13 @@
           "unit": "V",
           "min": 0,
           "max": 5
+        },
+        {
+          "key": "solar_car_connection",
+          "name": "Solar Car Connection",
+          "unit": "",
+          "min": 0,
+          "max": 1
         }
       ]
     },
