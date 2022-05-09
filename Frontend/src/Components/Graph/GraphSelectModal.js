@@ -84,17 +84,6 @@ function GraphModal(props) {
   // a state variable that keeps track of the history length that the user wants to show
   const [historyLength, setHistoryLength] = useState(initialHistoryLength);
 
-  // useEffect(() => {
-  //   console.log("GraphModal dialog updated");
-  // });
-  // useEffect(() => {
-  //   console.log("GraphModal should be updated");
-  // }, [isOpen, onClose, initialDatasets, onSave, dataKeys]);
-
-  // useEffect(() => {
-  //   console.log("new keys:", dataKeys);
-  // }, [dataKeys]);
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />

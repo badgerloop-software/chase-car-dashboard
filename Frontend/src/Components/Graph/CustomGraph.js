@@ -139,13 +139,11 @@ function getOptions(now, secondsRetained) {
 }
 
 /**
- * Creates a customizable graph
+ * Creates a customizable graph.
  *
  * @param {any} props the props to pass to this graph; any {@link StackProps} will be passed to the overarching container
  * @param {(name: string, isNew: boolean, datasets: string[]) => void} props.onSave the callback function for when the user attempts to save this graph
  * @param {string} props.title the title that this graph has
- * @param {{category: string, values: Dataset[]}[]} props.categories the color and other associated data for each dataset, organized in an object
- * @param {Dataset[]} props.allDatasets a list of all datasets, complete with ID and color information
  * @param {string[]} props.initialDatasets a list of the IDs of the initial datasets
  * @param {any} props.packedData the queue of data, packed in Chart.js format, coming from the solar car
  * @param {number} props.secondsRetained the number of seconds to retain a point on this grpah
@@ -156,10 +154,10 @@ export default function CustomGraph(props) {
   const {
     onSave,
     title,
-    categories,
+    // categories,
     packedData,
     initialDatasets,
-    allDatasets,
+    // allDatasets,
     secondsRetained,
     latestTime,
     ...stackProps
@@ -206,9 +204,9 @@ export default function CustomGraph(props) {
   const [formattedDatasets, setFormattedDatasets] = useState([]);
   // the keys of the dataset array
   const [datasetKeys, setDatasetKeys] = useState(Object.keys(datasets));
-  // called when the name is to be saved, memoized for performance
-  const onNameSave = useCallback(
-    (name, isNew) => onSave(name, isNew, datasetKeys),
+  // called when the name is to be saved for the first time, memoized for performance
+  const onNewSave = useCallback(
+    (name) => onSave(name, true, datasetKeys),
     [onSave, datasetKeys]
   );
   const [historyLength, setHistoryLength] = useState(
@@ -237,6 +235,7 @@ export default function CustomGraph(props) {
         (packedDataset) => packedDataset.key === key
       );
       if (temp) {
+        // copy the data to ensure that this function remains pure
         const copy = Object.assign({}, temp);
         copy.hidden = !datasets[key];
         // console.log(`${title} pushed:`, copy);
@@ -295,10 +294,10 @@ export default function CustomGraph(props) {
       <GraphNameModal
         isOpen={isNameModalOpen}
         onClose={onNameModalClose}
-        onSave={onNameSave}
+        onSave={onNewSave}
       />
     ),
-    [isNameModalOpen, onNameModalClose, onNameSave]
+    [isNameModalOpen, onNameModalClose, onNewSave]
   );
 
   // the actual graph shown to the user
@@ -450,7 +449,7 @@ function GraphNameModal(props) {
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(evt) => {
                 if (!isInvalid && evt.key === "Enter") {
-                  if (onSave(name, true)) {
+                  if (onSave(name)) {
                     onClose();
                   } else {
                     setInvalid(true);
@@ -479,7 +478,7 @@ function GraphNameModal(props) {
             mr={3}
             onClick={() => {
               // console.log("Saving and exiting...");
-              if (onSave(name, true)) onClose();
+              if (onSave(name)) onClose();
               else setInvalid(true);
             }}
             isDisabled={isInvalid}

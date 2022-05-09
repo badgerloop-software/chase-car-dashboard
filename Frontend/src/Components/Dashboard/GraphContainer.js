@@ -9,39 +9,23 @@ import GraphData from "../Graph/graph-data.json";
  * The data is in this format:
  * ```
  * [
- * [
- *   {
- *     category: string,
- *     values: [
- *       {
- *         key: string,
- *         name: string,
- *         color: string
- *       }
- *     ]
- *   }
- * ],
- * [
  *   {
  *     key: string,
  *     name: string,
  *     color: string
  *   }
- * ]
  * ]```
  *
- * where `category` is the name of a category,
- * `key` is the internally-used string used to identify the dataset,
+ * where `key` is the internally-used string used to identify the dataset,
  * `name` is the human-readable name of this dataset, and `color` is the
  * (CSS-compatible) hex color code assigned to this dataset.
  *
  * @returns a list of categories taken from the JSON file with randomly generated colors
  */
 function generateCategories() {
-  const categories = [],
-    allDatasets = [];
-  for (const category of GraphData.categories) {
-    const values = category.values.map((obj) => {
+  const allDatasets = GraphData.categories
+    .flatMap((category) => category.values)
+    .map((obj) => {
       const colorNum = Math.floor(Math.random() * 0x3fffff + 0x3fffff);
       const color = "#" + colorNum.toString(16);
 
@@ -50,10 +34,8 @@ function generateCategories() {
       // console.log("Generated color for", obj, ":", output);
       return output;
     });
-    categories.push({ category: category.category, values });
-  }
 
-  return [categories, allDatasets];
+  return allDatasets;
 }
 
 /**
@@ -64,7 +46,7 @@ function generateCategories() {
  */
 export default function GraphContainer({ queue, latestTime, ...props }) {
   // fetch constants: categories and flatpacked categories
-  const [categories, allDatasets] = useConst(generateCategories);
+  const allDatasets = useConst(generateCategories);
 
   //------------------- Choosing graphs using Select components -------------------
   // stores the list of graph names/id
@@ -113,6 +95,9 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
   );
 
   //------------------------- Saving custom graphs ----------------------------
+  // a state variable that stores all saved custom graphs' data
+  // the key is the name of the graph, and the value contains the selected datasets, which are hidden, and the visible history length
+  // format: {[name: string]: string[]}
   const [customGraphData, setCustomGraphData] = useState({});
   // console.log("custom graph data:", customGraphData);
 
@@ -148,6 +133,22 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
   );
 
   //----------------- Calculate all data that can be shown --------------------
+  /**
+   * A "pre-packed" representation of the data that can be easily inserted into
+   * the graph component for rendering.
+   *
+   * The object is of the format:
+   * ```
+   * [
+   *   {
+   *     key: string,
+   *     label: string,
+   *     data: [{x: DateTime, y: any}],
+   *     borderColor: string,
+   *     backgroundColor: string
+   *   }
+   * ]
+   */
   const packedData = useMemo(() => {
     // console.log("memo invoked");
     console.time("unpack graph data");
@@ -204,10 +205,10 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
                   onSave(title, isNew, datasets, index)
                 }
                 title=""
-                categories={categories}
+                // categories={categories}
                 packedData={packedData}
                 initialDatasets={[]}
-                allDatasets={allDatasets}
+                // allDatasets={allDatasets}
                 latestTime={latestTime}
               />
             ) : (
@@ -216,10 +217,10 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
                   onSave(title, isNew, datasets, index)
                 }
                 title={graphTitles[index]}
-                categories={categories}
+                // categories={categories}
                 packedData={packedData}
                 initialDatasets={customGraphData[graphTitles[index]]}
-                allDatasets={allDatasets}
+                // allDatasets={allDatasets}
                 latestTime={latestTime}
               />
             )}
