@@ -48,21 +48,23 @@ export default function RangeBar(props) {
     return [h, s, v]
   }
 
+  // Function that interpolates color (3-element array) from startCol to endCol by pct (0 <= pct <= 1)
   const lerpColor = (startCol, endCol, pct) =>
     Array.from(Array(3), (_, i) => (startCol[i] + pct * (endCol[i] - startCol[i])));
 
   let valp = toPercentage(props.val, props.min, props.max);
 
   const green = [0x52, 0xFF, 0x00];
-  const yellow = green; // I think this looks better than: [0xF6, 0xFF, 0x00];
   const red = [0xFF, 0x01, 0x01];
 
   let color;
-  let lb = 25, ub = 75;
+  const lb = 35, ub = 65;
   if (valp < lb) {
-    color = HSVtoRGB(lerpColor(RGBtoHSV(red), RGBtoHSV(yellow), valp / lb));
+    // Color is interpolated btw red and green depending on distance from lower bound (lb)
+    color = HSVtoRGB(lerpColor(RGBtoHSV(red), RGBtoHSV(green), valp / lb));
   } else if (valp > ub) {
-    color = HSVtoRGB(lerpColor(RGBtoHSV(yellow), RGBtoHSV(red), (valp - ub) / (100 - ub)));
+    // Color is interpolated btw red and green depending on distance from upper bound (ub)
+    color = HSVtoRGB(lerpColor(RGBtoHSV(green), RGBtoHSV(red), (valp - ub) / (100 - ub)));
   } else {
     color = green;
   }

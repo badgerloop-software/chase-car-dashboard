@@ -21,7 +21,7 @@ export default function CellGroup(props) {
             <Text fontSize='sm'>
                 {props.voltage.toFixed(2)} {voltageConstants.UNIT}
             </Text>
-            <RangeBar val={props.battery} min={voltageConstants.MIN} max={voltageConstants.MAX} 
+            <RangeBar val={props.voltage} min={voltageConstants.MIN} max={voltageConstants.MAX} 
                 w='99%' h='1.5vh' borderRadius='md' />
         </VStack>
     );
