@@ -2,8 +2,11 @@ import {Flex, Text, Spacer} from "@chakra-ui/react"
 import RangeBar from "./RangeBar"
 
 export default function RangeCell(props){
+    const bg = (props.data < props.min || props.data > props.max) ?
+        "#ff000055" : null;
+
     return(
-        <Flex flex='2' direction='column'>
+        <Flex flex='2' direction='column' backgroundColor={bg}>
             <Flex flex='0.4'>
                 <Text fontSize={props.fontSize}>{props.label}</Text>
                 <Spacer/>

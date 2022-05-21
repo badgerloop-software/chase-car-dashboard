@@ -1,11 +1,14 @@
 import { Box, Text, VStack, Flex, Spacer, Center } from "@chakra-ui/react";
 
 export default function DataPack(props) {
+    const bg = (props.dataValue < props.dataMin || props.dataValue > props.dataMax) ?
+        "#ff000055" : props.bg;
+
     return (
         <Center
             borderWidth={1}
             borderColor='black'
-            bg={props.bg}
+            bg={bg}
             lineHeight='1.2em'
             height='100%'
         >

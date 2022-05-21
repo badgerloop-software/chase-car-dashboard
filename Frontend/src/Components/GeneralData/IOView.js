@@ -1,6 +1,7 @@
 import { Flex, Spacer, VStack } from "@chakra-ui/react";
 import HeadingCell from "../Shared/HeadingCell";
 import RangeCell from "../Shared/RangeCell";
+import CONSTANTS from "../../data-constants.json";
 
 export default function IOView(props) {
     const fss = "1.0em";
@@ -16,9 +17,9 @@ export default function IOView(props) {
                 label='12V Bus'
                 data={props.data?.bus_12V[0] ?? -1}
                 digits={2}
-                unit=' V'
-                min={0}
-                max={100}
+                unit={' ' + CONSTANTS.bus_12V.UNIT}
+                min={CONSTANTS.bus_12V.MIN}
+                max={CONSTANTS.bus_12V.MAX}
             />
             <Spacer/>
             <RangeCell
@@ -27,9 +28,9 @@ export default function IOView(props) {
                 label='5V Bus'
                 data={props.data?.bus_5V[0] ?? -1}
                 digits={2}
-                unit=' V'
-                min={0}
-                max={100}
+                unit={' ' + CONSTANTS.bus_5V.UNIT}
+                min={CONSTANTS.bus_5V.MIN}
+                max={CONSTANTS.bus_5V.MAX}
             />
         </Flex>
 
@@ -41,17 +42,17 @@ export default function IOView(props) {
                 data={props.data?.driverIO_temp[0] ?? -1}
                 digits={2}
                 unit='&#x2103;'
-                min={0}
-                max={100}
+                min={CONSTANTS.driverIO_temp.MIN}
+                max={CONSTANTS.driverIO_temp.MAX}
             />
             <RangeCell
                 fontSize={fs}
                 label='Driver I/O Current In'
                 data={props.data?.driverIO_current_in[0] ?? -1}
                 digits={2}
-                unit=' A'
-                min={0}
-                max={100}
+                unit={' ' + CONSTANTS.driverIO_current_in.UNIT}
+                min={CONSTANTS.driverIO_current_in.MIN}
+                max={CONSTANTS.driverIO_current_in.MAX}
             />
         </Flex>
 
@@ -63,17 +64,17 @@ export default function IOView(props) {
                 data={props.data?.mainIO_temp[0] ?? -1}
                 digits={2}
                 unit='&#x2103;'
-                min={0}
-                max={100}
+                min={CONSTANTS.mainIO_temp.MIN}
+                max={CONSTANTS.mainIO_temp.MAX}
             />
             <RangeCell
                 fontSize={fs}
                 label='Main I/O Current In'
                 data={props.data?.mainIO_current_in[0] ?? -1}
                 digits={2}
-                unit=' A'
-                min={0}
-                max={100}
+                unit={' ' + CONSTANTS.mainIO_current_in.UNIT}
+                min={CONSTANTS.mainIO_current_in.MIN}
+                max={CONSTANTS.mainIO_current_in.MAX}
             />
         </Flex>
       </VStack>

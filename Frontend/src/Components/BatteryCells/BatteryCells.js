@@ -1,6 +1,7 @@
 import { SimpleGrid, VStack, Flex } from "@chakra-ui/react";
 import DataPack from "./DataPack";
 import CellGroup from "./CellGroup";
+import CONSTANTS from "../../data-constants.json";
 
 export default function BatteryCells(props) {
     return (
@@ -16,33 +17,43 @@ export default function BatteryCells(props) {
                 <DataPack
                     dataTitle="Power Input Voltage"
                     dataValue={props.data?.bms_input_voltage[0] ?? -1.0}
-                    dataUnit="V"
+                    dataUnit={CONSTANTS.bms_input_voltage.UNIT}
+                    dataMin={CONSTANTS.bms_input_voltage.MIN}
+                    dataMax={CONSTANTS.bms_input_voltage.MAX}
                     bg='#DDDDDD'
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack State of Charge"
                     dataValue={props.data?.soc[0] ?? -1.0}
-                    dataUnit="%"
+                    dataUnit={CONSTANTS.soc.UNIT}
+                    dataMin={CONSTANTS.soc.MIN}
+                    dataMax={CONSTANTS.soc.MAX}
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Current"
                     dataValue={props.data?.pack_current[0] ?? -1.0}
-                    dataUnit="A"
+                    dataUnit={CONSTANTS.pack_current.UNIT}
+                    dataMin={CONSTANTS.pack_current.MIN}
+                    dataMax={CONSTANTS.pack_current.MAX}
                     bg='#DDDDDD'
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Voltage"
                     dataValue={props.data?.pack_voltage[0] ?? -1.0}
-                    dataUnit="V"
+                    dataUnit={CONSTANTS.pack_voltage.UNIT}
+                    dataMin={CONSTANTS.pack_voltage.MIN}
+                    dataMax={CONSTANTS.pack_voltage.MAX}
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Power Out"
                     dataValue={(props.data?.pack_voltage[0] * props.data?.pack_current[0]) ?? -1.0}
-                    dataUnit="V"
+                    dataUnit="W"
+                    dataMin={CONSTANTS.pack_voltage.MIN * CONSTANTS.pack_current.MIN}
+                    dataMax={CONSTANTS.pack_voltage.MAX * CONSTANTS.pack_current.MAX}
                     bg='#DDDDDD'
                     DecimalPoint='3'
                 />
@@ -50,12 +61,16 @@ export default function BatteryCells(props) {
                     dataTitle="Pack Temperature"
                     dataValue={props.data?.pack_temp[0] ?? -1.0}
                     dataUnit="&#8451;"
+                    dataMin={CONSTANTS.pack_temp.MIN}
+                    dataMax={CONSTANTS.pack_temp.MAX}
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Fan Speed"
                     dataValue={props.data?.fan_speed[0] ?? -1.0}
-                    dataUnit=""
+                    dataUnit={CONSTANTS.fan_speed.UNIT}
+                    dataMin={CONSTANTS.fan_speed.MIN}
+                    dataMax={CONSTANTS.fan_speed.MAX}
                     bg='#DDDDDD'
                     DecimalPoint='0'
                 />
@@ -63,32 +78,42 @@ export default function BatteryCells(props) {
                     dataTitle="Pack Resistance"
                     dataValue={props.data?.pack_resistance[0] ?? -1.0}
                     dataUnit="m&#937;"
+                    dataMin={CONSTANTS.pack_resistance.MIN}
+                    dataMax={CONSTANTS.pack_resistance.MAX}
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Avg. Cell Int. Resist"
                     dataValue={props.data?.avg_cell_resistance[0] ?? -1.0}
                     dataUnit="m&#937;"
+                    dataMin={CONSTANTS.avg_cell_resistance.MIN}
+                    dataMax={CONSTANTS.avg_cell_resistance.MAX}
                     bg='#DDDDDD'
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack Capacity"
                     dataValue={props.data?.pack_capacity[0] ?? -1.0}
-                    dataUnit="Ah"
+                    dataUnit={CONSTANTS.pack_capacity.UNIT}
+                    dataMin={CONSTANTS.pack_capacity.MIN}
+                    dataMax={CONSTANTS.pack_capacity.MAX}
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Adap. Total Capacity"
                     dataValue={props.data?.adaptive_total_capacity[0] ?? -1.0}
-                    dataUnit="Ah"
+                    dataUnit={CONSTANTS.adaptive_total_capacity.UNIT}
+                    dataMin={CONSTANTS.adaptive_total_capacity.MIN}
+                    dataMax={CONSTANTS.adaptive_total_capacity.MAX}
                     bg='#DDDDDD'
                     DecimalPoint='3'
                 />
                 <DataPack
                     dataTitle="Pack State of Health"
                     dataValue={props.data?.soh[0] ?? -1.0}
-                    dataUnit="Ah"
+                    dataUnit={CONSTANTS.soh.UNIT}
+                    dataMin={CONSTANTS.soh.MIN}
+                    dataMax={CONSTANTS.soh.MAX}
                     DecimalPoint='3'
                 />
             </Flex>
