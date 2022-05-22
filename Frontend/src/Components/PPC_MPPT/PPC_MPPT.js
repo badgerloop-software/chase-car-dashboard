@@ -4,6 +4,7 @@ import MPPT_CELL from "./MPPT_CELL";
 import OutputCurrent from "./OutputCurrent";
 import HeadingCell from "../Shared/HeadingCell";
 import RangeCell from "../Shared/RangeCell";
+import CONSTANTS from "../../data-constants.json";
 
 
 export default function PPC_MPPT(props) {
@@ -39,6 +40,8 @@ export default function PPC_MPPT(props) {
                         <OutputCurrent
                             label='Output Current'
                             current={props.data?.mppt_current_out[0] ?? -1.0}
+                            currentMin={CONSTANTS.mppt_current_out.MIN}
+                            currentMax={CONSTANTS.mppt_current_out.MAX}
                         />
                         <Spacer/>
                         <Flex w='45%' direction='column'>
@@ -59,6 +62,8 @@ export default function PPC_MPPT(props) {
                         data={props.data?.string1_temp[0] ?? -1.0}
                         digits={3}
                         unit="&#8451;"
+                        min={CONSTANTS.string1_temp.MIN}
+                        max={CONSTANTS.string1_temp.MAX}
                     />
                     <RangeCell
                         fontSize='1vw'
@@ -66,6 +71,8 @@ export default function PPC_MPPT(props) {
                         data={props.data?.string2_temp[0] ?? -1.0}
                         digits={3}
                         unit="&#8451;"
+                        min={CONSTANTS.string2_temp.MIN}
+                        max={CONSTANTS.string2_temp.MAX}
                     />
                     <RangeCell
                         fontSize='1vw'
@@ -73,6 +80,8 @@ export default function PPC_MPPT(props) {
                         data={props.data?.string3_temp[0] ?? -1.0}
                         digits={3}
                         unit="&#8451;"
+                        min={CONSTANTS.string3_temp.MIN}
+                        max={CONSTANTS.string3_temp.MAX}
                     />
                 </Flex>
             </VStack>

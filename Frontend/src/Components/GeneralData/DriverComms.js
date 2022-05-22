@@ -7,6 +7,7 @@ import Hazards from "./DriverIcons/Hazards.png"
 import Cruise from "./DriverIcons/Cruise.png"
 import Left from "./DriverIcons/Left Turn.png"
 import Right from "./DriverIcons/Right Turn.png"
+import CONSTANTS from "../../data-constants.json";
 
 export default function DriverComms(props) {
     return (
@@ -19,14 +20,18 @@ export default function DriverComms(props) {
                         label='Speed'
                         data={props.data?.speed[0] ?? -1.0}
                         digits={0}
-                        unit=" mph"
+                        unit={' ' + CONSTANTS.speed.UNIT}
+                        min={CONSTANTS.speed.MIN}
+                        max={CONSTANTS.speed.MAX}
                     />
                     <RangeCell
                         fontSize='2vh'
                         label='Accelerator'
                         data={props.data?.accelerator[0] ?? -1.0}
                         digits={0}
-                        unit="V"
+                        unit={' ' + CONSTANTS.accelerator.UNIT}
+                        min={CONSTANTS.accelerator.MIN}
+                        max={CONSTANTS.accelerator.MAX}
                     />
                     <RangeCell
                         fontSize='2vh'
@@ -34,6 +39,8 @@ export default function DriverComms(props) {
                         data={props.data?.cabin_temp[0] ?? -1.0}
                         digits={1}
                         unit="&#8451;"
+                        min={CONSTANTS.cabin_temp.MIN}
+                        max={CONSTANTS.cabin_temp.MAX}
                     />
                 </Flex>
                 <Center w='30%'>
