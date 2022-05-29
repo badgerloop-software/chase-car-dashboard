@@ -1,8 +1,14 @@
 import {Flex, Text, Spacer} from "@chakra-ui/react"
 import RangeBar from "./RangeBar"
+import dataConstants from  "../../data-constants.json"
 
-export default function RangeCell(props){
-    const bg = (props.data < props.min || props.data > props.max) ?
+export default function RangeCell(props) {
+
+    const MIN = dataConstants.string2_temp.MIN
+    const MAX = dataConstants.string2_temp.MAX
+    const UNIT = dataConstants.string2_temp.UNIT
+
+    const bg = ((props.data < MIN && !props.ignoreMin) || (props.data > MAX && !props.ignoreMax)) ?
         "#ff000055" : null;
 
     return(
@@ -10,15 +16,15 @@ export default function RangeCell(props){
             <Flex flex='0.4'>
                 <Text fontSize={props.fontSize}>{props.label}</Text>
                 <Spacer/>
-                <Text fontSize={props.fontSize}>{props.data.toFixed(props.digits)}{props.unit}</Text>
+                <Text fontSize={props.fontSize}>{props.data.toFixed(props.digits)}{UNIT}</Text>
             </Flex>
             <RangeBar
                 val={props.data ?? -1}
-                min={props.min ?? -1}
-                max={props.max ?? 0}
                 w={props.w}
             />
         </Flex>
     );
 
 }
+
+

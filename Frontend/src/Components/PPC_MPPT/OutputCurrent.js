@@ -1,5 +1,6 @@
 import {Flex, Box, Text} from "@chakra-ui/react";
 import RangeBar from "../Shared/RangeBar";
+import CONSTANTS from "../../data-constants.json";
 
 export default function OutputCurrent(props) {
     const bg = (props.current < props.currentMin || props.current > props.currentMax) ?
@@ -12,7 +13,7 @@ export default function OutputCurrent(props) {
             </Box>
             <Box flex='2' border='1px' textAlign='center' p='1' lineHeight='3vh' backgroundColor={bg}>
                 <Text fontSize='1.5vw'>{props.current.toFixed(3)} A</Text>
-                <RangeBar val={props.current} min={props.currentMin} max={props.currentMax} />
+                <RangeBar val={props.current} min={CONSTANTS.string1_temp.MIN} max={CONSTANTS.string1_temp.MAX} unit={CONSTANTS.string1_temp.UNIT}/>
             </Box>
         </Flex>
     )

@@ -1,9 +1,13 @@
 import { Box } from "@chakra-ui/react";
+import dataConstants from "../../data-constants.json"
 
 export default function RangeBar(props) {
   const clamp = (x, a, b) => Math.max(a, Math.min(x, b));
 
   const toPercentage = (temp, minv, maxv) => 100 * clamp((temp - minv) / (maxv - minv), 0, 1);
+
+  const MIN = dataConstants.string1_temp.MIN
+  const MAX = dataConstants.string1_temp.MAX
 
   // https://stackoverflow.com/a/17243070
   const HSVtoRGB = (hsv) => {
@@ -52,17 +56,17 @@ export default function RangeBar(props) {
   const lerpColor = (startCol, endCol, pct) =>
     Array.from(Array(3), (_, i) => (startCol[i] + pct * (endCol[i] - startCol[i])));
 
-  let valp = toPercentage(props.val, props.min, props.max);
+  let valp = toPercentage(props.val, MIN, MAX);
 
   const green = [0x52, 0xFF, 0x00];
   const red = [0xFF, 0x01, 0x01];
 
   let color;
   const lb = 35, ub = 65;
-  if (valp < lb) {
+  if (valp < lb && !props.ignorMin) {
     // Color is interpolated btw red and green depending on distance from lower bound (lb)
     color = HSVtoRGB(lerpColor(RGBtoHSV(red), RGBtoHSV(green), valp / lb));
-  } else if (valp > ub) {
+  } else if (valp > ub && !props.ignorMax) {
     // Color is interpolated btw red and green depending on distance from upper bound (ub)
     color = HSVtoRGB(lerpColor(RGBtoHSV(green), RGBtoHSV(red), (valp - ub) / (100 - ub)));
   } else {
