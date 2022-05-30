@@ -1,8 +1,9 @@
 import { Box, Grid, GridItem, HStack, Select } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
-import BatteryCells from "../BatteryCells/BatteryCells";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
+import BatteryCells from "../BatteryCells/BatteryCells";
+import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import MiniMap from "../MiniMap/MiniMap";
 import GraphContainer from "./GraphContainer";
 
@@ -133,6 +134,8 @@ export default function Dashboard(props) {
       return <BatteryCells data={state.data} />;
     } else if (optionValue === "minimap") {
       return <MiniMap />;
+    } else if (optionValue === "ppc_mppt") {
+      return <PPC_MPPT data={state.data}/>;
     } else {
       return <Box />;
     }
@@ -140,8 +143,9 @@ export default function Dashboard(props) {
 
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
-      <Grid flex="1 1 0" templateRows="1fr 3fr 3fr">
+      <Grid flex="1 1 0" templateRows="2fr 3fr 3fr">
         <GridItem
+          h="25vh"
           rowStart={1}
           rowSpan={1}
           borderColor="black"
@@ -151,6 +155,7 @@ export default function Dashboard(props) {
           <FaultsView data={state.data} />
         </GridItem>
         <GridItem
+          h="37.5vh"
           rowStart={2}
           rowSpan={1}
           borderColor="black"
@@ -172,6 +177,7 @@ export default function Dashboard(props) {
           {switchDataView(dataView1)}
         </GridItem>
         <GridItem
+          h="37.5vh"
           rowStart={3}
           rowSpan={1}
           borderColor="black"

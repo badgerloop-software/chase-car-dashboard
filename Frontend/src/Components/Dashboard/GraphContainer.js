@@ -176,7 +176,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
         const key = graphTitle?.length
           ? graphTitle === "Custom"
             ? "Custom" + index
-            : graphTitles[index]
+            : "graph_" + graphTitles[index]
           : index;
         // console.log(index, graphTitle, key);
         return (
