@@ -1,0 +1,633 @@
+{
+  "categories": [
+    {
+      "category": "General",
+      "values": [
+        {
+          "key": "speed",
+          "name": "Speed",
+          "unit": "mph",
+          "min": 0,
+          "max": 70
+        },
+        {
+          "key": "state",
+          "name": "State",
+          "unit": "",
+          "min": 0,
+          "max": 256
+        },
+        {
+          "key": "cabin_temp",
+          "name": "Cabin Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "cruise",
+          "name": "Cruise",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "left_turn",
+          "name": "Left Turn",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "right_turn",
+          "name": "Right Turn",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "hazards",
+          "name": "Hazards",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "headlights",
+          "name": "Headlights",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "accelerator",
+          "name": "Accelerator",
+          "unit": "V",
+          "min": 0,
+          "max": 5
+        },
+        {
+          "key": "solar_car_connection",
+          "name": "Solar Car Connection",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "Shutdown",
+      "values": [
+        {
+          "key": "driver_eStop",
+          "name": "driver_eStop",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "external_eStop",
+          "name": "external_eStop",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "battery_eStop",
+          "name": "battery_eStop",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "crash",
+          "name": "Crash",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "door",
+          "name": "Door",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "mcu_check",
+          "name": "mcu_check",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        }
+      ]
+    },
+    {
+      "category": "BMS",
+      "values": [
+        {
+          "key": "imd_status",
+          "name": "imd_status",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "pack_temp",
+          "name": "Pack Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 60
+        },
+        {
+          "key": "pack_current",
+          "name": "Pack Current",
+          "unit": "A",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "pack_voltage",
+          "name": "Pack Voltage",
+          "unit": "V",
+          "min": 69,
+          "max": 108
+        },
+        {
+          "key": "cell_group1_voltage",
+          "name": "Cell Group 1 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group2_voltage",
+          "name": "Cell Group 2 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group3_voltage",
+          "name": "Cell Group 3 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group4_voltage",
+          "name": "Cell Group 4 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group5_voltage",
+          "name": "Cell Group 5 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group6_voltage",
+          "name": "Cell Group 6 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group7_voltage",
+          "name": "Cell Group 7 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group8_voltage",
+          "name": "Cell Group 8 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group9_voltage",
+          "name": "Cell Group 9 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group10_voltage",
+          "name": "Cell Group 10 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group11_voltage",
+          "name": "Cell Group 11 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group12_voltage",
+          "name": "Cell Group 12 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group13_voltage",
+          "name": "Cell Group 13 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group14_voltage",
+          "name": "Cell Group 14 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group15_voltage",
+          "name": "Cell Group 15 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group16_voltage",
+          "name": "Cell Group 16 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group17_voltage",
+          "name": "Cell Group 17 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group18_voltage",
+          "name": "Cell Group 18 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group19_voltage",
+          "name": "Cell Group 19 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group20_voltage",
+          "name": "Cell Group 20 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group21_voltage",
+          "name": "Cell Group 21 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group22_voltage",
+          "name": "Cell Group 22 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group23_voltage",
+          "name": "Cell Group 23 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group24_voltage",
+          "name": "Cell Group 24 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group25_voltage",
+          "name": "Cell Group 25 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group26_voltage",
+          "name": "Cell Group 26 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group27_voltage",
+          "name": "Cell Group 27 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group28_voltage",
+          "name": "Cell Group 28 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group29_voltage",
+          "name": "Cell Group 29 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "cell_group30_voltage",
+          "name": "Cell Group 30 Voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
+        },
+        {
+          "key": "soc",
+          "name": "soc",
+          "unit": "%",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "soh",
+          "name": "soh",
+          "unit": "Ah",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "pack_capacity",
+          "name": "Pack Capacity",
+          "unit": "Ah",
+          "min": 57,
+          "max": 57
+        },
+        {
+          "key": "adaptive_total_capacity",
+          "name": "Adaptive Total Capacity",
+          "unit": "Ah",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "bps_fault",
+          "name": "BPS Fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "fan_speed",
+          "name": "Fan Speed",
+          "unit": "",
+          "min": 0,
+          "max": 6
+        },
+        {
+          "key": "voltage_failsafe",
+          "name": "Voltage Failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "current_failsafe",
+          "name": "Current Failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "supply_power_failsafe",
+          "name": "Power Supply Failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "memory_failsafe",
+          "name": "Memory Failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "relay_failsafe",
+          "name": "Relay Failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "bms_canbus_failure",
+          "name": "BMS CAN-bus Failure",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "pack_resistance",
+          "name": "Pack Resistance",
+          "unit": "mOhm",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "avg_cell_resistance",
+          "name": "Average Cell Resistance",
+          "unit": "mOhm",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "bms_input_voltage",
+          "name": "BMS Input Voltage",
+          "unit": "V",
+          "min": 12,
+          "max": 24
+        }
+      ]
+    },
+    {
+      "category": "Motor",
+      "values": [
+        {
+          "key": "motor_temp",
+          "name": "Motor Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "category": "LV Boards",
+      "values": [
+        {
+          "key": "driverIO_temp",
+          "name": "Driver IO Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "mainIO_temp",
+          "name": "Main IO Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "mainIO_heartbeat",
+          "name": "mainIO_heartbeat",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "bus_5V",
+          "name": "5V Bus",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "bus_12V",
+          "name": "12V Bus",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "mainIO_current_in",
+          "name": "Main IO Current In",
+          "unit": "A",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "driverIO_current_in",
+          "name": "Driver IO Current In",
+          "unit": "A",
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "category": "MPS",
+      "values": [
+        {
+          "key": "mps_enable",
+          "name": "mps_enable",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "mppt_contactor",
+          "name": "mppt_contactor",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "motor_controller_contactor",
+          "name": "motor_controller_contactor",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "low_contactor",
+          "name": "low_contactor",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "PPC",
+      "values": [
+        {
+          "key": "dcdc_valid",
+          "name": "dcdc_valid",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "supplemental_valid",
+          "name": "supplemental_valid",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        }
+      ]
+    },
+    {
+      "category": "MPPT",
+      "values": [
+        {
+          "key": "mppt_mode",
+          "name": "mppt_mode",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "mppt_current_out",
+          "name": "mppt_current_out",
+          "unit": "A",
+          "min": 0,
+          "max": 7
+        },
+        {
+          "key": "string1_temp",
+          "name": "String 1 Temperature",
+          "unit": "°C",
+          "min": 20,
+          "max": 50
+        },
+        {
+          "key": "string2_temp",
+          "name": "String 2 Temperature",
+          "unit": "°C",
+          "min": 20,
+          "max": 50
+        },
+        {
+          "key": "string3_temp",
+          "name": "String 3 Temperature",
+          "unit": "°C",
+          "min": 20,
+          "max": 50
+        }
+      ]
+    }
+  ],
+  "defaultHistoryLength": 60
+}

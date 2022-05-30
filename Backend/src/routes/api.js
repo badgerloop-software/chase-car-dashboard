@@ -1,7 +1,8 @@
 import { Router } from "express";
-import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
-import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
+import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
+import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
+import net from "net";
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -9,18 +10,18 @@ let solarCarData = INITIAL_SOLAR_CAR_DATA,
 
 // Send data to front-end
 ROUTER.get("/api", (req, res) => {
-  res.send({ response: frontendData }).status(200);
+  console.time("send http");
+  const temp = res.send({ response: frontendData }).status(200);
+  temp.addListener("finish", () => console.timeEnd("send http"));
 });
 
-export default ROUTER;
-
 //----------------------------------------------------- TCP ----------------------------------------------------------
-
-import net from "net";
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
-let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
-                   // data) to solarCarData
+
+// The max number of data points to have in each array at one time
+// equivalent to 10 minutes' worth of data being sent 30 Hz
+const X_AXIS_CAP = 18_000;
 
 /**
  * Creates a connection with the TCP server at port CAR_PORT and address CAR_SERVER. Then, sets listeners for connect,
@@ -39,14 +40,16 @@ function openSocket() {
 
   // Data received listener
   client.on("data", (data) => {
-    console.log(data);
+    // console.log(data);
+    console.time("update data");
     unpackData(data);
+    console.timeEnd("update data");
   });
 
   // Socket closed listener
   client.on("close", function () {
     // Pull the most recent solar_car_connection values to false if connection was previously established
-    if(solarCarData.solar_car_connection.length > 0) {
+    if (solarCarData.solar_car_connection.length > 0) {
       solarCarData.solar_car_connection[0] = false;
       frontendData.solar_car_connection[0] = false;
     }
@@ -55,7 +58,7 @@ function openSocket() {
   });
 
   // Socket error listener
-  client.on('error', (err) => {
+  client.on("error", (err) => {
     // Log error
     console.log("Client errored out:", err);
 
@@ -64,7 +67,7 @@ function openSocket() {
     client.unref();
 
     // Pull the most recent solar_car_connection values to false if connection was previously established
-    if(solarCarData.solar_car_connection.length > 0) {
+    if (solarCarData.solar_car_connection.length > 0) {
       solarCarData.solar_car_connection[0] = false;
       frontendData.solar_car_connection[0] = false;
     }
@@ -81,41 +84,37 @@ function openSocket() {
  */
 function unpackData(data) {
   let buffOffset = 0; // Byte offset for the buffer array
-  const xAxisCap = 25; // The max number of data points to have in each array at one time
   let timestamps = solarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
   // Array values indicate the status of the connection to the solar car. These will always be true when unpacking data
   let solar_car_connection = solarCarData["solar_car_connection"];
 
   // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
-  timestamps.unshift(timestamp);
-  timestamp ++;
-  if(timestamps.length > xAxisCap)
+  // timestamps.unshift(DateTime.now().toString());
+
+  // Add separators for timestamp to timestamps and limit array's length
+  timestamps.unshift("::.");
+  if (timestamps.length > X_AXIS_CAP) {
     timestamps.pop();
-  solarCarData["timestamps"] = timestamps;
+  }
 
   // Repeat with solar_car_connection
   solar_car_connection.unshift(true);
-  if(solar_car_connection.length > xAxisCap)
-    solar_car_connection.pop();
+  if (solar_car_connection.length > X_AXIS_CAP) solar_car_connection.pop();
   solarCarData["solar_car_connection"] = solar_car_connection;
 
   for (const property in DATA_FORMAT) {
     let dataArray = []; // Holds the array of data specified by property that will be put in solarCarData
     let dataType = ""; // Data type specified in the data format
 
-    if(solarCarData.hasOwnProperty(property)) {
+    if (solarCarData.hasOwnProperty(property)) {
       dataArray = solarCarData[property];
     }
     dataType = DATA_FORMAT[property][1];
 
     // Add the data from the buffer to solarCarData
     switch (dataType) {
-      case "uint8":
-        // Add uint8 to the front of dataArray
-        dataArray.unshift(data.readUInt8(buffOffset));
-        break;
       case "float":
-        // Add float to the front of dataArray
+        // Add the data to the front of dataArray
         dataArray.unshift(data.readFloatLE(buffOffset));
         break;
       case "char":
@@ -126,21 +125,80 @@ function unpackData(data) {
         // Add bool to the front of dataArray
         dataArray.unshift(Boolean(data.readUInt8(buffOffset)));
         break;
+      case "uint8":
+        switch (property) {
+          case "tstamp_hr":
+            const hours = data.readUInt8(buffOffset);
+            if (hours < 10) timestamps[0] = "0" + hours + timestamps[0];
+            else timestamps[0] = hours + timestamps[0];
+            break;
+          case "tstamp_mn":
+            const mins = data.readUInt8(buffOffset);
+            timestamps[0] = timestamps[0].replace(
+              "::",
+              ":" + (mins < 10 ? "0" + mins : mins) + ":"
+            );
+            break;
+          case "tstamp_sc":
+            const secs = data.readUInt8(buffOffset);
+            timestamps[0] = timestamps[0].replace(
+              ":.",
+              ":" + (secs < 10 ? "0" + secs : secs) + "."
+            );
+            break;
+          default:
+            // Add the data to the front of dataArray
+            dataArray.unshift(data.readUInt8(buffOffset));
+            break;
+        }
+        break;
+      case "uint16":
+        if (property === "tstamp_ms") {
+          const millis = data.readUInt16BE(buffOffset);
+          let millisStr;
+          if (millis >= 100) {
+            millisStr = millis;
+          } else if (millis >= 10) {
+            millisStr = "0" + millis;
+          } else {
+            millisStr = "00" + millis;
+          }
+          if (typeof millisStr === "undefined") {
+            console.warn(
+              `Millis value of ${millis} caused undefined millis value`
+            );
+          }
+
+          timestamps[0] += millisStr;
+          break;
+        }
+        // Add the data to the front of dataArray
+        dataArray.unshift(data.readUInt16BE(buffOffset));
+        break;
       default:
         // Log if an unexpected type is specified in the data format
-        console.log(`No case for unpacking type ${dataType} (type specified for ${property} in format.json)`);
+        console.log(
+          `No case for unpacking type ${dataType} (type specified for ${property} in format.json)`
+        );
         break;
     }
-    // Limit dataArray to a length specified by xAxisCap
-    if(dataArray.length > xAxisCap) {
-      dataArray.pop();
+
+    if (!property.startsWith("tstamp")) {
+      // If property is not used for timestamps
+      // Limit dataArray to a length specified by X_AXIS_CAP
+      if (dataArray.length > X_AXIS_CAP) {
+        dataArray.pop();
+      }
+      // Write dataArray to solarCarData at the correct key
+      solarCarData[property] = dataArray;
     }
-    // Write dataArray to solarCarData at the correct key
-    solarCarData[property] = dataArray;
 
     // Increment offset by amount specified in data format
     buffOffset += DATA_FORMAT[property][0];
   }
+
+  // Update the timestamps array in solarCarData
+  solarCarData["timestamps"] = timestamps;
 
   // Update the data to be passed to the front-end
   frontendData = solarCarData;
@@ -148,3 +206,5 @@ function unpackData(data) {
 
 // Create new socket
 openSocket();
+
+export default ROUTER;

@@ -1,44 +1,100 @@
-import { Grid, GridItem, HStack, VStack, Select, Box } from "@chakra-ui/react";
-import React, { useState, useLayoutEffect } from "react";
+import { Box, Grid, GridItem, HStack, Select } from "@chakra-ui/react";
+import { useEffect, useReducer, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DataView from "../GeneralData/DataView";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import MiniMap from "../MiniMap/MiniMap";
-import BatteryGraph from "../Graph/BatteryGraph";
-import PowerGraph from "../Graph/PowerGraph";
-import TemperatureGraph from "../Graph/TemperatureGraph";
-import CustomGraph from "../Graph/CustomGraph";
+import GraphContainer from "./GraphContainer";
 
+// prevent accidental reloading/closing
+window.onbeforeunload = () => true;
+
+/**
+ * The reducer used for the main queue of data from the database
+ * @param {[any[], string]} prevData the previous queue and last time data
+ * @param {any[]} prevData[0] the queued data
+ * @param {any} newData the new data that is recieved directly from the backend
+ * @returns the new queue of data to use
+ */
+function reducer([currentQueue], newData) {
+  // console.log("reducer called :~)", newData);
+
+  // const timestamps = newData.timestamps.map((timestamp) =>
+  //   DateTime.fromISO(timestamp)
+  // );
+
+  const output = {};
+  for (const key in newData) {
+    if (key === "timestamps" || key.startsWith("tstamp")) continue;
+
+    output[key] = newData[key].map((value, idx) => ({
+      x: newData.timestamps[idx],
+      y: value,
+    }));
+  }
+
+  return [output, newData.timestamps[0]];
+}
+
+/**
+ * Requests the API endpoint and returns the response
+ * @returns the JSON response from the API
+ */
+async function callBackendAPI() {
+  console.time("http call");
+
+  const response = await fetch("/api");
+  console.timeLog("http call", "fetch finished");
+  const body = await response.json();
+  console.timeLog("http call", "json extracted");
+
+  if (response.status !== 200) {
+    console.error("api: error");
+    throw Error(body.message);
+  }
+
+  console.timeEnd("http call");
+  // console.log("body", body);
+  return body;
+}
+
+/**
+ * The Dashboard component
+ * @param {any} props the props to pass this dashboard component (none are used)
+ * @returns the dashboard component
+ */
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
 
-  const callBackendAPI = async () => {
-    const response = await fetch("/api");
-    const body = await response.json();
+  const [[queue, latestTimestamp], updateQueue] = useReducer(reducer, [
+    {},
+    null,
+  ]);
 
-    if (response.status !== 200) {
-      console.error("api: error");
-      throw Error(body.message);
-    }
-
-    return body;
-  };
+  // useEffect(() => {
+  //   console.log("recieved", latestTimestamp);
+  // }, latestTimestamp);
 
   const [state, setState] = useState({ data: null });
-  useLayoutEffect(() => {
+  useEffect(() => {
     callBackendAPI()
       .then((res) => {
+        console.time("update react");
+
         setState({ data: res.response });
+        updateQueue(res.response);
         // console.log("api::", res.response);
+
+        console.timeEnd("update react");
       })
       .catch((err) => console.log(err));
   }, [state]);
 
   //------------------- Choosing data views using Select components -------------------
 
-  const [dataView1, setDataView1] = React.useState("");
-  const [dataView2, setDataView2] = React.useState("");
+  const [dataView1, setDataView1] = useState("");
+  const [dataView2, setDataView2] = useState("");
 
   // Update the value indicating which data view to display when an option is selected
   const selectDataView = (event) => {
@@ -79,118 +135,15 @@ export default function Dashboard(props) {
     } else if (optionValue === "minimap") {
       return <MiniMap />;
     } else if (optionValue === "ppc_mppt") {
-      return <PPC_MPPT data={state.data}/>
-    }else {
-      return <VStack />;
+      return <PPC_MPPT data={state.data}/>;
+    } else {
+      return <Box />;
     }
-  };
-
-  //------------------- Choosing graphs using Select components -------------------
-
-  const [graph1, setGraph1] = React.useState("");
-  const [graph2, setGraph2] = React.useState("");
-  const [graph3, setGraph3] = React.useState("");
-
-  // Update the value indicating which graph to display when an option is selected
-  const selectGraph = (event) => {
-    if (event.target.id === "graphSelect1") {
-      // Avoid duplicate graphs, unless they are both empty or custom
-      if ((event.target.value !== "") && (event.target.value !== "custom")) {
-        // If trying to switch to a graph that is already being displayed in another
-        // section, switch the graphs in this section and the other one
-        switch (event.target.value) {
-          case document.getElementById("graphSelect2").value:
-            setGraph2(graph1);
-            break;
-          case document.getElementById("graphSelect3").value:
-            setGraph3(graph1);
-            break;
-          // default:
-          //   break;
-        }
-      }
-      setGraph1(event.target.value);
-    } else if (event.target.id === "graphSelect2") {
-      // Avoid duplicate graphs, unless they are both empty or custom
-      if ((event.target.value !== "") && (event.target.value !== "custom")) {
-        // If trying to switch to a graph that is already being displayed in another
-        // section, switch the graphs in this section and the other one
-        switch (event.target.value) {
-          case document.getElementById("graphSelect1").value:
-            setGraph1(graph2);
-            break;
-          case document.getElementById("graphSelect3").value:
-            setGraph3(graph2);
-            break;
-          // default:
-          //   break;
-        }
-      }
-      setGraph2(event.target.value);
-    } else if (event.target.id === "graphSelect3") {
-      // Avoid duplicate graphs, unless they are both empty or custom
-      if ((event.target.value !== "") && (event.target.value !== "custom")) {
-        // If trying to switch to a graph that is already being displayed in another
-        // section, switch the graphs in this section and the other one
-        switch (event.target.value) {
-          case document.getElementById("graphSelect1").value:
-            setGraph1(graph3);
-            break;
-          case document.getElementById("graphSelect2").value:
-            setGraph2(graph3);
-            break;
-          // default:
-          //   break;
-        }
-      }
-      setGraph3(event.target.value);
-    }
-  };
-
-  // Choose the graph to return/display based on the given option
-  const switchGraph = (optionValue) => {
-    if (optionValue === "battery") {
-      return <BatteryGraph data={ state.data } />;
-    } else if (optionValue === "power") {
-      return <PowerGraph data={ state.data } />;
-    } else if (optionValue === "temperature") {
-      return <TemperatureGraph data={ state.data } />;
-    } else if (optionValue === "custom") {
-      return <CustomGraph
-                id=""
-                data={ state.data }
-                title=""
-                buttons={[]}
-                datasets={[]}
-                save={ saveCustomGraph }
-             />;
-    } else if(optionValue in customGraphData) {
-      return <CustomGraph
-                id={ optionValue }
-                data={ state.data }
-                title={ optionValue }
-                buttons={ customGraphData[optionValue].buttons }
-                datasets={ customGraphData[optionValue].datasets }
-                save={ saveCustomGraph }
-             />;
-    }
-  };
-
-  //------------------------- Saving custom graphs ----------------------------
-
-  const [customGraphData, setCustomGraphData] = React.useState({});
-
-  const saveCustomGraph = (data) => {
-    let graphData = customGraphData;
-
-    graphData[data.title] = data;
-
-    setCustomGraphData(graphData);
   };
 
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
-      <Grid flex="1 1 0" h="100vh" templateRows="2fr 3fr 3fr">
+      <Grid flex="1 1 0" templateRows="2fr 3fr 3fr">
         <GridItem
           h="25vh"
           rowStart={1}
@@ -201,7 +154,15 @@ export default function Dashboard(props) {
         >
           <FaultsView data={state.data} />
         </GridItem>
-        <GridItem h="37.5vh" rowStart={2} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
+        <GridItem
+          h="37.5vh"
+          rowStart={2}
+          rowSpan={1}
+          borderColor="black"
+          borderWidth={1}
+          display="flex"
+          flexDir="column"
+        >
           <Select
             id="dataViewSelect1"
             size="xs"
@@ -215,7 +176,15 @@ export default function Dashboard(props) {
           </Select>
           {switchDataView(dataView1)}
         </GridItem>
-        <GridItem h="37.5vh" rowStart={3} rowSpan={1} borderColor="black" borderWidth={1} display="flex" flexDir="column">
+        <GridItem
+          h="37.5vh"
+          rowStart={3}
+          rowSpan={1}
+          borderColor="black"
+          borderWidth={1}
+          display="flex"
+          flexDir="column"
+        >
           <Select
             id="dataViewSelect2"
             size="xs"
@@ -230,68 +199,12 @@ export default function Dashboard(props) {
           {switchDataView(dataView2)}
         </GridItem>
       </Grid>
-      <Grid flex="2 0 0" h="100vh" templateRows="repeat(3, 1fr)">
-        <VStack
-          h="100%"
-          align="stretch"
-          spacing={0}
-          borderColor="black"
-          borderWidth={1}
-        >
-          <Select
-            id="graphSelect1"
-            size="xs"
-            variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
-            value={graph1}
-            onChange={selectGraph}
-          >
-            <GraphOptions customGraphs={ customGraphData } />
-          </Select>
-          {switchGraph(graph1)}
-        </VStack>
-        <VStack
-          h="100%"
-          align="stretch"
-          spacing={0}
-          borderColor="black"
-          borderWidth={1}
-        >
-          <Select
-            id="graphSelect2"
-            size="xs"
-            variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
-            value={graph2}
-            onChange={selectGraph}
-          >
-            <GraphOptions customGraphs={ customGraphData } />
-          </Select>
-          {switchGraph(graph2)}
-        </VStack>
-        <VStack
-          h="100%"
-          align="stretch"
-          spacing={0}
-          borderColor="black"
-          borderWidth={1}
-        >
-          <Select
-            id="graphSelect3"
-            size="xs"
-            variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
-            value={graph3}
-            onChange={selectGraph}
-          >
-            <GraphOptions customGraphs={ customGraphData } />
-          </Select>
-          {switchGraph(graph3)}
-        </VStack>
-      </Grid>
+      <GraphContainer
+        queue={queue}
+        latestTime={latestTimestamp}
+        flex="2 2 0"
+        maxW="67vw"
+      />
     </HStack>
   );
 }
@@ -303,26 +216,6 @@ function DataViewOptions(props) {
       <option value="battery">Battery Cells</option>
       <option value="minimap">Minimap</option>
       <option value="ppc_mppt">PPC and MPPT</option>
-    </>
-  );
-}
-
-function GraphOptions(props) {
-  let customGraphs = [];
-
-  for(const title in props.customGraphs) {
-    customGraphs.push(
-        <option value={title} >{title}</option>
-    );
-  }
-
-  return (
-    <>
-      <option value="battery">Battery</option>
-      <option value="power">Power</option>
-      <option value="temperature">Temperature</option>
-      {customGraphs}
-      <option value="custom">Custom</option>
     </>
   );
 }

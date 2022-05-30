@@ -4,22 +4,26 @@
   "private": true,
   "proxy": "http://localhost:4001",
   "dependencies": {
-    "@chakra-ui/icons": "^1.1.1",
-    "@chakra-ui/react": "^1.7.1",
-    "@emotion/react": "^11.6.0",
+    "@chakra-ui/icons": "^1.1.5",
+    "@chakra-ui/react": "^1.8.3",
+    "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "chart.js": "^3.6.0",
-    "express": "^4.17.1",
+    "chart.js": "^3.7.1",
+    "chartjs-adapter-luxon": "^1.1.0",
+    "express": "^4.17.3",
     "faker": "5.5.3",
     "framer-motion": "^4.1.17",
+    "luxon": "^2.3.0",
     "react": "^17.0.2",
-    "react-chartjs-2": "^3.3.0",
+    "react-chartjs-2": "^4.0.1",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
     "react-scripts": "4.0.3",
-    "socket.io-client": "^4.3.2",
+    "socket.io-client": "^4.4.1",
+    "typescript": "^4.5.5",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -27,7 +31,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "update-data-constants": "node --experimental-json-modules ./src/CustomScripts/updateDataConstants.mjs"
+    "update-data-constants": "node --experimental-json-modules ./src/CustomScripts/updateDataConstants.mjs",
+    "update-graph-data": "node --experimental-json-modules ./src/CustomScripts/convertData.mjs",
+    "update-data": "run-p update-data-constants update-graph-data"
   },
   "eslintConfig": {
     "extends": [
@@ -48,8 +54,9 @@
     ]
   },
   "devDependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.16.4"
+    "@babel/cli": "^7.17.3",
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "npm-run-all": "^4.1.5"
   }
 }

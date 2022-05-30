@@ -1,4 +1,4 @@
-import { Box, Text, VStack, Flex, Spacer, Center } from "@chakra-ui/react";
+import { Center, Flex, Spacer, Text } from "@chakra-ui/react";
 
 export default function DataPack(props) {
     const bg = (props.dataValue < props.dataMin || props.dataValue > props.dataMax) ?

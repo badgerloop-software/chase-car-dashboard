@@ -10,10 +10,11 @@
     "install-backend": "cd Backend && npm i",
     "install-frontend": "cd Frontend && npm i",
     "postinstall": "run-p install-data-generator install-backend install-frontend",
-    "update-data-constants": "cd Frontend && npm run update-data-constants"
+    "update-data": "git submodule update --recursive && cd Frontend && npm run update-data"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",
     "wait-port": "^0.2.9"
-  }
+  },
+  "dependencies": {}
 }

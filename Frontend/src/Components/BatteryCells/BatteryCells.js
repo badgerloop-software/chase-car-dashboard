@@ -1,4 +1,4 @@
-import { SimpleGrid, VStack, Flex } from "@chakra-ui/react";
+import { Flex, SimpleGrid } from "@chakra-ui/react";
 import DataPack from "./DataPack";
 import CellGroup from "./CellGroup";
 import CONSTANTS from "../../data-constants.json";
