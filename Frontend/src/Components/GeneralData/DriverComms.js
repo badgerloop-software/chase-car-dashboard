@@ -10,27 +10,26 @@ import Right from "./DriverIcons/Right Turn.png"
 import CONSTANTS from "../../data-constants.json";
 
 export default function DriverComms(props) {
-    const _getSecDiff = () => {
-        const timeArr = props.data?.timestamps[0].split(":");
-        const currTime = new Date();
-        console.log("Current: " +  currTime.getSeconds() + "." + currTime.getMilliseconds());
-        console.log("Packet: ", timeArr[2]);
-        console.log((currTime.getSeconds() - parseInt(timeArr[0].substr(-2))).toString()
-                    + "." + (currTime.getMilliseconds() - parseInt(timeArr[1])).toString());
+    /**
+     * Get delay between the current time and the most recent timestamp
+     * @returns {string} A formatted string containing the delay betweent the current time and the most recent timestamp
+     * @private
+     */
+    const _getPacketDelay = () => {
+        const timeArr = props.data?.timestamps[0].split(":"); // Split most recent timestamp into [hh, mm, ss.SSS]
+        const currTime = new Date(); // Get current time
 
+        // Get delay (from hours to milliseconds) between most recent timestamp and current time
         const packetDelay = new Date(currTime - parseInt(timeArr[0]) * 3600000 - parseInt(timeArr[1]) * 60000
                                      - parseInt(timeArr[2].substr(0,2)) * 1000 - parseInt(timeArr[2].substr(3,3)));
 
-        //const packetDelay = new Date(currTime - (new Date(month + " " + currTime.getDate() + ", " + currTime.getFullYear() + " "
-        //                                         + props.data.timestamps[0])));
+        // Return formatted delay
         return ((packetDelay.getHours() < 10) ? "0" + packetDelay.getHours() : packetDelay.getHours()) + ":"
                + ((packetDelay.getMinutes() < 10) ? "0" + packetDelay.getMinutes() : packetDelay.getMinutes()) + ":"
                + ((packetDelay.getSeconds() < 10) ? "0" + packetDelay.getSeconds() : packetDelay.getSeconds()) + "."
                + ((packetDelay.getMilliseconds() >= 100) ? packetDelay.getMilliseconds() :
                  ((packetDelay.getMilliseconds() >= 10) ? "0" + packetDelay.getMilliseconds() :
                  "00" + packetDelay.getMilliseconds()));
-        //return (currTime.getSeconds() - parseInt(timeArr[0].substr(-2))).toString()
-        //        + "." + (currTime.getMilliseconds() - parseInt(timeArr[1])).toString();
     };
 
     return (
@@ -86,7 +85,7 @@ export default function DriverComms(props) {
                         boolean={props.data?.solar_car_connection[0]}
                         label='Solar Car'
                     />
-                    <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: {_getSecDiff()}</Text>
+                    <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: {_getPacketDelay()}</Text>
                 </VStack>
                 <CommsLabel
                     boolean={props.data?.mainIO_heartbeat[0]}
