@@ -1,4 +1,4 @@
-import {Flex, Center, VStack, SimpleGrid, Text, Image, Box} from "@chakra-ui/react";
+import {Flex, Center, VStack, SimpleGrid, Text, Image, Box, HStack} from "@chakra-ui/react";
 import RangeCell from "../Shared/RangeCell";
 import HeadingCell from "../Shared/HeadingCell";
 import CommsLabel from "./CommsLabel";
@@ -10,19 +10,20 @@ import Right from "./DriverIcons/Right Turn.png"
 import CONSTANTS from "../../data-constants.json";
 
 export default function DriverComms(props) {
+    const timeArr = props.data?.timestamps[0].split(":"); // Split most recent timestamp into [hh, mm, ss.SSS]
+
+    // Get delay (from hours to milliseconds) between most recent timestamp and current time
+    const packetDelay = new Date(new Date() - parseInt(timeArr[0]) * 3600000 - parseInt(timeArr[1]) * 60000
+                                 - parseInt(timeArr[2].substring(0,2)) * 1000 - parseInt(timeArr[2].substring(3)));
+
+    const bgColor = (packetDelay.getSeconds() > 1) ? "#ff000055" : null;
+
     /**
-     * Get delay between the current time and the most recent timestamp
-     * @returns {string} A formatted string containing the delay betweent the current time and the most recent timestamp
+     * Get formatted delay between the current time and the most recent timestamp
+     * @returns {string} A formatted string containing the delay between the current time and the most recent timestamp
      * @private
      */
-    const _getPacketDelay = () => {
-        const timeArr = props.data?.timestamps[0].split(":"); // Split most recent timestamp into [hh, mm, ss.SSS]
-        const currTime = new Date(); // Get current time
-
-        // Get delay (from hours to milliseconds) between most recent timestamp and current time
-        const packetDelay = new Date(currTime - parseInt(timeArr[0]) * 3600000 - parseInt(timeArr[1]) * 60000
-                                     - parseInt(timeArr[2].substr(0,2)) * 1000 - parseInt(timeArr[2].substr(3,3)));
-
+    const _getFormattedPacketDelay = () => {
         // Return formatted delay
         return ((packetDelay.getHours() < 10) ? "0" + packetDelay.getHours() : packetDelay.getHours()) + ":"
                + ((packetDelay.getMinutes() < 10) ? "0" + packetDelay.getMinutes() : packetDelay.getMinutes()) + ":"
@@ -85,7 +86,10 @@ export default function DriverComms(props) {
                         boolean={props.data?.solar_car_connection[0]}
                         label='Solar Car'
                     />
-                    <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: {_getPacketDelay()}</Text>
+                    <HStack>
+                        <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: </Text>
+                        <Text fontSize='2vh' backgroundColor={bgColor}>{_getFormattedPacketDelay()}</Text>
+                    </HStack>
                 </VStack>
                 <CommsLabel
                     boolean={props.data?.mainIO_heartbeat[0]}
