@@ -171,7 +171,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
   // console.log("graph container propaganda");
 
   return (
-    <VStack align="stretch" spacing={0} {...props}>
+    <VStack align="stretch" padding={0.5} spacing={1} {...props}>
       {graphTitles.map((graphTitle, index) => {
         const key = graphTitle?.length
           ? graphTitle === "Custom"

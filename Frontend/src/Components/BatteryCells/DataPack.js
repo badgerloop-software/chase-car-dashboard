@@ -6,7 +6,8 @@ export default function DataPack(props) {
 
     return (
         <Center
-            borderWidth={1}
+            borderTopWidth={1}
+            borderBottomWidth={props.borderBottomWidth ?? 1}
             borderColor='black'
             bg={bg}
             lineHeight='1.2em'

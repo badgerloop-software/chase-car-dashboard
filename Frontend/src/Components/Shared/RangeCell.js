@@ -7,7 +7,7 @@ export default function RangeCell(props){
 
     return(
         <Flex flex='2' direction='column' backgroundColor={bg}>
-            <Flex flex='0.4'>
+            <Flex flex='0.4' w={props.w}>
                 <Text fontSize={props.fontSize}>{props.label}</Text>
                 <Spacer/>
                 <Text fontSize={props.fontSize}>{props.data.toFixed(props.digits)}{props.unit}</Text>

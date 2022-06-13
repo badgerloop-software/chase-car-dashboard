@@ -1,4 +1,4 @@
-import {Flex, Center, VStack, SimpleGrid, Text, Image, Box, HStack} from "@chakra-ui/react";
+import {Flex, Center, SimpleGrid, Text, Image, Box, HStack} from "@chakra-ui/react";
 import RangeCell from "../Shared/RangeCell";
 import HeadingCell from "../Shared/HeadingCell";
 import CommsLabel from "./CommsLabel";
@@ -8,12 +8,15 @@ import Cruise from "./DriverIcons/Cruise.png"
 import Left from "./DriverIcons/Left Turn.png"
 import Right from "./DriverIcons/Right Turn.png"
 import CONSTANTS from "../../data-constants.json";
+import {isNullOrUndef} from "chart.js/helpers";
 
 export default function DriverComms(props) {
     const timeArr = props.data?.timestamps[0].split(":"); // Split most recent timestamp into [hh, mm, ss.SSS]
 
     // Get delay (from hours to milliseconds) between most recent timestamp and current time
-    const packetDelay = new Date(new Date() - parseInt(timeArr[0]) * 3600000 - parseInt(timeArr[1]) * 60000
+    const packetDelay = isNullOrUndef(props.data?.timestamps[0]) ?
+                        new Date(0,0,0,0,0,0,0) :
+                        new Date(new Date() - parseInt(timeArr[0]) * 3600000 - parseInt(timeArr[1]) * 60000
                                  - parseInt(timeArr[2].substring(0,2)) * 1000 - parseInt(timeArr[2].substring(3)));
 
     const bgColor = (packetDelay.getSeconds() > 1) ? "#ff000055" : null;
@@ -34,10 +37,10 @@ export default function DriverComms(props) {
     };
 
     return (
-        <VStack align='stretch' spacing={0}>
+        <Flex flex='auto' direction='column'>
             <HeadingCell fontSize='2.2vh' label='Driver / Cabin'/>
-            <Flex flex='3' pt='1' pb='1'>
-                <Flex flex='1.5' direction='column' pl='2' pr='2'>
+            <Flex flex='inherit' py='1'>
+                <Flex flex='1' direction='column' pl='2' pr='2'>
                     <RangeCell
                         fontSize='2vh'
                         label='Speed'
@@ -61,7 +64,7 @@ export default function DriverComms(props) {
                         label='Cabin Temp'
                         data={props.data?.cabin_temp[0] ?? -1.0}
                         digits={1}
-                        unit="&#8451;"
+                        unit='&#8451;'
                         min={CONSTANTS.cabin_temp.MIN}
                         max={CONSTANTS.cabin_temp.MAX}
                     />
@@ -80,17 +83,15 @@ export default function DriverComms(props) {
                 </Center>
             </Flex>
             <HeadingCell fontSize='2.2vh' label='Communication'/>
-            <Flex flex='3' direction='column' pt='1' pl='2' pb='1'>
-                <VStack spacing={0} align='left' marginBottom='5px'>
-                    <CommsLabel
-                        boolean={props.data?.solar_car_connection[0]}
-                        label='Solar Car'
-                    />
-                    <HStack>
-                        <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: </Text>
-                        <Text fontSize='2vh' backgroundColor={bgColor}>{_getFormattedPacketDelay()}</Text>
-                    </HStack>
-                </VStack>
+            <Flex flex='inherit' direction='column' pl='2' justify='center' >
+                <CommsLabel
+                    boolean={props.data?.solar_car_connection[0]}
+                    label='Solar Car'
+                />
+                <HStack>
+                    <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: </Text>
+                    <Text fontSize='2vh' backgroundColor={bgColor}>{_getFormattedPacketDelay()}</Text>
+                </HStack>
                 <CommsLabel
                     boolean={props.data?.mainIO_heartbeat[0]}
                     label='Driver I/O - Main I/O'
@@ -100,6 +101,6 @@ export default function DriverComms(props) {
                     label='BMS CANBUS'
                 />
             </Flex>
-        </VStack>
+        </Flex>
     );
 }
