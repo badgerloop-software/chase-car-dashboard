@@ -170,6 +170,42 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
 
   // console.log("graph container propaganda");
 
+
+
+  const [selColors, setSelColors] = useState({0: props.selectTxt, 1: props.selectTxt, 2: props.selectTxt});
+
+  const [selectFocus, setSelectFocus] = useState("");
+
+  const _updateSelColor = (targetId, newColor) => {
+      switch (targetId) {
+        case "graphSelect0":
+          setSelColors({...selColors, 0: newColor});
+          break;
+        case "graphSelect1":
+          setSelColors({...selColors, 1: newColor});
+          break;
+        case "graphSelect2":
+          setSelColors({...selColors, 2: newColor});
+          break;
+      }
+  }
+
+  const removeSelectFocus = (event) => {
+      setSelectFocus("");
+      _updateSelColor(event.target.id, props.selectTxt);
+  }
+
+  const changeSelColor = (event) => {
+      if(selectFocus !== event.target.id)
+          _updateSelColor(event.target.id, props.selectTxtFocus);
+  }
+
+  const changeSelColorBack = (event) => {
+      if (selectFocus !== event.target.id)
+          _updateSelColor(event.target.id, props.selectTxt);
+  }
+
+
   return (
     <VStack align="stretch" padding={0.5} spacing={1} {...props}>
       {graphTitles.map((graphTitle, index) => {
@@ -179,25 +215,34 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
             : "graph_" + graphTitles[index]
           : index;
         // console.log(index, graphTitle, key);
+
+
+
         return (
           <VStack
             align="stretch"
             spacing={0}
-            borderColor="black"
+            borderColor={props.borderCol}
             borderWidth={1}
             flex="1 1 0"
             key={key}
           >
             <Select
-              id="graphSelect1"
+              id={"graphSelect" + index}
               size="xs"
               variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
+              bgColor={props.selectBg}
+              color={selColors[index]}//props.selectTxt}
+              focusBorderColor={props.borderCol}
               value={graphTitles[index]}
+              onFocus={() => {setSelectFocus("graphSelect"+index)}}
+              onBlur={removeSelectFocus}
+              onMouseEnter={changeSelColor}
+              onMouseLeave={changeSelColorBack}
               onChange={(evt) => showGraph(evt.target.value, index)}
+              onChangeCapture={removeSelectFocus}
             >
-              <GraphOptions titles={Object.keys(customGraphData)} />
+              <GraphOptions titles={Object.keys(customGraphData)} txtColor={props.optionTxt} />
             </Select>
             {graphTitles[index] === "" ? null : graphTitles[index] ===
               "Custom" ? (
@@ -242,17 +287,18 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
  * @param {string[]} props.titles the list of graph titles to display in the dropdown
  * @returns a component containing all the given options and "Custom"
  */
-function GraphOptions({ titles }) {
+function GraphOptions({ titles, txtColor}) {
   return (
     <>
+      <option style={{color: txtColor}} value="">Select option</option>
       {titles
         .filter((title) => title && title !== "Custom")
         .map((title) => (
-          <option key={title} value={title}>
+          <option style={{color: txtColor}} key={title} value={title}>
             {title}
           </option>
         ))}
-      <option value="Custom">Custom</option>
+      <option style={{color: txtColor}} value="Custom">Custom</option>
     </>
   );
 }

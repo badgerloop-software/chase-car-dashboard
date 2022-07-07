@@ -1,4 +1,5 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
+import colors from "./colors";
 
 export default function RangeBar(props) {
   const clamp = (x, a, b) => Math.max(a, Math.min(x, b));
@@ -71,13 +72,15 @@ export default function RangeBar(props) {
 
   const colorStr = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 
+  const bgColorStr = useColorModeValue(colors.light.background, colors.dark.background);
+
   return (
     <Box
       border={props.border ?? "2px"}
       borderRadius={props.borderRadius}
       w={props.w}
       h={props.h ?? "1.25vh"}
-      css={{ background: "linear-gradient(to right, " + colorStr + valp + "%, #FFFFFF " + valp + "% 100%)" }}
+      css={{ background: "linear-gradient(to right, " + colorStr + valp + "%, " + bgColorStr + " " + valp + "% 100%)" }}
       />
   );
 }

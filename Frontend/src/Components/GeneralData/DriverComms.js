@@ -1,16 +1,18 @@
-import {Flex, Center, SimpleGrid, Text, Image, Box, HStack} from "@chakra-ui/react";
+import {Flex, Center, SimpleGrid, Text, Image, Box, HStack, useColorMode} from "@chakra-ui/react";
 import RangeCell from "../Shared/RangeCell";
 import HeadingCell from "../Shared/HeadingCell";
 import CommsLabel from "./CommsLabel";
-import Headlights from "./DriverIcons/Headlights.png"
-import Hazards from "./DriverIcons/Hazards.png"
-import Cruise from "./DriverIcons/Cruise.png"
-import Left from "./DriverIcons/Left Turn.png"
-import Right from "./DriverIcons/Right Turn.png"
+import { DriverImages } from "./DriverIcons/Images";
 import CONSTANTS from "../../data-constants.json";
 import {isNullOrUndef} from "chart.js/helpers";
+import colors from "../Shared/colors";
 
 export default function DriverComms(props) {
+    const { colorMode } = useColorMode();
+
+    const borderCol = colorMode === "light" ? colors.light.border : colors.dark.border;
+    const Images = colorMode === "light" ? DriverImages.light : DriverImages.dark;
+
     const timeArr = props.data?.timestamps[0].split(":"); // Split most recent timestamp into [hh, mm, ss.SSS]
 
     // Get delay (from hours to milliseconds) between most recent timestamp and current time
@@ -71,14 +73,14 @@ export default function DriverComms(props) {
                 </Flex>
                 <Center w='30%'>
                     <SimpleGrid columns={2} rows={3} alignItems='center' spacing={2}>
-                        <Center h='35px' w='35px' borderColor='black' borderWidth='2px' borderRadius='md' textAlign='center'>
+                        <Center h='35px' w='35px' borderColor={borderCol} borderWidth='2px' borderRadius='md' textAlign='center'>
                             <Text as='b' fontSize='2.3vh'>{props.data?.state[0] ?? "?"}</Text>
                         </Center>
-                        {props.data?.headlights[0] ? <Image boxSize='35px' src={Headlights}/> : <Box h='35px'/>}
-                        {props.data?.hazards[0] ? <Image boxSize='35px' src={Hazards}/> : <Box h='35px'/>}
-                        {props.data?.cruise[0] ? <Image boxSize='35px' src={Cruise}/> : <Box h='35px'/>}
-                        {props.data?.left_turn[0] ? <Image boxSize='35px' src={Left}/> : <Box h='35px'/>}
-                        {props.data?.right_turn[0] ? <Image boxSize='35px' src={Right}/> : <Box h='35px'/>}
+                        {props.data?.headlights[0] ? <Image boxSize='35px' src={Images.Headlights}/> : <Box h='35px'/>}
+                        {props.data?.hazards[0] ? <Image boxSize='35px' src={Images.Hazards}/> : <Box h='35px'/>}
+                        {props.data?.cruise[0] ? <Image boxSize='35px' src={Images.Cruise}/> : <Box h='35px'/>}
+                        {props.data?.left_turn[0] ? <Image boxSize='35px' src={Images.Left}/> : <Box h='35px'/>}
+                        {props.data?.right_turn[0] ? <Image boxSize='35px' src={Images.Right}/> : <Box h='35px'/>}
                     </SimpleGrid>
                 </Center>
             </Flex>

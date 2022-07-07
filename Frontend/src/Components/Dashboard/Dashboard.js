@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, HStack, Select } from "@chakra-ui/react";
+import { Button, Box, Grid, GridItem, HStack, Select, useColorMode } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DriverComms from "../GeneralData/DriverComms";
@@ -7,6 +7,7 @@ import BatteryCells from "../BatteryCells/BatteryCells";
 import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import GraphContainer from "./GraphContainer";
+import colors from "../Shared/colors";
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
@@ -194,6 +195,67 @@ export default function Dashboard(props) {
     }
   };
 
+  /*const getRecordedData = async () => {
+    const response = await fetch("/get-recorded-data");
+    if (response.status === 200) {
+      console.log("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+      const body = response.json();
+      return body
+    } else {
+      console.log("Error getting Rec data")
+    }
+    return null;
+  };*/
+
+  const {colorMode} = useColorMode();
+
+  // TODO Just make the overall colorscheme change. Separate light and dark colors into two objects in colors.js.
+  //      Then, use the same names within those objects, and set a generic value (e.g. themeColors) to either
+  //      colors.light or colors.dark, depending on colorMode. Also, memoize colorTheme based on colorMode so it doesn't
+  //      reevaluate the value all the time
+  const colorPalette = colorMode === "light" ? colors.light : colors.dark;
+
+  //const [selColors, setSelColors] = useState({tl: colorPalette.selectTxt, tr: colorPalette.selectTxt, bl: colorPalette.selectTxt, br: colorPalette.selectTxt});
+
+  const [selColorStr1, setSelColorStr1] = useState(colorPalette.selectTxt);
+  const [selColorStr2, setSelColorStr2] = useState(colorPalette.selectTxt);
+  const [selColorStr3, setSelColorStr3] = useState(colorPalette.selectTxt);
+  const [selColorStr4, setSelColorStr4] = useState(colorPalette.selectTxt);
+
+  const [selectFocus, setSelectFocus] = useState("");
+
+  const _updateSelColor = (targetId, newColor) => {
+    switch (targetId) {
+      case "dataViewSelect1":
+        setSelColorStr1(newColor);
+        break;
+      case "dataViewSelect2":
+        setSelColorStr2(newColor);
+        break;
+      case "dataViewSelect3":
+        setSelColorStr3(newColor);
+        break;
+      case "dataViewSelect4":
+        setSelColorStr4(newColor);
+        break;
+    }
+  }
+
+  const removeSelectFocus = (event) => {
+    setSelectFocus("");
+    _updateSelColor(event.target.id, colorPalette.selectTxt);
+  }
+
+  const changeSelColor = (event) => {
+    if(selectFocus !== event.target.id)
+      _updateSelColor(event.target.id, colorPalette.selectTxtFocus);
+  }
+
+  const changeSelColorBack = (event) => {
+    if (selectFocus !== event.target.id)
+      _updateSelColor(event.target.id, colorPalette.selectTxt);
+  }
+
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
       <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
@@ -203,10 +265,25 @@ export default function Dashboard(props) {
           rowSpan={1}
           colStart={1}
           colSpan={2}
-          borderColor="black"
+          borderColor={colorPalette.border}
           borderWidth={1}
           p={2}
         >
+          {/*<Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
+            //if(false) getRecordedData() // TODO
+            //if (currentSession) {
+              getRecordedData().then((res) => {
+                if (res.response) {
+                  //setRecordedData({ data: res.response });
+                  //console.log("Rec Data::", res.response);
+                  localStorage.setItem("recordedData", res.response)
+                }
+              }).catch((err) => console.log(err));
+            //} else {
+            //  alert("Please select a session to get the data from")
+            //}
+
+          }}> Get session data</Button>*/}
           <FaultsView data={state.data} />
         </GridItem>
         <GridItem
@@ -215,7 +292,7 @@ export default function Dashboard(props) {
           rowSpan={1}
           colStart={1}
           colSpan={1}
-          borderColor="black"
+          borderColor={colorPalette.border}
           borderWidth={1}
           display="flex"
           flexDir="column"
@@ -224,12 +301,17 @@ export default function Dashboard(props) {
             id="dataViewSelect1"
             size="xs"
             variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
+            bgColor={colorPalette.selectBg}
+            color={selColorStr1}
+            focusBorderColor={colorPalette.border}
             value={dataView1}
+            onFocus={() => {setSelectFocus("dataViewSelect1")}}
+            onBlur={removeSelectFocus}
+            onMouseEnter={changeSelColor}
+            onMouseLeave={changeSelColorBack}
             onChange={selectDataView}
           >
-            <DataViewOptions />
+            <DataViewOptions txtColor={colorPalette.optionTxt} />
           </Select>
           {switchDataView(dataView1)}
         </GridItem>
@@ -239,7 +321,7 @@ export default function Dashboard(props) {
           rowSpan={1}
           colStart={2}
           colSpan={1}
-          borderColor="black"
+          borderColor={colorPalette.border}
           borderWidth={1}
           display="flex"
           flexDir="column"
@@ -248,12 +330,17 @@ export default function Dashboard(props) {
             id="dataViewSelect2"
             size="xs"
             variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
+            bgColor={colorPalette.selectBg}
+            color={selColorStr2}
+            focusBorderColor={colorPalette.border}
             value={dataView2}
+            onFocus={() => {setSelectFocus("dataViewSelect2")}}
+            onBlur={removeSelectFocus}
+            onMouseEnter={changeSelColor}
+            onMouseLeave={changeSelColorBack}
             onChange={selectDataView}
           >
-            <DataViewOptions />
+            <DataViewOptions txtColor={colorPalette.optionTxt} />
           </Select>
             {switchDataView(dataView2)}
         </GridItem>
@@ -263,7 +350,7 @@ export default function Dashboard(props) {
             rowSpan={1}
             colStart={1}
             colSpan={1}
-            borderColor="black"
+            borderColor={colorPalette.border}
             borderWidth={1}
             display="flex"
             flexDir="column"
@@ -272,12 +359,17 @@ export default function Dashboard(props) {
               id="dataViewSelect3"
               size="xs"
               variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
+              bgColor={colorPalette.selectBg}
+              color={selColorStr3}
+              focusBorderColor={colorPalette.border}
               value={dataView3}
+              onFocus={() => {setSelectFocus("dataViewSelect3")}}
+              onBlur={removeSelectFocus}
+              onMouseEnter={changeSelColor}
+              onMouseLeave={changeSelColorBack}
               onChange={selectDataView}
           >
-            <DataViewOptions />
+            <DataViewOptions txtColor={colorPalette.optionTxt} />
           </Select>
           {switchDataView(dataView3)}
         </GridItem>
@@ -287,7 +379,7 @@ export default function Dashboard(props) {
             rowSpan={1}
             colStart={2}
             colSpan={1}
-            borderColor="black"
+            borderColor={colorPalette.border}
             borderWidth={1}
             display="flex"
             flexDir="column"
@@ -296,12 +388,17 @@ export default function Dashboard(props) {
               id="dataViewSelect4"
               size="xs"
               variant="filled"
-              bgColor="grey.300"
-              placeholder="Select option"
+              bgColor={colorPalette.selectBg}
+              color={selColorStr4}
+              focusBorderColor={colorPalette.border}
               value={dataView4}
+              onFocus={() => {setSelectFocus("dataViewSelect4")}}
+              onBlur={removeSelectFocus}
+              onMouseEnter={changeSelColor}
+              onMouseLeave={changeSelColorBack}
               onChange={selectDataView}
           >
-            <DataViewOptions />
+            <DataViewOptions txtColor={colorPalette.optionTxt} />
           </Select>
           {switchDataView(dataView4)}
         </GridItem>
@@ -311,6 +408,11 @@ export default function Dashboard(props) {
         latestTime={latestTimestamp}
         flex="2 2 0"
         maxW="67vw"
+        selectBg={colorPalette.selectBg}
+        selectTxt={colorPalette.selectTxt}
+        selectTxtFocus={colorPalette.selectTxtFocus}
+        optionTxt={colorPalette.optionTxt}
+        borderCol={colorPalette.border}
       />
     </HStack>
   );
@@ -319,11 +421,12 @@ export default function Dashboard(props) {
 function DataViewOptions(props) {
   return (
     <>
-      <option value="battery_pack">BMS - Battery Pack</option>
-      <option value="cell_groups">BMS - Cell Groups</option>
-      <option value="ppc_mppt">PPC and MPPT</option>
-      <option value="driver_comms">Driver/Cabin and Communication</option>
-      <option value="io_boards">I/O Boards</option>
+      <option style={{color: props.txtColor}} value="">Select option</option>
+      <option style={{color: props.txtColor}} value="battery_pack">BMS - Battery Pack</option>
+      <option style={{color: props.txtColor}} value="cell_groups">BMS - Cell Groups</option>
+      <option style={{color: props.txtColor}} value="ppc_mppt">PPC and MPPT</option>
+      <option style={{color: props.txtColor}} value="driver_comms">Driver/Cabin and Communication</option>
+      <option style={{color: props.txtColor}} value="io_boards">I/O Boards</option>
     </>
   );
 }

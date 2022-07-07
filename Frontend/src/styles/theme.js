@@ -1,8 +1,16 @@
+import { mode } from '@chakra-ui/theme-tools';
 import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
+  components: {
+    VStack: {
+      baseStyle: {
+          backgroundColor: mode("#fff000", "#00ff00"),
+      }
+    }
+  },
   styles: {
-    global: () => ({
+    global: (props) => ({
       "::-webkit-scrollbar": {
         height: "5px",
         width: "5px",
@@ -17,6 +25,10 @@ const theme = extendTheme({
         borderRadius: "80px",
       },
     }),
+  },
+  config: {
+    initialColorMode: 'system',
+    useSystemColorMode: false,
   },
 });
 

@@ -1,8 +1,13 @@
-import { Flex } from "@chakra-ui/react";
+import {Flex, useColorMode} from "@chakra-ui/react";
 import DataPack from "./DataPack";
 import CONSTANTS from "../../data-constants.json";
+import colors from "../Shared/colors";
 
 export default function BatteryPack(props) {
+    const { colorMode } = useColorMode();
+
+    const headerBg = colorMode === "light" ? colors.light.header : colors.dark.header;
+
     return (
         <Flex flex="auto" direction="column">
             <DataPack
@@ -11,7 +16,7 @@ export default function BatteryPack(props) {
                 dataUnit={CONSTANTS.bms_input_voltage.UNIT}
                 dataMin={CONSTANTS.bms_input_voltage.MIN}
                 dataMax={CONSTANTS.bms_input_voltage.MAX}
-                bg='#DDDDDD'
+                bg={headerBg}
                 DecimalPoint='3'
             />
             <DataPack
@@ -28,7 +33,7 @@ export default function BatteryPack(props) {
                 dataUnit={CONSTANTS.pack_current.UNIT}
                 dataMin={CONSTANTS.pack_current.MIN}
                 dataMax={CONSTANTS.pack_current.MAX}
-                bg='#DDDDDD'
+                bg={headerBg}
                 DecimalPoint='3'
             />
             <DataPack
@@ -46,7 +51,7 @@ export default function BatteryPack(props) {
                 dataUnit="W"
                 dataMin={CONSTANTS.pack_voltage.MIN * CONSTANTS.pack_current.MIN}
                 dataMax={CONSTANTS.pack_voltage.MAX * CONSTANTS.pack_current.MAX}
-                bg='#DDDDDD'
+                bg={headerBg}
                 DecimalPoint='3'
             />
             <DataPack
@@ -65,7 +70,7 @@ export default function BatteryPack(props) {
                          Math.floor(((((props.data?.pack_temp[0] ?? -1.0) >= 20) ? props.data?.pack_temp[0] : 15) - 15) / 5) :
                          CONSTANTS.fan_speed.MAX}
                 dataMax={CONSTANTS.fan_speed.MAX}
-                bg='#DDDDDD'
+                bg={headerBg}
                 DecimalPoint='0'
             />
             <DataPack
@@ -82,7 +87,7 @@ export default function BatteryPack(props) {
                 dataUnit="m&#937;"
                 dataMin={CONSTANTS.avg_cell_resistance.MIN}
                 dataMax={CONSTANTS.avg_cell_resistance.MAX}
-                bg='#DDDDDD'
+                bg={headerBg}
                 DecimalPoint='3'
             />
             <DataPack
@@ -99,7 +104,7 @@ export default function BatteryPack(props) {
                 dataUnit={CONSTANTS.adaptive_total_capacity.UNIT}
                 dataMin={CONSTANTS.adaptive_total_capacity.MIN}
                 dataMax={CONSTANTS.adaptive_total_capacity.MAX}
-                bg='#DDDDDD'
+                bg={headerBg}
                 DecimalPoint='3'
             />
             <DataPack
