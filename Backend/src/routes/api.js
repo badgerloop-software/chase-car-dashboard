@@ -23,13 +23,14 @@ ROUTER.get("/api", async (req, res) => {
   }); // TODO
   await dataReady; // TODO
   console.log("No longer waiting for data...");
+  console.log(frontendData);
 
   dataReadyResolver = null;
 
 
-  console.time("send http");
+  // TODO console.time("send http");
   const temp = res.send({ response: frontendData }).status(200);
-  temp.addListener("finish", () => console.timeEnd("send http"));
+  // TODO temp.addListener("finish", () => console.timeEnd("send http"));
 });
 
 
@@ -271,11 +272,13 @@ function unpackData(data) {
   solarCarData["timestamps"] = timestamps;
 
   // Update the data to be passed to the front-end
-  frontendData = solarCarData;
+  frontendData = JSON.parse(JSON.stringify(solarCarData));
 
   // TODO
   if(dataReadyResolver) {
     dataReadyResolver();
+    solarCarData = JSON.parse("{ \"timestamps\": [], \"solar_car_connection\": [] }");
+
         /*.then((result) => {
       console.log(result); // TODO
     })*/
