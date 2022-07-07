@@ -16,6 +16,37 @@ ROUTER.get("/api", (req, res) => {
   temp.addListener("finish", () => console.timeEnd("send http"));
 });
 
+
+ROUTER.get("/get-recorded-data", (req, res) => {
+
+  var dataToSend;
+  // spawn new child process to call the python script
+  //const python = spawn('python', ['C:\\Users\\james\\badgerloop_repo\\chase-car-dashboard\\Backend\\src\\routes\\script1.py']);
+  const python = spawn('python', ['./src/routes/script1.py','./Data/demo2.bin','./Data/sc1-data-format/format.json']);
+  // collect data from script
+  python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+    dataToSend = data.toString();
+    console.log(dataToSend);
+  });
+  // in close event we are sure that stream from child process is closed
+  python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+    // send data to browser
+    //console.log(dataToSend);
+    res.send({ response: dataToSend }).status(200);
+  });
+
+  /*if (currentSession == "") {
+    res.send({ response: "NoFileSelected" }).status(200);
+    return
+  }
+  getrecordedData()
+  res.send({ response: RecodedData }).status(200);*/
+})
+
+
+/*
 // TODO this would go in the get method for the stop recording/save session request
 ROUTER.get('/', (req, res) => {
 
@@ -35,7 +66,7 @@ ROUTER.get('/', (req, res) => {
     res.send(dataToSend)
   });
 
-})
+})*/
 
 
 //----------------------------------------------------- TCP ----------------------------------------------------------

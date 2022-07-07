@@ -195,7 +195,7 @@ export default function Dashboard(props) {
     }
   };
 
-  /*const getRecordedData = async () => {
+  const getRecordedData = async () => {
     const response = await fetch("/get-recorded-data");
     if (response.status === 200) {
       console.log("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
@@ -205,7 +205,7 @@ export default function Dashboard(props) {
       console.log("Error getting Rec data")
     }
     return null;
-  };*/
+  };
 
   const {colorMode} = useColorMode();
 
@@ -269,7 +269,7 @@ export default function Dashboard(props) {
           borderWidth={1}
           p={2}
         >
-          {/*<Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
+          <Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
             //if(false) getRecordedData() // TODO
             //if (currentSession) {
               getRecordedData().then((res) => {
@@ -283,7 +283,7 @@ export default function Dashboard(props) {
             //  alert("Please select a session to get the data from")
             //}
 
-          }}> Get session data</Button>*/}
+          }}> Get session data</Button>
           <FaultsView data={state.data} />
         </GridItem>
         <GridItem
