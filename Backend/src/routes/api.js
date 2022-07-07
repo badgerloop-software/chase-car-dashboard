@@ -5,12 +5,28 @@ import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import net from "net";
 import {spawn} from "child_process"; // TODO
 
+
+
+//let dataReady = null; // TODO
+let dataReadyResolver = null;
+
+
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
   frontendData = INITIAL_FRONTEND_DATA;
 
 // Send data to front-end
-ROUTER.get("/api", (req, res) => {
+ROUTER.get("/api", async (req, res) => {
+  console.log("Waiting for data...");
+  const dataReady = new Promise((resolve) => {
+    dataReadyResolver = resolve;
+  }); // TODO
+  await dataReady; // TODO
+  console.log("No longer waiting for data...");
+
+  dataReadyResolver = null;
+
+
   console.time("send http");
   const temp = res.send({ response: frontendData }).status(200);
   temp.addListener("finish", () => console.timeEnd("send http"));
@@ -256,6 +272,15 @@ function unpackData(data) {
 
   // Update the data to be passed to the front-end
   frontendData = solarCarData;
+
+  // TODO
+  if(dataReadyResolver) {
+    dataReadyResolver();
+        /*.then((result) => {
+      console.log(result); // TODO
+    })*/
+  }
+
 }
 
 // Create new socket
