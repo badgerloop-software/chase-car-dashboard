@@ -1,4 +1,11 @@
-import { Box, Grid, GridItem, HStack, Select, useColorMode } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  HStack,
+  Select,
+  useColorMode
+} from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DriverComms from "../GeneralData/DriverComms";
@@ -7,8 +14,18 @@ import BatteryCells from "../BatteryCells/BatteryCells";
 import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import GraphContainer from "./GraphContainer";
+import DataRecordingControl from "./DataRecordingControl";
 import dvOptions from "./dataViewOptions";
 import getColor from "../Shared/colors";
+
+
+/**
+ *ToDo:
+ *  Handling empty parems sent to the back end
+ *  Making get data experience more user frendly
+ *  Fixing unexpected getSessionsList error (Usually happens when app is left idal)
+ */
+
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
@@ -46,19 +63,19 @@ function reducer([currentQueue], newData) {
  * @returns the JSON response from the API
  */
 async function callBackendAPI() {
-  console.time("http call");
+  //console.time("http call");
 
   const response = await fetch("/api");
-  console.timeLog("http call", "fetch finished");
+  //console.timeLog("http call", "fetch finished");
   const body = await response.json();
-  console.timeLog("http call", "json extracted");
+  //console.timeLog("http call", "json extracted");
 
   if (response.status !== 200) {
     console.error("api: error");
     throw Error(body.message);
   }
 
-  console.timeEnd("http call");
+  //console.timeEnd("http call");
   // console.log("body", body);
   return body;
 }
@@ -80,16 +97,29 @@ export default function Dashboard(props) {
   useEffect(() => {
     callBackendAPI()
       .then((res) => {
-        console.time("update react");
+        //console.time("update react");
 
         setState({ data: res.response });
         updateQueue(res.response);
         // console.log("api::", res.response);
 
-        console.timeEnd("update react");
+        //console.timeEnd("update react");
       })
       .catch((err) => console.log(err));
   }, [state]);
+/*TODO=======
+  const callBackendAPI = async () => {
+    const response = await fetch("/api");
+    const body = await response.json();
+    // console.log("gen data",body)
+
+    if (response.status !== 200) {
+      console.error("api: error");
+      throw Error(body.message);
+    }
+
+    return body;
+  };*/
 
   //------------------- Choosing data views using Select components -------------------
 
@@ -253,6 +283,9 @@ export default function Dashboard(props) {
 
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
+
+      <DataRecordingControl/>
+
       <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
         <GridItem
           minH="min-content"

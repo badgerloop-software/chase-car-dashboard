@@ -1,13 +1,25 @@
 import { Router } from "express";
-import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
-import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
-import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
-import CONSTANTS from "../../src/constants.json";
 import net from "net";
+import { spawn } from "child_process";
+import * as fs from "fs";
+const nReadlines = require('n-readlines');
+import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
+import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
+import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
+import CONSTANTS from "../../src/constants.json";
 
 const ROUTER = Router();
-let solarCarData = INITIAL_SOLAR_CAR_DATA,
-  frontendData = INITIAL_FRONTEND_DATA;
+let solarCarData = INITIAL_SOLAR_CAR_DATA;
+let frontendData = INITIAL_FRONTEND_DATA;
+
+const NUM_BYTES_IDX = 0;
+const DATA_TYPE_IDX = 1;
+
+let bytesPerPacket = 0;
+for (const property in DATA_FORMAT) {
+  bytesPerPacket += DATA_FORMAT[property][NUM_BYTES_IDX];
+}
+
 
 // Send data to front-end
 ROUTER.get("/api", (req, res) => {
@@ -15,6 +27,156 @@ ROUTER.get("/api", (req, res) => {
   const temp = res.send({ response: frontendData }).status(200);
   temp.addListener("finish", () => console.timeEnd("send http"));
 });
+
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// Data recording
+// --------------------------------------------------------------------------------------------------------------------
+
+// Convert line to UTF-8 and remove return character
+function _convertLine(line) {
+	return line.toString('utf8').replace('\r', "");
+}
+
+
+const RECORDED_DATA_PATH = './recordedData/sessions/';
+const SESSIONS_LIST_PATH = './recordedData/sessionsList.bin';
+const PROCESS_SCRIPT_PATH = './src/routes/process_recorded_data.py';
+const DATA_FORMAT_PATH = './Data/sc1-data-format/format.json';
+const PROCESSED_DATA_PATH = './src/routes/';
+
+let doRecord = false; // Flag for whether we should be recording data or not
+let currentSession = "";
+
+let sessionsList = [];
+
+const broadbandLines = new nReadlines(SESSIONS_LIST_PATH);
+let line;
+let lineNumber = 1;
+
+// Getting all the created sessions from sessionsList.bin
+while (line = broadbandLines.next()) {
+  // console.log(`Line ${lineNumber} has: ${line.toString('ascii')}`);
+  sessionsList.push(_convertLine(line));
+  lineNumber++;
+}
+console.log("Initial list of recorded sessions:", sessionsList)
+
+
+ROUTER.get("/sessionsList", (req, res) => {
+  res.send({ response: sessionsList }).status(200);
+});
+
+
+ROUTER.post("/create-recording-session", (req, res) => {
+  if (req.body.fileName === "") {
+    res.send({ response: "Empty" }).status(200);
+    return
+  }
+
+  fs.appendFile(SESSIONS_LIST_PATH, req.body.fileName + "\n", (err) => {
+    sessionsList.push(req.body.fileName)
+    if (err) {
+      res.send({ response: "Error" }).status(200);
+      return console.error(err);
+    };
+  });
+
+  fs.writeFile(RECORDED_DATA_PATH + req.body.fileName + '.bin', '', { flag: 'w' }, function (err) {
+    if (err) {
+      res.send({ response: "Error" }).status(200);
+      return console.error(err);
+    }
+    res.send({ response: "Created" }).status(200)
+    currentSession = req.body.fileName
+  });
+  console.log('req:', req.body);
+});
+
+
+ROUTER.post("/current-recording-session", (req, res) => {
+  if (req.body.fileName === "") {
+    res.send({ response: -1 }).status(200);
+    return
+  }
+
+  res.send({ response: 200 }).status(200)
+  currentSession = req.body.fileName
+
+  console.log('req:', req.body);
+});
+
+
+// Set recording flag to true or false depeding on request
+ROUTER.post("/record-data", (req, res) => {
+  if (currentSession === "") {
+    res.send({ response: "NoFile" }).status(200)
+    return
+  }
+  res.send({ response: "Recording" }).status(200)
+  doRecord = req.body.doRecord
+  console.log("Record Status:", req.body)
+});
+
+
+ROUTER.post("/process-recorded-data/x", async (req, res) => {
+  currentSession = req.body.fileName
+  if (currentSession === "") {
+    res.send({ response: "NoFile" }).status(200)
+    return
+  }
+
+  res.send({ response: currentSession}).status(200)
+});
+
+
+ROUTER.get("/process-recorded-data", (req, res) => {
+  // Execute Python script to convert recorded binary data to a formatted Excel file
+
+  console.log(currentSession)
+
+  if (currentSession === "") {
+    res.send({ response: "NoFileSelected" }).status(200);
+    return
+  }
+
+  // Spawn new child process to call the python script
+  const python = spawn('python', [PROCESS_SCRIPT_PATH,
+                                  RECORDED_DATA_PATH + currentSession + '.bin',
+                                  DATA_FORMAT_PATH,
+                                  PROCESSED_DATA_PATH + currentSession + '.csv']);
+
+  // Collect data from script
+  python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+    console.log(data.toString());
+  });
+
+  python.stderr.on('data', function (data) {
+    console.log('Python script errored out ...');
+    console.log(data.toString());
+  });
+
+  // In close event we are sure that stream from child process is closed
+  python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+  });
+
+  res.send({ response: currentSession }).status(200);
+})
+
+
+function recordData(data) {
+  fs.appendFile(RECORDED_DATA_PATH + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]),
+                (err) => {
+                  if(err) {
+                    console.error("ERROR: Error while appending to file");
+                  }
+  });
+}
+
+
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
 const CAR_PORT = CONSTANTS.CAR_PORT; // Port for TCP connection
@@ -59,10 +221,20 @@ function openSocket() {
 
   // Data received listener
   client.on("data", (data) => {
-    // console.log(data);
-    console.time("update data");
-    unpackData(data);
-    console.timeEnd("update data");
+    if(data.length === bytesPerPacket) {
+      // console.log(data);
+      console.time("update data");
+      unpackData(data);
+
+      if (doRecord) {
+        recordData(data)
+      }
+
+      console.timeEnd("update data");
+    } else {
+      console.warn("ERROR: Bad packet length ------------------------------------");
+    }
+
   });
 
   // Socket closed listener
@@ -71,6 +243,22 @@ function openSocket() {
     if (solarCarData.solar_car_connection.length > 0) {
       solarCarData.solar_car_connection[0] = false;
       frontendData.solar_car_connection[0] = false;
+      // If recording, replace the latest solar_car_connection value in file with false
+      if(doRecord) {
+        fs.open(RECORDED_DATA_PATH + currentSession + ".bin", "r+", (err, fd) => {
+          if(!err) {
+            fs.write(
+                fd, Buffer.alloc(1, false), 0, 1, fs.fstatSync(fd).size - 1,
+                (err, bw, buf) => {
+                  if(err) {
+                    // Failed to write byte to offset
+                    console.error("ERROR: Error writing to file when lost connection");
+                  }
+                }
+            );
+          }
+        });
+      }
     }
 
     console.log(`Connection to car server (${CAR_PORT}) is closed`);
@@ -95,6 +283,7 @@ function openSocket() {
     setTimeout(openSocket, 1000);
   });
 }
+
 
 /**
  * Unpacks a Buffer and updates the data to be passed to the front-end
@@ -128,7 +317,7 @@ function unpackData(data) {
     if (solarCarData.hasOwnProperty(property)) {
       dataArray = solarCarData[property];
     }
-    dataType = DATA_FORMAT[property][1];
+    dataType = DATA_FORMAT[property][DATA_TYPE_IDX];
 
     // Add the data from the buffer to solarCarData
     switch (dataType) {
@@ -213,7 +402,7 @@ function unpackData(data) {
     }
 
     // Increment offset by amount specified in data format
-    buffOffset += DATA_FORMAT[property][0];
+    buffOffset += DATA_FORMAT[property][NUM_BYTES_IDX];
   }
 
   // Update the timestamps array in solarCarData

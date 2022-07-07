@@ -2,10 +2,12 @@
 
 ## Libraries
 
-- [node.js and npm](https://nodejs.org/en/) - Package manager and server workhorse (node version **>16**)
+- [node.js and npm](https://nodejs.org/en/) - Package manager and server workhorse (node version **16**)
 - [React](https://reactjs.org/) - Front-end library
 - [Chakra UI](https://chakra-ui.com/) - Component library
 - [Chart.js](https://www.chartjs.org/) & [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2) - Graph library & React wrapper
+- [XlsxWriter](https://pypi.org/project/XlsxWriter/) - Python module for writing Excel files
+- [NumPy](https://numpy.org/) - Python library for working with numerical data
 
 ## Cloning the Data Format Repository and Initializing the Submodule
 
@@ -20,7 +22,8 @@
 
 ## Running the Dashboard
 
-0. Ensure that you have [node.js](https://nodejs.org/en/download/) installed on your computer.
+0. Ensure that you have [node.js](https://nodejs.org/en/download/) and [Python 3](https://www.python.org/downloads/release/python-3104/), as well as [XlsxWriter](https://xlsxwriter.readthedocs.io/getting_started.html) and [NumPy](https://numpy.org/install/), installed on your computer.
+   1. Additionally, check that running `python --version` on the terminal returns Python 3.X.X (ideally Python 3.10.X).
 1. Clone the repository to your computer (see steps 0-1 of "Cloning the Data Format Repository and Initializing the Submodule" for instructions on cloning a repo using SSH).
 2. If you have not already, clone the `sc1-data-format` repository and initialize the submodule (see instructions above).
 3. Run `npm run update-data` to update the constants (e.g. nominal min/max values for all data) related to each piece of data listed in the submodule (see the "Updating Data" section).
@@ -39,7 +42,8 @@
 
 ## Contributing to the Dashboard
 
-0. Again, make sure you have [node.js](https://nodejs.org/en/download/) installed on your computer (as well as Prettier if you want clean code :neutral_face:).
+0. Again, make sure you have [node.js](https://nodejs.org/en/download/) and [Python 3](https://www.python.org/downloads/release/python-3104/), as well as [XlsxWriter](https://xlsxwriter.readthedocs.io/getting_started.html) and [NumPy](https://numpy.org/install/), installed on your computer (and maybe Prettier if you want clean code :neutral_face:).
+   1. Additionally, check that running `python --version` on the terminal returns Python 3.X.X (ideally Python 3.10.X).
 1. Clone the repository to your computer (see steps 0-1 of "Cloning the Data Format Repository and Initializing the Submodule" for instructions on cloning a repo using SSH).
 2. If you have not already, clone the `sc1-data-format` repository and initialize the submodule with `git submodule update --init`.
 3. Open the repository in your IDE of choice (Visual Studio Code is recommended).
@@ -57,3 +61,7 @@
 8. Once you have finished making your necessary changes to your code, switch to a new branch that has a good name for the feature or names the Jira issue (e.g. `SW-23/skeleton`).
 9. Commit related changes to that branch and push to this repository. (Do this often so that it is easy to finely revert to a previous state!)
 10. Once you are happy with the state of your code, open a pull request and request someone to conduct a code review. It may be kicked back with some suggestions or edits, but when it is accepted, it will be merged with `main`. Congrats! Now it's just time to rinse and repeat.
+
+## Data Recording
+
+Raw recorded data is saved in .bin files in `Backend/recordedData/sessions/`. However, the dashboard can be used to convert this raw binary data to Excel format. The generated Excel workbooks (.csv files) are located in `Backend/src/routes/`.
