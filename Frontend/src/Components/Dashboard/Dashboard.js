@@ -27,13 +27,37 @@ function reducer([currentQueue], newData) {
   // );
 
   const output = {};
+  //const output = currentQueue;
   for (const key in newData) {
     if (key === "timestamps" || key.startsWith("tstamp")) continue;
 
-    output[key] = newData[key].map((value, idx) => ({
+
+    if(!currentQueue.hasOwnProperty(key)) {
+      currentQueue[key] = [];
+    }
+
+    //const toAdd = {x: newData.timestamps[0], y: newData[key]};
+
+    const toAdd = newData[key].map((value, idx) => ({
       x: newData.timestamps[idx],
       y: value,
     }));
+
+    currentQueue[key].unshift(toAdd[0]);
+
+    /*for (const idx in toAdd) {
+      currentQueue[key].unshift(toAdd[idx]);
+
+      console.log("Element, ", toAdd[idx]);
+    }*/
+
+    /* TODO
+    output[key] = newData[key].map((value, idx) => ({
+      x: newData.timestamps[idx],
+      y: value,
+    }));*/
+    console.log("ToAdd, ", toAdd);
+    console.log(currentQueue);
   }
 
   return [output, newData.timestamps[0]];
