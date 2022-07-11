@@ -44,14 +44,24 @@ function reducer([currentQueue], newData) {
       y: value,
     }));
 
+    // TODO Would it be worth moving the mapping/processing of the data to GraphContainer.js (and instead just appending
+    //      the newest data object to the end of an array of objects) so that it doesn't have to be done on a stateful
+    //      object?? I don't know if that would be worth doing
     // Add data to output
-    for(const idx in toAdd) {
+    //console.log("output: ", output);
+    //console.log("toAdd: ", toAdd);
+    output[key] = output[key].concat(toAdd);
+    //console.log("output: ", output);
+    /*for(const idx in toAdd) {
       output[key].unshift(toAdd[idx]);
-    }
+    }*/
 
-    while(output[key].length > 18000) {
-      output[key].pop();
+    if(output[key].length > 18000) {
+      output[key].splice(17999, output.length - 18000);
     }
+    /*while(output[key].length > 18000) {
+      output[key].pop();
+    }*/
   }
   //console.log("output: ", output);
   console.log("currentQueue: ", currentQueue);
@@ -99,15 +109,47 @@ export default function Dashboard(props) {
   //   console.log("recieved", latestTimestamp);
   // }, latestTimestamp);
 
-  const [state, setState] = useState({ data: null }); // TODO remove and just use queue?
+  // TODO The queue, but not part of this component's state
+  let output = {};
+
+  const [state, setState] = useState({ data: [] }); // TODO remove and just use queue?
   useEffect(() => {
     callBackendAPI()
       .then((res) => {
         console.time("update react");
 
-        updateQueue(res.response);
-        setState({ data: res.response }); // TODO remove and just use queue?
+        //updateQueue(res.response);
+        //setState(state => ({ data: state.data.concat(Array(res.response)) })); // TODO remove and just use queue?
+        setState(state => ({ data: [...state.data, res.response] })); // TODO remove and just use queue?
         // console.log("api::", res.response);
+        console.log(state.data);
+
+
+        // TODO The queue, but not as a stateful object
+        //let output = {};
+
+        // Add keys to output/queue
+        for(const key in state.data[0]) {
+          if (key === "timestamps" || key.startsWith("tstamp")) continue;
+
+          //console.log(key);
+          // If output/currentQueue does not have a certain key yet (i.e. it is the first time data is being added), create the key
+          if(!output.hasOwnProperty(key)) {
+            output[key] = [];
+          }
+          //console.log(key,output[key]);
+        }
+
+        // Add data from state.data to output/queue
+        for(const dataset in state.data) {
+          for(const key in state.data[dataset]) {
+            if (key === "timestamps" || key.startsWith("tstamp")) continue;
+            //console.log(key,output[key]);
+            output[key] = output[key].concat(state.data[dataset][key]);
+          }
+        }
+
+        console.log(output);
 
         console.timeEnd("update react");
       })
@@ -277,7 +319,10 @@ export default function Dashboard(props) {
       _updateSelColor(event.target.id, colorPalette.selectTxt);
   }
 
+
   return (
+      <HStack>
+      {/*
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
       <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
         <GridItem
@@ -424,7 +469,7 @@ export default function Dashboard(props) {
           {switchDataView(dataView4)}
         </GridItem>
       </Grid>
-      <GraphContainer
+      {/*<GraphContainer
         queue={queue}
         latestTime={latestTimestamp}
         flex="2 2 0"
@@ -434,7 +479,7 @@ export default function Dashboard(props) {
         selectTxtFocus={colorPalette.selectTxtFocus}
         optionTxt={colorPalette.optionTxt}
         borderCol={colorPalette.border}
-      />
+      />*/}
     </HStack>
   );
 }
