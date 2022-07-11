@@ -26,39 +26,36 @@ function reducer([currentQueue], newData) {
   //   DateTime.fromISO(timestamp)
   // );
 
-  const output = {};
-  //const output = currentQueue;
-  for (const key in newData) {
+  // Stringify currentQueue and then parse that string bc stateful objects shouldn't be copied without caution
+  let output = JSON.parse(JSON.stringify(currentQueue));
+
+  // Add data from newData to output
+  for(const key in newData) {
     if (key === "timestamps" || key.startsWith("tstamp")) continue;
 
-
-    if(!currentQueue.hasOwnProperty(key)) {
-      currentQueue[key] = [];
+    // If output/currentQueue does not have a certain key yet (i.e. it is the first time data is being added), create the key
+    if(!output.hasOwnProperty(key)) {
+      output[key] = [];
     }
 
-    //const toAdd = {x: newData.timestamps[0], y: newData[key]};
-
+    // Map the data from newData associated with the current key to a graph-friendly format (x & y values)
     const toAdd = newData[key].map((value, idx) => ({
       x: newData.timestamps[idx],
       y: value,
     }));
 
-    currentQueue[key].unshift(toAdd[0]);
+    // Add data to output
+    for(const idx in toAdd) {
+      output[key].unshift(toAdd[idx]);
+    }
 
-    /*for (const idx in toAdd) {
-      currentQueue[key].unshift(toAdd[idx]);
-
-      console.log("Element, ", toAdd[idx]);
-    }*/
-
-    /* TODO
-    output[key] = newData[key].map((value, idx) => ({
-      x: newData.timestamps[idx],
-      y: value,
-    }));*/
-    console.log("ToAdd, ", toAdd);
-    console.log(currentQueue);
+    while(output[key].length > 18000) {
+      output[key].pop();
+    }
   }
+  //console.log("output: ", output);
+  console.log("currentQueue: ", currentQueue);
+
 
   return [output, newData.timestamps[0]];
 }
@@ -102,14 +99,14 @@ export default function Dashboard(props) {
   //   console.log("recieved", latestTimestamp);
   // }, latestTimestamp);
 
-  const [state, setState] = useState({ data: null });
+  const [state, setState] = useState({ data: null }); // TODO remove and just use queue?
   useEffect(() => {
     callBackendAPI()
       .then((res) => {
         console.time("update react");
 
-        setState({ data: res.response });
         updateQueue(res.response);
+        setState({ data: res.response }); // TODO remove and just use queue?
         // console.log("api::", res.response);
 
         console.timeEnd("update react");
