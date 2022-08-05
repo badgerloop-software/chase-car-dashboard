@@ -94,6 +94,8 @@ const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP
 // equivalent to 10 minutes' worth of data being sent 30 Hz
 const X_AXIS_CAP = 100; // TODO 18_000
 
+let dataCount = 0; // TODO
+
 /**
  * Creates a connection with the TCP server at port CAR_PORT and address CAR_SERVER. Then, sets listeners for connect,
  * data, close, and error events. In the event of an error, the client will attempt to re-open the socket at
@@ -112,9 +114,11 @@ function openSocket() {
   // Data received listener
   client.on("data", (data) => {
     // console.log(data);
+    dataCount++;
     console.time("update data");
     unpackData(data);
     console.timeEnd("update data");
+    console.log(dataCount);
   });
 
   // Socket closed listener
