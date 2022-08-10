@@ -1,44 +1,64 @@
 import sys
 import time
 import json
-# TODO import csv
-# TODO import nupmy as np
+import csv
+import numpy as np
+import os # TODO Just for getting the size of the binary file for debugging
 
 print('#Hello from python#')
 print('First param:'+sys.argv[1]+'#')
 print('Second param:'+sys.argv[2])
+
 #f = open('./Data/demo2.bin', mode='rb')
 #f = open(sys.argv[1], mode='rb')
-f2 = open("./Data/demofile2.txt", "a")
+# TODO "./Data/demofile2.txt", "a" worked when spawned in backend
+
+f2 = open("./demofile2.txt", "a")
 f3 = open(sys.argv[2])
-#TODO f4 = open("src/routes/demo2.bin", "rb") # TODO Check the file name
-#TODO f5 = open("src/routes/test.csv", "w")
-#TODO f5writer = csv.writer(f5, delimeter=',', dialect='excel', newline='')
+
+f4 = open("./demo2.bin", "rb") # TODO Check the file name
+
+# TODO f5 = open("src/routes/test.csv", "w")
+f5 = open("./test.csv", "w", newline='')
+f5writer = csv.writer(f5, dialect='excel', delimiter=',')
+
 format = json.load(f3)
+
 #print(format.keys())
 
 f2.write('d\n')
 #f2.write(str(format))
 
-print(format.keys())
+# TODO print(format.keys())
+print("\nKeys were here\n") # TODO
 #keys = format.keys()
 
 j=0
+i=0
 for key in format.keys():
-    if(j <= 3):
-        f2.write(key + '\n')
-        j += 1
-        # TODO time.sleep(1)
+	i += format[key][0]
+	if(j <= 3):
+		f2.write(key + '\n')
+		j += 1
+		# TODO time.sleep(1)
 
-# Write headers to the file
-# TODO f5writer.writerow(format.keys() + ["timestamp"])
+print("Bytes in data packet: " + str(i))
+print("Bytes in binary file: " + str(os.path.getsize("./demo2.bin")))
+print("Number of rows that should be loaded: " + str(os.path.getsize("./demo2.bin") / i))
+
+# Write headers to the file TODO Will have to account for and remove the tstamp elements. Will also have to add solar_car_connection
+f5writer.writerow(list(format.keys()) + ["timestamp"])
+
 # TODO
-'''
-data = 1 # Initialize data to true
+
+print(np.fromfile(f4, np.dtype('<u2'), 1, "", 51))
+
+data = 1 # Initialize data
 #fun unpackData(data):
 while data: # Loop until there is no more data left in the file
 	offset = 0 # Byte offset for the buffer array
 	timestamp = "::."# TODO s = solarCarData["timestamps"] # The array of timestamps for each set of data added to solarCarData
+	row = []
 	# Array values indicate the status of the connection to the solar car. These will always be true when unpacking data
 	# TODO This will have to be accounted for eventually: solar_car_connection = solarCarData["solar_car_connection"]
 	
@@ -65,10 +85,85 @@ while data: # Loop until there is no more data left in the file
 		
 		dataType = format[property][1] # Get the data type of the next piece of data to read
 		
-		# TODO Check actual file types (might have to do a chain of if statements to convert data types in format.json to the data types numpy.fromfile() is expecting)
-		data = np.fromfile(f4, dataType, 1, "", offset) 
-		# TODO f4.read(format[property][0]) # Read the next n bytes, where n is the bytes specified in the data format JSON
+		# Get the next piece of data from the file
+		if (dataType == "uint8"):
+			# TODO dataType = np.dtype('u1')
+			data = np.fromfile(f4, np.dtype('u1'), 1, "", offset)
+			
+			# Add hours, minutes, or seconds to the timestamp if the current piece of data is tstamp_hr/mn/sc
+			if (property == "tstamp_hr"):
+				if (data < 10):
+					timestamp = "0" + str(data) + timestamp
+				else:
+					timestamp = str(data) + timestamp
+				#break
+			elif (property == "tstamp_mn"):
+				# TODO Update this: Ternary operator (and probably replace function) don't work the same in Python
+				timestamp = timestamp.replace(
+ 					"::",
+					":" + (("0" + str(data)) if (data < 10) else str(data)) + ":"
+				)
+				#break
+			elif (property == "tstamp_sc"):
+				timestamp = timestamp.replace(
+					":.",
+					":" + (("0" + str(data)) if (data < 10) else str(data)) + "."
+				)
+				#break
+			
+			#break
+		elif (dataType == "float"):
+			# TODO dataType = np.dtype('<f4') #TODO Remove the 4?
+			data = np.fromfile(f4, np.dtype('<f4'), 1, "", offset) # TODO Remove the 4 in the data type?
+			#break
+		elif (dataType == "bool"):
+			# TODO dataType = np.dtype('?')
+			data = np.fromfile(f4, np.dtype('?'), 1, "", offset)
+			#break
+		elif (dataType == "char"):
+			#dataType = np.dtype('U1') # TODO
+			
+			# TODO Try making this an 8-bit unsigned int and check what the ASCII/Unicode equivalent is. Then, keep trying stuff until it matches that character.
+			# TODO Right now, I am just making it raw bytes that are zero-terminated and casting it to a string. This isn't recommended, and I'm convinced there's a better way too
+			
+			#data = np.fromfile(f4, np.dtype('u1'), 1, "", offset) # TODO Remove; just for testing
+			
+			# TODO Should be able to use i1 instead of u1 since the random number generator in DataGenerator and the actual values will never go above 100 (and will not have a msb of 1)
+			data = np.fromfile(f4, np.dtype('u1'), 1, "", offset) # TODO Check data type
+			data = chr(int(data))
+			#break
+		elif (dataType == "uint16"):
+			# TODO dataType = np.dtype('u2')
+			data = np.fromfile(f4, np.dtype('>u2'), 1, "", offset)
+			
+			# Add milliseconds to the timestamp if the current piece of data is tstamp_ms
+			if (property == "tstamp_ms"):
+				milliStr = ""
+				if (data >= 100):
+					millisStr = str(data)
+				elif (data >= 10):
+					millisStr = "0" + str(data)
+				else:
+					millisStr = "00" + str(data)
+				#if (typeof millisStr === "undefined"):
+				#	console.warn(
+				#		`Millis value of ${millis} caused undefined millis value`
+				#	)
+				timestamp += millisStr
+				#break
+			#break
+		else:
+			# If the data type does not match any of the previous values, default to a string with n characters, where n is the byte count listed in the data format
+			data = np.fromfile(f4, np.dtype('U'+format[property][0]), 1, "", offset)
+			print("WARNING: default case reached when unpacking recorded data") # TODO Elaborate if there are multiple unpacking scripts
+			#break
 		
+		# TODO Check actual file types (might have to do a chain of if statements to convert data types in format.json to the data types numpy.fromfile() is expecting)
+		
+		# TODO data = np.fromfile(f4, dataType, 1, "", offset) 
+		
+		# TODO f4.read(format[property][0]) # Read the next n bytes, where n is the bytes specified in the data format JSON
+		'''
 		switch (property):
 			case "tstamp_hr":
 				#hours = data.readUInt8(offset)
@@ -131,12 +226,10 @@ while data: # Loop until there is no more data left in the file
 				#	)
 				timestamp += millisStr
 				break
-
-
-'''
-# TODO
-'''
-
+		'''
+		# TODO
+		'''
+		
 		# Add the data from the buffer to solarCarData
 		switch (dataType):
 			case "float":
@@ -206,8 +299,9 @@ while data: # Loop until there is no more data left in the file
 				# Log if an unexpected type is specified in the data format
 				print("No case for unpacking type ${dataType} (type specified for ${property} in format.json)")
 				break
-'''
-'''
+		'''
+		
+		'''
 		if (!property.startsWith("tstamp")):
 			# If property is not used for timestamps
 			# Limit dataArray to a length specified by X_AXIS_CAP
@@ -216,22 +310,34 @@ while data: # Loop until there is no more data left in the file
 			
 			# Write dataArray to solarCarData at the correct key
 			solarCarData[proper,ty] = dataArray
-'''
-# TODO
-'''
+		'''
+		
+		# Add the piece of data to the row, provided it is not part of the timestamp
+		# TODO Use a more graceful/compact condition
+		if (property != "tstamp_sc" and property != "tstamp_mn" and property != "tstamp_hr"):
+			print("\n----------\n" + property + ": " + str(data)) # TODO
+			print("----------\nFirst element of " + property + ": " + str(data[0])) # TODO
+			row += [data[0]] # np.fromfile() returns an array, and the first element is the actual value, so add the first element to the row
+			print(row) # TODO
 		
 		# Increment offset by amount specified in data format
-		offset += DATA_FORMAT[property][0]
+		offset += format[property][0]
 	
+	# Add the timestamp to the end of the row
+	row += [timestamp]
+	
+	#TODO
+	print(row)
+	# Write the row to the csv file
+	f5writer.writerow(row)
 	
 	# Update the timestamps array in solarCarData
-	#solarCarData["timestamps"] = timestamps
+	# TODO solarCarData["timestamps"] = timestamps
 	
 	# Update the data to be passed to the front-end
-	frontendData = solarCarData
+	#frontendData = solarCarData
 
 
-'''
 #TODO
 '''
 for i in range(5):
@@ -241,11 +347,12 @@ for i in range(5):
 		f2.write(str(fp[j]) + ' | ')
 	print('\n')
 	f2.write('\n')
-	time.sleep(1)'''
+	time.sleep(1)
+'''
 #print(f.readline())
 
-# TODO f5.close()
-# TODO f4.close()
+f5.close()
+f4.close()
 f3.close()
 f2.close()
 #f.close()
