@@ -69,6 +69,9 @@ for header in headers:
 								'criteria': '>',
 								'value': format[header][4],
 								'format': outofbounds_format})
+		
+		if(format[header][2] != ""):
+			header += " (" + format[header][2] + ")"
 	elif(header == "timestamp"):
 		column_format.set_num_format('hh:mm:ss.000')
 		column_format.set_right(2)
