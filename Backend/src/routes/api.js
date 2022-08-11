@@ -27,7 +27,7 @@ ROUTER.get("/get-recorded-data", (req, res) => {
 
   // TODO Add installing python/pip (and any dependencies/additional modules, like `pip install numpy` and `pip install (--user most likely?) XlsxWriter`) in terminal in which npm is used to README
 
-  const python = spawn('python', ['./src/routes/new_script1.py','./src/routes/demo1.bin','./Data/sc1-data-format/format.json','./src/routes/test.csv']);
+  const python = spawn('python', ['./src/routes/exp_new_script1.py','./src/routes/demo3.bin','./Data/sc1-data-format/format.json','./src/routes/test.csv']);
   // collect data from script
   python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
