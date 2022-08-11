@@ -22,14 +22,15 @@ f3 = open(sys.argv[2])
 f4 = open(recordedDataPath, "rb") # TODO Check the file name
 
 # TODO f5 = open("src/routes/test.csv", "w")
-f5 = open(sys.argv[3], "w", newline='')
-f5writer = csv.writer(f5, dialect='excel', delimiter=',')
+#f5 = open(sys.argv[3], "w", newline='')
+#f5writer = csv.writer(f5, dialect='excel', delimiter=',')
 
-
-#TODO workbook = xlsxwriter.Workbook(sys.argv[3])
-#TODO worksheet = workbook.get_worksheet_by_name("test")
-#TODO tstamp_format = workbook.add_format({'num_format': 'hh:mm:ss.000'})
-#TODO worksheet.set_column('CF:CF',8.43,tstamp_format)
+#print(sys.argv[3][(sys.argv[3].rfind("/")+1):sys.argv[3].rfind(".")])
+#print(sys.argv[3][2,3])
+workbook = xlsxwriter.Workbook(sys.argv[3])
+worksheet = workbook.add_worksheet(sys.argv[3][(sys.argv[3].rfind("/")+1):sys.argv[3].rfind(".")])
+tstamp_format = workbook.add_format({'num_format': 'hh:mm:ss.000'})
+worksheet.set_column('CF:CF',8.43,tstamp_format)
 
 
 # Load data format JSON and get the keys in it
@@ -62,7 +63,8 @@ for toRemove in ["tstamp_ms", "tstamp_sc", "tstamp_mn", "tstamp_hr"]:
 
 # Write headers to the file
 # TODO Will also have to add solar_car_connection (to this and data recording)
-f5writer.writerow(headers + ["timestamp"])
+worksheet.write_row('A1', headers + ["timestamp"])
+#f5writer.writerow(headers + ["timestamp"])
 
 
 # TODO Showed the tstamp_ms value: print(np.fromfile(f4, np.dtype('>u2'), 1, "", 51))
@@ -70,11 +72,13 @@ f5writer.writerow(headers + ["timestamp"])
 
 # Get the size of the recorded data file
 recordedDataSize = os.path.getsize(recordedDataPath)
+rownum = 2
 while (f4.tell() < recordedDataSize):# TODO data: # Loop until there is no more data left in the file
 	data = 0 # Data to add to the current row
 	offset = 0 # Byte offset for the buffer array
 	timestamp = "::."# TODO s = solarCarData["timestamps"] # The array of timestamps for each set of data added to solarCarData
 	row = [] # Row to be added to the file
+	
 	# Array values indicate the status of the connection to the solar car. These will always be true when unpacking data
 	# TODO This will have to be accounted for eventually: solar_car_connection = solarCarData["solar_car_connection"]
 	
@@ -350,7 +354,9 @@ while (f4.tell() < recordedDataSize):# TODO data: # Loop until there is no more 
 	#TODO
 	# TODO print(row)
 	# Write the row to the csv file
-	f5writer.writerow(row)
+	worksheet.write_row('A'+str(rownum),row)
+	rownum += 1
+	#f5writer.writerow(row)
 	
 	# Update the timestamps array in solarCarData
 	# TODO solarCarData["timestamps"] = timestamps
@@ -372,7 +378,7 @@ for i in range(5):
 '''
 #print(f.readline())
 
-f5.close()
+#f5.close()
 f4.close()
 f3.close()
 f2.close()
@@ -381,9 +387,7 @@ f2.close()
 # ----------------------------------------------------------------------------------------------------------------
 # Excel formatting
 # ----------------------------------------------------------------------------------------------------------------
-
-
-# TODO workbook.close()
+workbook.close()
 
 
 print("From python script: I'm done")

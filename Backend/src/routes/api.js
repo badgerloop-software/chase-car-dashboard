@@ -5,6 +5,8 @@ import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import net from "net";
 import {spawn} from "child_process"; // TODO
 
+// TODO const fs = require('fs') // TODO Remove
+
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
   frontendData = INITIAL_FRONTEND_DATA;
@@ -22,10 +24,18 @@ ROUTER.get("/get-recorded-data", (req, res) => {
   var dataToSend;
   // spawn new child process to call the python script
   //const python = spawn('python', ['C:\\Users\\james\\badgerloop_repo\\chase-car-dashboard\\Backend\\src\\routes\\script1.py']);
-  const python = spawn('python', ['./src/routes/script1.py','./Data/demo2.bin','./Data/sc1-data-format/format.json']);
+
+  // TODO Add installing python/pip (and any dependencies/additional modules, like `pip install numpy` and `pip install (--user most likely?) XlsxWriter`) in terminal in which npm is used to README
+
+  const python = spawn('python', ['./src/routes/new_script1.py','./src/routes/demo1.bin','./Data/sc1-data-format/format.json','./src/routes/test.csv']);
   // collect data from script
   python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
+    dataToSend = data.toString();
+    console.log(dataToSend);
+  });
+  python.stderr.on('data', function (data) {
+    console.log('Python script errored out ...');
     dataToSend = data.toString();
     console.log(dataToSend);
   });
@@ -97,6 +107,19 @@ function openSocket() {
     // console.log(data);
     console.time("update data");
     unpackData(data);
+    /*TODO fs.writeFile('./src/routes/demo3.bin', data, { flag: 'a' }, err => {
+      if (err) {
+        console.error(err)
+        return
+      }
+    }) // TODO
+    fs.writeFile('./src/routes/unpacked_demo3.txt', JSON.stringify(solarCarData), { flag: 'a' }, err => {
+      if (err) {
+        console.error(err)
+        return
+      }
+    }) // TODO
+    */
     console.timeEnd("update data");
   });
 
