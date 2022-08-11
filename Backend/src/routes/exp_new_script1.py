@@ -54,8 +54,8 @@ headers = ["timestamp"] + headers
 outofbounds_format = workbook.add_format({'bg_color': '#ff5858'})
 c=0
 for header in headers:
-	column_format = workbook.add_format({'bottom_color': '#b0b0b0', 'bottom': 1, 'left': 1, 'right': 1})
-	header_format = workbook.add_format({'bottom': 2, 'left': 1, 'right': 1, 'bold': True})
+	column_format = workbook.add_format({'align': 'center', 'bottom_color': '#b0b0b0', 'bottom': 1, 'left': 1, 'right': 1})
+	header_format = workbook.add_format({'align': 'center', 'bottom': 2, 'left': 1, 'right': 1, 'bold': True})
 	
 	if(header != "state" and header != "timestamp"):
 		if(format[header][1] == "float"):
