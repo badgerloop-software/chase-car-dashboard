@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "build": "babel ./src/ -d dist",
-    "start": "npm run build && node ./dist/server.js"
+    "start": "npm run build && node ./dist/server.js",
+    "live": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,8 @@
   "dependencies": {
     "express": "^4.17.3",
     "luxon": "^2.3.0",
+    "cors": "^2.8.5",
+    "n-readlines": "^1.0.1",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
