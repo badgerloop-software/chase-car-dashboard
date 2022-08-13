@@ -128,7 +128,7 @@ ROUTER.get("/get-recorded-data", (req, res) => {
   const python = spawn('python', ['./src/routes/exp_new_script1.py',
                                                 './recordedData/sessions/' + currentSession + '.bin',
                                                 './Data/sc1-data-format/format.json',
-                                                './src/routes/test2.csv']);
+                                                './src/routes/' + currentSession + '.csv']);
   // collect data from script
   python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
