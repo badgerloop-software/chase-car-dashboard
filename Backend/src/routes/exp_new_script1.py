@@ -61,6 +61,9 @@ for header in headers:
 		if(format[header][1] == "float"):
 			column_format.set_num_format('0.00')
 		
+		worksheet.conditional_format(1, c, 1048575, c, {'type': 'blanks',
+								'format': None,
+								'stop_if_true': True})
 		worksheet.conditional_format(1, c, 1048575, c, {'type': 'cell',
 								'criteria': '<',
 								'value': format[header][3],
