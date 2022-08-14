@@ -70,19 +70,19 @@ fi
 if [[ ${setup} = true || ${update} = true ]]; then
 	echo "Update"
 	
-	git restore Backend/Data/sc1-data-format
+	# TODO git restore Backend/Data/sc1-data-format Frontend/src/data-constants.json Frontend/src/Components/Graph/graph-data.json
 	
-	git restore Frontend/src/data-constants.json
-	git restore Frontend/src/Components/Graph/graph-data.json
+	#TODO Instead of the above restore command: git reset --hard
 	
-	#TODO git reset --hard
+	# TODO git pull origin main
 	
-	git pull origin main
+	# TODO (probably) Just for testing
+	git pull origin $(git branch --show-current)
 	
 	# TODO Not needed since `npm run update-data` takes care of this: git submodule update --recursive
+	# TODO npm run update-data
 	
-	npm run update-data
-	
+	echo $(git branch)
 	#TODO
 	# origin main
 	#	Might need to restore sc1-data-format and data constants before pulling in case they were updated in between remote main updates
@@ -90,27 +90,30 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	#	data constants
 fi
 
-
-echo -e "Make sure to update recorded_data_args.txt with the directories in which you want to save recorded data (CSVs, not binary files).\nIf you leave it as is, recorded data will be saved in Backend/Data/src/recordedData/"
+# TODO Actually make recorded_data_args.txt and implement it in data recording/processing
+echo -e "Make sure to update Backend/src/routes/recorded_data_args with the directory in which you want to save recorded data (CSVs, not binary files)."
 
 while [[ TRUE ]]; do
-	echo -n "Is the recorded data location okay with you (y/n)? "
+	echo "Currently, recorded data will be saved in $(cat Backend/src/routes/recorded_data_args)"
+	echo -n "Would you like to change the recorded data directory (y/n)? "
 	read recDirOkay
-	if [[ ${recDirOkay^^} != @(Y|N|YES|NO) ]]; then
-		echo "Please enter a valid option"
-		echo -en "\033[1A\033[1A\033[2K"
-	elif [[ ${recDirOkay^^} == @(Y|YES) ]]; then
-		echo -e "\033[2K\n-------------------------------------------------------------------------------------\n"
+	
+	if [[ ${recDirOkay^^} == @(Y|YES) ]]; then
+		nano Backend/src/routes/recorded_data_args
+		echo -en "\033[1A\033[2K\033[1A\033[2K"
+	elif [[ ${recDirOkay^^} == @(N|NO) ]]; then
+		#TODO echo -e "\033[2K\n-------------------------------------------------------------------------------------\n"
 		break
 	else
-		exit
+		echo "Please enter a valid option"
+		echo -en "\033[1A\033[1A\033[2K\033[1A\033[2K"
 	fi
 done
 
-#if [[ ${recDirOkay^^} == @(N|NO) ]]; then
-#	echo "It's not okay"
-#	exit
-#fi
+
+
+# TODO Run the production build, not debug
+#TODO npm start
 
 
 
