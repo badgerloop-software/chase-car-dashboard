@@ -112,55 +112,58 @@ ROUTER.post("/get-recorded-data/x", async (req, res) => {
   // res.send({ response: RecodedData }).status(200)
 });
 
-
 ROUTER.get("/get-recorded-data", (req, res) => {
-  // Execute Python script to convert recorded binary data to a formatted Excel file
+  // Check if no session is currently selected. If so, return
+  if (currentSession == "") {
+    res.send({ response: "NoFileSelected" }).status(200);
+    return
+  }
 
   var dataToSend = "";
-  // spawn new child process to call the python script
-  //const python = spawn('python', ['C:\\Users\\james\\badgerloop_repo\\chase-car-dashboard\\Backend\\src\\routes\\script1.py']);
 
   // TODO Add installing python/pip (and any dependencies/additional modules, like `pip install numpy` and `pip install (--user most likely?) XlsxWriter`) in terminal in which npm is used to README
 
   console.log(currentSession);
 
-  // TODO const python = spawn('python', ['./src/routes/exp_new_script1.py','./src/routes/demo3.bin','./Data/sc1-data-format/format.json','./src/routes/test.csv']);
+  // Get path to specified csv directory
+  let csvPath = ''
+  csvPath = fs.readFileSync('src/routes/recorded_data_args', {encoding: 'utf8', flag: 'r'}).toString();
+
+  // Remove the EOF newline from csvPath
+  if(csvPath.length > 0) csvPath = csvPath.slice(0,-1);
+
+  // Ensure csvPath ends with / (or \)
+  if(csvPath.length !== 0 && (csvPath[csvPath.length-1] !== '/' || csvPath[csvPath.length-1] !== '\\')) {
+    csvPath += '/'
+  }
+
+  // Spawn new child process to call the Python script to process the recorded data
+  // Args: python script, recorded data, data format, csv directory (with ending /), csv name (no file extension)
   const python = spawn('python', ['./src/routes/exp_new_script1.py',
-                                                './recordedData/sessions/' + currentSession + '.bin',
-                                                './Data/sc1-data-format/format.json',
-                                                './src/routes/' + currentSession + '.csv']);
-  // collect data from script
+                                  './recordedData/sessions/' + currentSession + '.bin',
+                                  './Data/sc1-data-format/format.json',
+                                  csvPath,
+                                  currentSession]);
+
+  // Collect data from script
   python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
-    dataToSend = data.toString();
-    console.log(dataToSend);
-  });
-  python.stderr.on('data', function (data) {
-    console.log('Python script errored out ...');
-    dataToSend = data.toString();
-    console.log(dataToSend);
-  });
-  // in close event we are sure that stream from child process is closed
-  python.on('close', (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-    // send data to browser
-    //console.log(dataToSend);
-    // TODO res.send({ response: dataToSend }).status(200);
+    console.log(data.toString());
   });
 
-  /*if (currentSession == "") {
-    res.send({ response: "NoFileSelected" }).status(200);
-    return
-  }
-  getrecordedData()
-  res.send({ response: RecodedData }).status(200);*/
+  // Notify if the Python script errors
+  python.stderr.on('data', function (data) {
+    console.log('Python script errored out ...');
+    console.log(data.toString());
+  });
+
+  // Notify of close event
+  python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+  });
 
   // ------------------------------------------------------------------------------------------------------------------
 
-  if (currentSession == "") {
-    res.send({ response: "NoFileSelected" }).status(200);
-    return
-  }
   getrecordedData()
 
   res.send({ response: RecodedData }).status(200);

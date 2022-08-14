@@ -10,7 +10,7 @@ Where available options are the following:
 \t-n, --no-update\tSkip updating the sc1-data-format submodule and all constants that depend on its contents
 
 "
-
+# Process arguments
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
 	case $1 in
 		-s | --setup )
@@ -39,6 +39,7 @@ update=${update-true}
 
 # Setup/Installations
 if [[ ${setup} = true ]]; then
+	# TODO Remove
 	echo "Setup"
 	
 	# Install xdg to open web pages
@@ -68,6 +69,7 @@ fi
 
 # Update data format/constants and main
 if [[ ${setup} = true || ${update} = true ]]; then
+	#TODO Remove
 	echo "Update"
 	
 	# TODO git restore Backend/Data/sc1-data-format Frontend/src/data-constants.json Frontend/src/Components/Graph/graph-data.json
@@ -77,12 +79,11 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	# TODO git pull origin main
 	
 	# TODO (probably) Just for testing
-	git pull origin $(git branch --show-current)
+	echo "git pull origin $(git branch --show-current)"
 	
 	# TODO Not needed since `npm run update-data` takes care of this: git submodule update --recursive
 	# TODO npm run update-data
 	
-	echo $(git branch)
 	#TODO
 	# origin main
 	#	Might need to restore sc1-data-format and data constants before pulling in case they were updated in between remote main updates
@@ -90,7 +91,9 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	#	data constants
 fi
 
-# TODO Actually make recorded_data_args.txt and implement it in data recording/processing
+
+# TODO Implement recorded_data_args in data recording/processing
+echo -e "\n------------------------------------------------\n"
 echo -e "Make sure to update Backend/src/routes/recorded_data_args with the directory in which you want to save recorded data (CSVs, not binary files)."
 
 while [[ TRUE ]]; do

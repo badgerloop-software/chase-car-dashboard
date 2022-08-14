@@ -1,1 +1,1 @@
-./demo3.bin ../../Data/sc1-data-format/format.json ./test.csv
+./demo3.bin ../../Data/sc1-data-format/format.json ./ test

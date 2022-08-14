@@ -11,18 +11,25 @@ print('#Hello from python#')
 print('First param: '+sys.argv[1])
 print('Second param: '+sys.argv[2])
 
+# Path to recorded binary data
 recordedDataPath = sys.argv[1]
+# Path to directory for the csv file that will be created
+csvDir = sys.argv[3]
+# Name of the csv file that will be created (without a file extension)
+csvName = sys.argv[4]
 
+# Data format JSON
 f3 = open(sys.argv[2])
-f4 = open(recordedDataPath, "rb") # TODO Check the file name
+# Recorded data binary file
+f4 = open(recordedDataPath, "rb")
 
 # TODO f5 = open("src/routes/test.csv", "w")
-#f5 = open(sys.argv[3], "w", newline='')
+#f5 = open(csvName, "w", newline='')
 #f5writer = csv.writer(f5, dialect='excel', delimiter=',')
 
 # Open Excel file and create first sheet (same name as the file)
-workbook = xlsxwriter.Workbook(sys.argv[3])
-worksheet = workbook.add_worksheet(sys.argv[3][(sys.argv[3].rfind("/")+1):sys.argv[3].rfind(".")])
+workbook = xlsxwriter.Workbook(csvDir + csvName + ".csv")
+worksheet = workbook.add_worksheet(csvName)
 
 # Load data format JSON and get the keys in it
 format = json.load(f3)
