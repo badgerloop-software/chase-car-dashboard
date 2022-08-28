@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# TODO Update this (e.g. updating main/current branch isn't mentioned here)
 usage="
 $0 - Runs the engineering dashboard. This command will optionally install all necessary dependencies for the dashboard and, unless otherwise sepcified, will update all data constants. Installing all necessary dependencies (with the s/setup flag) only needs to be done once. However, it is not recommended that you skip the update process unless you have recently run the dashboard.
 
