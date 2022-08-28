@@ -15,7 +15,6 @@ ROUTER.get("/api", (req, res) => {
   temp.addListener("finish", () => console.timeEnd("send http"));
 });
 
-
 //----------------------------------------------------- TCP ----------------------------------------------------------
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
