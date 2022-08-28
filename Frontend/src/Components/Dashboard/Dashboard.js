@@ -1,4 +1,4 @@
-import { Button, Box, Grid, GridItem, HStack, Select, useColorMode } from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, Select, useColorMode } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DriverComms from "../GeneralData/DriverComms";
@@ -74,10 +74,6 @@ export default function Dashboard(props) {
     null,
   ]);
 
-  // useEffect(() => {
-  //   console.log("recieved", latestTimestamp);
-  // }, latestTimestamp);
-
   const [state, setState] = useState({ data: null });
   useEffect(() => {
     callBackendAPI()
@@ -106,18 +102,17 @@ export default function Dashboard(props) {
       // Avoid duplicate data views, unless they are both empty
       if(event.target.value !== "") {
         if (event.target.value === document.getElementById("dataViewSelect2").value) {
-          // TODO Update comments like this: If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the top right section, switch the
+          // data views in this section and the other one
           setDataView2(dataView1);
         } else if (event.target.value === document.getElementById("dataViewSelect3").value) {
-          // If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the bottom left section, switch the
+          // data views in this section and the other one
           setDataView3(dataView1);
         } else if (event.target.value === document.getElementById("dataViewSelect4").value) {
-          // If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the bottom right section, switch the
+          // data views in this section and the other one
           setDataView4(dataView1);
-          console.log(event.target.value.toString()); // TODO Remove
         }
       }
       setDataView1(event.target.value);
@@ -125,16 +120,16 @@ export default function Dashboard(props) {
       // Avoid duplicate data views, unless they are both empty
       if(event.target.value !== "") {
         if (event.target.value === document.getElementById("dataViewSelect1").value) {
-          // TODO Update comments like this: If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the top left section, switch the
+          // data views in this section and the other one
           setDataView1(dataView2);
         } else if (event.target.value === document.getElementById("dataViewSelect3").value) {
-          // If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the bottom left section, switch the
+          // data views in this section and the other one
           setDataView3(dataView2);
         } else if (event.target.value === document.getElementById("dataViewSelect4").value) {
-          // If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the bottom right section, switch the
+          // data views in this section and the other one
           setDataView4(dataView2);
         }
       }
@@ -143,16 +138,16 @@ export default function Dashboard(props) {
       // Avoid duplicate data views, unless they are both empty
       if(event.target.value !== "") {
         if (event.target.value === document.getElementById("dataViewSelect1").value) {
-          // TODO Update comments like this: If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the top left section, switch the
+          // data views in this section and the other one
           setDataView1(dataView3);
         } else if (event.target.value === document.getElementById("dataViewSelect2").value) {
-          // If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the top right section, switch the
+          // data views in this section and the other one
           setDataView2(dataView3);
         } else if (event.target.value === document.getElementById("dataViewSelect4").value) {
-          // If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the bottom right section, switch the
+          // data views in this section and the other one
           setDataView4(dataView3);
         }
       }
@@ -161,16 +156,16 @@ export default function Dashboard(props) {
       // Avoid duplicate data views, unless they are both empty
       if(event.target.value !== "") {
         if (event.target.value === document.getElementById("dataViewSelect1").value) {
-          // TODO Update comments like this: If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the top left section, switch the
+          // data views in this section and the other one
           setDataView1(dataView4);
         } else if (event.target.value === document.getElementById("dataViewSelect2").value) {
-          // If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the top right section, switch the
+          // data views in this section and the other one
           setDataView2(dataView4);
         } else if (event.target.value === document.getElementById("dataViewSelect3").value) {
-          // If trying to switch to a data view that is already being displayed in the other
-          // section, switch the data views in this section and the other one
+          // If trying to switch to a data view that is already being displayed in the bottom left section, switch the
+          // data views in this section and the other one
           setDataView3(dataView4);
         }
       }
@@ -181,49 +176,35 @@ export default function Dashboard(props) {
   // Choose the data view to return/display based on the given option
   const switchDataView = (optionValue) => {
     if (optionValue === "battery_pack") {
-      return <BatteryPack data={state.data} />; // TODO Split up
+      return <BatteryPack data={state.data} />;
     } else if (optionValue === "cell_groups") {
-      return <BatteryCells data={state.data} />; // TODO Split up
+      return <BatteryCells data={state.data} />;
     } else if (optionValue === "ppc_mppt") {
-      return <PPC_MPPT data={state.data}/>; // TODO Check
+      return <PPC_MPPT data={state.data}/>;
     } else if (optionValue === "driver_comms") {
-      return <DriverComms data={state.data}/>; // TODO Check
+      return <DriverComms data={state.data}/>;
     } else if (optionValue === "io_boards") {
-      return <IOView data={state.data}/>; // TODO Check
+      return <IOView data={state.data}/>;
     } else {
       return <Box />;
     }
   };
 
-  /*const getRecordedData = async () => {
-    const response = await fetch("/get-recorded-data");
-    if (response.status === 200) {
-      console.log("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-      const body = response.json();
-      return body
-    } else {
-      console.log("Error getting Rec data")
-    }
-    return null;
-  };*/
-
+  // Get system color mode
   const {colorMode} = useColorMode();
-
-  // TODO Just make the overall colorscheme change. Separate light and dark colors into two objects in colors.js.
-  //      Then, use the same names within those objects, and set a generic value (e.g. themeColors) to either
-  //      colors.light or colors.dark, depending on colorMode. Also, memoize colorTheme based on colorMode so it doesn't
-  //      reevaluate the value all the time
+  // Select color set depending on color mode
   const colorPalette = colorMode === "light" ? colors.light : colors.dark;
 
-  //const [selColors, setSelColors] = useState({tl: colorPalette.selectTxt, tr: colorPalette.selectTxt, bl: colorPalette.selectTxt, br: colorPalette.selectTxt});
-
+  // Select colors
   const [selColorStr1, setSelColorStr1] = useState(colorPalette.selectTxt);
   const [selColorStr2, setSelColorStr2] = useState(colorPalette.selectTxt);
   const [selColorStr3, setSelColorStr3] = useState(colorPalette.selectTxt);
   const [selColorStr4, setSelColorStr4] = useState(colorPalette.selectTxt);
 
+  // selectFocus indicates which select currently has focus
   const [selectFocus, setSelectFocus] = useState("");
 
+  // Update select color when the select's state changes
   const _updateSelColor = (targetId, newColor) => {
     switch (targetId) {
       case "dataViewSelect1":
@@ -241,16 +222,19 @@ export default function Dashboard(props) {
     }
   }
 
+  // Reset selectFocus and change the color of the select that just lost focus
   const removeSelectFocus = (event) => {
     setSelectFocus("");
     _updateSelColor(event.target.id, colorPalette.selectTxt);
   }
 
+  // Change the color of a select to a color appropriate to when it has focus
   const changeSelColor = (event) => {
     if(selectFocus !== event.target.id)
       _updateSelColor(event.target.id, colorPalette.selectTxtFocus);
   }
 
+  // Change the color of a select to a color appropriate to when it does not have focus
   const changeSelColorBack = (event) => {
     if (selectFocus !== event.target.id)
       _updateSelColor(event.target.id, colorPalette.selectTxt);
@@ -269,21 +253,6 @@ export default function Dashboard(props) {
           borderWidth={1}
           p={2}
         >
-          {/*<Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
-            //if(false) getRecordedData() // TODO
-            //if (currentSession) {
-              getRecordedData().then((res) => {
-                if (res.response) {
-                  //setRecordedData({ data: res.response });
-                  //console.log("Rec Data::", res.response);
-                  localStorage.setItem("recordedData", res.response)
-                }
-              }).catch((err) => console.log(err));
-            //} else {
-            //  alert("Please select a session to get the data from")
-            //}
-
-          }}> Get session data</Button>*/}
           <FaultsView data={state.data} />
         </GridItem>
         <GridItem

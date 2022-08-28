@@ -12,7 +12,7 @@ const colors = {
         ticks: "#666666",
         ppc_mppt_txtRedBg: "#000000",
         ppc_mppt_txtGreenBg: "#000000"
-    },//119,127,150
+    },
     dark: {
         background: "#1A202C",
         header: "#2D3748",

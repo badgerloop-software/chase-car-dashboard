@@ -3,7 +3,6 @@ import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import net from "net";
-import {spawn} from "child_process"; // TODO
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -15,27 +14,6 @@ ROUTER.get("/api", (req, res) => {
   const temp = res.send({ response: frontendData }).status(200);
   temp.addListener("finish", () => console.timeEnd("send http"));
 });
-
-// TODO this would go in the get method for the stop recording/save session request
-ROUTER.get('/', (req, res) => {
-
-  var dataToSend;
-  // spawn new child process to call the python script
-  //const python = spawn('python', ['C:\\Users\\james\\badgerloop_repo\\chase-car-dashboard\\Backend\\src\\routes\\script1.py']);
-  const python = spawn('python', ['./src/routes/script1.py','./Data/demo2.bin']);
-  // collect data from script
-  python.stdout.on('data', function (data) {
-    console.log('Pipe data from python script ...');
-    dataToSend = data.toString();
-  });
-  // in close event we are sure that stream from child process is closed
-  python.on('close', (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-    // send data to browser
-    res.send(dataToSend)
-  });
-
-})
 
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
