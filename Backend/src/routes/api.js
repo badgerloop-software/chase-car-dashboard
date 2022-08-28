@@ -44,7 +44,7 @@ const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP
 
 // The max number of data points to have in each array at one time
 // equivalent to 10 minutes' worth of data being sent 30 Hz
-const X_AXIS_CAP = 100; // TODO 18_000
+const X_AXIS_CAP = 18_000;
 
 /**
  * Creates a connection with the TCP server at port CAR_PORT and address CAR_SERVER. Then, sets listeners for connect,
