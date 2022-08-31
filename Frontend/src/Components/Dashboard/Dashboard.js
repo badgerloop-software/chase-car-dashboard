@@ -7,10 +7,12 @@ import BatteryCells from "../BatteryCells/BatteryCells";
 import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import GraphContainer from "./GraphContainer";
+import dvOptions from "./dataViewOptions";
 import colors from "../Shared/colors";
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
+
 
 /**
  * The reducer used for the main queue of data from the database
@@ -175,18 +177,23 @@ export default function Dashboard(props) {
 
   // Choose the data view to return/display based on the given option
   const switchDataView = (optionValue) => {
-    if (optionValue === "battery_pack") {
-      return <BatteryPack data={state.data} />;
-    } else if (optionValue === "cell_groups") {
-      return <BatteryCells data={state.data} />;
-    } else if (optionValue === "ppc_mppt") {
-      return <PPC_MPPT data={state.data}/>;
-    } else if (optionValue === "driver_comms") {
-      return <DriverComms data={state.data}/>;
-    } else if (optionValue === "io_boards") {
-      return <IOView data={state.data}/>;
-    } else {
-      return <Box />;
+    switch(optionValue) {
+      case dvOptions.battery_pack:
+        return <BatteryPack data={state.data} />;
+      case dvOptions.cell_groups:
+        return <BatteryCells data={state.data} />;
+      case dvOptions.ppc_mppt:
+        return <PPC_MPPT data={state.data}/>;
+      case dvOptions.driver_comms:
+        return <DriverComms data={state.data}/>;
+      case dvOptions.io_boards:
+        return <IOView data={state.data}/>;
+      case dvOptions.select:
+        return <Box />;
+      default:
+        console.warn("Default case in switchDataView was reached");
+        // Return a red box to make it clear that whatever option is selected is invalid
+        return <Box h="100%" w="100%" bgColor="#ff0000" />;
     }
   };
 
@@ -390,12 +397,12 @@ export default function Dashboard(props) {
 function DataViewOptions(props) {
   return (
     <>
-      <option style={{color: props.txtColor}} value="">Select option</option>
-      <option style={{color: props.txtColor}} value="battery_pack">BMS - Battery Pack</option>
-      <option style={{color: props.txtColor}} value="cell_groups">BMS - Cell Groups</option>
-      <option style={{color: props.txtColor}} value="ppc_mppt">PPC and MPPT</option>
-      <option style={{color: props.txtColor}} value="driver_comms">Driver/Cabin and Communication</option>
-      <option style={{color: props.txtColor}} value="io_boards">I/O Boards</option>
+      <option style={{color: props.txtColor}} value={dvOptions.select}>Select option</option>
+      <option style={{color: props.txtColor}} value={dvOptions.battery_pack}>BMS - Battery Pack</option>
+      <option style={{color: props.txtColor}} value={dvOptions.cell_groups}>BMS - Cell Groups</option>
+      <option style={{color: props.txtColor}} value={dvOptions.ppc_mppt}>PPC and MPPT</option>
+      <option style={{color: props.txtColor}} value={dvOptions.driver_comms}>Driver/Cabin and Communication</option>
+      <option style={{color: props.txtColor}} value={dvOptions.io_boards}>I/O Boards</option>
     </>
   );
 }
