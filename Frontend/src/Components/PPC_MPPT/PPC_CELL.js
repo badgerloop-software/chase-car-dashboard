@@ -13,13 +13,13 @@ export default function PPC_CELL(props) {
     return (
         <Center
             w='47%'
-            bg={props.boolean ? greenBgCol : redBgCol}
+            bg={props.isGreen ? greenBgCol : redBgCol}
             borderColor={borderCol}
             borderWidth='2px'
             textAlign='center'
             lineHeight='2vh'
         >
-            <Text as='b' fontSize='1vw' color={props.boolean ? greenTxtCol : redTxtCol}>{props.label}</Text>
+            <Text as='b' fontSize='1vw' color={props.isGreen ? greenTxtCol : redTxtCol}>{props.label}</Text>
         </Center>
     )
 }

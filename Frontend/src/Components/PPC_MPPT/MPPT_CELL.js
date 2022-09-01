@@ -13,12 +13,12 @@ export default function MPPT_CELL(props){
     return (
         <Center
             h='45%'
-            bg={props.boolean ? greenBgCol : redBgCol}
+            bg={props.isGreen ? greenBgCol : redBgCol}
             borderColor={borderCol}
             borderWidth='2px'
             lineHeight='1.6em'
         >
-            <Text as='b' fontSize='1.3vw' color={props.boolean ? greenTxtCol : redTxtCol}>{props.label}</Text>
+            <Text as='b' fontSize='1.3vw' color={props.isGreen ? greenTxtCol : redTxtCol}>{props.label}</Text>
         </Center>
     )
 

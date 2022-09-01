@@ -380,8 +380,8 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
-      {props.data?.soc[0] < CONSTANTS.soc.MIN + 5 ? (
-        <Tooltip label={"Battery charge is low (<" + (CONSTANTS.soc.MIN + 5) + "%)"}>
+      {props.data?.soc[0] < CONSTANTS.soc.MIN ? (
+        <Tooltip label={`Battery charge is low (<${CONSTANTS.soc.MIN}%)`}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.LowBattery} />
         </Tooltip>
       ) : (

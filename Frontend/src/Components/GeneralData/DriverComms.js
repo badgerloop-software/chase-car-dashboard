@@ -7,6 +7,10 @@ import CONSTANTS from "../../data-constants.json";
 import {isNullOrUndef} from "chart.js/helpers";
 import getColor from "../Shared/colors";
 
+const MILLIS_PER_SEC = 1000;
+const MILLIS_PER_MIN = 60000;
+const MILLIS_PER_HR = 3600000;
+
 export default function DriverComms(props) {
     const { colorMode } = useColorMode();
 
@@ -19,8 +23,8 @@ export default function DriverComms(props) {
     // Get delay (from hours to milliseconds) between most recent timestamp and current time
     const packetDelay = isNullOrUndef(props.data?.timestamps[0]) ?
                         new Date(0,0,0,0,0,0,0) :
-                        new Date(new Date() - parseInt(timeArr[0]) * 3600000 - parseInt(timeArr[1]) * 60000
-                                 - parseInt(timeArr[2].substring(0,2)) * 1000 - parseInt(timeArr[2].substring(3)));
+                        new Date(new Date() - parseInt(timeArr[0]) * MILLIS_PER_HR - parseInt(timeArr[1]) * MILLIS_PER_MIN
+                                 - parseInt(timeArr[2].substring(0,2)) * MILLIS_PER_SEC - parseInt(timeArr[2].substring(3)));
 
     const bgColor = !props.data?.solar_car_connection[0] ||
                     ((packetDelay.getHours() > 0) || (packetDelay.getMinutes() > 0) || (packetDelay.getSeconds() > 1)) ?

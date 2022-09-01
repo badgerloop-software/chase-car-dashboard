@@ -49,6 +49,7 @@ export default function getColor(key, colorMode) {
     if(colors[`${colorMode}`].hasOwnProperty(key)) {
         return colors[`${colorMode}`][key];
     } else {
+        console.warn(`There is no ${colorMode} mode value of ${key}`);
         return null;
     }
 }
