@@ -1,9 +1,11 @@
-import {Flex, Text, Spacer} from "@chakra-ui/react"
+import {Flex, Text, Spacer, useColorMode} from "@chakra-ui/react"
 import RangeBar from "./RangeBar"
+import getColor from "./colors";
 
-export default function RangeCell(props){
-    const bg = (props.data < props.min || props.data > props.max) ?
-        "#ff000055" : null;
+export default function RangeCell(props) {
+    const { colorMode } = useColorMode();
+
+    const bg = (props.data < props.min || props.data > props.max) ? getColor("errorBg", colorMode) : null;
 
     return(
         <Flex flex='2' direction='column' backgroundColor={bg}>

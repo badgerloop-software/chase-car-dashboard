@@ -7,7 +7,7 @@ export default function DataPack(props) {
     const borderCol = getColor("border", colorMode);
 
     const bg = (props.dataValue < props.dataMin || props.dataValue > props.dataMax) ?
-        "#ff000055" : props.bg;
+        getColor("errorBg", colorMode) : props.bg;
 
     return (
         <Center

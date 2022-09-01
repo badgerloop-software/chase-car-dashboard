@@ -7,7 +7,7 @@ export default function OutputCurrent(props) {
 
     const borderCol = getColor("border", colorMode);
     const bg = (props.current < props.currentMin || props.current > props.currentMax) ?
-        "#ff000055" : null;
+               getColor("errorBg", colorMode) : null;
 
     return (
         <Flex w='50%' direction='column'>

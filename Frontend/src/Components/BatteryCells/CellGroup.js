@@ -8,7 +8,7 @@ export default function CellGroup(props) {
 
     const voltageConstants = CONSTANTS[`cell_group${props.groupNum}_voltage`];
     const bg = (props.voltage < voltageConstants.MIN || props.voltage > voltageConstants.MAX) ?
-        "#ff000055" : null;
+        getColor("errorBg", colorMode) : null;
     const borderCol = getColor("border", colorMode);
 
     return (

@@ -11,6 +11,7 @@ export default function DriverComms(props) {
     const { colorMode } = useColorMode();
 
     const borderCol = getColor("border", colorMode);
+
     const Images = DriverImages[`${colorMode}`];
 
     const timeArr = props.data?.timestamps[0].split(":"); // Split most recent timestamp into [hh, mm, ss.SSS]
@@ -21,7 +22,9 @@ export default function DriverComms(props) {
                         new Date(new Date() - parseInt(timeArr[0]) * 3600000 - parseInt(timeArr[1]) * 60000
                                  - parseInt(timeArr[2].substring(0,2)) * 1000 - parseInt(timeArr[2].substring(3)));
 
-    const bgColor = ((packetDelay.getHours() > 0) || (packetDelay.getMinutes() > 0) || (packetDelay.getSeconds() > 1)) ? "#ff000055" : null;
+    const bgColor = !props.data?.solar_car_connection[0] ||
+                    ((packetDelay.getHours() > 0) || (packetDelay.getMinutes() > 0) || (packetDelay.getSeconds() > 1)) ?
+                    getColor("errorBg", colorMode) : null;
 
     /**
      * Get formatted delay between the current time and the most recent timestamp
