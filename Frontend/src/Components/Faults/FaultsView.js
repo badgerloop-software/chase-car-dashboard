@@ -1,29 +1,15 @@
-import { Box, Tooltip, Image, SimpleGrid } from "@chakra-ui/react";
-import MPPTContactorImage from "./Images/MPPT Contactor.png";
-import LowContactorImage from "./Images/Low Contactor.png";
-import MotorControllerContactorImage from "./Images/Motor Controller Contactor.png";
-import DoorImage from "./Images/Door.png";
-import BatteryFailsafeImage from "./Images/Battery Failsafe.png";
-import BPSFaultImage from "./Images/BPS Fault.png";
-import EStopImage from "./Images/E-Stop.png";
-import IMDStatusImage from "./Images/IMD Status.png";
-import CrashImage from "./Images/Crash.png";
-import HighCurrentImage from "./Images/High Current.png";
-import HighVoltageImage from "./Images/High Voltage.png";
-import LowCurrentImage from "./Images/Low Current.png";
-import LowVoltageImage from "./Images/Low Voltage.png";
-import LowBatteryImage from "./Images/Low Battery.png";
-import MCUCheckImage from "./Images/MCU Check.png";
-import MPPTCurrentImage from "./Images/MPPT Current.png";
-import BMSInputVoltageImage from "./Images/BMS Input Voltage.png";
-import PhysicalConnectionImage from "./Images/Physical Connection Lost.png";
-import WirelessCommsLostImage from "./Images/Wireless Comms Lost.png";
-import HighTemperatureImage from "./Images/High Temperature.png";
+import {Box, Tooltip, Image, SimpleGrid, useColorMode} from "@chakra-ui/react";
+import { FaultsViewImages } from "./Images/Images";
 import CONSTANTS from "../../data-constants.json";
 
 export default function Faults(props) {
   const fitType = "scale-down";
   const imageHeight = "7vh";
+
+  const { colorMode } = useColorMode();
+
+  // Get set of images for light mode or dark mode
+  const Images = FaultsViewImages[`${colorMode}`];
 
   /**
    * Checks the boolean value specified by dataLabel against its nominal value. Returns true if the boolean value
@@ -316,14 +302,14 @@ export default function Faults(props) {
     >
       {_checkBooleanData("mppt_contactor") ? (
         <Tooltip label={"MPPT contactor is open"}>
-          <Image fit={fitType} boxSize={imageHeight} src={MPPTContactorImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.MPPTContactor} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
       {_checkBooleanData("low_contactor") ? (
         <Tooltip label={"Low contactor is open"}>
-          <Image fit={fitType} boxSize={imageHeight} src={LowContactorImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.LowContactor} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
@@ -333,7 +319,7 @@ export default function Faults(props) {
           <Image
             fit={fitType}
             boxSize={imageHeight}
-            src={MotorControllerContactorImage}
+            src={Images.MotorControllerContactor}
           />
         </Tooltip>
       ) : (
@@ -343,35 +329,35 @@ export default function Faults(props) {
       _checkBooleanData("driver_eStop") ||
       _checkBooleanData("external_eStop") ? (
         <Tooltip label={getEStopString()}>
-          <Image fit={fitType} boxSize={imageHeight} src={EStopImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.EStop} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
       {_checkBooleanData("door") ? (
         <Tooltip label={"Door is open"}>
-          <Image fit={fitType} boxSize={imageHeight} src={DoorImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.Door} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
       {_checkBooleanData("crash") ? (
         <Tooltip label={"Solar car has crashed"}>
-          <Image fit={fitType} boxSize={imageHeight} src={CrashImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.Crash} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
       {_checkBooleanData("mcu_check") ? (
         <Tooltip label={"MCU check failed"}>
-          <Image fit={fitType} boxSize={imageHeight} src={MCUCheckImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.MCUCheck} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
       {_checkBooleanData("imd_status") ? (
         <Tooltip label={"IMD status (battery isolation) fault"}>
-          <Image fit={fitType} boxSize={imageHeight} src={IMDStatusImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.IMDStatus} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
@@ -381,7 +367,7 @@ export default function Faults(props) {
           <Image
             fit={fitType}
             boxSize={imageHeight}
-            src={BatteryFailsafeImage}
+            src={Images.BatteryFailsafe}
           />
         </Tooltip>
       ) : (
@@ -389,47 +375,47 @@ export default function Faults(props) {
       )}
       {_checkBooleanData("bps_fault") ? (
         <Tooltip label={"BPS fault"}>
-          <Image fit={fitType} boxSize={imageHeight} src={BPSFaultImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.BPSFault} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
-      {props.data?.soc[0] < CONSTANTS.soc.MIN + 5 ? (
-        <Tooltip label={"Battery charge is low (<5%)"}>
-          <Image fit={fitType} boxSize={imageHeight} src={LowBatteryImage} />
+      {props.data?.soc[0] < CONSTANTS.soc.MIN ? (
+        <Tooltip label={`Battery charge is low (<${CONSTANTS.soc.MIN}%)`}>
+          <Image fit={fitType} boxSize={imageHeight} src={Images.LowBattery} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
       {props.data?.mppt_current_out[0] > CONSTANTS.mppt_current_out.MAX ? (
         <Tooltip label={"High MPPT current"}>
-          <Image fit={fitType} boxSize={imageHeight} src={MPPTCurrentImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.MPPTCurrent} />
         </Tooltip>
       ) : props.data?.mppt_current_out[0] < CONSTANTS.mppt_current_out.MIN ? (
         <Tooltip label={"MPPT current is negative"}>
-          <Image fit={fitType} boxSize={imageHeight} src={MPPTCurrentImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.MPPTCurrent} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
       {props.data?.pack_current[0] > CONSTANTS.pack_current.MAX ? (
         <Tooltip label={"High battery pack current"}>
-          <Image fit={fitType} boxSize={imageHeight} src={HighCurrentImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.HighCurrent} />
         </Tooltip>
       ) : props.data?.pack_current[0] < CONSTANTS.pack_current.MIN ? (
         <Tooltip label={"Low battery pack current"}>
-          <Image fit={fitType} boxSize={imageHeight} src={LowCurrentImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.LowCurrent} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
       {props.data?.pack_voltage[0] > CONSTANTS.pack_voltage.MAX ? (
         <Tooltip label={"High battery pack voltage"}>
-          <Image fit={fitType} boxSize={imageHeight} src={HighVoltageImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.HighVoltage} />
         </Tooltip>
       ) : props.data?.pack_voltage[0] < CONSTANTS.pack_voltage.MIN ? (
         <Tooltip label={"Low battery pack voltage"}>
-          <Image fit={fitType} boxSize={imageHeight} src={LowVoltageImage} />
+          <Image fit={fitType} boxSize={imageHeight} src={Images.LowVoltage} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
@@ -439,7 +425,7 @@ export default function Faults(props) {
           <Image
             fit={fitType}
             boxSize={imageHeight}
-            src={WirelessCommsLostImage}
+            src={Images.WirelessCommsLost}
           />
         </Tooltip>
       ) : (
@@ -453,7 +439,7 @@ export default function Faults(props) {
             <Image
               fit={fitType}
               boxSize={imageHeight}
-              src={PhysicalConnectionImage}
+              src={Images.PhysicalConnection}
             />
           </Tooltip>
         ) : (
@@ -461,7 +447,7 @@ export default function Faults(props) {
             <Image
               fit={fitType}
               boxSize={imageHeight}
-              src={PhysicalConnectionImage}
+              src={Images.PhysicalConnection}
             />
           </Tooltip>
         )
@@ -470,7 +456,7 @@ export default function Faults(props) {
           <Image
             fit={fitType}
             boxSize={imageHeight}
-            src={PhysicalConnectionImage}
+            src={Images.PhysicalConnection}
           />
         </Tooltip>
       ) : (
@@ -481,7 +467,7 @@ export default function Faults(props) {
           <Image
             fit={fitType}
             boxSize={imageHeight}
-            src={BMSInputVoltageImage}
+            src={Images.BMSInputVoltage}
           />
         </Tooltip>
       ) : props.data?.bms_input_voltage[0] < CONSTANTS.bms_input_voltage.MIN ? (
@@ -489,7 +475,7 @@ export default function Faults(props) {
           <Image
             fit={fitType}
             boxSize={imageHeight}
-            src={BMSInputVoltageImage}
+            src={Images.BMSInputVoltage}
           />
         </Tooltip>
       ) : (
@@ -500,7 +486,7 @@ export default function Faults(props) {
           <Image
             fit={fitType}
             boxSize={imageHeight}
-            src={HighTemperatureImage}
+            src={Images.HighTemperature}
           />
         </Tooltip>
       ) : (

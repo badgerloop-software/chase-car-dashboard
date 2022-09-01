@@ -1,4 +1,4 @@
-import { Flex, Spacer, VStack } from "@chakra-ui/react";
+import { Flex, Spacer } from "@chakra-ui/react";
 import HeadingCell from "../Shared/HeadingCell";
 import RangeCell from "../Shared/RangeCell";
 import CONSTANTS from "../../data-constants.json";
@@ -8,9 +8,9 @@ export default function IOView(props) {
     const fs = "1.2em";
 
     return (
-      <VStack align='stretch' spacing={0} borderLeft='1px'>
+      <Flex flex='auto' direction='column'>
         <HeadingCell fontSize='2.2vh' label='I/O Boards' />
-          <Flex pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+        <Flex flex='inherit' py='1' pl='2' pr='2'>
             <RangeCell
                 w='7.5vw'
                 fontSize={fss}
@@ -35,7 +35,7 @@ export default function IOView(props) {
         </Flex>
 
         <HeadingCell fontSize='2.2vh' label='Driver I/O' />
-        <Flex flex={2} direction='column' pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+        <Flex flex='inherit' direction='column' py='1' pl='2' pr='2'>
             <RangeCell
                 fontSize={fs}
                 label='Driver I/O Temp'
@@ -57,7 +57,7 @@ export default function IOView(props) {
         </Flex>
 
         <HeadingCell fontSize='2.2vh' label='Main I/O' />
-        <Flex direction='column' flex={2} pt='0.5vh' pb='0.75vh' pl='2' pr='2'>
+        <Flex flex='inherit' direction='column' py='1' pl='2' pr='2'>
             <RangeCell
                 fontSize={fs}
                 label='Main I/O Temp'
@@ -77,6 +77,6 @@ export default function IOView(props) {
                 max={CONSTANTS.mainIO_current_in.MAX}
             />
         </Flex>
-      </VStack>
+      </Flex>
     );
 }

@@ -1,13 +1,19 @@
-import { Center, Flex, Spacer, Text } from "@chakra-ui/react";
+import {Center, Flex, Spacer, Text, useColorMode} from "@chakra-ui/react";
+import getColor from "../Shared/colors";
 
 export default function DataPack(props) {
+    const { colorMode } = useColorMode();
+
+    const borderCol = getColor("border", colorMode);
+
     const bg = (props.dataValue < props.dataMin || props.dataValue > props.dataMax) ?
-        "#ff000055" : props.bg;
+        getColor("errorBg", colorMode) : props.bg;
 
     return (
         <Center
-            borderWidth={1}
-            borderColor='black'
+            borderTopWidth={1}
+            borderBottomWidth={props.borderBottomWidth ?? 1}
+            borderColor={borderCol}
             bg={bg}
             lineHeight='1.2em'
             height='100%'

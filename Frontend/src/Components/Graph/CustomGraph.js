@@ -18,6 +18,7 @@ import {
   ModalOverlay,
   Stack,
   Text,
+  useColorMode,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
@@ -38,6 +39,7 @@ import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
 import GraphData from "./graph-data.json";
+import getColor from "../Shared/colors";
 
 ChartJS.register(
   LinearScale,
@@ -60,9 +62,13 @@ for (const category of GraphData.categories) {
 }
 
 // the options fed into the graph object, save regardless of datasets
-function getOptions(now, secondsRetained) {
+function getOptions(now, secondsRetained, colorMode) {
   // console.log("now:", now);
   // console.log("diff:", DateTime.now().diff(now).toHuman());
+
+  const gridColor = getColor("grid", colorMode);
+  const gridBorderColor = getColor("gridBorder", colorMode);
+  const ticksColor = getColor("ticks", colorMode);
 
   return {
     responsive: true,
@@ -96,9 +102,6 @@ function getOptions(now, secondsRetained) {
       x: {
         type: "time",
         reverse: true,
-        // ticks: {
-        //   source: "data",
-        // },
         bounds: "data", // ticks?
         time: {
           unit: "second",
@@ -108,6 +111,14 @@ function getOptions(now, secondsRetained) {
             second: "h:mm:ss a",
           },
         },
+        ticks: {
+          color: ticksColor,
+        },
+        grid: {
+          color: gridColor,
+          borderColor: gridBorderColor,
+          borderWidth: 2,
+        },
 
         // show the last secondsRetained seconds
         max: now.toISO(),
@@ -115,6 +126,14 @@ function getOptions(now, secondsRetained) {
       },
       y: {
         suggestedMin: 0,
+        ticks: {
+          color: ticksColor,
+        },
+        grid: {
+          color: gridColor,
+          borderColor: gridBorderColor,
+          borderWidth: 2,
+        },
       },
     },
     elements: {
@@ -150,6 +169,10 @@ function getOptions(now, secondsRetained) {
  * @returns
  */
 export default function CustomGraph(props) {
+  const { colorMode } = useColorMode();
+
+  const borderCol = getColor("border", colorMode);
+
   // destructure props
   const {
     onSave,
@@ -298,7 +321,8 @@ export default function CustomGraph(props) {
         data={{ datasets: formattedDatasets }}
         options={getOptions(
           DateTime.fromFormat(latestTime, "HH:mm:ss.SSS") ?? DateTime.now(),
-          historyLength
+          historyLength,
+          colorMode
         )}
         parsing="false"
       />
@@ -350,7 +374,7 @@ export default function CustomGraph(props) {
               flex="1 1 0"
               spacing={2}
               borderWidth={1}
-              borderColor="black"
+              borderColor={borderCol}
               overflowX="scroll"
               px={2}
             >

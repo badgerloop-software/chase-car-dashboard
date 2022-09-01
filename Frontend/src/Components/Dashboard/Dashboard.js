@@ -1,14 +1,18 @@
-import { Box, Grid, GridItem, HStack, Select } from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, Select, useColorMode } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
-import DataView from "../GeneralData/DataView";
+import DriverComms from "../GeneralData/DriverComms";
+import IOView from "../GeneralData/IOView";
 import BatteryCells from "../BatteryCells/BatteryCells";
+import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
-import MiniMap from "../MiniMap/MiniMap";
 import GraphContainer from "./GraphContainer";
+import dvOptions from "./dataViewOptions";
+import getColor from "../Shared/colors";
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
+
 
 /**
  * The reducer used for the main queue of data from the database
@@ -72,10 +76,6 @@ export default function Dashboard(props) {
     null,
   ]);
 
-  // useEffect(() => {
-  //   console.log("recieved", latestTimestamp);
-  // }, latestTimestamp);
-
   const [state, setState] = useState({ data: null });
   useEffect(() => {
     callBackendAPI()
@@ -95,70 +95,184 @@ export default function Dashboard(props) {
 
   const [dataView1, setDataView1] = useState("");
   const [dataView2, setDataView2] = useState("");
+  const [dataView3, setDataView3] = useState("");
+  const [dataView4, setDataView4] = useState("");
 
   // Update the value indicating which data view to display when an option is selected
   const selectDataView = (event) => {
     if (event.target.id === "dataViewSelect1") {
       // Avoid duplicate data views, unless they are both empty
-      if (
-        event.target.value ===
-          document.getElementById("dataViewSelect2").value &&
-        event.target.value !== ""
-      ) {
-        // If trying to switch to a data view that is already being displayed in the other
-        // section, switch the data views in this section and the other one
-        setDataView2(dataView1);
-        console.log(event.target.value.toString());
+      if(event.target.value !== "") {
+        if (event.target.value === document.getElementById("dataViewSelect2").value) {
+          // If trying to switch to a data view that is already being displayed in the top right section, switch the
+          // data views in this section and the other one
+          setDataView2(dataView1);
+        } else if (event.target.value === document.getElementById("dataViewSelect3").value) {
+          // If trying to switch to a data view that is already being displayed in the bottom left section, switch the
+          // data views in this section and the other one
+          setDataView3(dataView1);
+        } else if (event.target.value === document.getElementById("dataViewSelect4").value) {
+          // If trying to switch to a data view that is already being displayed in the bottom right section, switch the
+          // data views in this section and the other one
+          setDataView4(dataView1);
+        }
       }
       setDataView1(event.target.value);
     } else if (event.target.id === "dataViewSelect2") {
       // Avoid duplicate data views, unless they are both empty
-      if (
-        event.target.value ===
-          document.getElementById("dataViewSelect1").value &&
-        event.target.value !== ""
-      ) {
-        // If trying to switch to a data view that is already being displayed in the other
-        // section, switch the data views in this section and the other one
-        setDataView1(dataView2);
+      if(event.target.value !== "") {
+        if (event.target.value === document.getElementById("dataViewSelect1").value) {
+          // If trying to switch to a data view that is already being displayed in the top left section, switch the
+          // data views in this section and the other one
+          setDataView1(dataView2);
+        } else if (event.target.value === document.getElementById("dataViewSelect3").value) {
+          // If trying to switch to a data view that is already being displayed in the bottom left section, switch the
+          // data views in this section and the other one
+          setDataView3(dataView2);
+        } else if (event.target.value === document.getElementById("dataViewSelect4").value) {
+          // If trying to switch to a data view that is already being displayed in the bottom right section, switch the
+          // data views in this section and the other one
+          setDataView4(dataView2);
+        }
       }
       setDataView2(event.target.value);
+    } else if (event.target.id === "dataViewSelect3") {
+      // Avoid duplicate data views, unless they are both empty
+      if(event.target.value !== "") {
+        if (event.target.value === document.getElementById("dataViewSelect1").value) {
+          // If trying to switch to a data view that is already being displayed in the top left section, switch the
+          // data views in this section and the other one
+          setDataView1(dataView3);
+        } else if (event.target.value === document.getElementById("dataViewSelect2").value) {
+          // If trying to switch to a data view that is already being displayed in the top right section, switch the
+          // data views in this section and the other one
+          setDataView2(dataView3);
+        } else if (event.target.value === document.getElementById("dataViewSelect4").value) {
+          // If trying to switch to a data view that is already being displayed in the bottom right section, switch the
+          // data views in this section and the other one
+          setDataView4(dataView3);
+        }
+      }
+      setDataView3(event.target.value);
+    } else if (event.target.id === "dataViewSelect4") {
+      // Avoid duplicate data views, unless they are both empty
+      if(event.target.value !== "") {
+        if (event.target.value === document.getElementById("dataViewSelect1").value) {
+          // If trying to switch to a data view that is already being displayed in the top left section, switch the
+          // data views in this section and the other one
+          setDataView1(dataView4);
+        } else if (event.target.value === document.getElementById("dataViewSelect2").value) {
+          // If trying to switch to a data view that is already being displayed in the top right section, switch the
+          // data views in this section and the other one
+          setDataView2(dataView4);
+        } else if (event.target.value === document.getElementById("dataViewSelect3").value) {
+          // If trying to switch to a data view that is already being displayed in the bottom left section, switch the
+          // data views in this section and the other one
+          setDataView3(dataView4);
+        }
+      }
+      setDataView4(event.target.value);
     }
   };
 
   // Choose the data view to return/display based on the given option
   const switchDataView = (optionValue) => {
-    if (optionValue === "general") {
-      return <DataView data={state.data} />;
-    } else if (optionValue === "battery") {
-      return <BatteryCells data={state.data} />;
-    } else if (optionValue === "minimap") {
-      return <MiniMap />;
-    } else if (optionValue === "ppc_mppt") {
-      return <PPC_MPPT data={state.data}/>;
-    } else {
-      return <Box />;
+    switch(optionValue) {
+      case dvOptions.battery_pack:
+        return <BatteryPack data={state.data} />;
+      case dvOptions.cell_groups:
+        return <BatteryCells data={state.data} />;
+      case dvOptions.ppc_mppt:
+        return <PPC_MPPT data={state.data}/>;
+      case dvOptions.driver_comms:
+        return <DriverComms data={state.data}/>;
+      case dvOptions.io_boards:
+        return <IOView data={state.data}/>;
+      case dvOptions.select:
+        return <Box />;
+      default:
+        console.warn("Default case in switchDataView was reached");
+        // Return a red box to make it clear that whatever option is selected is invalid
+        return <Box h="100%" w="100%" bgColor="#ff0000" />;
     }
   };
 
+  // Get system color mode
+  const {colorMode} = useColorMode();
+  // Get colors depending on color mode
+  const borderCol = getColor("border", colorMode);
+  const selectTxtCol = getColor("selectTxt", colorMode);
+  const selectTxtFocusCol = getColor("selectTxtFocus", colorMode);
+  const selectBgCol = getColor("selectBg", colorMode);
+  const optionTxtCol = getColor("optionTxt", colorMode);
+
+  // Select colors
+  const [selColorStr1, setSelColorStr1] = useState(selectTxtCol);
+  const [selColorStr2, setSelColorStr2] = useState(selectTxtCol);
+  const [selColorStr3, setSelColorStr3] = useState(selectTxtCol);
+  const [selColorStr4, setSelColorStr4] = useState(selectTxtCol);
+
+  // selectFocus indicates which select currently has focus
+  const [selectFocus, setSelectFocus] = useState("");
+
+  // Update select color when the select's state changes
+  const _updateSelColor = (targetId, newColor) => {
+    switch (targetId) {
+      case "dataViewSelect1":
+        setSelColorStr1(newColor);
+        break;
+      case "dataViewSelect2":
+        setSelColorStr2(newColor);
+        break;
+      case "dataViewSelect3":
+        setSelColorStr3(newColor);
+        break;
+      case "dataViewSelect4":
+        setSelColorStr4(newColor);
+        break;
+    }
+  }
+
+  // Reset selectFocus and change the color of the select that just lost focus
+  const removeSelectFocus = (event) => {
+    setSelectFocus("");
+    _updateSelColor(event.target.id, selectTxtCol);
+  }
+
+  // Change the color of a select to a color appropriate to when it has focus
+  const changeSelColor = (event) => {
+    if(selectFocus !== event.target.id)
+      _updateSelColor(event.target.id, selectTxtFocusCol);
+  }
+
+  // Change the color of a select to a color appropriate to when it does not have focus
+  const changeSelColorBack = (event) => {
+    if (selectFocus !== event.target.id)
+      _updateSelColor(event.target.id, selectTxtCol);
+  }
+
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
-      <Grid flex="1 1 0" templateRows="2fr 3fr 3fr">
+      <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
         <GridItem
-          h="25vh"
+          minH="min-content"
           rowStart={1}
           rowSpan={1}
-          borderColor="black"
+          colStart={1}
+          colSpan={2}
+          borderColor={borderCol}
           borderWidth={1}
           p={2}
         >
           <FaultsView data={state.data} />
         </GridItem>
         <GridItem
-          h="37.5vh"
+          minH="min-content"
           rowStart={2}
           rowSpan={1}
-          borderColor="black"
+          colStart={1}
+          colSpan={1}
+          borderColor={borderCol}
           borderWidth={1}
           display="flex"
           flexDir="column"
@@ -167,20 +281,27 @@ export default function Dashboard(props) {
             id="dataViewSelect1"
             size="xs"
             variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
+            bgColor={selectBgCol}
+            color={selColorStr1}
+            focusBorderColor={borderCol}
             value={dataView1}
+            onFocus={() => {setSelectFocus("dataViewSelect1")}}
+            onBlur={removeSelectFocus}
+            onMouseEnter={changeSelColor}
+            onMouseLeave={changeSelColorBack}
             onChange={selectDataView}
           >
-            <DataViewOptions />
+            <DataViewOptions txtColor={optionTxtCol} />
           </Select>
           {switchDataView(dataView1)}
         </GridItem>
         <GridItem
-          h="37.5vh"
-          rowStart={3}
+          minH="fit-content"
+          rowStart={2}
           rowSpan={1}
-          borderColor="black"
+          colStart={2}
+          colSpan={1}
+          borderColor={borderCol}
           borderWidth={1}
           display="flex"
           flexDir="column"
@@ -189,14 +310,77 @@ export default function Dashboard(props) {
             id="dataViewSelect2"
             size="xs"
             variant="filled"
-            bgColor="grey.300"
-            placeholder="Select option"
+            bgColor={selectBgCol}
+            color={selColorStr2}
+            focusBorderColor={borderCol}
             value={dataView2}
+            onFocus={() => {setSelectFocus("dataViewSelect2")}}
+            onBlur={removeSelectFocus}
+            onMouseEnter={changeSelColor}
+            onMouseLeave={changeSelColorBack}
             onChange={selectDataView}
           >
-            <DataViewOptions />
+            <DataViewOptions txtColor={optionTxtCol} />
           </Select>
-          {switchDataView(dataView2)}
+            {switchDataView(dataView2)}
+        </GridItem>
+        <GridItem
+            minH="min-content"
+            rowStart={3}
+            rowSpan={1}
+            colStart={1}
+            colSpan={1}
+            borderColor={borderCol}
+            borderWidth={1}
+            display="flex"
+            flexDir="column"
+        >
+          <Select
+              id="dataViewSelect3"
+              size="xs"
+              variant="filled"
+              bgColor={selectBgCol}
+              color={selColorStr3}
+              focusBorderColor={borderCol}
+              value={dataView3}
+              onFocus={() => {setSelectFocus("dataViewSelect3")}}
+              onBlur={removeSelectFocus}
+              onMouseEnter={changeSelColor}
+              onMouseLeave={changeSelColorBack}
+              onChange={selectDataView}
+          >
+            <DataViewOptions txtColor={optionTxtCol} />
+          </Select>
+          {switchDataView(dataView3)}
+        </GridItem>
+        <GridItem
+            minH="min-content"
+            rowStart={3}
+            rowSpan={1}
+            colStart={2}
+            colSpan={1}
+            borderColor={borderCol}
+            borderWidth={1}
+            display="flex"
+            flexDir="column"
+        >
+          <Select
+              id="dataViewSelect4"
+              size="xs"
+              variant="filled"
+              bgColor={selectBgCol}
+              color={selColorStr4}
+              focusBorderColor={borderCol}
+              value={dataView4}
+              onFocus={() => {setSelectFocus("dataViewSelect4")}}
+              onBlur={removeSelectFocus}
+              onMouseEnter={changeSelColor}
+              onMouseLeave={changeSelColorBack}
+              onChange={selectDataView}
+          >
+            <DataViewOptions txtColor={optionTxtCol} />
+          </Select>
+          {switchDataView(dataView4)}
         </GridItem>
       </Grid>
       <GraphContainer
@@ -204,6 +388,11 @@ export default function Dashboard(props) {
         latestTime={latestTimestamp}
         flex="2 2 0"
         maxW="67vw"
+        selectBg={selectBgCol}
+        selectTxt={selectTxtCol}
+        selectTxtFocus={selectTxtFocusCol}
+        optionTxt={optionTxtCol}
+        borderCol={borderCol}
       />
     </HStack>
   );
@@ -212,10 +401,12 @@ export default function Dashboard(props) {
 function DataViewOptions(props) {
   return (
     <>
-      <option value="general">General Data</option>
-      <option value="battery">Battery Cells</option>
-      <option value="minimap">Minimap</option>
-      <option value="ppc_mppt">PPC and MPPT</option>
+      <option style={{color: props.txtColor}} value={dvOptions.select}>Select option</option>
+      <option style={{color: props.txtColor}} value={dvOptions.battery_pack}>BMS - Battery Pack</option>
+      <option style={{color: props.txtColor}} value={dvOptions.cell_groups}>BMS - Cell Groups</option>
+      <option style={{color: props.txtColor}} value={dvOptions.ppc_mppt}>PPC and MPPT</option>
+      <option style={{color: props.txtColor}} value={dvOptions.driver_comms}>Driver/Cabin and Communication</option>
+      <option style={{color: props.txtColor}} value={dvOptions.io_boards}>I/O Boards</option>
     </>
   );
 }
