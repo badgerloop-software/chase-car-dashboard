@@ -2,16 +2,16 @@ import {Flex, Center, SimpleGrid, Text, Image, Box, HStack, useColorMode} from "
 import RangeCell from "../Shared/RangeCell";
 import HeadingCell from "../Shared/HeadingCell";
 import CommsLabel from "./CommsLabel";
-import { DriverImages } from "./DriverIcons/Images";
+import DriverImages from "./DriverIcons/Images";
 import CONSTANTS from "../../data-constants.json";
 import {isNullOrUndef} from "chart.js/helpers";
-import colors from "../Shared/colors";
+import getColor from "../Shared/colors";
 
 export default function DriverComms(props) {
     const { colorMode } = useColorMode();
 
-    const borderCol = colorMode === "light" ? colors.light.border : colors.dark.border;
-    const Images = colorMode === "light" ? DriverImages.light : DriverImages.dark;
+    const borderCol = getColor("border", colorMode);
+    const Images = DriverImages[`${colorMode}`];
 
     const timeArr = props.data?.timestamps[0].split(":"); // Split most recent timestamp into [hh, mm, ss.SSS]
 
@@ -21,7 +21,7 @@ export default function DriverComms(props) {
                         new Date(new Date() - parseInt(timeArr[0]) * 3600000 - parseInt(timeArr[1]) * 60000
                                  - parseInt(timeArr[2].substring(0,2)) * 1000 - parseInt(timeArr[2].substring(3)));
 
-    const bgColor = (packetDelay.getSeconds() > 1) ? "#ff000055" : null;
+    const bgColor = ((packetDelay.getHours() > 0) || (packetDelay.getMinutes() > 0) || (packetDelay.getSeconds() > 1)) ? "#ff000055" : null;
 
     /**
      * Get formatted delay between the current time and the most recent timestamp

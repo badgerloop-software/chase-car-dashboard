@@ -1,11 +1,11 @@
 import {Flex, Box, Text, useColorMode} from "@chakra-ui/react";
 import RangeBar from "../Shared/RangeBar";
-import colors from "../Shared/colors";
+import getColor from "../Shared/colors";
 
 export default function OutputCurrent(props) {
     const { colorMode } = useColorMode();
 
-    const borderCol = colorMode === "light" ? colors.light.border : colors.dark.border;
+    const borderCol = getColor("border", colorMode);
     const bg = (props.current < props.currentMin || props.current > props.currentMax) ?
         "#ff000055" : null;
 

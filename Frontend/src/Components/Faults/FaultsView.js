@@ -9,7 +9,7 @@ export default function Faults(props) {
   const { colorMode } = useColorMode();
 
   // Get set of images for light mode or dark mode
-  const Images = colorMode === "light" ? FaultsViewImages.light : FaultsViewImages.dark;
+  const Images = FaultsViewImages[`${colorMode}`];
 
   /**
    * Checks the boolean value specified by dataLabel against its nominal value. Returns true if the boolean value

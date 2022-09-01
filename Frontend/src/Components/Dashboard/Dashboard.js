@@ -8,7 +8,7 @@ import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import GraphContainer from "./GraphContainer";
 import dvOptions from "./dataViewOptions";
-import colors from "../Shared/colors";
+import getColor from "../Shared/colors";
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
@@ -199,14 +199,18 @@ export default function Dashboard(props) {
 
   // Get system color mode
   const {colorMode} = useColorMode();
-  // Select color set depending on color mode
-  const colorPalette = colorMode === "light" ? colors.light : colors.dark;
+  // Get colors depending on color mode
+  const borderCol = getColor("border", colorMode);
+  const selectTxtCol = getColor("selectTxt", colorMode);
+  const selectTxtFocusCol = getColor("selectTxtFocus", colorMode);
+  const selectBgCol = getColor("selectBg", colorMode);
+  const optionTxtCol = getColor("optionTxt", colorMode);
 
   // Select colors
-  const [selColorStr1, setSelColorStr1] = useState(colorPalette.selectTxt);
-  const [selColorStr2, setSelColorStr2] = useState(colorPalette.selectTxt);
-  const [selColorStr3, setSelColorStr3] = useState(colorPalette.selectTxt);
-  const [selColorStr4, setSelColorStr4] = useState(colorPalette.selectTxt);
+  const [selColorStr1, setSelColorStr1] = useState(selectTxtCol);
+  const [selColorStr2, setSelColorStr2] = useState(selectTxtCol);
+  const [selColorStr3, setSelColorStr3] = useState(selectTxtCol);
+  const [selColorStr4, setSelColorStr4] = useState(selectTxtCol);
 
   // selectFocus indicates which select currently has focus
   const [selectFocus, setSelectFocus] = useState("");
@@ -232,19 +236,19 @@ export default function Dashboard(props) {
   // Reset selectFocus and change the color of the select that just lost focus
   const removeSelectFocus = (event) => {
     setSelectFocus("");
-    _updateSelColor(event.target.id, colorPalette.selectTxt);
+    _updateSelColor(event.target.id, selectTxtCol);
   }
 
   // Change the color of a select to a color appropriate to when it has focus
   const changeSelColor = (event) => {
     if(selectFocus !== event.target.id)
-      _updateSelColor(event.target.id, colorPalette.selectTxtFocus);
+      _updateSelColor(event.target.id, selectTxtFocusCol);
   }
 
   // Change the color of a select to a color appropriate to when it does not have focus
   const changeSelColorBack = (event) => {
     if (selectFocus !== event.target.id)
-      _updateSelColor(event.target.id, colorPalette.selectTxt);
+      _updateSelColor(event.target.id, selectTxtCol);
   }
 
   return (
@@ -256,7 +260,7 @@ export default function Dashboard(props) {
           rowSpan={1}
           colStart={1}
           colSpan={2}
-          borderColor={colorPalette.border}
+          borderColor={borderCol}
           borderWidth={1}
           p={2}
         >
@@ -268,7 +272,7 @@ export default function Dashboard(props) {
           rowSpan={1}
           colStart={1}
           colSpan={1}
-          borderColor={colorPalette.border}
+          borderColor={borderCol}
           borderWidth={1}
           display="flex"
           flexDir="column"
@@ -277,9 +281,9 @@ export default function Dashboard(props) {
             id="dataViewSelect1"
             size="xs"
             variant="filled"
-            bgColor={colorPalette.selectBg}
+            bgColor={selectBgCol}
             color={selColorStr1}
-            focusBorderColor={colorPalette.border}
+            focusBorderColor={borderCol}
             value={dataView1}
             onFocus={() => {setSelectFocus("dataViewSelect1")}}
             onBlur={removeSelectFocus}
@@ -287,7 +291,7 @@ export default function Dashboard(props) {
             onMouseLeave={changeSelColorBack}
             onChange={selectDataView}
           >
-            <DataViewOptions txtColor={colorPalette.optionTxt} />
+            <DataViewOptions txtColor={optionTxtCol} />
           </Select>
           {switchDataView(dataView1)}
         </GridItem>
@@ -297,7 +301,7 @@ export default function Dashboard(props) {
           rowSpan={1}
           colStart={2}
           colSpan={1}
-          borderColor={colorPalette.border}
+          borderColor={borderCol}
           borderWidth={1}
           display="flex"
           flexDir="column"
@@ -306,9 +310,9 @@ export default function Dashboard(props) {
             id="dataViewSelect2"
             size="xs"
             variant="filled"
-            bgColor={colorPalette.selectBg}
+            bgColor={selectBgCol}
             color={selColorStr2}
-            focusBorderColor={colorPalette.border}
+            focusBorderColor={borderCol}
             value={dataView2}
             onFocus={() => {setSelectFocus("dataViewSelect2")}}
             onBlur={removeSelectFocus}
@@ -316,7 +320,7 @@ export default function Dashboard(props) {
             onMouseLeave={changeSelColorBack}
             onChange={selectDataView}
           >
-            <DataViewOptions txtColor={colorPalette.optionTxt} />
+            <DataViewOptions txtColor={optionTxtCol} />
           </Select>
             {switchDataView(dataView2)}
         </GridItem>
@@ -326,7 +330,7 @@ export default function Dashboard(props) {
             rowSpan={1}
             colStart={1}
             colSpan={1}
-            borderColor={colorPalette.border}
+            borderColor={borderCol}
             borderWidth={1}
             display="flex"
             flexDir="column"
@@ -335,9 +339,9 @@ export default function Dashboard(props) {
               id="dataViewSelect3"
               size="xs"
               variant="filled"
-              bgColor={colorPalette.selectBg}
+              bgColor={selectBgCol}
               color={selColorStr3}
-              focusBorderColor={colorPalette.border}
+              focusBorderColor={borderCol}
               value={dataView3}
               onFocus={() => {setSelectFocus("dataViewSelect3")}}
               onBlur={removeSelectFocus}
@@ -345,7 +349,7 @@ export default function Dashboard(props) {
               onMouseLeave={changeSelColorBack}
               onChange={selectDataView}
           >
-            <DataViewOptions txtColor={colorPalette.optionTxt} />
+            <DataViewOptions txtColor={optionTxtCol} />
           </Select>
           {switchDataView(dataView3)}
         </GridItem>
@@ -355,7 +359,7 @@ export default function Dashboard(props) {
             rowSpan={1}
             colStart={2}
             colSpan={1}
-            borderColor={colorPalette.border}
+            borderColor={borderCol}
             borderWidth={1}
             display="flex"
             flexDir="column"
@@ -364,9 +368,9 @@ export default function Dashboard(props) {
               id="dataViewSelect4"
               size="xs"
               variant="filled"
-              bgColor={colorPalette.selectBg}
+              bgColor={selectBgCol}
               color={selColorStr4}
-              focusBorderColor={colorPalette.border}
+              focusBorderColor={borderCol}
               value={dataView4}
               onFocus={() => {setSelectFocus("dataViewSelect4")}}
               onBlur={removeSelectFocus}
@@ -374,7 +378,7 @@ export default function Dashboard(props) {
               onMouseLeave={changeSelColorBack}
               onChange={selectDataView}
           >
-            <DataViewOptions txtColor={colorPalette.optionTxt} />
+            <DataViewOptions txtColor={optionTxtCol} />
           </Select>
           {switchDataView(dataView4)}
         </GridItem>
@@ -384,11 +388,11 @@ export default function Dashboard(props) {
         latestTime={latestTimestamp}
         flex="2 2 0"
         maxW="67vw"
-        selectBg={colorPalette.selectBg}
-        selectTxt={colorPalette.selectTxt}
-        selectTxtFocus={colorPalette.selectTxtFocus}
-        optionTxt={colorPalette.optionTxt}
-        borderCol={colorPalette.border}
+        selectBg={selectBgCol}
+        selectTxt={selectTxtCol}
+        selectTxtFocus={selectTxtFocusCol}
+        optionTxt={optionTxtCol}
+        borderCol={borderCol}
       />
     </HStack>
   );

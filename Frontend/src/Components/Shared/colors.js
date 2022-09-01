@@ -31,4 +31,22 @@ const colors = {
     darkBackground: "#000000"
 };
 
-export default colors;
+// TODO Add the green and red values Eric commented about in code review to colors
+
+/**
+ * Returns a hexadecimal color string corresponding to the provided key and color mode. Returns null if that pair does
+ * not exist.
+ *
+ * @param key The description of the color you want to retrieve (e.g. "border" and "selectTxt")
+ * @param colorMode The color mode, "light" or "dark"
+ * @returns {null|*} The color corresponding to the provided key and color mode or null if that key does not exist for
+ *                   the given color mode.
+ */
+export default function getColor(key, colorMode) {
+    // Return color depending on color mode and key. If the key does not exist for the given color mode, return null
+    if(colors[`${colorMode}`].hasOwnProperty(key)) {
+        return colors[`${colorMode}`][key];
+    } else {
+        return null;
+    }
+}

@@ -1,12 +1,12 @@
 import {Text, Center, useColorMode} from "@chakra-ui/react";
-import colors from "../Shared/colors";
+import getColor from "../Shared/colors";
 
 export default function PPC_CELL(props) {
     const { colorMode } = useColorMode();
 
-    const borderCol = colorMode === "light" ? colors.light.border : colors.dark.border;
-    const greenTxtCol = colorMode === "light" ? colors.light.ppc_mppt_txtGreenBg : colors.dark.ppc_mppt_txtGreenBg;
-    const redTxtCol = colorMode === "light" ? colors.light.ppc_mppt_txtRedBg : colors.dark.ppc_mppt_txtRedBg;
+    const borderCol = getColor("border", colorMode);
+    const greenTxtCol = getColor("ppc_mppt_txtGreenBg", colorMode);
+    const redTxtCol = getColor("ppc_mppt_txtRedBg", colorMode);
 
     return (
         <Center
