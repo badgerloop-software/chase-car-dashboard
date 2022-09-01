@@ -6,10 +6,7 @@ import DriverImages from "./DriverIcons/Images";
 import CONSTANTS from "../../data-constants.json";
 import {isNullOrUndef} from "chart.js/helpers";
 import getColor from "../Shared/colors";
-
-const MILLIS_PER_SEC = 1000;
-const MILLIS_PER_MIN = 60000;
-const MILLIS_PER_HR = 3600000;
+import {MILLIS_PER_HR, MILLIS_PER_MIN, MILLIS_PER_SEC} from "../Shared/misc-constants";
 
 export default function DriverComms(props) {
     const { colorMode } = useColorMode();

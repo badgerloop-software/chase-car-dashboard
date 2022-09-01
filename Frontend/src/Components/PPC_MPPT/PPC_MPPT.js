@@ -13,12 +13,12 @@ export default function PPC_MPPT(props) {
             <HeadingCell fontSize='2.2vh' label='Power Path Controller'/>
             <Flex flex='2' p='1'>
                   <PPC_CELL
-                      isGreen={props.data?.supplemental_valid[0]}
+                      isCurrSource={props.data?.supplemental_valid[0]}
                       label='Supplemental Battery Pack'
                   />
                   <Spacer/>
                   <PPC_CELL
-                      isGreen={props.data?.dcdc_valid[0]}
+                      isCurrSource={props.data?.dcdc_valid[0]}
                       label='Main Battery Pack'
                   />
             </Flex>
@@ -35,12 +35,12 @@ export default function PPC_MPPT(props) {
                     <Flex w='45%' direction='column'>
                         <MPPT_CELL
                             label='Charge'
-                            isGreen={props.data?.mppt_mode[0]}
+                            isCurrMode={props.data?.mppt_mode[0]}
                         />
                         <Spacer/>
                         <MPPT_CELL
                             label='MPPT'
-                            isGreen={!props.data?.mppt_mode[0]}
+                            isCurrMode={!props.data?.mppt_mode[0]}
                         />
                     </Flex>
                 </Flex>
