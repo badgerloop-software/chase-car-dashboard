@@ -3,6 +3,7 @@ import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import net from "net";
+import fetch from 'node-fetch';
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -14,6 +15,31 @@ ROUTER.get("/api", (req, res) => {
   const temp = res.send({ response: frontendData }).status(200);
   temp.addListener("finish", () => console.timeEnd("send http"));
 });
+
+
+//----------------------------------------------------- LTE ----------------------------------------------------------
+let interval;
+
+interval = setInterval(() => {
+  // TODO Is not using a database for this project
+  fetch('https://g5079b74c17c11c-allrecipes.adb.us-ashburn-1.oraclecloudapps.com/ords/admin/test-select/api/select-2', {
+    method: 'GET',
+    headers: {
+      "Content-type": "application/json"
+    }
+  })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        // TODO Gets the first item of the response
+        console.log('Request succeeded with JSON response', data.items[0]);
+      })
+      .catch(function(error) {
+        console.log('Request failed', error);
+      });
+}, 250);
+
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
 const CAR_PORT = 4003; // Port for TCP connection
