@@ -4,6 +4,7 @@ import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import net from "net";
 import fetch from 'node-fetch';
+const { Client } = require("cassandra-driver"); // TODO For Cassandra
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -19,7 +20,7 @@ ROUTER.get("/api", (req, res) => {
 
 //----------------------------------------------------- LTE ----------------------------------------------------------
 let interval;
-
+/* TODO
 interval = setInterval(() => {
   // TODO Is not using a database for this project
   fetch('https://g5079b74c17c11c-allrecipes.adb.us-ashburn-1.oraclecloudapps.com/ords/admin/test-select/api/select-2', {
@@ -38,7 +39,39 @@ interval = setInterval(() => {
       .catch(function(error) {
         console.log('Request failed', error);
       });
-}, 250);
+}, 250);*/
+
+const client = new Client({
+  cloud: {
+    secureConnectBundle: "./secure-connect-testingforbloop.zip",
+  },
+  credentials: {
+    username: "<<CLIENT ID>>",
+    password: "<<CLIENT SECRET>>",
+  },
+});
+
+async function run() {
+
+
+  await client.connect();
+
+  // Execute a query
+  //const rs = await client.execute("select counter from blooptests.table1 where session='sess5' order by tstamp desc, bytes desc, counter desc limit 1;");
+  //console.log('Your cluster returned', rs.rows[0].get("counter"));
+
+  //await client.shutdown();
+}
+
+async function execute() {
+  // Execute a query
+  const rs = await client.execute("select counter from blooptests.table1 where session='sess5' and tstamp='t' and bytes = '010101' and counter > 5000 order by counter desc limit 1;");
+  console.log('Your cluster returned', rs.rows[0].get("counter"));
+}
+
+// Run the async function
+run();
+
 
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
@@ -70,6 +103,8 @@ function openSocket() {
     console.time("update data");
     unpackData(data);
     console.timeEnd("update data");
+
+    execute(); // TODO
   });
 
   // Socket closed listener
