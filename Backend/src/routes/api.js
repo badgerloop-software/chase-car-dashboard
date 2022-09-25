@@ -20,7 +20,7 @@ ROUTER.get("/api", (req, res) => {
 
 //----------------------------------------------------- LTE ----------------------------------------------------------
 let interval;
-/* TODO
+
 interval = setInterval(() => {
   // TODO Is not using a database for this project
   fetch('https://g5079b74c17c11c-allrecipes.adb.us-ashburn-1.oraclecloudapps.com/ords/admin/test-select/api/select-2', {
@@ -39,8 +39,8 @@ interval = setInterval(() => {
       .catch(function(error) {
         console.log('Request failed', error);
       });
-}, 250);*/
-
+}, 250);
+/*
 const client = new Client({
   cloud: {
     secureConnectBundle: "./secure-connect-testingforbloop.zip",
@@ -70,7 +70,7 @@ async function execute() {
 }
 
 // Run the async function
-run();
+run();*/
 
 
 
