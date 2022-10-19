@@ -1,6 +1,31 @@
-import {Box, Tooltip, Image, SimpleGrid, useColorMode} from "@chakra-ui/react";
+import {Box, Tooltip, Image, SimpleGrid, useColorMode, Text} from "@chakra-ui/react";
 import { FaultsViewImages } from "./Images/Images";
 import CONSTANTS from "../../data-constants.json";
+import {Alert, AlertIcon, AlertTitle, AlertDescription} from '@chakra-ui/react'
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+} from '@chakra-ui/react'
+import { Button } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
+import React from "react"; 
+import { useState } from "react";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+} from '@chakra-ui/react'
+
 
 export default function Faults(props) {
   const fitType = "scale-down";
@@ -292,7 +317,112 @@ export default function Faults(props) {
     );
   };
 
+  const [historyFaults, setHistoryFaults] = useState(["fault 1", "fault 2", "fault 3"]);
+
+  const addFaultToHistory = (date, info) => {
+    setHistoryFaults([...historyFaults, date + " " + info])
+  }
+
+  /**
+   * This function prompts the alert for when there is a fault, can be closed or deleted when prompted. After deletion the information of the fault will be saved to the tab of history of faults on the top left of the faults window.
+   * 
+   * @param {*} textInfo information of why the fault occured
+   * @param {*} icon image of the icon that will be displayed
+   * @returns 
+   */
+  function AlertDialogExample(textInfo, icon) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = React.useRef()
+    const [display, setDisplay] = useState(true)
+
+    const onDelete = () => {
+      var today = new Date(),
+      date = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds() + " | " + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      addFaultToHistory(date, textInfo)
+      setDisplay(false)
+    }
+
+    const innerBoxStyles = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      boxSize: 'full',
+      color: 'white',
+      textShadow: '0 0 20px black',
+      fontWeight: 'bold',
+      fontSize: '20px',
+    }
+      const outerBoxStyles = {
+      boxSize: '250px',
+      p: '10',
+    }
+
+    return (
+      <>
+      {display &&
+      <Box sx={outerBoxStyles} >
+      <Box sx={innerBoxStyles} backdropFilter='auto' backdropBlur='8px'>
+        <h1>{textInfo} Until this fault has been cleared, the following icon will be present in the top left-hand corner of the app </h1>
+        <Image fit={fitType} boxSize={imageHeight} src={icon} />
+        <Button colorScheme='red' onClick={onOpen}>
+          Close Alert
+        </Button>
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                Remove Alert Box
+              </AlertDialogHeader>
+            
+              <AlertDialogBody>
+                Are you sure? You can't undo this action afterwards. If closed, the information of this fault and what had caused it will be saved to the tab of faults.
+              </AlertDialogBody>
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button colorScheme='red' onClick={onDelete} ml={3}>
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </Box>
+      </Box>
+      }
+      </>
+    )
+  }
+
   return (
+    <>
+    <Popover>
+  <PopoverTrigger>
+    <Button>Faults History</Button>
+  </PopoverTrigger>
+  <PopoverContent>
+    <PopoverArrow />
+    <PopoverCloseButton />
+    <PopoverHeader>Previusly Occured Faults</PopoverHeader>
+    <PopoverBody>
+      <div>
+      {historyFaults.map((fault) => {
+        return (
+          <li>
+            {fault}
+          </li>
+        );
+      })}
+    </div>
+    </PopoverBody>
+  </PopoverContent>
+</Popover>
     <SimpleGrid
       columns={6}
       rows={3}
@@ -431,6 +561,11 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {!(props.data?.solar_car_connection[0] ?? false) ? (
+        AlertDialogExample("hello world", Images.WirelessCommsLost)
+      ) : (
+        <h1>placeholder</h1>
+      )}
       {_checkBooleanData("bms_canbus_failure") ? (
         _checkBooleanData("mainIO_heartbeat") ? (
           <Tooltip
@@ -493,5 +628,6 @@ export default function Faults(props) {
         <Box h={imageHeight} />
       )}
     </SimpleGrid>
+    </>
   );
 }
