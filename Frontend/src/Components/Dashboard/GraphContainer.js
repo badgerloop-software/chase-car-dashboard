@@ -66,7 +66,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
 )
 
 const sendNGM_toBackend = async (data) =>{
- let response = await fetch("api/needed-graph-metadata",{
+ let response = await fetch("http://localhost:4001/api/needed-graph-metadata",{
   method: 'POST', // *GET, POST, PUT, DELETE, etc.
   // mode: 'cors', // no-cors, *cors, same-origin
   headers: {

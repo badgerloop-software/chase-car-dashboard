@@ -7,6 +7,7 @@ import bodyParser  from "body-parser";
 
 const PORT = CONSTANTS.PORT;
 const APP = express();
+  
 APP.use(bodyParser.json());
 APP.use(cors({
     // Accepted Origin
