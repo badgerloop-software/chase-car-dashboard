@@ -26,7 +26,15 @@ for (const property in DATA_FORMAT) {
 ROUTER.get("/api", (req, res) => {
   // console.time("send http");
   // const temp = 
-  res.send({ response: frontendData }).status(200);
+  
+  // if(graphsToSend.length){
+     let f_data = filterGraphsToSend(frontendData)
+     res.send({ response: f_data }).status(200);
+  // } else{
+  //   res.send({ response: {} }).status(200);
+  // }
+
+  // res.send({ response: frontendData }).status(200);
   // temp.addListener("finish", () => console.timeEnd("send http"));
 });
 
@@ -46,15 +54,26 @@ ROUTER.get("/api/specificdata", (req, res) => {
   // console.time("send http");
   let singleValuesJSON = getSingleValuesAtIndex(frontendData, 0)
   // const temp = 
+
   res.send({ response: singleValuesJSON }).status(200);
   // temp.addListener("finish", () => console.timeEnd("send http"));
 });
 
 
 ROUTER.post("/api/needed-graph-metadata", (req, res) =>{
-  console.log("(BACKEND)needed-graph-metadata:", req.body)
-  res.send({got: req.body}).status(200)
+  console.log("(BACKEND)needed-graph-metadata:", req.body.meta)
+  updateGraphsToSend(req.body.meta)
+  res.send({status: "SUCCESS"}).status(200)
 });
+
+function filterGraphsToSend(data){
+   let obj = {}
+    graphsToSend.map((key) => {
+      obj[`${key}`] =  data[`${key}`]
+    })
+    obj["timestamps"] =  data["timestamps"] 
+  return obj
+}
 
 function getSingleValuesAtIndex(jsonData, index=0){
   let newJson = {} 
@@ -65,6 +84,18 @@ function getSingleValuesAtIndex(jsonData, index=0){
     }
   }
   return newJson
+}
+
+function updateGraphsToSend(data){
+  graphsToSend = []
+   data.map((item) =>{
+    item?.list.map((i)=>{
+      if(!graphsToSend.includes(i)){
+        graphsToSend.push(i)
+      }
+    })
+   })
+  //  console.log("UPDATED:",graphsToSend )
 }
 
 
