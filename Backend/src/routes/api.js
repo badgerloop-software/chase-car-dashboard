@@ -11,6 +11,7 @@ import CONSTANTS from "../../src/constants.json";
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA;
 let frontendData = INITIAL_FRONTEND_DATA;
+let graphsToSend = [];
 
 const NUM_BYTES_IDX = 0;
 const DATA_TYPE_IDX = 1;
@@ -51,7 +52,7 @@ ROUTER.get("/api/specificdata", (req, res) => {
 
 
 ROUTER.post("/api/needed-graph-metadata", (req, res) =>{
-  console.log("(BACKEND)needed-graph-metadata:", req)
+  console.log("(BACKEND)needed-graph-metadata:", req.body)
   res.send({got: req.body}).status(200)
 });
 

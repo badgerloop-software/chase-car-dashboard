@@ -70,8 +70,8 @@ const sendNGM_toBackend = async (data) =>{
   method: 'POST', // *GET, POST, PUT, DELETE, etc.
   // mode: 'cors', // no-cors, *cors, same-origin
   headers: {
-    'Content-Type': 'application/json'
-    // 'Content-Type': 'application/x-www-form-urlencoded',
+    'Accept': 'application/json',
+    'Content-type': 'application/json; charset=UTF-8',
   },
   body: JSON.stringify(data) // body data type must match "Content-Type" 
  })
