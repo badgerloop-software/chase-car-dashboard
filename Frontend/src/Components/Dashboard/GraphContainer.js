@@ -1,5 +1,5 @@
-import { Select, useConst, VStack } from "@chakra-ui/react";
-import { useCallback, useMemo, useState } from "react";
+import { list, Select, useConst, VStack } from "@chakra-ui/react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomGraph from "../Graph/CustomGraph";
 import GraphData from "../Graph/graph-data.json";
 
@@ -50,6 +50,34 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
   //------------------- Choosing graphs using Select components -------------------
   // stores the list of graph names/id
   const [graphTitles, setGraphTitles] = useState(["", "", ""]);
+
+
+  const [neededGraphMetaData, setNeededGraphMetaData] = useState({meta: [] })
+
+
+
+  const updateNeedGraphMetaData = useCallback((indx, data) => {
+    let obj = neededGraphMetaData
+    obj.meta[indx] = data
+    setNeededGraphMetaData(obj)
+    console.log("index:", indx, "data:", data)
+    sendNGM_toBackend(obj)
+  }, [neededGraphMetaData]
+)
+
+const sendNGM_toBackend = async (data) =>{
+ let response = await fetch("api/needed-graph-metadata",{
+  method: 'POST', // *GET, POST, PUT, DELETE, etc.
+  // mode: 'cors', // no-cors, *cors, same-origin
+  headers: {
+    'Content-Type': 'application/json'
+    // 'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  body: JSON.stringify(data) // body data type must match "Content-Type" 
+ })
+
+ console.log(response)
+}
 
   /**
    * A function that makes the given graph display in the given place. If the graph is
@@ -112,8 +140,10 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
   const onSave = useCallback(
     (title, isNew, data, index) => {
       // check duplicates if new
+      console.log("customGraphData::", customGraphData)
       if (isNew && Object.keys(customGraphData).includes(title)) {
         console.warn("No\n", title, "is in", customGraphData);
+
         return false;
       }
 
@@ -152,7 +182,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
    */
   const packedData = useMemo(() => {
     // console.log("memo invoked");
-    console.time("unpack graph data");
+    // console.time("unpack graph data");
     const temp = allDatasets.map((value) => {
       const output = {
         key: value.key,
@@ -164,7 +194,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
       // console.log("packing:", output);
       return output;
     });
-    console.timeEnd("unpack graph data");
+    // console.timeEnd("unpack graph data");
     return temp;
   }, [allDatasets, queue]);
 
@@ -172,37 +202,37 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
 
 
 
-  const [selColors, setSelColors] = useState({0: props.selectTxt, 1: props.selectTxt, 2: props.selectTxt});
+  const [selColors, setSelColors] = useState({ 0: props.selectTxt, 1: props.selectTxt, 2: props.selectTxt });
 
   const [selectFocus, setSelectFocus] = useState("");
 
   const _updateSelColor = (targetId, newColor) => {
-      switch (targetId) {
-        case "graphSelect0":
-          setSelColors({...selColors, 0: newColor});
-          break;
-        case "graphSelect1":
-          setSelColors({...selColors, 1: newColor});
-          break;
-        case "graphSelect2":
-          setSelColors({...selColors, 2: newColor});
-          break;
-      }
+    switch (targetId) {
+      case "graphSelect0":
+        setSelColors({ ...selColors, 0: newColor });
+        break;
+      case "graphSelect1":
+        setSelColors({ ...selColors, 1: newColor });
+        break;
+      case "graphSelect2":
+        setSelColors({ ...selColors, 2: newColor });
+        break;
+    }
   }
 
   const removeSelectFocus = (event) => {
-      setSelectFocus("");
-      _updateSelColor(event.target.id, props.selectTxt);
+    setSelectFocus("");
+    _updateSelColor(event.target.id, props.selectTxt);
   }
 
   const changeSelColor = (event) => {
-      if(selectFocus !== event.target.id)
-          _updateSelColor(event.target.id, props.selectTxtFocus);
+    if (selectFocus !== event.target.id)
+      _updateSelColor(event.target.id, props.selectTxtFocus);
   }
 
   const changeSelColorBack = (event) => {
-      if (selectFocus !== event.target.id)
-          _updateSelColor(event.target.id, props.selectTxt);
+    if (selectFocus !== event.target.id)
+      _updateSelColor(event.target.id, props.selectTxt);
   }
 
 
@@ -235,7 +265,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
               color={selColors[index]}//props.selectTxt}
               focusBorderColor={props.borderCol}
               value={graphTitles[index]}
-              onFocus={() => {setSelectFocus("graphSelect"+index)}}
+              onFocus={() => { setSelectFocus("graphSelect" + index) }}
               onBlur={removeSelectFocus}
               onMouseEnter={changeSelColor}
               onMouseLeave={changeSelColorBack}
@@ -246,22 +276,26 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
             </Select>
             {graphTitles[index] === "" ? null : graphTitles[index] ===
               "Custom" ? (
-              <CustomGraph
-                onSave={(title, isNew, data) =>
-                  onSave(title, isNew, data, index)
-                }
-                title=""
-                // categories={categories}
-                packedData={packedData}
-                initialDatasets={[]}
-                // allDatasets={allDatasets}
-                latestTime={latestTime}
-              />
+                <CustomGraph
+                 _index={index}
+                  onUpdateGraphMetaData={updateNeedGraphMetaData}
+                  onSave={(title, isNew, data) =>
+                    onSave(title, isNew, data, index)
+                  }
+                  title=""
+                  // categories={categories}
+                  packedData={packedData}
+                  initialDatasets={[]}
+                  // allDatasets={allDatasets}
+                  latestTime={latestTime}
+                />
             ) : (
-              <CustomGraph
+               <CustomGraph
+                _index = {index}
                 onSave={(title, isNew, data) =>
                   onSave(title, isNew, data, index)
                 }
+                onUpdateMetaData={updateNeedGraphMetaData}
                 title={graphTitles[index]}
                 // categories={categories}
                 packedData={packedData}
@@ -287,18 +321,18 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
  * @param {string[]} props.titles the list of graph titles to display in the dropdown
  * @returns a component containing all the given options and "Custom"
  */
-function GraphOptions({ titles, txtColor}) {
+function GraphOptions({ titles, txtColor }) {
   return (
     <>
-      <option style={{color: txtColor}} value="">Select option</option>
+      <option style={{ color: txtColor }} value="">Select option</option>
       {titles
         .filter((title) => title && title !== "Custom")
         .map((title) => (
-          <option style={{color: txtColor}} key={title} value={title}>
+          <option style={{ color: txtColor }} key={title} value={title}>
             {title}
           </option>
         ))}
-      <option style={{color: txtColor}} value="Custom">Custom</option>
+      <option style={{ color: txtColor }} value="Custom">Custom</option>
     </>
   );
 }

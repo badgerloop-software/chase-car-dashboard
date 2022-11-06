@@ -23,10 +23,48 @@ for (const property in DATA_FORMAT) {
 
 // Send data to front-end
 ROUTER.get("/api", (req, res) => {
-  console.time("send http");
-  const temp = res.send({ response: frontendData }).status(200);
-  temp.addListener("finish", () => console.timeEnd("send http"));
+  // console.time("send http");
+  // const temp = 
+  res.send({ response: frontendData }).status(200);
+  // temp.addListener("finish", () => console.timeEnd("send http"));
 });
+
+
+// Send data to front-end
+ROUTER.get("/api/singleValues", (req, res) => {
+  // console.time("send http");
+  let singleValuesJSON = getSingleValuesAtIndex(frontendData, 0)
+  // const temp = 
+  res.send({ response: singleValuesJSON }).status(200);
+  // temp.addListener("finish", () => console.timeEnd("send http"));
+});
+
+
+// Send data to front-end
+ROUTER.get("/api/specificdata", (req, res) => {
+  // console.time("send http");
+  let singleValuesJSON = getSingleValuesAtIndex(frontendData, 0)
+  // const temp = 
+  res.send({ response: singleValuesJSON }).status(200);
+  // temp.addListener("finish", () => console.timeEnd("send http"));
+});
+
+
+ROUTER.post("/api/needed-graph-metadata", (req, res) =>{
+  console.log("(BACKEND)needed-graph-metadata:", req)
+  res.send({got: req.body}).status(200)
+});
+
+function getSingleValuesAtIndex(jsonData, index=0){
+  let newJson = {} 
+  for (const key in jsonData){
+    if(jsonData.hasOwnProperty(key)){
+      newJson[`${key}`] = [jsonData[key][index]]
+      // console.log(`${key} : ${jsonData[key]} \n`)
+    }
+  }
+  return newJson
+}
 
 
 

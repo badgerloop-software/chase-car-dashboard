@@ -181,6 +181,8 @@ export default function CustomGraph(props) {
     initialDatasets,
     secondsRetained,
     latestTime,
+    _index,
+    onUpdateGraphMetaData,
     ...stackProps
   } = props;
 
@@ -275,11 +277,17 @@ export default function CustomGraph(props) {
   // console.log("formatted datasets:", formattedDatasets);
   // console.log(datasets, "keys:", datasetKeys);
 
+  
   // the modal that appears when the user wants to update the datasets that are shown
   const graphSelectModal = useMemo(() => {
     const onSelectSave = (newDatasetKeys, newHistoryLength) => {
       setDatasetKeys(newDatasetKeys);
       setHistoryLength(newHistoryLength);
+      let obj = {
+        list: newDatasetKeys,
+        historyLength: newHistoryLength
+      }
+      onUpdateGraphMetaData(_index, obj)
     };
     return (
       <GraphSelectModal
@@ -315,7 +323,7 @@ export default function CustomGraph(props) {
   // the actual graph shown to the user
   const graph = useMemo(() => {
     // const min = DateTime.now().minus(historyLength * 1_000);
-    console.time("graph update");
+    // console.time("graph update");
     const temp = (
       <Line
         data={{ datasets: formattedDatasets }}
@@ -327,7 +335,7 @@ export default function CustomGraph(props) {
         parsing="false"
       />
     );
-    console.timeEnd("graph update");
+    // console.timeEnd("graph update");
     return temp;
   }, [formattedDatasets, historyLength, latestTime]);
 

@@ -3,10 +3,10 @@ import { createServer } from "http";
 import index from "./routes/api.js";
 import cors from 'cors';
 import CONSTANTS from "../src/constants.json";
+import bodyParser  from "body-parser";
 
 const PORT = CONSTANTS.PORT;
 const APP = express();
-const bodyParser = require('body-parser');
 APP.use(bodyParser.json());
 APP.use(cors({
     // Accepted Origin

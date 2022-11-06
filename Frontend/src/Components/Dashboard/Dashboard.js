@@ -54,19 +54,37 @@ function reducer([currentQueue], newData) {
  * @returns the JSON response from the API
  */
 async function callBackendAPI() {
-  console.time("http call");
+  // console.time("http call");
 
   const response = await fetch("/api");
-  console.timeLog("http call", "fetch finished");
+  // console.timeLog("http call", "fetch finished");
   const body = await response.json();
-  console.timeLog("http call", "json extracted");
+  // console.timeLog("http call", "json extracted");
 
   if (response.status !== 200) {
     console.error("api: error");
     throw Error(body.message);
   }
 
-  console.timeEnd("http call");
+  // console.timeEnd("http call");
+  // console.log("body", body);
+  return body;
+}
+
+async function callBackendAPI_SingleValues() {
+  // console.time("http call");
+
+  const response = await fetch("/api/singleValues");
+  // console.timeLog("http call", "fetch finished");
+  const body = await response.json();
+  // console.timeLog("http call", "json extracted");
+
+  if (response.status !== 200) {
+    console.error("api: error");
+    throw Error(body.message);
+  }
+
+  // console.timeEnd("http call");
   // console.log("body", body);
   return body;
 }
@@ -85,19 +103,27 @@ export default function Dashboard(props) {
   ]);
 
   const [state, setState] = useState({ data: null });
+  // const [graphState, setGraphState] = useState({ data: null }); // Need in the future for graphing data
   useEffect(() => {
     callBackendAPI()
       .then((res) => {
-        console.time("update react");
+        // console.time("update react");
 
-        setState({ data: res.response });
-        updateQueue(res.response);
+        updateQueue(res.response); // Move mapping to the backend and send back x,y data and set this data to graphState 
+        // setGraphState({ data: res.response });
+        
         // console.log("api::", res.response);
 
-        console.timeEnd("update react");
+        // console.timeEnd("update react");
       })
       .catch((err) => console.log(err));
   }, [state]);
+
+  useEffect(() =>{
+     callBackendAPI_SingleValues().then((res) =>{
+      setState({ data: res.response });
+     }).catch((err) => console.log(err));
+  }, [state])
 
   //------------------- Choosing data views using Select components -------------------
 
@@ -394,6 +420,7 @@ export default function Dashboard(props) {
           {switchDataView(dataView4)}
         </GridItem>
       </Grid>
+      
       <GraphContainer
         queue={queue}
         latestTime={latestTimestamp}
