@@ -18,8 +18,71 @@
           "max": 256
         },
         {
+          "key": "linear_accel_x",
+          "name": "linear_accel_x",
+          "unit": "m/s^2",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "linear_accel_y",
+          "name": "linear_accel_y",
+          "unit": "m/s^2",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "linear_accel_z",
+          "name": "linear_accel_z",
+          "unit": "m/s^2",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "angular_rate_pitch",
+          "name": "angular_rate_pitch",
+          "unit": "deg/s",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "angular_rate_roll",
+          "name": "angular_rate_roll",
+          "unit": "deg/s",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "angular_rate_yaw",
+          "name": "angular_rate_yaw",
+          "unit": "deg/s",
+          "min": 0,
+          "max": 100
+        },
+        {
           "key": "cabin_temp",
           "name": "Cabin Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "road_temp",
+          "name": "road_temp",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "brake_temp",
+          "name": "brake_temp",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "air_temp",
+          "name": "air_temp",
           "unit": "°C",
           "min": 0,
           "max": 100
@@ -479,6 +542,39 @@
           "unit": "°C",
           "min": 0,
           "max": 100
+        },
+        {
+          "key": "motor_controller_temp",
+          "name": "motor_controller_temp",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "category": "PPC",
+      "values": [
+        {
+          "key": "dcdc_temp",
+          "name": "dcdc_temp",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "dcdc_valid",
+          "name": "dcdc_valid",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "supplemental_valid",
+          "name": "supplemental_valid",
+          "unit": "",
+          "min": 0,
+          "max": 0
         }
       ]
     },
@@ -533,6 +629,27 @@
           "unit": "A",
           "min": 0,
           "max": 100
+        },
+        {
+          "key": "power_critical",
+          "name": "power_critical",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "power_warning",
+          "name": "power_warning",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "power_tc",
+          "name": "power_tc",
+          "unit": "",
+          "min": 0,
+          "max": 0
         }
       ]
     },
@@ -566,25 +683,6 @@
           "unit": "",
           "min": 1,
           "max": 1
-        }
-      ]
-    },
-    {
-      "category": "PPC",
-      "values": [
-        {
-          "key": "dcdc_valid",
-          "name": "dcdc_valid",
-          "unit": "",
-          "min": 1,
-          "max": 1
-        },
-        {
-          "key": "supplemental_valid",
-          "name": "supplemental_valid",
-          "unit": "",
-          "min": 0,
-          "max": 0
         }
       ]
     },
