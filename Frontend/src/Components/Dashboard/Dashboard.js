@@ -112,7 +112,7 @@ export default function Dashboard(props) {
         updateQueue(res.response); // Move mapping to the backend and send back x,y data and set this data to graphState 
         // setGraphState({ data: res.response });
         
-        console.log("api::", res.response);
+        // console.log("api::", res.response);
 
         // console.timeEnd("update react");
       })

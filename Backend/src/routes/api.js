@@ -61,7 +61,7 @@ ROUTER.get("/api/specificdata", (req, res) => {
 
 
 ROUTER.post("/api/needed-graph-metadata", (req, res) =>{
-  console.log("(BACKEND)needed-graph-metadata:", req.body.meta)
+  // console.log("(BACKEND)needed-graph-metadata:", req.body.meta)
   updateGraphsToSend(req.body.meta)
   res.send({status: "SUCCESS"}).status(200)
 });
