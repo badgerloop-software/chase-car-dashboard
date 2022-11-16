@@ -25,6 +25,16 @@ import {
   PopoverCloseButton,
   PopoverAnchor,
 } from '@chakra-ui/react'
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react'
 
 
 export default function Faults(props) {
@@ -331,9 +341,13 @@ export default function Faults(props) {
    * @returns 
    */
   function AlertDialogExample(textInfo, icon) {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    // const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
     const cancelRef = React.useRef()
+    // const [display, setDisplay] = useState(true)
+
+    const { isOpen, onOpen, onClose } = useDisclosure({defaultIsOpen: true})
     const [display, setDisplay] = useState(true)
+  
 
     const onDelete = () => {
       var today = new Date(),
@@ -341,6 +355,7 @@ export default function Faults(props) {
       addFaultToHistory(date, textInfo)
       setDisplay(false)
     }
+    
 
     const innerBoxStyles = {
       display: 'flex',
@@ -361,39 +376,31 @@ export default function Faults(props) {
     return (
       <>
       {display &&
-      <Box sx={outerBoxStyles} >
-      <Box sx={innerBoxStyles} backdropFilter='auto' backdropBlur='8px'>
-        <h1>{textInfo} Until this fault has been cleared, the following icon will be present in the top left-hand corner of the app </h1>
-        <Image fit={fitType} boxSize={imageHeight} src={icon} />
-        <Button colorScheme='red' onClick={onOpen}>
-          Close Alert
-        </Button>
+      <Box>
         <AlertDialog
           isOpen={isOpen}
           leastDestructiveRef={cancelRef}
           onClose={onClose}
+          closeOnOverlayClick={false}
         >
           <AlertDialogOverlay>
             <AlertDialogContent>
-              <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                Remove Alert Box
+              <AlertDialogHeader fontSize='lg' fontWeight='bold' textColor='red'>
+                Alert: Uncleared Fault
               </AlertDialogHeader>
-            
+        
               <AlertDialogBody>
-                Are you sure? You can't undo this action afterwards. If closed, the information of this fault and what had caused it will be saved to the tab of faults.
+                <h1>{textInfo} Until this fault has been cleared, the following icon will be present in the top left-hand corner of the app. If windos is closed, the information of this fault and what had caused it will be saved to the tab of faults.</h1>
+                <Image fit={fitType} boxSize={imageHeight} src={icon} />
               </AlertDialogBody>
               <AlertDialogFooter>
-                <Button ref={cancelRef} onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button colorScheme='red' onClick={onDelete} ml={3}>
-                  Delete
+                <Button ref={cancelRef} onClick={onDelete}>
+                  Close
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialogOverlay>
         </AlertDialog>
-      </Box>
       </Box>
       }
       </>
@@ -402,34 +409,46 @@ export default function Faults(props) {
 
   return (
     <>
-    <Popover>
-  <PopoverTrigger>
-    <Button>Faults History</Button>
-  </PopoverTrigger>
-  <PopoverContent>
-    <PopoverArrow />
-    <PopoverCloseButton />
-    <PopoverHeader>Previusly Occured Faults</PopoverHeader>
-    <PopoverBody>
-      <div>
-      {historyFaults.map((fault) => {
-        return (
-          <li>
-            {fault}
-          </li>
-        );
-      })}
-    </div>
-    </PopoverBody>
-  </PopoverContent>
-</Popover>
     <SimpleGrid
-      columns={6}
-      rows={3}
-      spacingX="2vw"
-      spacingY="0.5vh"
-      alignItems="center"
+    rows={2}
+    columns={9}
     >
+      <Popover>
+        <PopoverTrigger>
+          <Button 
+            border="2px solid rgb(201, 38, 74)"
+            width="62.5px"
+          >Faults</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverHeader>Previusly Occured Faults</PopoverHeader>
+          <PopoverBody>
+            <div>
+              <Box
+              height={150}
+              columns={1}
+              rows={historyFaults.length}
+              spacingX={'0.25vw'}
+              spacingY={'0.25vh'}
+              overflowY='scroll'
+              borderTopColor='black'
+              borderTopWidth={1}
+            >
+            {historyFaults.map((fault) => {
+              return (
+                <li>
+                  {fault}
+                </li>
+              );
+            })}
+            </Box>
+          </div>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+
       {_checkBooleanData("mppt_contactor") ? (
         <Tooltip label={"MPPT contactor is open"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.MPPTContactor} />
@@ -437,6 +456,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("mppt_contactor") ? (
+        AlertDialogExample("MPPT contactor is open." , Images.MPPTContactor)
+      ) : (
+        <></>
+      )}
+
       {_checkBooleanData("low_contactor") ? (
         <Tooltip label={"Low contactor is open"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.LowContactor} />
@@ -444,6 +469,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("low_contactor") ? (
+        AlertDialogExample("Low contactor is open.", Images.LowContactor)
+      ) : (
+        <></>
+      )}
+
       {_checkBooleanData("motor_controller_contactor") ? (
         <Tooltip label={"Motor controller contactor is open"}>
           <Image
@@ -455,6 +486,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("motor_controller_contactor") ? (
+        AlertDialogExample("Motor controller contactor is open.", Images.MotorControllerContactor)
+      ) : (
+        <></>
+      )}
+
       {_checkBooleanData("battery_eStop") ||
       _checkBooleanData("driver_eStop") ||
       _checkBooleanData("external_eStop") ? (
@@ -464,6 +501,14 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("battery_eStop") ||
+      _checkBooleanData("driver_eStop") ||
+      _checkBooleanData("external_eStop") ? (
+        AlertDialogExample(getEStopString() + ".", Images.EStop)
+      ) : (
+        <></>
+      )}
+
       {_checkBooleanData("door") ? (
         <Tooltip label={"Door is open"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.Door} />
@@ -471,6 +516,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("door") ? (
+        AlertDialogExample("Door is open.", Images.Door)
+      ) : (
+        <></>
+      )}
+
       {_checkBooleanData("crash") ? (
         <Tooltip label={"Solar car has crashed"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.Crash} />
@@ -478,6 +529,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("crash") ? (
+        AlertDialogExample("Solar car has crashed.", Images.Crash)
+      ) : (
+        <></>
+      )}
+
       {_checkBooleanData("mcu_check") ? (
         <Tooltip label={"MCU check failed"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.MCUCheck} />
@@ -485,6 +542,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("mcu_check") ? (
+        AlertDialogExample("MCU check failed.", Images.MCUCheck)
+      ) : (
+        <></>
+      )}
+
       {_checkBooleanData("imd_status") ? (
         <Tooltip label={"IMD status (battery isolation) fault"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.IMDStatus} />
@@ -492,6 +555,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("imd_status") ? (
+        AlertDialogExample("IMD status (battery isolation) fault", Images.IMDStatus)
+      ) : (
+        <></>
+      )}
+
       {checkBMSFailsafes() ? (
         <Tooltip label={getBMSFailsafeString()}>
           <Image
@@ -503,6 +572,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {checkBMSFailsafes() ? (
+        AlertDialogExample(getBMSFailsafeString() + ".", Images.BatteryFailsafe)
+      ) : (
+        <></>
+      )}
+
       {_checkBooleanData("bps_fault") ? (
         <Tooltip label={"BPS fault"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.BPSFault} />
@@ -510,13 +585,25 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
-      {props.data?.soc[0] < CONSTANTS.soc.MIN ? (
+      {_checkBooleanData("bps_fault") ? (
+        AlertDialogExample("BPS fault.", Images.BPSFault)
+      ) : (
+        <></>
+      )}
+
+      {!(props.data?.soc[0] < CONSTANTS.soc.MIN) ? (
         <Tooltip label={`Battery charge is low (<${CONSTANTS.soc.MIN}%)`}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.LowBattery} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
+      {!(props.data?.soc[0] < CONSTANTS.soc.MIN) ? (
+        AlertDialogExample(`Battery charge is low (<${CONSTANTS.soc.MIN}%.)`, Images.LowBattery)
+      ) : (
+        <></>
+      )}
+
       {props.data?.mppt_current_out[0] > CONSTANTS.mppt_current_out.MAX ? (
         <Tooltip label={"High MPPT current"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.MPPTCurrent} />
@@ -528,6 +615,14 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {props.data?.mppt_current_out[0] > CONSTANTS.mppt_current_out.MAX ? (
+        AlertDialogExample(`High MPPT current (>${CONSTANTS.mppt_current_out.MAX}Amps.)`, Images.MPPTCurrent)
+      ) : props.data?.mppt_current_out[0] < CONSTANTS.mppt_current_out.MIN ? (
+        AlertDialogExample(`MPPT current is negative (<${CONSTANTS.mppt_current_out.MIN}Amps.)`, Images.MPPTCurrent)
+      ) : (
+        <></>
+      )}
+      
       {props.data?.pack_current[0] > CONSTANTS.pack_current.MAX ? (
         <Tooltip label={"High battery pack current"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.HighCurrent} />
@@ -539,6 +634,14 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {props.data?.pack_current[0] > CONSTANTS.pack_current.MAX ? (
+        AlertDialogExample(`High battery pack current (>${CONSTANTS.pack_current.MAX}Amps.)`, Images.HighCurrent)
+      ) : props.data?.pack_current[0] < CONSTANTS.pack_current.MIN ? (
+        AlertDialogExample(`Low battery pack current (<${CONSTANTS.pack_current.MIN}Amps.)`, Images.LowCurrent)
+      ) : (
+        <></>
+      )}
+
       {props.data?.pack_voltage[0] > CONSTANTS.pack_voltage.MAX ? (
         <Tooltip label={"High battery pack voltage"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.HighVoltage} />
@@ -550,6 +653,14 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {props.data?.pack_voltage[0] > CONSTANTS.pack_voltage.MAX ? (
+        AlertDialogExample(`High battery pack voltage (>${CONSTANTS.pack_voltage.MAX}V.)`, Images.HighVoltage)
+      ) : props.data?.pack_voltage[0] < CONSTANTS.pack_voltage.MIN ? (
+        AlertDialogExample(`Low battery pack voltage (<${CONSTANTS.pack_current.MIN}V.)`, Images.LowVoltage)
+      ) : (
+        <></>
+      )}
+
       {!(props.data?.solar_car_connection[0] ?? false) ? (
         <Tooltip label={"Lost communication with the solar car"}>
           <Image
@@ -562,10 +673,11 @@ export default function Faults(props) {
         <Box h={imageHeight} />
       )}
       {!(props.data?.solar_car_connection[0] ?? false) ? (
-        AlertDialogExample("hello world", Images.WirelessCommsLost)
+        AlertDialogExample("Lost communication with the solar car.", Images.WirelessCommsLost)
       ) : (
-        <h1>placeholder</h1>
+        <Box h={imageHeight} />
       )}
+
       {_checkBooleanData("bms_canbus_failure") ? (
         _checkBooleanData("mainIO_heartbeat") ? (
           <Tooltip
@@ -597,6 +709,18 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {_checkBooleanData("bms_canbus_failure") ? (
+        _checkBooleanData("mainIO_heartbeat") ? (
+          AlertDialogExample("BMS CANBUS failure and Driver IO/Main IO connection lost.", Images.PhysicalConnection)
+        ) : (
+          AlertDialogExample("BMS CANBUS failure.", Images.PhysicalConnection)
+        )
+      ) : _checkBooleanData("mainIO_heartbeat") ? (
+          AlertDialogExample("Driver IO/Main IO connection lost.", Images.PhysicalConnection)
+      ) : (
+        <></>
+      )}
+
       {props.data?.bms_input_voltage[0] > CONSTANTS.bms_input_voltage.MAX ? (
         <Tooltip label={"High BMS input voltage"}>
           <Image
@@ -616,7 +740,15 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
-      {checkTemps() ? (
+      {props.data?.bms_input_voltage[0] > CONSTANTS.bms_input_voltage.MAX ? (
+        AlertDialogExample(`High BMS input voltage (>${CONSTANTS.bms_input_voltage.MAX}V.)`, Images.BMSInputVoltage)
+      ) : props.data?.bms_input_voltage[0] < CONSTANTS.bms_input_voltage.MIN ? (
+        AlertDialogExample(`Low BMS input voltage (<${CONSTANTS.bms_input_voltage.MIN}V.)`, Images.BMSInputVoltage)
+      ) : (
+        <></>
+      )}
+
+      {!checkTemps() ? (
         <Tooltip label={getTempString()} shouldWrapChildren size={"5"}>
           <Image
             fit={fitType}
@@ -627,6 +759,12 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
+      {!checkTemps() ? (
+        AlertDialogExample(getTempString() + ".", Images.HighTemperature)
+      ) : (
+        <></>
+      )}
+
     </SimpleGrid>
     </>
   );
