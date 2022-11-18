@@ -8,7 +8,7 @@ import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import SESSION_SOLAR_CAR_DATA from "../../Data/session_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 // TODO ---------------------------------------------------------------------
-let doRecord = false; // Flag for whether we should be recording data or not
+let doRecord = process.env.RECORDING || false; // Flag for whether we should be recording data or not
 let currentSession = ""
 
 const ROUTER = Router();
