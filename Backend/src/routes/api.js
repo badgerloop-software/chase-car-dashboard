@@ -4,7 +4,7 @@ import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import net from "net";
 import fetch from 'node-fetch';
-const { Client } = require("cassandra-driver"); // TODO For Cassandra
+// TODO const { Client } = require("cassandra-driver"); // TODO For Cassandra
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
@@ -23,7 +23,26 @@ let interval;
 
 interval = setInterval(() => {
   // TODO Is not using a database for this project
-  fetch('https://g5079b74c17c11c-allrecipes.adb.us-ashburn-1.oraclecloudapps.com/ords/admin/test-select/api/select-2', {
+
+  fetch('http://host:port/route', {
+    method: 'GET',
+    headers: {
+      "Content-type": "application/json"
+    }
+  })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      // TODO Gets the first item of the response
+      // console.log('Request succeeded with JSON response', data);
+      console.log('Count:', data.count, '\ttimestamp:', data.tStamp, '\nBytes:', Buffer.from(data.bytes.data));
+    })
+    .catch(function(error) {
+      console.log('Request failed', error);
+    });
+
+  /*fetch('cloud DB REST API', {
     method: 'GET',
     headers: {
       "Content-type": "application/json"
@@ -38,7 +57,7 @@ interval = setInterval(() => {
       })
       .catch(function(error) {
         console.log('Request failed', error);
-      });
+      });*/
 }, 250);
 /*
 const client = new Client({
@@ -100,11 +119,11 @@ function openSocket() {
   // Data received listener
   client.on("data", (data) => {
     // console.log(data);
-    console.time("update data");
+    // TODO In the way: console.time("update data");
     unpackData(data);
-    console.timeEnd("update data");
+    // TODO In the way: console.timeEnd("update data");
 
-    execute(); // TODO
+    //execute(); // TODO
   });
 
   // Socket closed listener
@@ -121,7 +140,8 @@ function openSocket() {
   // Socket error listener
   client.on("error", (err) => {
     // Log error
-    console.log("Client errored out:", err);
+    // TODO Getting in the way of logging response from server
+    // TODO console.log("Client errored out:", err);
 
     // Kill socket
     client.destroy();
