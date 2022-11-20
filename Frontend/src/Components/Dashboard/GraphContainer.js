@@ -73,7 +73,7 @@ const sendNGM_toBackend = async (data) =>{
     'Accept': 'application/json',
     'Content-type': 'application/json; charset=UTF-8',
   },
-  body: JSON.stringify(data) // body data type must match "Content-Type" 
+  body: JSON.stringify(data) // body data type must match "Content-Type"
  })
 
  console.log(response)
@@ -295,7 +295,7 @@ const sendNGM_toBackend = async (data) =>{
                 onSave={(title, isNew, data) =>
                   onSave(title, isNew, data, index)
                 }
-                onUpdateMetaData={updateNeedGraphMetaData}
+                onUpdateGraphMetaData={updateNeedGraphMetaData}
                 title={graphTitles[index]}
                 // categories={categories}
                 packedData={packedData}
