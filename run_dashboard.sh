@@ -170,10 +170,10 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	
 	# TODO git pull origin main
 	
-	# TODO (probably) Just for testing
+	# Pull latest changes from current remote branch
 	git pull origin $(git branch --show-current)
 	
-	# TODO Not needed since `npm run update-data` takes care of this: git submodule update --recursive
+	# Update data format and constants that depend on it
 	npm run update-data
 	
 	#TODO
@@ -208,7 +208,7 @@ done
 
 
 # TODO Run the production build, not debug
-#TODO npm start
+echo -e "\n\n----------------------------------------------------------\n\nRun \`npm start\` to run the dashboard project\n\n----------------------------------------------------------\n\n"
 
 
 
