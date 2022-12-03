@@ -43,18 +43,26 @@ if [[ ${setup} = true ]]; then
 	# TODO Remove
 	echo "Setup"
 		
-	node -v 2>nodevar 1>nodevar
+	#TODO
+	#node -v 2>nodevar 1>nodevar
 	#echo "v16.14.2" 2>nodevar 1>nodevar
 	
-	echo "NODE - $(cat nodevar)"
+	#echo "NODE - $(cat nodevar)"
 		
-	if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-		echo "You've got node $(cat nodevar)"
+	#if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+	#	echo "You've got node $(cat nodevar)"
+	#else
+	#	echo "You don't got node"
+	#fi'
+
+	if ! command -v node &>/dev/null
+	then
+		echo "I need node"
 	else
-		echo "You don't got node"
+		echo "I don't need node"
 	fi
-	
-	rm nodevar
+
+	#TODO rm nodevar
 	
 	# Install xdg to open web pages
 	# TODO sudo apt install xdg-utils
