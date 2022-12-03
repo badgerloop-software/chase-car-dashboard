@@ -44,7 +44,7 @@ if [[ ${setup} = true ]]; then
 	echo "Setup"
 	
 	node -v &>nodevar
-	#echo "v16.14.2" &>nodevar
+	# TODO echo "v16.14.1" &>nodevar
 	
 	#echo "NODE - $(cat nodevar)"
 		
@@ -60,8 +60,11 @@ if [[ ${setup} = true ]]; then
 		# TODO
 		echo "${versions[@]}"
 		
+		# TODO Add a -d/--downgrade flag to downgrade node if they have a version of node installed that's higher than 16 (/a version that won't run the dashboard)
+		# TODO Could possibly fix the backwards compatibility issue in package.json (adding an option in the start script)
+		# TODO Could check what the earliest incompatible (newer) version of node is, and check if the existing version is that new or newer
 		
-		# Check if the versions are less than a working LTS version of node
+		# Check if the existing version is older than a known working version of node
 		if [[ versions[0] -lt 16 || (versions[0] -eq 16 && (versions[1] -lt 14 || (versions[1] -eq 14 && versions[2] -lt 2))) ]]; then
 			# Installed node version is old
 			echo -e "You need to update node\n\n"
@@ -72,14 +75,28 @@ if [[ ${setup} = true ]]; then
 			# Remove current version of node
 			sudo rm -rf /usr/{bin,include,lib,share}/{node,npm}
 			
-			# Install LTS version
-			wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
-			sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
-			sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
-			export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
+			# Install newer working version node
+			# TODO wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
+			# TODO sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
+			# TODO sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
+			# TODO export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
+			wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
+			sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
+			sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
+			export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 			
 			# Remove node files in current directory
-			rm -rf ./node-v18.12.1-linux-x64*
+			#TODO rm -rf ./node-v18.12.1-linux-x64*
+			rm -rf ./node-v16.14.2-linux-x64*
+			
+			# TODO Install LTS version
+			#wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
+			#sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
+			#sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
+			#export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
+			
+			# TODO Remove node files in current directory
+			#rm -rf ./node-v18.12.1-linux-x64*
 		fi
 	else
 		# Node is not installed
@@ -88,19 +105,21 @@ if [[ ${setup} = true ]]; then
 		
 		sleep 3
 		
+		# TODO Do v16.14.2 (Higher versions cause issues when running the frontend)
+
 		# Install node
-		wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
-		sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
-		sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
-		export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
-		# TODO wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
-		# TODO sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
-		# TODO sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
-		# TODO export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
+		# TODO wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
+		# TODO sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
+		# TODO sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
+		# TODO export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
+		wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
+		sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
+		sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
+		export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 		
 		# Remove node files in current directory
-		rm -rf ./node-v18.12.1-linux-x64*
-		# TODO rm -rf ./node-v16.14.2-linux-x64*
+		# TODO rm -rf ./node-v18.12.1-linux-x64*
+		rm -rf ./node-v16.14.2-linux-x64*
 	fi
 	
 	rm nodevar
@@ -114,23 +133,8 @@ if [[ ${setup} = true ]]; then
 	#fi
 	
 	
-	
-	# Install xdg to open web pages
-	# TODO sudo apt install xdg-utils
-	
-	#TODO
-	# TODO xdg-open "https://INSERT_NODEJS_DOWNLOAD_PAGE_WITH_CORRECT_VERSION_HERE"
-	
-	# TODO Instead, just curl/wget the nodejs install and tar -xzf it
-	
-	# Install nvm for downloading nodejs and npm
-	# TODO See github.com/nvm-sh/nvm
-	# TODO wget -q0- https://raw.githubusercontent. TODO
-	
-	# TODO wget/curl python and pip too
-	
-	
-	# Check for pip and install Python 3.8 as well as pip if it isn't found
+	# TODO Should check that Python version (if found) is 3.X.X
+	# Check if pip is installed. If not, install pip and Python 3.8
 	# NOTE - Checking version instead of using command -v because it's more reliable
 	pip --version &>pyvar
 	
@@ -143,23 +147,24 @@ if [[ ${setup} = true ]]; then
 	fi
 	
 	rm pyvar
-
+	
+	# Install necessary Python libraries
 	pip install xlsxwriter
 	pip install numpy
-	
-	
-	# TODO
-	# nodejs
-	# npm
-	# python (3.X.X I believe)
-	# pip
-	# 	xlsxwriter
-	# 	numpy
-	# TODO init submodule
 fi
 
 
-# Update data format/constants and main
+# TODO	Add a check for node/npm before continuing
+#	If either is not installed, prompt the user to use the -s/--setup flag
+
+
+# TODO Also add a check to make sure sc1-data-format has been initialized
+
+
+# Update the dashboard:
+#	Pull remote changes
+#	Update data format/constants
+#	Install/Update dependencies
 if [[ ${setup} = true || ${update} = true ]]; then
 	#TODO Remove
 	echo "Update"
@@ -168,12 +173,13 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	
 	#TODO Instead of the above restore command: git reset --hard
 	
-	# TODO git pull origin main
-	
 	# Pull latest changes from current remote branch
 	git pull origin $(git branch --show-current)
 	
-	# Update data format and constants that depend on it
+	# Install/Update dependencies
+	npm i
+	
+	# Update data format and constants generated using it
 	npm run update-data
 	
 	#TODO
@@ -208,7 +214,10 @@ done
 
 
 # TODO Run the production build, not debug
-echo -e "\n\n----------------------------------------------------------\n\nRun \`npm start\` to run the dashboard project\n\n----------------------------------------------------------\n\n"
+# echo -e "\n\n----------------------------------------------------------\n\nRun \`npm start\` to run the dashboard project\n\n----------------------------------------------------------\n\n"
+
+# Run the dashboard
+npm start
 
 
 
@@ -232,3 +241,4 @@ List of dependencies/installs/tasks to do before running the dashboard:
 *  Check README for version/details
 ** Check Backend/src/routes for version/details
 '
+
