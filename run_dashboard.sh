@@ -171,7 +171,7 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	# TODO git pull origin main
 	
 	# TODO (probably) Just for testing
-	echo "git pull origin $(git branch --show-current)"
+	git pull origin $(git branch --show-current)
 	
 	# TODO Not needed since `npm run update-data` takes care of this: git submodule update --recursive
 	npm run update-data
