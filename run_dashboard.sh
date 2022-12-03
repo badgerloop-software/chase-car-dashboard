@@ -142,6 +142,10 @@ if [[ ${setup} = true ]]; then
 	fi
 	
 	rm pyvar
+
+	pip install xlsxwriter
+	pip install numpy
+	
 	
 	#if ! command -v python3 &>/dev/null
 	#then
@@ -165,8 +169,8 @@ if [[ ${setup} = true ]]; then
 	# npm
 	# python (3.X.X I believe)
 	# pip
-	# TODO		xlsxwriter
-	# TODO		numpy
+	# 	xlsxwriter
+	# 	numpy
 	# TODO init submodule
 fi
 
