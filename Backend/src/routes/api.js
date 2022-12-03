@@ -133,7 +133,7 @@ ROUTER.get("/get-recorded-data", (req, res) => {
   if(csvPath.length > 0) csvPath = csvPath.slice(0,-1);
 
   // Ensure csvPath ends with / (or \)
-  if(csvPath.length !== 0 && (csvPath[csvPath.length-1] !== '/' || csvPath[csvPath.length-1] !== '\\')) {
+  if(csvPath.length !== 0 && !(csvPath[csvPath.length-1] === '/' || csvPath[csvPath.length-1] === '\\')) {
     csvPath += '/'
   }
 
