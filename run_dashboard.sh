@@ -42,27 +42,73 @@ update=${update-true}
 if [[ ${setup} = true ]]; then
 	# TODO Remove
 	echo "Setup"
-		
-	#TODO
-	#node -v 2>nodevar 1>nodevar
-	#echo "v16.14.2" 2>nodevar 1>nodevar
+	
+	node -v &>nodevar
+	#echo "v16.14.2" &>nodevar
 	
 	#echo "NODE - $(cat nodevar)"
 		
-	#if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-	#	echo "You've got node $(cat nodevar)"
-	#else
-	#	echo "You don't got node"
-	#fi'
+	if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+		echo "You've got node $(cat nodevar)"
+		
+		# Get individual version numbers
+		IFS='.' read -r -a versions <<< "$(cat nodevar)"
+		# Remove the 'v' preceding the first version number
+		versions[0]="${versions[0]#v}"
+		
+		# Check if the versions are less than a working LTS version of node
+		if [[ versions[0] -lt 16 || versions[1] -lt 15 || versions[2] -lt 2 ]]; then
+			# Installed node version is old
+			echo -e "You need to update node\n\n"
+			echo -e "Buckle up buckaroo, 'cause this is gonna take a minute\n\n"
+		
+			sleep 3
 
-	if ! command -v node &>/dev/null
-	then
-		echo "I need node"
+			# Remove current version of node
+			sudo rm -rf /usr/{bin,include,lib,share}/{node,npm}
+			
+			# Install LTS version
+			wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
+			sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
+			sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
+			export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
+			
+			# Remove node files in current directory
+			rm -rf ./node-v18.12.1-linux-x64*
+			#rm -rf ./node-v16.14.2-linux-x64*
+		fi
+		echo "${versions[@]}"
 	else
-		echo "I don't need node"
+		# Node is not installed
+		echo -e "You don't got node\n\n" #TODO
+		echo -e "Buckle up buckaroo, 'cause this is gonna take a minute\n\n"
+		
+		sleep 3
+		
+		# Install node
+		#wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
+		wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
+		#sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
+		sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
+		#sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
+		sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
+		#export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
+		export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
+		
+		# Remove node files in current directory
+		#rm -rf ./node-v18.12.1-linux-x64*
+		rm -rf ./node-v16.14.2-linux-x64*
 	fi
 
-	#TODO rm nodevar
+	#TODO
+	#if ! command -v node &>/dev/null
+	#then
+	#	echo "I"
+	#else
+	#	echo "I don't need node"
+	#fi
+
+	rm nodevar
 	
 	# Install xdg to open web pages
 	# TODO sudo apt install xdg-utils
