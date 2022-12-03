@@ -139,29 +139,13 @@ if [[ ${setup} = true ]]; then
 		sudo add-apt-repository ppa:deadsnakes/ppa
 		sudo apt-get update
 		sudo apt-get install python3-pip
+		#TODO sudo apt-get install python3.8
 	fi
 	
 	rm pyvar
 
 	pip install xlsxwriter
 	pip install numpy
-	
-	
-	#if ! command -v python3 &>/dev/null
-	#then
-	#	echo "You need Python 3 dude"
-		
-		# Install Python 3.8
-	#	sudo apt-get install software-properties-common
-	#	sudo add-apt-repository ppa:deadsnakes/ppa
-	#	sudo apt-get update
-	#	sudo apt-get install python3.8
-	#else
-		# TODO The user already has Python 3
-		# TODO Remove this case
-	#	echo "Congrats, you have Python 3!"
-	#fi
-	
 	
 	
 	# TODO
@@ -190,7 +174,7 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	echo "git pull origin $(git branch --show-current)"
 	
 	# TODO Not needed since `npm run update-data` takes care of this: git submodule update --recursive
-	# TODO npm run update-data
+	npm run update-data
 	
 	#TODO
 	# origin main
