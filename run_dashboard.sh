@@ -42,6 +42,19 @@ update=${update-true}
 if [[ ${setup} = true ]]; then
 	# TODO Remove
 	echo "Setup"
+		
+	node -v 2>nodevar 1>nodevar
+	#echo "v16.14.2" 2>nodevar 1>nodevar
+	
+	echo "NODE - $(cat nodevar)"
+		
+	if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+		echo "You've got node $(cat nodevar)"
+	else
+		echo "You don't got node"
+	fi
+	
+	rm nodevar
 	
 	# Install xdg to open web pages
 	# TODO sudo apt install xdg-utils
