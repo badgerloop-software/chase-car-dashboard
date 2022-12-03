@@ -56,8 +56,13 @@ if [[ ${setup} = true ]]; then
 		# Remove the 'v' preceding the first version number
 		versions[0]="${versions[0]#v}"
 		
+		
+		# TODO
+		echo "${versions[@]}"
+		
+		
 		# Check if the versions are less than a working LTS version of node
-		if [[ versions[0] -lt 16 || versions[1] -lt 15 || versions[2] -lt 2 ]]; then
+		if [[ versions[0] -lt 16 || (versions[0] -eq 16 && (versions[1] -lt 14 || (versions[1] -eq 14 && versions[2] -lt 2))) ]]; then
 			# Installed node version is old
 			echo -e "You need to update node\n\n"
 			echo -e "Buckle up buckaroo, 'cause this is gonna take a minute\n\n"
@@ -75,9 +80,7 @@ if [[ ${setup} = true ]]; then
 			
 			# Remove node files in current directory
 			rm -rf ./node-v18.12.1-linux-x64*
-			#rm -rf ./node-v16.14.2-linux-x64*
 		fi
-		echo "${versions[@]}"
 	else
 		# Node is not installed
 		echo -e "You don't got node\n\n" #TODO
@@ -86,29 +89,31 @@ if [[ ${setup} = true ]]; then
 		sleep 3
 		
 		# Install node
-		#wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
-		wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
-		#sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
-		sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
-		#sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
-		sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
-		#export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
-		export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
+		wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
+		sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
+		sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
+		export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
+		# TODO wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
+		# TODO sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
+		# TODO sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
+		# TODO export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 		
 		# Remove node files in current directory
-		#rm -rf ./node-v18.12.1-linux-x64*
-		rm -rf ./node-v16.14.2-linux-x64*
+		rm -rf ./node-v18.12.1-linux-x64*
+		# TODO rm -rf ./node-v16.14.2-linux-x64*
 	fi
-
-	#TODO
+	
+	rm nodevar
+	
+	# TODO
 	#if ! command -v node &>/dev/null
 	#then
 	#	echo "I"
 	#else
 	#	echo "I don't need node"
 	#fi
-
-	rm nodevar
+	
+	
 	
 	# Install xdg to open web pages
 	# TODO sudo apt install xdg-utils
@@ -124,14 +129,45 @@ if [[ ${setup} = true ]]; then
 	
 	# TODO wget/curl python and pip too
 	
-	#TODO
+	
+	# Check for pip and install Python 3.8 as well as pip if it isn't found
+	# NOTE - Checking version instead of using command -v because it's more reliable
+	pip --version &>pyvar
+	
+	if [[ ! $(cat pyvar) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+		sudo apt-get install software-properties-common
+		sudo add-apt-repository ppa:deadsnakes/ppa
+		sudo apt-get update
+		sudo apt-get install python3-pip
+	fi
+	
+	rm pyvar
+	
+	#if ! command -v python3 &>/dev/null
+	#then
+	#	echo "You need Python 3 dude"
+		
+		# Install Python 3.8
+	#	sudo apt-get install software-properties-common
+	#	sudo add-apt-repository ppa:deadsnakes/ppa
+	#	sudo apt-get update
+	#	sudo apt-get install python3.8
+	#else
+		# TODO The user already has Python 3
+		# TODO Remove this case
+	#	echo "Congrats, you have Python 3!"
+	#fi
+	
+	
+	
+	# TODO
 	# nodejs
 	# npm
 	# python (3.X.X I believe)
 	# pip
-	#	xlsxwriter
-	#	numpy
-	# init submodule
+	# TODO		xlsxwriter
+	# TODO		numpy
+	# TODO init submodule
 fi
 
 
