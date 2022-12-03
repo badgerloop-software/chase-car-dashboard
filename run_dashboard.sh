@@ -35,8 +35,6 @@ setup=${setup-false}
 update=${update-true}
 
 
-#TODO Is there a difference between the starting line used above and #!/usr/bin/env bash ???
-
 
 # Setup/Installations
 if [[ ${setup} = true ]]; then
@@ -46,8 +44,6 @@ if [[ ${setup} = true ]]; then
 	node -v &>nodevar
 	# TODO echo "v16.14.1" &>nodevar
 	
-	#echo "NODE - $(cat nodevar)"
-		
 	if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
 		echo "You've got node $(cat nodevar)"
 		
@@ -60,7 +56,7 @@ if [[ ${setup} = true ]]; then
 		# TODO
 		echo "${versions[@]}"
 		
-		# TODO Add a -d/--downgrade flag to downgrade node if they have a version of node installed that's higher than 16 (/a version that won't run the dashboard)
+		# TODO Add a -d/--downgrade flag to downgrade node if they have a version of node installed that's higher than 16 (i.e. a version that won't run the dashboard, such as 18.12.1)
 		# TODO Could possibly fix the backwards compatibility issue in package.json (adding an option in the start script)
 		# TODO Could check what the earliest incompatible (newer) version of node is, and check if the existing version is that new or newer
 		
@@ -76,27 +72,13 @@ if [[ ${setup} = true ]]; then
 			sudo rm -rf /usr/{bin,include,lib,share}/{node,npm}
 			
 			# Install newer working version node
-			# TODO wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
-			# TODO sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
-			# TODO sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
-			# TODO export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
 			wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
 			sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
 			sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
 			export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 			
 			# Remove node files in current directory
-			#TODO rm -rf ./node-v18.12.1-linux-x64*
 			rm -rf ./node-v16.14.2-linux-x64*
-			
-			# TODO Install LTS version
-			#wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
-			#sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
-			#sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
-			#export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
-			
-			# TODO Remove node files in current directory
-			#rm -rf ./node-v18.12.1-linux-x64*
 		fi
 	else
 		# Node is not installed
@@ -105,50 +87,39 @@ if [[ ${setup} = true ]]; then
 		
 		sleep 3
 		
-		# TODO Do v16.14.2 (Higher versions cause issues when running the frontend)
-
 		# Install node
-		# TODO wget https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-x64.tar.xz
-		# TODO sudo tar -xvf node-v18.12.1-linux-x64.tar.xz
-		# TODO sudo cp -r ./node-v18.12.1-linux-x64/{bin,include,lib,share} /usr/
-		# TODO export PATH=/usr/node-v18.12.1-linux-x64/bin:$PATH
 		wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
 		sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
 		sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
 		export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 		
 		# Remove node files in current directory
-		# TODO rm -rf ./node-v18.12.1-linux-x64*
 		rm -rf ./node-v16.14.2-linux-x64*
 	fi
 	
 	rm nodevar
 	
-	# TODO
-	#if ! command -v node &>/dev/null
-	#then
-	#	echo "I"
-	#else
-	#	echo "I don't need node"
-	#fi
 	
+	# Check if Python 3.X.X is installed and set as the default for Python.
+	# If not, install Python 3 and pip, and set Python 3 as the default
+	python --version &>pyvar
 	
-	# TODO Should check that Python version (if found) is 3.X.X
-	# Check if pip is installed. If not, install pip and Python 3.8
-	# NOTE - Checking version instead of using command -v because it's more reliable
-	pip --version &>pyvar
-	
-	if [[ ! $(cat pyvar) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+	if [[ ! $(cat pyvar) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
+		# Install Python 3 and pip
 		sudo apt-get install software-properties-common
 		sudo add-apt-repository ppa:deadsnakes/ppa
 		sudo apt-get update
-		sudo apt-get install python3-pip
-		#TODO sudo apt-get install python3.8
+		sudo apt-get install python3 python3-pip
+		
+		# Set Python 3 as the default when running python
+		# so that the command being spawned in api.js (for processing recorded binary data)
+		# can be "python" instead of "python3"
+		sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 	fi
 	
 	rm pyvar
 	
-	# Install necessary Python libraries
+	# Install necessary Python modules
 	pip install xlsxwriter
 	pip install numpy
 fi
@@ -157,8 +128,16 @@ fi
 # TODO	Add a check for node/npm before continuing
 #	If either is not installed, prompt the user to use the -s/--setup flag
 
+# TODO
+#if ! command -v node &>/dev/null
+#then
+#	echo "I"
+#else
+#	echo "I don't need node"
+#fi
 
-# TODO Also add a check to make sure sc1-data-format has been initialized
+
+# TODO Also add a check to make sure sc1-data-format has been cloned and included as a submodule
 
 
 # Update the dashboard:
@@ -214,7 +193,6 @@ done
 
 
 # TODO Run the production build, not debug
-# echo -e "\n\n----------------------------------------------------------\n\nRun \`npm start\` to run the dashboard project\n\n----------------------------------------------------------\n\n"
 
 # Run the dashboard
 npm start
