@@ -96,8 +96,8 @@ if [[ ${setup} = true ]]; then
 			
 			# Install newer version of node
 			wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
-			tar -xvf node-v16.14.2-linux-x64.tar.xz
-			cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
+			sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
+			sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
 			export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 			
 			# Remove node files in current directory
@@ -111,8 +111,8 @@ if [[ ${setup} = true ]]; then
 		
 		# Install known working version node
 		wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
-		tar -xvf node-v16.14.2-linux-x64.tar.xz
-		cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
+		sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
+		sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
 		export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 		
 		# Remove node files in current directory
@@ -179,12 +179,15 @@ fi
 #	Update data format/constants
 #	Install/Update dependencies
 if [[ ${setup} = true || ${update} = true ]]; then
-	#TODO Remove
-	echo "Update"
+	# TODO git restore Frontend/src/data-constants.json Frontend/src/Components/Graph/graph-data.json
 	
-	# TODO git restore Backend/Data/sc1-data-format Frontend/src/data-constants.json Frontend/src/Components/Graph/graph-data.json
-	
-	#TODO Instead of the above restore command: git reset --hard
+	echo -en "\033[0;31mRESETTING CHANGES. LAST CHANCE TO SAVE ANY CHANGES MADE\n3"
+	sleep 1
+	echo -en "\t2"
+	sleep 1
+	echo -e "\t1"
+	sleep 1
+	git reset --hard
 	
 	# Pull latest changes from current remote branch
 	git pull origin $(git branch --show-current)
@@ -194,12 +197,6 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	
 	# Update data format and constants generated using it
 	npm run update-data
-	
-	#TODO
-	# origin main
-	#	Might need to restore sc1-data-format and data constants before pulling in case they were updated in between remote main updates
-	# sc1-data-format
-	#	data constants
 fi
 
 
