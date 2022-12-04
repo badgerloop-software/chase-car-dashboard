@@ -185,11 +185,11 @@ if [[ -z $(node -v 2>/dev/null) || -z $(npm -v 2>/dev/null) || ! $(python --vers
 		echo -e "\tnpm"
 	fi
 	# Python 3 (as default)
-	if [[ ! $(python --version) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
+	if [[ ! $(python --version 2>/dev/null) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
 		echo -e "\tPython 3 (or Python 3 is not set as default)"
 	fi
 	# pip
-	if [[ ! $(pip --version) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+	if [[ ! $(pip --version 2>/dev/null) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 		echo -e "\tpip"
 	fi
 	# sc1-data-format
