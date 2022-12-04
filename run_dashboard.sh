@@ -148,11 +148,9 @@ if [[ ${setup} = true ]]; then
 fi
 
 
-# TODO	Add a check for node/npm before continuing
-#	If either is not installed, prompt the user to use the -s/--setup flag
-
-if [[ -z $(node -v 2>/dev/null) || -z $(npm -v 2>/dev/null) ]]; then
-	# TODO echo "You don't have node ($(command -v node)) or npm ($(command -v npm))"
+# Check for missing dependencies before continuing
+# If any dependencies are missing, prompt the user to use the -s/--setup flag
+if [[ -z $(node -v 2>/dev/null) || -z $(npm -v 2>/dev/null) || ! $(python --version) =~ Python\ 3\.[0-9]+\.[0-9]+ || ! $(pip --version) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ || -z $(ls Backend/Data/sc1-data-format) ]]; then
 	echo -e "\n\033[0;31mYou are missing necessary dependencies:"
 	if [[ -z $(node -v 2>/dev/null) ]]; then
 		echo -e "\tNode.js"
@@ -173,20 +171,7 @@ if [[ -z $(node -v 2>/dev/null) || -z $(npm -v 2>/dev/null) ]]; then
 	echo -e "\n\033[0mConsider running this script with the -s/--setup flag (\`\033[1;32m./run_dashboard.sh -s\033[0m\`) to install any missing dependencies\n"
 	
 	exit
-else
-	echo "You have node and npm"
-	exit # TODO
 fi
-
-# TODO
-#if ! command -v node &>/dev/null
-#then
-#	echo "I"
-#else
-#	echo "I don't need node"
-#fi
-
-# TODO Also add a check to make sure sc1-data-format has been cloned and included as a submodule
 
 
 # Update the dashboard:
