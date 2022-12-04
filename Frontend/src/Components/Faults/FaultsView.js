@@ -354,7 +354,7 @@ export default function Faults(props) {
     const { isOpen, onOpen, onClose } = useDisclosure({defaultIsOpen: true})
     const [display, setDisplay] = useState(true)
 
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0.9) {
       onSave(textInfo)
     }
 
