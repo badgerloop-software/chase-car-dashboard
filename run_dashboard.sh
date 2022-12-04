@@ -73,10 +73,10 @@ if [[ ${setup} = true ]]; then
 	# Check the node version (if node is already installed) and install a working version if needed
 	node -v &>nodevar
 	
+	# TODO Just check full version in regex here
+	
 	# TODO if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
 	if [[ $(cat nodevar) =~ v16\.[0-9]+\.[0-9]+ ]]; then
-		# TODO echo "You've got node $(cat nodevar)"
-		
 		# Get individual version numbers
 		IFS='.' read -r -a versions <<< "$(cat nodevar)"
 		# TODO Remove the 'v' preceding the first version number
@@ -171,21 +171,28 @@ fi
 
 
 # Check for missing dependencies before continuing
-# If any dependencies are missing, prompt the user to use the -s/--setup flag
+# If any dependencies are missing, prompt the user to run the script with the -s/--setup flag
 if [[ -z $(node -v 2>/dev/null) || -z $(npm -v 2>/dev/null) || ! $(python --version) =~ Python\ 3\.[0-9]+\.[0-9]+ || ! $(pip --version) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ || -z $(ls Backend/Data/sc1-data-format) ]]; then
 	echo -e "\n\033[0;31mYou are missing necessary dependencies:"
+	# Node.js (or version check if installed)
 	if [[ -z $(node -v 2>/dev/null) ]]; then
 		echo -e "\tNode.js"
+	elif [[ ! $(node -v) =~ v16\.[0-9]+\.[0-9]+ ]]; then
+		echo -e "\tNode.js is installed, but existing version ($(node -v)) is not a known working version (v16.X.X)"
 	fi
+	# npm
 	if [[ -z $(npm -v 2>/dev/null) ]]; then
 		echo -e "\tnpm"
 	fi
+	# Python 3 (as default)
 	if [[ ! $(python --version) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
 		echo -e "\tPython 3 (or Python 3 is not set as default)"
 	fi
+	# pip
 	if [[ ! $(pip --version) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 		echo -e "\tpip"
 	fi
+	# sc1-data-format
 	if [[ -z $(ls Backend/Data/sc1-data-format) ]]; then
 		echo -e "\tsc1-data-format (data format submodule)"
 	fi
@@ -196,6 +203,14 @@ if [[ -z $(node -v 2>/dev/null) || -z $(npm -v 2>/dev/null) || ! $(python --vers
 fi
 
 
+# Additional check for node version
+# Don't take action other than warning the user that their node version could cause issues
+if [[ ! $(node -v) =~ v16\.[0-9]+\.[0-9]+ ]]; then
+	echo -e "\n\n\033[1;31m WARNING - Node.js version is $(node -v), which may cause issues when running the dashboard.\n\n\033[0mConsider running the script with the -s/--setup flag (\033[1;33m./run_dashboard.sh -s\033[0m) to switch to a known working version (v16.14.2).\n"
+	sleep 3
+fi
+
+
 # Update the dashboard:
 #	Pull remote changes
 #	Update data format/constants
@@ -203,7 +218,7 @@ fi
 if [[ ${setup} = true || ${update} = true ]]; then
 	# TODO git restore Frontend/src/data-constants.json Frontend/src/Components/Graph/graph-data.json
 	
-	echo -en "\033[0;31mRESETTING CHANGES. LAST CHANCE TO SAVE ANY CHANGES MADE\n3"
+	echo -en "\n\n\033[0;31mRESETTING CHANGES. LAST CHANCE TO SAVE ANY CHANGES MADE\n3"
 	sleep 1
 	echo -en "\t2"
 	sleep 1
