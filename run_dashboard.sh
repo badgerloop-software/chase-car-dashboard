@@ -2,7 +2,7 @@
 
 # TODO Update this (e.g. updating main/current branch isn't mentioned here)
 usage="
-\033[4m\033[1m$0\033[0m
+\033[1;4m$0\033[0m
 
 \033[1mDESCRIPTION\033[0m
 	Runs the engineering dashboard. This command will optionally install all necessary dependencies for the dashboard and, unless otherwise sepcified, will update all data constants. Installing all necessary dependencies (with the s/setup flag) only needs to be done once. However, it is not recommended that you skip the update process unless you have recently run the dashboard.
@@ -145,6 +145,28 @@ if [[ ${setup} = true ]]; then
 	# Install necessary Python modules
 	pip install xlsxwriter
 	pip install numpy
+	
+	
+	# Make sure the sc1-data-format submodule is set up in the project
+	if [[ -z $(ls Backend/Data/sc1-data-format) ]]; then
+		# Move to the parent directory
+		cd ..
+		
+		# Make sure the sc1-data-format repo has been cloned by the user
+		if [[ ! $(ls) =~ sc1-data-format ]]; then
+			git clone git@github.com:badgerloop-software/sc1-data-format.git
+		fi
+		
+		# Move back into the chase-car-dashboard project and set up the submodule
+		cd chase-car-dashboard
+		git submodule update --init
+		
+		# Check that the submodule was correctly initialized (bc it has a history of failing for new, unexpected reasons)
+		if [[ -z $(ls Backend/Data/sc1-data-format) ]]; then
+			echo -e "\033[1;31mSubmodule (Backend/Data/sc1-data-format) initialization failed... Exiting\033[0m"
+			exit
+		fi
+	fi
 fi
 
 
@@ -168,7 +190,7 @@ if [[ -z $(node -v 2>/dev/null) || -z $(npm -v 2>/dev/null) || ! $(python --vers
 		echo -e "\tsc1-data-format (data format submodule)"
 	fi
 	
-	echo -e "\n\033[0mConsider running this script with the -s/--setup flag (\`\033[1;32m./run_dashboard.sh -s\033[0m\`) to install any missing dependencies\n"
+	echo -e "\n\033[0mConsider running this script with the -s/--setup flag (\033[1;33m./run_dashboard.sh -s\033[0m) to install any missing dependencies\n"
 	
 	exit
 fi
@@ -201,7 +223,7 @@ fi
 
 
 # TODO Implement recorded_data_args in data recording/processing
-echo -e "\n------------------------------------------------\n"
+echo -e "\n\n--------------------------------------------------------------------\n\n"
 echo -e "Make sure to update Backend/src/routes/recorded_data_args with the directory in which you want to save recorded data (CSVs, not binary files)."
 
 while [[ TRUE ]]; do
