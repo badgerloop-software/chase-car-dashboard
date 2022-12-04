@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# TODO need to add chmod instructions in README
+
+
 # TODO Update this (e.g. updating main/current branch isn't mentioned here)
 usage="
 \033[1;4m$0\033[0m
@@ -73,17 +76,11 @@ if [[ ${setup} = true ]]; then
 	# Check the node version (if node is already installed) and install a working version if needed
 	node -v &>nodevar
 	
-	# TODO Just check full version in regex here
-	
-	# TODO if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
 	if [[ $(cat nodevar) =~ v16\.[0-9]+\.[0-9]+ ]]; then
 		# Get individual version numbers
 		IFS='.' read -r -a versions <<< "$(cat nodevar)"
-		# TODO Remove the 'v' preceding the first version number
-		# TODO versions[0]="${versions[0]#v}"
 		
 		# Check if the existing version is older than a known working version of node
-		# TODO if [[ versions[0] -lt 16 || (versions[0] -eq 16 && (versions[1] -lt 14 || (versions[1] -eq 14 && versions[2] -lt 2))) ]]; then
 		if [[ versions[1] -lt 14 || (versions[1] -eq 14 && versions[2] -lt 2) ]]; then
 			# Installed node version is old
 			echo -e "You need to update node\n\n"
@@ -101,7 +98,7 @@ if [[ ${setup} = true ]]; then
 			export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 			
 			# Remove node files in current directory
-			rm -rf ./node-v16.14.2-linux-x64*
+			sudo rm -rf ./node-v16.14.2-linux-x64* # TODO Maybe remove sudo, but it was needed for Noah's copy
 		fi
 	else
 		# Node v16.X.X is not installed
@@ -116,7 +113,7 @@ if [[ ${setup} = true ]]; then
 		export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 		
 		# Remove node files in current directory
-		rm -rf ./node-v16.14.2-linux-x64*
+		sudo rm -rf ./node-v16.14.2-linux-x64* # TODO Maybe remove sudo, but it was needed for Noah's copy
 	fi
 	
 	rm nodevar
@@ -125,6 +122,12 @@ if [[ ${setup} = true ]]; then
 	# Check if Python 3.X.X is installed and set as the default for Python.
 	# If not, install Python 3 and pip, and set Python 3 as the default
 	if [[ ! $(python --version) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
+		# Python 3 is not installed or not default
+		echo -e "You need Python 3 (as default)\n\n"
+		echo -e "Buckle up buckaroo, 'cause this could take a minute\n\n"
+		
+		sleep 3
+		
 		# Install Python 3 and pip
 		sudo apt-get install software-properties-common
 		sudo add-apt-repository ppa:deadsnakes/ppa
