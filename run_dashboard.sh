@@ -38,9 +38,29 @@ update=${update-true}
 
 # Setup/Installations
 if [[ ${setup} = true ]]; then
-	# TODO Remove
-	echo "Setup"
+	# Make sure the user knows what they're in for
+	echo -e "\n\nJust a heads up, depending on what you already have installed and set, this setup could take a few minutes."
+	echo "By specifying the -s (or --setup) flag, this script will do the following:"
+	echo -e "\t- If needed, install a version of Node.js (along with a suitable version of npm) that can run the engineering dashboard (namely v16.14.2 of Node.js)\n\t\t\033[0;31m* NOTE - If you have a higher major version of Node.js (i.e. v17.X.X or v18.X.X) installed, this script will downgrade your current version, as it may have issues running the front end of the dashboard\033[0m"
+	echo -e "\t- If needed, install Python 3 and pip. Additionally, Python 3 will be set as the default for Python so that the command spawned for processing recorded data can be \"python\" instead of a specified version of Python (e.g. \"python3\")"
+	echo -e "\t- If needed, clone the sc1-data-format repository and include it as a submodule in this project"
+	echo -e "\t- Pull the latest changes from the remote copy of the current branch ($(git branch --show-current))\n\t\t\033[0;31m* NOTE - Any uncommitted changes you have in your local copy of this project will be reset, so stash any changes you want to save before continuing\033[0m"
+	echo -e "\t- Install/Update all dependencies specified in the respective package.json files in the Frontend, Backend, and DataGenerator directories"
 	
+	while [[ TRUE ]]; do
+		echo -en "\nWould you like to continue with the setup described above (y/n)? "
+		read continueSetup
+		
+		if [[ ${continueSetup^^} == @(N|NO) ]]; then
+			echo ""
+			exit
+		elif [[ ${continueSetup^^} != @(Y|YES) ]]; then
+			echo "Please enter a valid option"
+			echo -en "\033[1A\033[2K\033[1A\033[2K"
+		fi
+	done
+	
+	# Check the node version (if node is already installed) and install a working version if needed
 	node -v &>nodevar
 	# TODO echo "v16.14.1" &>nodevar
 	
@@ -115,6 +135,7 @@ if [[ ${setup} = true ]]; then
 		# so that the command being spawned in api.js (for processing recorded binary data)
 		# can be "python" instead of "python3"
 		sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+		# TODO Try: echo "alias python=/usr/local/bin/python3" >> ~/.bashrc
 	fi
 	
 	rm pyvar
