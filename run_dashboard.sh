@@ -2,13 +2,20 @@
 
 # TODO Update this (e.g. updating main/current branch isn't mentioned here)
 usage="
-$0 - Runs the engineering dashboard. This command will optionally install all necessary dependencies for the dashboard and, unless otherwise sepcified, will update all data constants. Installing all necessary dependencies (with the s/setup flag) only needs to be done once. However, it is not recommended that you skip the update process unless you have recently run the dashboard.
+\033[4m\033[1m$0\033[0m
 
-Usage: $0 [OPTIONS]
+\033[1mDESCRIPTION\033[0m
+	Runs the engineering dashboard. This command will optionally install all necessary dependencies for the dashboard and, unless otherwise sepcified, will update all data constants. Installing all necessary dependencies (with the s/setup flag) only needs to be done once. However, it is not recommended that you skip the update process unless you have recently run the dashboard.
 
-Where available options are the following:
-\t-s, --setup\tInstall necessary dependencies
-\t-n, --no-update\tSkip updating the sc1-data-format submodule and all constants that depend on its contents
+\033[1mUSAGE\033[0m
+	$0 [OPTIONS...]
+
+\033[1mOPTIONS\033[0m
+	-s, --setup
+	    Install necessary dependencies
+	
+	-n, --no-update
+	    Skip updating the sc1-data-format submodule and all constants that depend on its contents
 
 "
 # Process arguments
@@ -21,7 +28,7 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
 			update=false
 			;;
 		-h | --help )
-			echo -e "${usage}"
+			{ echo -e "${usage}"; } | fmt
 			exit
 			;;
 	esac
