@@ -333,6 +333,12 @@ export default function Faults(props) {
     setHistoryFaults([...historyFaults, date + " " + info])
   }
 
+  const onSave = (textInfo) => {
+      var today = new Date(),
+      date = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds() + " | " + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      addFaultToHistory(date, textInfo)
+  }
+
   /**
    * This function prompts the alert for when there is a fault, can be closed or deleted when prompted. After deletion the information of the fault will be saved to the tab of history of faults on the top left of the faults window.
    * 
@@ -347,12 +353,12 @@ export default function Faults(props) {
 
     const { isOpen, onOpen, onClose } = useDisclosure({defaultIsOpen: true})
     const [display, setDisplay] = useState(true)
-  
+
+    if (Math.random() > 0.5) {
+      onSave(textInfo)
+    }
 
     const onDelete = () => {
-      var today = new Date(),
-      date = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds() + " | " + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-      addFaultToHistory(date, textInfo)
       setDisplay(false)
     }
     
@@ -385,9 +391,9 @@ export default function Faults(props) {
         </Button> */}
         <AlertDialog
           isOpen={isOpen}
-          leastDestructiveRef={cancelRef}
+          // leastDestructiveRef={cancelRef}
           onClose={onClose}
-          closeOnOverlayClick={false}
+          // closeOnOverlayClick={false}
         >
           <AlertDialogOverlay>
             <AlertDialogContent>
@@ -400,7 +406,8 @@ export default function Faults(props) {
                 <Image fit={fitType} boxSize={imageHeight} src={icon} />
               </AlertDialogBody>
               <AlertDialogFooter>
-                <Button ref={cancelRef} onClick={onDelete}>
+                {/* <Button ref={cancelRef} onClick={onDelete}> */}
+                <Button ref={cancelRef} onClick={onClose}>
                   Close
                 </Button>
               </AlertDialogFooter>
@@ -419,7 +426,7 @@ export default function Faults(props) {
       columns={6}
       rows={3}
       spacingX="2vw"
-      spacingY="0.5vh"
+      spacingY="1.5vh"
       alignItems="center" 
       overflowY='scroll'
     >
@@ -436,6 +443,16 @@ export default function Faults(props) {
           <PopoverHeader>Previusly Occured Faults</PopoverHeader>
           <PopoverBody>
             <div>
+            <Box
+              height={150}
+              columns={1}
+              rows={historyFaults.length}
+              spacingX={'0.25vw'}
+              spacingY={'0.25vh'}
+              overflowY='scroll'
+              borderTopColor='black'
+              borderTopWidth={1}
+            >
             {historyFaults.map((fault) => {
               return (
                 <li>
@@ -443,19 +460,20 @@ export default function Faults(props) {
                 </li>
               );
             })}
+            </Box>
           </div>
           </PopoverBody>
         </PopoverContent>
       </Popover>
 
-      {_checkBooleanData("mppt_contactor") ? (
+      {!_checkBooleanData("mppt_contactor") ? (
         <Tooltip label={"MPPT contactor is open"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.MPPTContactor} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
-      {_checkBooleanData("mppt_contactor") ? (
+      {!_checkBooleanData("mppt_contactor") ? (
         AlertDialogExample("MPPT contactor is open." , Images.MPPTContactor)
       ) : (
         <></>
@@ -590,14 +608,14 @@ export default function Faults(props) {
         <></>
       )}
 
-      {props.data?.soc[0] < CONSTANTS.soc.MIN ? (
+      {(props.data?.soc[0] < CONSTANTS.soc.MIN) ? (
         <Tooltip label={`Battery charge is low (<${CONSTANTS.soc.MIN}%)`}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.LowBattery} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
-      {props.data?.soc[0] < CONSTANTS.soc.MIN ? (
+      {(props.data?.soc[0] < CONSTANTS.soc.MIN) ? (
         AlertDialogExample(`Battery charge is low (<${CONSTANTS.soc.MIN}%.)`, Images.LowBattery)
       ) : (
         <></>
@@ -660,7 +678,7 @@ export default function Faults(props) {
         <></>
       )}
 
-      {!(props.data?.solar_car_connection[0] ?? false) ? (
+      {(props.data?.solar_car_connection[0] ?? false) ? (
         <Tooltip label={"Lost communication with the solar car"}>
           <Image
             fit={fitType}
@@ -671,7 +689,7 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
-      {!(props.data?.solar_car_connection[0] ?? false) ? (
+      {(props.data?.solar_car_connection[0] ?? false) ? (
         AlertDialogExample("Lost communication with the solar car.", Images.WirelessCommsLost)
       ) : (
         <Box h={imageHeight} />
