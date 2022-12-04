@@ -51,37 +51,33 @@ if [[ ${setup} = true ]]; then
 		echo -en "\nWould you like to continue with the setup described above (y/n)? "
 		read continueSetup
 		
-		if [[ ${continueSetup^^} == @(N|NO) ]]; then
+		if [[ ${continueSetup^^} == @(Y|YES) ]]; then
+			echo ""
+			break
+		elif [[ ${continueSetup^^} == @(N|NO) ]]; then
 			echo ""
 			exit
-		elif [[ ${continueSetup^^} != @(Y|YES) ]]; then
+		else
 			echo "Please enter a valid option"
-			echo -en "\033[1A\033[2K\033[1A\033[2K"
+			echo -en "\033[1A\033[1A\033[2K\033[1A\033[2K"
 		fi
 	done
 	
 	# Check the node version (if node is already installed) and install a working version if needed
 	node -v &>nodevar
-	# TODO echo "v16.14.1" &>nodevar
 	
-	if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-		echo "You've got node $(cat nodevar)"
+	# TODO if [[ $(cat nodevar) =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+	if [[ $(cat nodevar) =~ v16\.[0-9]+\.[0-9]+ ]]; then
+		# TODO echo "You've got node $(cat nodevar)"
 		
 		# Get individual version numbers
 		IFS='.' read -r -a versions <<< "$(cat nodevar)"
-		# Remove the 'v' preceding the first version number
-		versions[0]="${versions[0]#v}"
-		
-		
-		# TODO
-		echo "${versions[@]}"
-		
-		# TODO Add a -d/--downgrade flag to downgrade node if they have a version of node installed that's higher than 16 (i.e. a version that won't run the dashboard, such as 18.12.1)
-		# TODO Could possibly fix the backwards compatibility issue in package.json (adding an option in the start script)
-		# TODO Could check what the earliest incompatible (newer) version of node is, and check if the existing version is that new or newer
+		# TODO Remove the 'v' preceding the first version number
+		# TODO versions[0]="${versions[0]#v}"
 		
 		# Check if the existing version is older than a known working version of node
-		if [[ versions[0] -lt 16 || (versions[0] -eq 16 && (versions[1] -lt 14 || (versions[1] -eq 14 && versions[2] -lt 2))) ]]; then
+		# TODO if [[ versions[0] -lt 16 || (versions[0] -eq 16 && (versions[1] -lt 14 || (versions[1] -eq 14 && versions[2] -lt 2))) ]]; then
+		if [[ versions[1] -lt 14 || (versions[1] -eq 14 && versions[2] -lt 2) ]]; then
 			# Installed node version is old
 			echo -e "You need to update node\n\n"
 			echo -e "Buckle up buckaroo, 'cause this is gonna take a minute\n\n"
@@ -91,7 +87,7 @@ if [[ ${setup} = true ]]; then
 			# Remove current version of node
 			sudo rm -rf /usr/{bin,include,lib,share}/{node,npm}
 			
-			# Install newer working version node
+			# Install newer version of node
 			wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
 			sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
 			sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
@@ -101,13 +97,12 @@ if [[ ${setup} = true ]]; then
 			rm -rf ./node-v16.14.2-linux-x64*
 		fi
 	else
-		# Node is not installed
-		echo -e "You don't got node\n\n" #TODO
+		# Node v16.X.X is not installed
 		echo -e "Buckle up buckaroo, 'cause this is gonna take a minute\n\n"
 		
 		sleep 3
 		
-		# Install node
+		# Install known working version node
 		wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
 		sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
 		sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
@@ -122,9 +117,7 @@ if [[ ${setup} = true ]]; then
 	
 	# Check if Python 3.X.X is installed and set as the default for Python.
 	# If not, install Python 3 and pip, and set Python 3 as the default
-	python --version &>pyvar
-	
-	if [[ ! $(cat pyvar) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
+	if [[ ! $(python --version) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
 		# Install Python 3 and pip
 		sudo apt-get install software-properties-common
 		sudo add-apt-repository ppa:deadsnakes/ppa
@@ -136,9 +129,11 @@ if [[ ${setup} = true ]]; then
 		# can be "python" instead of "python3"
 		sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 		# TODO Try: echo "alias python=/usr/local/bin/python3" >> ~/.bashrc
+	elif [[ ! $(pip --version) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+		# Python 3 is installed and default, but pip is not installed
+		sudo apt-get install python3-pip
+		# TODO Could improve the pip check to make sure it's for Python 3
 	fi
-	
-	rm pyvar
 	
 	# Install necessary Python modules
 	pip install xlsxwriter
@@ -149,6 +144,33 @@ fi
 # TODO	Add a check for node/npm before continuing
 #	If either is not installed, prompt the user to use the -s/--setup flag
 
+if [[ -z $(node -v 2>/dev/null) || -z $(npm -v 2>/dev/null) ]]; then
+	# TODO echo "You don't have node ($(command -v node)) or npm ($(command -v npm))"
+	echo -e "\n\033[0;31mYou are missing necessary dependencies:"
+	if [[ -z $(node -v 2>/dev/null) ]]; then
+		echo -e "\tNode.js"
+	fi
+	if [[ -z $(npm -v 2>/dev/null) ]]; then
+		echo -e "\tnpm"
+	fi
+	if [[ ! $(python --version) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
+		echo -e "\tPython 3 (or Python 3 is not set as default)"
+	fi
+	if [[ ! $(pip --version) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+		echo -e "\tpip"
+	fi
+	if [[ -z $(ls Backend/Data/sc1-data-format) ]]; then
+		echo -e "\tsc1-data-format (data format submodule)"
+	fi
+	
+	echo -e "\n\033[0mConsider running this script with the -s/--setup flag (\`\033[1;32m./run_dashboard.sh -s\033[0m\`) to install any missing dependencies\n"
+	
+	exit
+else
+	echo "You have node and npm"
+	exit # TODO
+fi
+
 # TODO
 #if ! command -v node &>/dev/null
 #then
@@ -156,7 +178,6 @@ fi
 #else
 #	echo "I don't need node"
 #fi
-
 
 # TODO Also add a check to make sure sc1-data-format has been cloned and included as a submodule
 
