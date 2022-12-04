@@ -96,8 +96,8 @@ if [[ ${setup} = true ]]; then
 			
 			# Install newer version of node
 			wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
-			sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
-			sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
+			tar -xvf node-v16.14.2-linux-x64.tar.xz
+			cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
 			export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 			
 			# Remove node files in current directory
@@ -111,8 +111,8 @@ if [[ ${setup} = true ]]; then
 		
 		# Install known working version node
 		wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
-		sudo tar -xvf node-v16.14.2-linux-x64.tar.xz
-		sudo cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
+		tar -xvf node-v16.14.2-linux-x64.tar.xz
+		cp -r ./node-v16.14.2-linux-x64/{bin,include,lib,share} /usr/
 		export PATH=/usr/node-v16.14.2-linux-x64/bin:$PATH
 		
 		# Remove node files in current directory
