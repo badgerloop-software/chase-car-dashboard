@@ -83,10 +83,9 @@ if [[ ${setup} = true ]]; then
 		# Check if the existing version is older than a known working version of node
 		if [[ versions[1] -lt 14 || (versions[1] -eq 14 && versions[2] -lt 2) ]]; then
 			# Installed node version is old
-			echo -e "You need to update node\n\n"
-			echo -e "Buckle up buckaroo, 'cause this is gonna take a minute\n\n"
-		
-			sleep 3
+			echo -e "\n\n\n\033[1mAligning main spurving bearings with the pentametric fan.\033[0m\n"
+			echo -e "A high-precision task such as this requires ample time. Please be patient.\n\n\n"
+			sleep 5
 
 			# Remove current version of node
 			sudo rm -rf /usr/{bin,include,lib,share}/{node,npm}
@@ -102,9 +101,9 @@ if [[ ${setup} = true ]]; then
 		fi
 	else
 		# Node v16.X.X is not installed
-		echo -e "Buckle up buckaroo, 'cause this is gonna take a minute\n\n"
-		
-		sleep 3
+		echo -e "\n\n\n\033[1mMounting base plate of prefabulated aluminite.\033[0m\n"
+		echo -e "This is a delicate procedure, so please be patient.\n\n\n"
+		sleep 5
 		
 		# Install known working version node
 		wget https://nodejs.org/download/release/v16.14.2/node-v16.14.2-linux-x64.tar.xz
@@ -123,10 +122,9 @@ if [[ ${setup} = true ]]; then
 	# If not, install Python 3 and pip, and set Python 3 as the default
 	if [[ ! $(python --version) =~ Python\ 3\.[0-9]+\.[0-9]+ ]]; then
 		# Python 3 is not installed or not default
-		echo -e "You need Python 3 (as default)\n\n"
-		echo -e "Buckle up buckaroo, 'cause this could take a minute\n\n"
-		
-		sleep 3
+		echo -e "\n\n\n\033[1mPlacing main winding in panendermic semi-bovoid slots in the stator, such that every seventh conductor is connected by a non-reversible tremie pipe to te differential girdlespring on the \"up\" end of the grammeters.\033[0m\n"
+		echo -e "Complicated procedures like this sometimes take a while. I apologize in advance.\n\n\n"
+		sleep 7
 		
 		# Install Python 3 and pip
 		sudo apt-get install software-properties-common
@@ -141,6 +139,11 @@ if [[ ${setup} = true ]]; then
 		# TODO Try: echo "alias python=/usr/local/bin/python3" >> ~/.bashrc
 	elif [[ ! $(pip --version) =~ pip\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 		# Python 3 is installed and default, but pip is not installed
+		echo -e "\n\n\n\033[1mConstructing a winding of the normal lotus-o-delta type.\033[0m\n"
+		echo -e "Don't wait up.\n\n\n"
+		sleep 4
+		
+		# Install pip
 		sudo apt-get install python3-pip
 		# TODO Could improve the pip check to make sure it's for Python 3
 	fi
@@ -152,6 +155,11 @@ if [[ ${setup} = true ]]; then
 	
 	# Make sure the sc1-data-format submodule is set up in the project
 	if [[ -z $(ls Backend/Data/sc1-data-format) ]]; then
+		# Need to set up the sc1-data-format submodule
+		echo -e "\n\n\n\033[1mFitting six hydrocoptic marzlevanes to the ambifacient lunar waneshaft so that side fumbling is effectively prevented.\033[0m\n"
+		echo -e "This should be relatively trivial.\n\n\n"
+		sleep 5
+		
 		# Move to the parent directory
 		cd ..
 		
@@ -221,12 +229,14 @@ fi
 if [[ ${setup} = true || ${update} = true ]]; then
 	# TODO git restore Frontend/src/data-constants.json Frontend/src/Components/Graph/graph-data.json
 	
-	echo -en "\n\n\033[0;31mRESETTING CHANGES. LAST CHANCE TO SAVE ANY CHANGES MADE\n3"
+	echo -en "\n\n\033[0;31mRESETTING CHANGES. LAST CHANCE TO SAVE ANY CHANGES MADE\n\n\n\n\033[1A\033[1A\033[1A3"
 	sleep 1
 	echo -en "\t2"
 	sleep 1
 	echo -e "\t1\033[0m"
 	sleep 1
+	
+	# Reset changes before pulling new changes
 	git reset --hard
 	
 	# Pull latest changes from current remote branch
@@ -267,27 +277,4 @@ done
 
 # Run the dashboard
 npm start
-
-
-
-#TODO
-:'
-NOTE - Run dashboard with production build instead of debug
-
-List of dependencies/installs/tasks to do before running the dashboard:
-      *	1. npm
-      *	2. nodejs
-	3. git
-     **	4. python (3.X.X I believe)
-     **	6. pip
-     **	7. xlsxwriter
-     **	8. numpy
-	9. sc1-data-format submodule and data constants
-		a. Automatically update the submodule/data constants at the end of the installations/before running the dashboard
-		b. init submodule during setup
-	10. Pull origin/main before running
-
-*  Check README for version/details
-** Check Backend/src/routes for version/details
-'
 
