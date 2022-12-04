@@ -185,7 +185,7 @@ if [[ ${setup} = true || ${update} = true ]]; then
 	sleep 1
 	echo -en "\t2"
 	sleep 1
-	echo -e "\t1"
+	echo -e "\t1\033[0m"
 	sleep 1
 	git reset --hard
 	
