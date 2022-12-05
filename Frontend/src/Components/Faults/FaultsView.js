@@ -479,14 +479,14 @@ export default function Faults(props) {
         <></>
       )}
 
-      {_checkBooleanData("low_contactor") ? (
+      {!_checkBooleanData("low_contactor") ? (
         <Tooltip label={"Low contactor is open"}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.LowContactor} />
         </Tooltip>
       ) : (
         <Box h={imageHeight} />
       )}
-      {_checkBooleanData("low_contactor") ? (
+      {!_checkBooleanData("low_contactor") ? (
         AlertDialogExample("Low contactor is open.", Images.LowContactor)
       ) : (
         <></>
