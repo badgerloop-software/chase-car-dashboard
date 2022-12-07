@@ -272,6 +272,7 @@ while [[ TRUE ]]; do
 done
 
 
+# TODO Add user input (or use flags/options to take care of this right away) to choose how to run the dashboard/set up the backend (get data from pi - and allow the user to either set the ip address or use a preset ip address for the radio - or get data from the data generator)
 
 # TODO Run the production build, not debug
 
