@@ -20,11 +20,13 @@ ROUTER.get("/api", (req, res) => {
 
 //----------------------------------------------------- LTE ----------------------------------------------------------
 let interval;
+let latestTimestamp = 1671328444870; // TODO Make 0 (or 10 minutes behind the current time) for actual implementation.
+                                     // Just using this to avoid gathering too much data right away
 
 interval = setInterval(() => {
   // TODO Is not using a database for this project
-
-  fetch('http://host:port/route', {
+  
+  fetch(`http://host:port/get-new-rows/${latestTimestamp}`, {
     method: 'GET',
     headers: {
       "Content-type": "application/json"
@@ -34,9 +36,28 @@ interval = setInterval(() => {
       return response.json();
     })
     .then(function(data) {
+      console.log("Getting new rows", data);
+
+      // Get the rows of timestamps and data from the response
+      let rows = data.response;
+
+      // Make sure there was at least 1 row returned
+      if(data.response.length > 0) {
+        // Iterate through the rows and print the timestamps and payloads
+        //                          and unpack the payloads
+        let i;
+        for(i in rows) {
+          console.log('\ttimestamp:', rows[i].timestamp, '\nBytes:', Buffer.from(rows[i].payload.data));
+          unpackData(Buffer.from(rows[i].payload.data)); // TODO
+        }
+
+        // Update the latest timestamp
+        latestTimestamp = rows[i].timestamp;
+      }
+
       // TODO Gets the first item of the response
       // console.log('Request succeeded with JSON response', data);
-      console.log('Count:', data.count, '\ttimestamp:', data.tStamp, '\nBytes:', Buffer.from(data.bytes.data));
+      // TODO console.log('Count:', data.count, '\ttimestamp:', data.tStamp, '\nBytes:', Buffer.from(data.bytes.data));
     })
     .catch(function(error) {
       console.log('Request failed', error);
@@ -106,7 +127,7 @@ const X_AXIS_CAP = 18_000;
  * data, close, and error events. In the event of an error, the client will attempt to re-open the socket at
  * regular intervals.
  */
-function openSocket() {
+function openSocket() { /* TODO Uncomment
   // Establish connection with server
   var client = net.connect(CAR_PORT, CAR_SERVER); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
   client.setKeepAlive(true);
@@ -155,7 +176,7 @@ function openSocket() {
 
     // Attempt to re-open socket
     setTimeout(openSocket, 1000);
-  });
+  });*/
 }
 
 /**
