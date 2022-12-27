@@ -1,10 +1,11 @@
 import {Box, Tooltip, Image, SimpleGrid, useColorMode} from "@chakra-ui/react";
 import { FaultsViewImages } from "./Images/Images";
 import CONSTANTS from "../../data-constants.json";
+import { IMAGE_HEIGHT } from "../Shared/misc-constants";
 
 export default function Faults(props) {
   const fitType = "scale-down";
-  const imageHeight = "7vh";
+  const imageHeight = IMAGE_HEIGHT;
 
   const { colorMode } = useColorMode();
 
