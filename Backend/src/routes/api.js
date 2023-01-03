@@ -60,8 +60,13 @@ async function setupVPSInterface() {
       return response.json();
     })
     .then(function(data) {
-      // TODO Get first timestamp in table or timestamp 10 minutes before now, whichever is later, for latestTimestamp
+      // Get the first timestamp in the table (minus 1)
       latestTimestamp = data.response - 1;
+      // Get millisecond timestamp from ten minutes ago
+      const tenMinutesEarlier = Date.now() - 600000; // TODO Good place to add SECONDS_PER_MINUTE and MILLIS_PER_SECOND
+
+      // Set latestTimestamp to whichever is later: ten minutes ago or the first timestamp in the table (minus 1)
+      latestTimestamp = (latestTimestamp >= tenMinutesEarlier) ? latestTimestamp : tenMinutesEarlier;
       console.log(`Got latest timestamp: ${latestTimestamp}`);
     });
 
