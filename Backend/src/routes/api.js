@@ -20,12 +20,111 @@ ROUTER.get("/api", (req, res) => {
 
 //----------------------------------------------------- LTE ----------------------------------------------------------
 let interval;
-let latestTimestamp = 1671328444870; // TODO Make 0 (or 10 minutes behind the current time) for actual implementation.
-                                     // Just using this to avoid gathering too much data right away
+let tableName;
+let latestTimestamp;
 
+// TODO Wouldn't be a bad idea to add a simple/small frontend control for refreshing the latest table
+//      This would re-fetch newest-timestamp-table and update. This could be useful for avoiding having to restart the
+//      backend every time the driver dashboard is restarted. It would also allow the engineering dashboard to be started
+//      before the driver dashboard because, if the driver dashboard hasn't started/created a new table yet, the backend
+//      will fetch the wrong table using newest-timestamp-table.
+
+async function setupVPSInterface() {
+  // Get most recently created table that has a timestamp for a name
+  await fetch(`http://host:port/newest-timestamp-table`, {
+    method: 'GET',
+    headers: {
+      "Content-type": "application/json"
+    }
+  })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        tableName = data.response;
+        console.log(`Got table name: ${tableName}`);
+      });
+
+  // Get the first timestamp from the table and subtract 1 so that it is included
+  // in the first group of retrieved entries
+  await fetch(`http://host:port/get-first-timestamp/${tableName}`, {
+    method: 'GET',
+    headers: {
+      "Content-type": "application/json"
+    }
+  })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        // TODO Get first timestamp in table or timestamp 10 minutes before now, whichever is later, for latestTimestamp
+        latestTimestamp = data.response - 1;
+        console.log(`Got latest timestamp: ${latestTimestamp}`);
+      });
+
+  // Fetch the newest rows TODO at regular intervals
+  interval = setInterval(() => {
+    console.log(`Fetching http://host:port/get-new-rows/${tableName}/${latestTimestamp}`);
+
+    // TODO Maybe put this in a while loop and use `await` instead of having this repeat at constant intervals.
+    //      I believe the constant 250ms intervals is what's causing the duplicate datasets: The backend fetches the
+    //      same url a second time before the first response is sent back
+    //      If a while loop with await fetch() repeats too quickly/blocks the rest of the backend (shouldn't block),
+    //      try to set up a *MINIMUM* interval of 250ms
+
+    fetch(`http://host:port/get-new-rows/${tableName}/${latestTimestamp}`, {
+      method: 'GET',
+      headers: {
+        "Content-type": "application/json"
+      }
+    })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          console.log("Getting new rows", data);
+
+          // Get the rows of timestamps and data from the response
+          let rows = data.response;
+
+          // Make sure there was at least 1 row returned
+          if(data.response.length > 0) {
+            // Iterate through the rows and print the timestamps and payloads
+            //                          and unpack the payloads
+            let i;
+            for(i in rows) {
+              console.log('\ttimestamp:', rows[i].timestamp, '\nBytes:', Buffer.from(rows[i].payload.data));
+              unpackData(Buffer.from(rows[i].payload.data)); // TODO
+            }
+
+            // Update the latest timestamp
+            latestTimestamp = rows[i].timestamp;
+          }
+
+          // TODO Gets the first item of the response
+          // console.log('Request succeeded with JSON response', data);
+          // TODO console.log('Count:', data.count, '\ttimestamp:', data.tStamp, '\nBytes:', Buffer.from(data.bytes.data));
+        })
+        .catch(function(error) {
+          console.log('Request failed', error);
+        });
+  }, 250);
+}
+
+setupVPSInterface();
+
+/* TODO Remove
+let int2 = setInterval(() => {
+  console.log("INTERVAL GOOD");
+}, 10);*/
+
+
+
+
+/* TODO
 interval = setInterval(() => {
   // TODO Is not using a database for this project
-  
+
   fetch(`http://host:port/get-new-rows/${latestTimestamp}`, {
     method: 'GET',
     headers: {
@@ -79,7 +178,9 @@ interval = setInterval(() => {
       .catch(function(error) {
         console.log('Request failed', error);
       });*/
-}, 250);
+// TODO }, 250);
+
+
 /*
 const client = new Client({
   cloud: {
