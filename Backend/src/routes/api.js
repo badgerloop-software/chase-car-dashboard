@@ -22,6 +22,9 @@ ROUTER.get("/api", (req, res) => {
 let interval;
 let tableName;
 let latestTimestamp;
+// Counts for the total number of fetches and successes
+let fetchCount = 0;
+let successCount = 0;
 
 // TODO Wouldn't be a bad idea to add a simple/small frontend control for refreshing the latest table
 //      This would re-fetch newest-timestamp-table and update. This could be useful for avoiding having to restart the
@@ -37,13 +40,13 @@ async function setupVPSInterface() {
       "Content-type": "application/json"
     }
   })
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
-        tableName = data.response;
-        console.log(`Got table name: ${tableName}`);
-      });
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      tableName = data.response;
+      console.log(`Got table name: ${tableName}`);
+    });
 
   // Get the first timestamp from the table and subtract 1 so that it is included
   // in the first group of retrieved entries
@@ -53,14 +56,14 @@ async function setupVPSInterface() {
       "Content-type": "application/json"
     }
   })
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
-        // TODO Get first timestamp in table or timestamp 10 minutes before now, whichever is later, for latestTimestamp
-        latestTimestamp = data.response - 1;
-        console.log(`Got latest timestamp: ${latestTimestamp}`);
-      });
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      // TODO Get first timestamp in table or timestamp 10 minutes before now, whichever is later, for latestTimestamp
+      latestTimestamp = data.response - 1;
+      console.log(`Got latest timestamp: ${latestTimestamp}`);
+    });
 
   // Fetch the newest rows TODO at regular intervals
   interval = setInterval(() => {
@@ -72,12 +75,18 @@ async function setupVPSInterface() {
     //      If a while loop with await fetch() repeats too quickly/blocks the rest of the backend (shouldn't block),
     //      try to set up a *MINIMUM* interval of 250ms
 
-    fetch(`http://host:port/get-new-rows/${tableName}/${latestTimestamp}`, {
-      method: 'GET',
-      headers: {
-        "Content-type": "application/json"
-      }
-    })
+    // Increment the total number of fetches
+    fetchCount ++;
+
+    console.log("Fetch:",fetchCount,"\tSuccess:",successCount);
+
+    if(fetchCount === (successCount + 1)) {
+      fetch(`http://host:port/get-new-rows/${tableName}/${latestTimestamp}`, {
+        method: 'GET',
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
         .then(function(response) {
           return response.json();
         })
@@ -101,13 +110,20 @@ async function setupVPSInterface() {
             latestTimestamp = rows[i].timestamp;
           }
 
+          // Increment total number of successes
+          successCount ++;
+          // Reset fetchCount to match successCount so that on the next iteration, the get-new-rows will be fetched
+          fetchCount = successCount;
+
           // TODO Gets the first item of the response
           // console.log('Request succeeded with JSON response', data);
           // TODO console.log('Count:', data.count, '\ttimestamp:', data.tStamp, '\nBytes:', Buffer.from(data.bytes.data));
         })
         .catch(function(error) {
           console.log('Request failed', error);
+          // TODO Set fetchCount equal to successCount so that get-new-rows can still be fetched
         });
+    }
   }, 250);
 }
 
