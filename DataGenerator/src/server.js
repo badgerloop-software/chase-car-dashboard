@@ -205,8 +205,8 @@ async function VPSGenerator() {
       buffOffset += DATA_FORMAT[property][0];
     }
 
-    // TODO When exp-add-data is changed to add-data, change the following line
-    fetch(`http://host:port/exp-add-data?table-name=${tableName}&dataset-time=${time.toMillis()}`, {
+    // Add data to the database
+    fetch(`http://host:port/add-data?table-name=${tableName}&dataset-time=${time.toMillis()}`, {
       method: 'POST',
       headers: {
         "Content-type": "application/json"
