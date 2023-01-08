@@ -2,11 +2,10 @@ import { Flex, Spacer } from "@chakra-ui/react";
 import HeadingCell from "../Shared/HeadingCell";
 import RangeCell from "../Shared/RangeCell";
 import CONSTANTS from "../../data-constants.json";
-import { FS, FSS } from "../Shared/misc-constants";
 
 export default function IOView(props) {
-    const fss = FSS;
-    const fs = FS;
+    const fss = '1.0em';
+    const fs = '1.2em';
 
     return (
       <Flex flex='auto' direction='column'>

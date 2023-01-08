@@ -1,8 +1,8 @@
 import DATA_FORMAT from "../../Backend/Data/sc1-data-format/format.json";
 import { DateTime } from "luxon";
-import IMPORTED_CONSTANTS from "./constants.json";
+import CONSTANTS from "../src/constants.json";
 const NET = require("net");
-const PORT = IMPORTED_CONSTANTS; // Port for TCP connection
+const PORT = CONSTANTS.PORT; // Port for TCP connection
 
 // Calculate the number of bytes to allocate for the Buffer
 let bytes = 0;
