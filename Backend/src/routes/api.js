@@ -5,6 +5,12 @@ import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import CONSTANTS from "../../src/constants.json";
 import net from "net";
 
+
+// TODO
+process.argv.forEach((val, index, array) => {
+  console.log(index + ': ' + val);
+});
+
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA,
   frontendData = INITIAL_FRONTEND_DATA;
