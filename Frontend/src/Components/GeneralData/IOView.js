@@ -4,8 +4,8 @@ import RangeCell from "../Shared/RangeCell";
 import CONSTANTS from "../../data-constants.json";
 
 export default function IOView(props) {
-    const fss = "1.0em";
-    const fs = "1.2em";
+    const fss = '1.0em';
+    const fs = '1.2em';
 
     return (
       <Flex flex='auto' direction='column'>

@@ -2,6 +2,7 @@ import { Router } from "express";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
+import CONSTANTS from "../../src/constants.json";
 import net from "net";
 
 const ROUTER = Router();
@@ -16,21 +17,23 @@ ROUTER.get("/api", (req, res) => {
 });
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
-const CAR_PORT = 4003; // Port for TCP connection
-const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
+const CAR_PORT = CONSTANTS.CAR_PORT; // Port for TCP connection
+const CAR_ADDRESS = CONSTANTS.TEST_ADDRESS; // TCP server's IP address (Replace with PI_ADDRESS to connect to pi)
+
 
 // The max number of data points to have in each array at one time
 // equivalent to 10 minutes' worth of data being sent 30 Hz
-const X_AXIS_CAP = 18_000;
+const X_AXIS_CAP = CONSTANTS.X_AXIS_CAP;
 
 /**
- * Creates a connection with the TCP server at port CAR_PORT and address CAR_SERVER. Then, sets listeners for connect,
+ * Creates a connection with the TCP server at port CAR_PORT and address CAR_ADDRESS. Then, sets listeners for connect,
  * data, close, and error events. In the event of an error, the client will attempt to re-open the socket at
  * regular intervals.
  */
 function openSocket() {
   // Establish connection with server
-  var client = net.connect(CAR_PORT, CAR_SERVER); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
+  console.log(CAR_PORT);
+  var client = net.connect(CAR_PORT, CAR_ADDRESS); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
   client.setKeepAlive(true);
 
   // Connection established listener

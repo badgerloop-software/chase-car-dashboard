@@ -1,0 +1,7 @@
+{
+    "CAR_PORT": 4003,
+    "TEST_ADDRESS": "localhost",
+    "PI_ADDRESS": "192.168.1.15",
+    "X_AXIS_CAP": 18000,
+    "PORT": 4001
+}

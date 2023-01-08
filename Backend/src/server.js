@@ -1,8 +1,9 @@
 import express from "express";
 import { createServer } from "http";
 import index from "./routes/api.js";
+import CONSTANTS from "../src/constants.json";
 
-const PORT = 4001;
+const PORT = CONSTANTS.PORT;
 const APP = express();
 APP.use(index);
 

@@ -44,7 +44,47 @@
         "MIN": 0,
         "MAX": 256
     },
+    "linear_accel_x": {
+        "UNIT": "m/s^2",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "linear_accel_y": {
+        "UNIT": "m/s^2",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "linear_accel_z": {
+        "UNIT": "m/s^2",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "angular_rate_pitch": {
+        "UNIT": "deg/s",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "angular_rate_roll": {
+        "UNIT": "deg/s",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "angular_rate_yaw": {
+        "UNIT": "deg/s",
+        "MIN": 0,
+        "MAX": 100
+    },
     "motor_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "motor_controller_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "dcdc_temp": {
         "UNIT": "degC",
         "MIN": 0,
         "MAX": 100
@@ -60,6 +100,21 @@
         "MAX": 100
     },
     "cabin_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "road_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "brake_temp": {
+        "UNIT": "degC",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "air_temp": {
         "UNIT": "degC",
         "MIN": 0,
         "MAX": 100
@@ -118,6 +173,21 @@
         "UNIT": "A",
         "MIN": 0,
         "MAX": 100
+    },
+    "power_critical": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "power_warning": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "power_tc": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
     },
     "mps_enable": {
         "UNIT": "",
