@@ -29,7 +29,7 @@ if(process.argv.length === 3 && process.argv.findIndex((val) => val === "dev") >
   CAR_ADDRESS = CONSTANTS.PI_ADDRESS;
 } else {
   // An invalid command was used. Throw an error describing the usage
-  throw new Error('Invalid command. Correct usage:\n\t`npm start`: Starts the backend and connects to the pi\n\t`npm start dev`: Starts the backend and connects to the local data generator\n');
+  throw new Error('Invalid command. Correct usage:\n\t`npm start`: Use to connect the backend to the pi\n\t`npm start dev`: Use to connect the backend to the local data generator\n');
 }
 
 console.log('CAR_ADDRESS: ' + CAR_ADDRESS);
