@@ -18,8 +18,24 @@ ROUTER.get("/api", (req, res) => {
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
 const CAR_PORT = CONSTANTS.CAR_PORT; // Port for TCP connection
-const CAR_ADDRESS = CONSTANTS.TEST_ADDRESS; // TCP server's IP address (Replace with PI_ADDRESS to connect to pi)
+let CAR_ADDRESS; // TCP server's IP address (PI_ADDRESS to connect to pi; TEST_ADDRESS to connect to data generator)
 
+// Set CAR_ADDRESS according to the command used to start the backend
+if((process.argv.length === 3) && (process.argv.findIndex((val) => val === "dev") === 2)) {
+  // `npm start dev` was used. Connect to data generator
+  CAR_ADDRESS = CONSTANTS.TEST_ADDRESS;
+} else if(process.argv.length === 2) {
+  // `npm start` was used. Connect to the pi
+  CAR_ADDRESS = CONSTANTS.PI_ADDRESS;
+} else {
+  // An invalid command was used. Throw an error describing the usage
+  throw new Error('Invalid command. Correct usages:\n' +
+                  '\t`npm start`: Use to connect the backend to the pi\n' +
+                  '\t`npm run start-dev`: Use to connect the backend to the local data generator\n' +
+                  '\t`npm start dev` (from Backend/ only): Same as `npm run start-dev`\n');
+}
+
+console.log('CAR_ADDRESS: ' + CAR_ADDRESS);
 
 // The max number of data points to have in each array at one time
 // equivalent to 10 minutes' worth of data being sent 30 Hz
@@ -32,7 +48,7 @@ const X_AXIS_CAP = CONSTANTS.X_AXIS_CAP;
  */
 function openSocket() {
   // Establish connection with server
-  console.log(CAR_PORT);
+  console.log('CAR_PORT: ' + CAR_PORT);
   var client = net.connect(CAR_PORT, CAR_ADDRESS); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
   client.setKeepAlive(true);
 
