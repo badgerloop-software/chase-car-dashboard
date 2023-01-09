@@ -8,7 +8,8 @@ import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import SESSION_SOLAR_CAR_DATA from "../../Data/session_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 // TODO ---------------------------------------------------------------------
-let doRecord = process.env.RECORDING || false; // Flag for whether we should be recording data or not
+let recordFromStart = Boolean(process.env.RECORDING_FROM_START) || false; // Flag for whether we should be recording data or not
+let doRecord = recordFromStart; // Above is a flag to indicate if we record from start, this is an activity flag
 let currentSession = ""
 
 const ROUTER = Router();
@@ -170,6 +171,7 @@ ROUTER.get("/get-recorded-data", (req, res) => {
 
 //----------------------------------------------------- TCP -----------------------------------------------------------
 import { Socket } from "net";
+import { create } from "domain";
 
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
@@ -318,6 +320,7 @@ function openSocket() {
     unpackData(data);
 
     if (doRecord) {
+      console.log("Recording data")
       recordData(data)
     }
     // console.log(i++, ") Data::", data);
@@ -496,7 +499,38 @@ function unpackData(data) {
   frontendData = solarCarData;
 }
 
+function createAutomaticRecording(fileName) {
+
+  if (!fileName) {
+    fileName = `${new Date().toISOString()}.bin`;
+  }
+
+  fs.appendFile('./recordedData/sessionsList.bin', fileName + "\n", (err) => {
+    sessionsList.push(fileName)
+    if (err) {
+      return console.error(err);
+    };
+  });
+
+  fs.writeFile('./recordedData/sessions/' + fileName + '.bin', '', { flag: 'w' }, function (err) {
+    if (err) {
+      return console.error(err);
+    }
+    currentSession = fileName
+  });
+};
+
+
+/**
+ * Main Entrypoint of the API
+ */
+function main() {
 // Create new socket
 openSocket();
+}
 
-export default ROUTER;
+main();
+
+module.exports.index = ROUTER;
+module.exports.createAutomaticRecording = createAutomaticRecording;
+module.exports.doCreate = recordFromStart;

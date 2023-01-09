@@ -6,17 +6,19 @@
   "scripts": {
     "build": "babel ./src/ -d dist",
     "start": "npm run build && node ./dist/server.js",
-    "record": "RECORDING=1 npm run start",
+    "record": "RECORDING=1 NOCUSTOMNAME=0 node ./dist/server.js",
+    "record:auto": "RECORDING=1 NOCUSTOMNAME=1 node ./dist/server.js",
     "live": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "luxon": "^2.3.0",
-    "cors": "^2.8.5",
     "n-readlines": "^1.0.1",
+    "prompt-sync": "^4.2.0",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {

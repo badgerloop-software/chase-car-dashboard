@@ -1,7 +1,9 @@
 import express from "express";
 import { createServer } from "http";
-import index from "./routes/api.js";
+import {index, createAutomaticRecording} from "./routes/api.js";
 import cors from 'cors';
+import { create } from "domain";
+
 // var cors = require('cors');
 
 
@@ -15,6 +17,22 @@ APP.use(cors({
   }));
 APP.use(index);
 
+const prompt = require('prompt-sync')({sigint: true})
+
 const SERVER = createServer(APP);
 
-SERVER.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+SERVER.listen(PORT, () => {
+  let recordFlag = Boolean(process.env.RECORDING);
+  let customNameFlag = process.env.NOCUSTOMNAME === "0" ? false : true;
+  console.debug(`Recording? ${recordFlag} Custom Name? ${customNameFlag}`)
+  console.log(`Listening on port ${PORT}`)
+  if (recordFlag) {
+    var filename;
+    if (!customNameFlag) {
+      filename = prompt("Enter a filename: ").trim();
+      // Clean filename to replace spaces with -
+      filename = filename.replace(/ /g, "-");
+    }
+    createAutomaticRecording(filename);
+  }
+});
