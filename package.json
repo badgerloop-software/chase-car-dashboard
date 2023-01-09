@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "scripts": {
     "data-generator": "cd DataGenerator && npm start",
-    "backend": "wait-port 4003 && cd Backend && npm start",
+    "backend": "cd Backend && npm start",
+    "backend-dev": "wait-port 4003 && cd Backend && npm start dev",
     "frontend": "wait-port 4001 && cd Frontend && npm start",
-    "start": "run-p frontend data-generator \"backend",
+    "start": "run-p backend frontend",
+    "start-dev": "run-p data-generator backend-dev frontend",
     "install-data-generator": "cd DataGenerator && npm i",
     "install-backend": "cd Backend && npm i",
     "install-frontend": "cd Frontend && npm i",

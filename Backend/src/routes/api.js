@@ -21,7 +21,7 @@ const CAR_PORT = CONSTANTS.CAR_PORT; // Port for TCP connection
 let CAR_ADDRESS; // TCP server's IP address (PI_ADDRESS to connect to pi; TEST_ADDRESS to connect to data generator)
 
 // Set CAR_ADDRESS according to the command used to start the backend
-if(process.argv.length === 3 && process.argv.findIndex((val) => val === "dev") >= 2) {
+if((process.argv.length === 3) && (process.argv.findIndex((val) => val === "dev") === 2)) {
   // `npm start dev` was used. Connect to data generator
   CAR_ADDRESS = CONSTANTS.TEST_ADDRESS;
 } else if(process.argv.length === 2) {
@@ -29,7 +29,10 @@ if(process.argv.length === 3 && process.argv.findIndex((val) => val === "dev") >
   CAR_ADDRESS = CONSTANTS.PI_ADDRESS;
 } else {
   // An invalid command was used. Throw an error describing the usage
-  throw new Error('Invalid command. Correct usage:\n\t`npm start`: Use to connect the backend to the pi\n\t`npm start dev`: Use to connect the backend to the local data generator\n');
+  throw new Error('Invalid command. Correct usages:\n' +
+                  '\t`npm start`: Use to connect the backend to the pi\n' +
+                  '\t`npm run start-dev`: Use to connect the backend to the local data generator\n' +
+                  '\t`npm start dev` (from Backend/ only): Same as `npm run start-dev`\n');
 }
 
 console.log('CAR_ADDRESS: ' + CAR_ADDRESS);

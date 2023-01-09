@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "build": "babel ./src/ -d dist",
-    "start": "npm run build && node ./dist/server.js"
+    "start": "npm run build && node ./dist/server.js",
+    "start-dev": "npm run build && node ./dist/server.js dev"
   },
   "keywords": [],
   "author": "",
