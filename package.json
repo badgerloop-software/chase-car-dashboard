@@ -5,7 +5,7 @@
     "data-generator": "cd DataGenerator && npm start",
     "backend": "wait-port 4003 && cd Backend && npm start",
     "frontend": "wait-port 4001 && cd Frontend && npm start",
-    "start": "run-p data-generator backend frontend",
+    "start": "run-p frontend data-generator \"backend",
     "install-data-generator": "cd DataGenerator && npm i",
     "install-backend": "cd Backend && npm i",
     "install-frontend": "cd Frontend && npm i",
