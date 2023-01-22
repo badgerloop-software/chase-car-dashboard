@@ -16,6 +16,11 @@ import {
   Input,
   FormLabel,
   FormControl,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverCloseButton,
+  PopoverBody,
   useColorMode,
   useDisclosure
 } from "@chakra-ui/react";
@@ -554,70 +559,81 @@ export default function Dashboard(props) {
 
           }}> Get session data</Button>*/}
 
+          <Popover>
+            <PopoverTrigger>
+              <Button>
+                Open Data Recording Stuff
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverCloseButton/>
+              <PopoverBody>
+                <VStack>
 
-          <VStack>
+                  <HStack style={{ marginBottom: "0.5em" }}>
+                    <Select
+                        width={"15em"}
+                        placeholder={"Select session to view"}
+                        value={currentSession}
 
-            <HStack style={{ marginBottom: "0.5em" }}>
-              <Select
-                  width={"15em"}
-                  placeholder={"Select session to view"}
-                  value={currentSession}
+                        onChange={(e) => {
+                          setCurrentRecordingSession(e.target.value)
+                        }}>
+                      {sessionsList?.data?.map((name, i) => {
+                        return (<option key={i} value={name}>{name}</option>)
+                      })}
 
-                  onChange={(e) => {
-                    setCurrentRecordingSession(e.target.value)
-                  }}>
-                {sessionsList?.data?.map((name, i) => {
-                  return (<option key={i} value={name}>{name}</option>)
-                })}
+                    </Select>
+                    <Button width={"auto"} colorScheme='blue' size='sm' onClick={onOpen}>+ Create</Button>
+                  </HStack>
+                  {
+                    currentSession ?
+                        <>
 
-              </Select>
-              <Button width={"auto"} colorScheme='blue' size='sm' onClick={onOpen}>+ Create</Button>
-            </HStack>
-            {
-              currentSession ?
-                  <>
+                          <HStack>
+                            <Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
+                              if (currentSession) {
+                                getRecordedData().then((res) => {
+                                  if (res.response) {
+                                    setRecordedData({ data: res.response });
+                                    console.log("Rec Data::", res.response);
+                                    localStorage.setItem("recordeData", JSON.stringify(res.response))
+                                  }
+                                }).catch((err) => console.log(err));
+                              } else {
+                                alert("Please select a session to get the data from")
+                              }
 
-                    <HStack>
-                      <Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
-                        if (currentSession) {
-                          getRecordedData().then((res) => {
-                            if (res.response) {
-                              setRecordedData({ data: res.response });
-                              console.log("Rec Data::", res.response);
-                              localStorage.setItem("recordeData", JSON.stringify(res.response))
-                            }
-                          }).catch((err) => console.log(err));
-                        } else {
-                          alert("Please select a session to get the data from")
-                        }
+                            }}> Get session data</Button>
 
-                      }}> Get session data</Button>
+                            <Button width={"auto"} colorScheme='blue' size='sm'
+                                    onClick={() => { if (currentSession) { recordCarData() } else { alert("No session created or selected") } }}>
+                              <BsFillRecordCircleFill color={isRecording ? "red" : null} />
+                            </Button>
 
-                      <Button width={"auto"} colorScheme='blue' size='sm'
-                              onClick={() => { if (currentSession) { recordCarData() } else { alert("No session created or selected") } }}>
-                        <BsFillRecordCircleFill color={isRecording ? "red" : null} />
-                      </Button>
+                          </HStack>
 
-                    </HStack>
+                          {
+                            recordedData.data ?
+                                <>
+                                  <HStack>
+                                    <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => playData()} > <FaPlay /> </Button>
+                                    <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => pause()}><FaPause /> </Button>
+                                    <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => stop()}><FaStop /></Button>
 
-                    {
-                      recordedData.data ?
-                          <>
-                            <HStack>
-                              <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => playData()} > <FaPlay /> </Button>
-                              <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => pause()}><FaPause /> </Button>
-                              <Button width={"auto"} colorScheme='blue' size='sm' onClick={() => stop()}><FaStop /></Button>
+                                  </HStack>
+                                  <Box><span>Data Frames: {framePointer}/{recordedData.data?.length}</span></Box>
+                                </>
+                                : null
+                          }
 
-                            </HStack>
-                            <Box><span>Data Frames: {framePointer}/{recordedData.data?.length}</span></Box>
-                          </>
-                          : null
-                    }
-
-                  </>
-                  : null
-            }
-          </VStack>
+                        </>
+                        : null
+                  }
+                </VStack>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
 
           {/* Create new session popup */}
           <Modal
