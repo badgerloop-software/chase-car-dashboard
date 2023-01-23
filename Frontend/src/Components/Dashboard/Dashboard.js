@@ -90,19 +90,19 @@ function reducer([currentQueue], newData) {
  * @returns the JSON response from the API
  */
 async function callBackendAPI() {
-  console.time("http call");
+  //console.time("http call");
 
   const response = await fetch("/api");
-  console.timeLog("http call", "fetch finished");
+  //console.timeLog("http call", "fetch finished");
   const body = await response.json();
-  console.timeLog("http call", "json extracted");
+  //console.timeLog("http call", "json extracted");
 
   if (response.status !== 200) {
     console.error("api: error");
     throw Error(body.message);
   }
 
-  console.timeEnd("http call");
+  //console.timeEnd("http call");
   // console.log("body", body);
   return body;
 }
@@ -145,13 +145,13 @@ export default function Dashboard(props) {
   useEffect(() => {
     callBackendAPI()
       .then((res) => {
-        console.time("update react");
+        //console.time("update react");
 
         setState({ data: res.response });
         updateQueue(res.response);
         // console.log("api::", res.response);
 
-        console.timeEnd("update react");
+        //console.timeEnd("update react");
       })
       .catch((err) => console.log(err));
   }, [state]);
@@ -390,7 +390,7 @@ export default function Dashboard(props) {
           // If trying to switch to a data view that is already being displayed in the other
           // section, switch the data views in this section and the other one
           setDataView4(dataView1);
-          console.log(event.target.value.toString()); // TODO Remove
+          //console.log(event.target.value.toString()); // TODO Remove
         }
       }
       setDataView1(event.target.value);
@@ -559,13 +559,15 @@ export default function Dashboard(props) {
 
           }}> Get session data</Button>*/}
 
-          <Popover>
+          <Popover
+              placement='right'
+              closeOnBlur={false}>
             <PopoverTrigger>
               <Button>
                 Open Data Recording Stuff
               </Button>
             </PopoverTrigger>
-            <PopoverContent>
+            <PopoverContent pt={5} w='max-content'>
               <PopoverCloseButton/>
               <PopoverBody>
                 <VStack>
@@ -577,6 +579,7 @@ export default function Dashboard(props) {
                         value={currentSession}
 
                         onChange={(e) => {
+                          console.log('current value',e.target.value)
                           setCurrentRecordingSession(e.target.value)
                         }}>
                       {sessionsList?.data?.map((name, i) => {
@@ -631,45 +634,45 @@ export default function Dashboard(props) {
                         : null
                   }
                 </VStack>
-              </PopoverBody>
+          </PopoverBody>
+
             </PopoverContent>
-          </Popover>
+            {/* Create new session popup */}
+            <Modal
+                initialFocusRef={initialRef}
+                finalFocusRef={finalRef}
+                isOpen={isOpen}
+                onClose={onClose}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Create recording session</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                  <FormControl>
+                    <FormLabel>File name</FormLabel>
+                    <Input ref={initialRef} placeholder='File name' onChange={(e) => {
+                      setSessionFileName(e.target.value)
+                    }} />
+                  </FormControl>
+                </ModalBody>
 
-          {/* Create new session popup */}
-          <Modal
-              initialFocusRef={initialRef}
-              finalFocusRef={finalRef}
-              isOpen={isOpen}
-              onClose={onClose}
-          >
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Create recording session</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody pb={6}>
-                <FormControl>
-                  <FormLabel>File name</FormLabel>
-                  <Input ref={initialRef} placeholder='File name' onChange={(e) => {
-                    setSessionFileName(e.target.value)
-                  }} />
-                </FormControl>
-              </ModalBody>
-
-              <ModalFooter>
-                <Button colorScheme='blue' mr={3} onClick={() => {
-                  if (sessionFileName == "") {
-                    alert("Error: Empty feild")
-                    return
-                  }
-                  createRecordingSession(sessionFileName);
-                  onClose()
-                }}>
-                  Create
-                </Button>
-                <Button onClick={onClose}>Cancel</Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
+                <ModalFooter>
+                  <Button colorScheme='blue' mr={3} onClick={() => {
+                    if (sessionFileName == "") {
+                      alert("Error: Empty feild")
+                      return
+                    }
+                    createRecordingSession(sessionFileName);
+                    onClose()
+                  }}>
+                    Create
+                  </Button>
+                  <Button onClick={onClose}>Cancel</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+      </Popover>
 
 
           <FaultsView data={state.data} />
