@@ -255,10 +255,10 @@ export default function DataRecordingControl(props) {
                 <Popover
                     placement='right'
                     initialFocusRef={initialPopoverRef}
-                    closeOnBlur={false}
                 >
                     <PopoverTrigger>
                         <Button
+                            ref={finalModalRef}
                             w={75}
                             h={75}
                             p={0}
