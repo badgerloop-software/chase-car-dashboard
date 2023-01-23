@@ -300,6 +300,8 @@ export default function DataRecordingControl(props) {
                 <Box
                     zIndex='overlay'
                     position='absolute'
+                    bottom='25px'
+                    left='25px'
                 >
                 <Popover
                     placement='right'
@@ -307,8 +309,17 @@ export default function DataRecordingControl(props) {
                     closeOnBlur={false}
                 >
                     <PopoverTrigger>
-                        <Button>
-                            Open Data Recording Stuff
+                        <Button
+                            w={75}
+                            h={75}
+                            p={0}
+                            borderWidth={10}
+                            borderColor='#ff0000'
+                            borderRadius='full'
+                            boxShadow='md'
+                            bgColor='#00000000'
+                        >
+                            <Box w={35} h={35} borderRadius='full' m={0} bgColor='#ff0000' />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent pt={5} w='max-content'>
