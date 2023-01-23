@@ -9,6 +9,7 @@ import {
     PopoverTrigger, Select, useDisclosure,
     VStack
 } from "@chakra-ui/react";
+import Draggable, { DraggableCore } from 'react-draggable';
 import {BsFillRecordCircleFill} from "react-icons/bs";
 import {FaPause, FaPlay, FaStop} from "react-icons/fa";
 import { useState, useLayoutEffect, useRef } from "react";
@@ -243,98 +244,156 @@ export default function DataRecordingControl(props) {
 
 
 
+
+    // TODO ---------------------------------------------------------------------------
+/*
+    // Make the DIV element draggable:
+    dragElement(document.getElementById("mydiv"));
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (document.getElementById(elmnt.id + "header")) {
+            // if present, the header is where you move the DIV from:
+            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+        } else {
+            // otherwise, move the DIV from anywhere inside the DIV:
+            elmnt.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }*/
+
+
+
+
     return (
         <>
-            <Popover
-                placement='right'
-                initialFocusRef={initialPopoverRef}
-                closeOnBlur={false}>
-                <PopoverTrigger>
-                    <Button>
-                        Open Data Recording Stuff
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent pt={5} w='max-content'>
-                    <PopoverCloseButton/>
-                    <PopoverBody>
-                        <VStack>
+            <Draggable>
+                <Box
+                    zIndex='overlay'
+                    position='absolute'
+                >
+                <Popover
+                    placement='right'
+                    initialFocusRef={initialPopoverRef}
+                    closeOnBlur={false}
+                >
+                    <PopoverTrigger>
+                        <Button>
+                            Open Data Recording Stuff
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent pt={5} w='max-content'>
+                        <PopoverCloseButton/>
+                        <PopoverBody>
+                            <VStack>
 
-                            <HStack style={{marginBottom: "0.5em"}}>
-                                { /* TODO Add a refresh button to get (/set sessionsList to) the most recent list of sessions */ }
-                                <Select
-                                    width={"15em"}
-                                    placeholder={"Select session to view"}
-                                    value={currentSession}
+                                <HStack style={{marginBottom: "0.5em"}}>
+                                    { /* TODO Add a refresh button to get (/set sessionsList to) the most recent list of sessions */ }
+                                    <Select
+                                        width={"15em"}
+                                        placeholder={"Select session to view"}
+                                        value={currentSession}
 
-                                    onChange={(e) => {
-                                        console.log('current value', e.target.value)
-                                        setCurrentRecordingSession(e.target.value)
-                                    }}>
-                                    {sessionsList?.data?.map((name, i) => {
-                                        return (<option key={i} value={name}>{name}</option>)
-                                    })}
+                                        onChange={(e) => {
+                                            console.log('current value', e.target.value)
+                                            setCurrentRecordingSession(e.target.value)
+                                        }}>
+                                        {sessionsList?.data?.map((name, i) => {
+                                            return (<option key={i} value={name}>{name}</option>)
+                                        })}
 
-                                </Select>
-                                <Button ref={initialPopoverRef} width={"auto"} colorScheme='blue' size='sm' onClick={onOpen}>+ Create</Button>
-                            </HStack>
-                            {
-                                currentSession ?
-                                    <>
+                                    </Select>
+                                    <Button ref={initialPopoverRef} width={"auto"} colorScheme='blue' size='sm' onClick={onOpen}>+ Create</Button>
+                                </HStack>
+                                {
+                                    currentSession ?
+                                        <>
 
-                                        <HStack>
-                                            <Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
-                                                if (currentSession) {
-                                                    getRecordedData().then((res) => {
-                                                        if (res.response) {
-                                                            setRecordedData({data: res.response});
-                                                            console.log("Rec Data::", res.response);
-                                                            localStorage.setItem("recordeData", JSON.stringify(res.response))
-                                                        }
-                                                    }).catch((err) => console.log(err));
-                                                } else {
-                                                    alert("Please select a session to get the data from")
-                                                }
+                                            <HStack>
+                                                <Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
+                                                    if (currentSession) {
+                                                        getRecordedData().then((res) => {
+                                                            if (res.response) {
+                                                                setRecordedData({data: res.response});
+                                                                console.log("Rec Data::", res.response);
+                                                                localStorage.setItem("recordeData", JSON.stringify(res.response))
+                                                            }
+                                                        }).catch((err) => console.log(err));
+                                                    } else {
+                                                        alert("Please select a session to get the data from")
+                                                    }
 
-                                            }}> Get session data</Button>
+                                                }}> Get session data</Button>
 
-                                            <Button width={"auto"} colorScheme='blue' size='sm'
-                                                    onClick={() => {
-                                                        if (currentSession) {
-                                                            recordCarData()
-                                                        } else {
-                                                            alert("No session created or selected")
-                                                        }
-                                                    }}>
-                                                <BsFillRecordCircleFill color={isRecording ? "red" : null}/>
-                                            </Button>
+                                                <Button width={"auto"} colorScheme='blue' size='sm'
+                                                        onClick={() => {
+                                                            if (currentSession) {
+                                                                recordCarData()
+                                                            } else {
+                                                                alert("No session created or selected")
+                                                            }
+                                                        }}>
+                                                    <BsFillRecordCircleFill color={isRecording ? "red" : null}/>
+                                                </Button>
 
-                                        </HStack>
+                                            </HStack>
 
-                                        {
-                                            recordedData.data ?
-                                                <>
-                                                    <HStack>
-                                                        <Button width={"auto"} colorScheme='blue' size='sm'
-                                                                /*onClick={() => playData()}*/> <FaPlay/> </Button>
-                                                        <Button width={"auto"} colorScheme='blue' size='sm'
-                                                                /*onClick={() => pause()}*/><FaPause/> </Button>
-                                                        <Button width={"auto"} colorScheme='blue' size='sm'
-                                                                /*onClick={() => stop()}*/><FaStop/></Button>
+                                            {
+                                                recordedData.data ?
+                                                    <>
+                                                        <HStack>
+                                                            <Button width={"auto"} colorScheme='blue' size='sm'
+                                                                    /*onClick={() => playData()}*/> <FaPlay/> </Button>
+                                                            <Button width={"auto"} colorScheme='blue' size='sm'
+                                                                    /*onClick={() => pause()}*/><FaPause/> </Button>
+                                                            <Button width={"auto"} colorScheme='blue' size='sm'
+                                                                    /*onClick={() => stop()}*/><FaStop/></Button>
 
-                                                    </HStack>
-                                                    <Box><span>Data Frames: {framePointer}/{recordedData.data?.length}</span></Box>
-                                                </>
-                                                : null
-                                        }
+                                                        </HStack>
+                                                        <Box><span>Data Frames: {framePointer}/{recordedData.data?.length}</span></Box>
+                                                    </>
+                                                    : null
+                                            }
 
-                                    </>
-                                    : null
-                            }
-                        </VStack>
-                    </PopoverBody>
+                                        </>
+                                        : null
+                                }
+                            </VStack>
+                        </PopoverBody>
 
-                </PopoverContent>
-            </Popover>
+                    </PopoverContent>
+                </Popover>
+                </Box>
+            </Draggable>
         {/* Create new session popup */}
         <Modal
             initialFocusRef={initialModalRef}
