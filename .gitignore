@@ -21,6 +21,11 @@
 /**/.idea
 /**/.vscode
 
+# Data recording
+/Backend/recordedData/sessions/*
+/Backend/recordedData/sessionsList.bin
+/Backend/src/routes/*.csv
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
