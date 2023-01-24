@@ -255,6 +255,13 @@ export default function DataRecordingControl(props) {
                 <Popover
                     placement='right'
                     initialFocusRef={initialPopoverRef}
+                    onOpen={
+                        // Get the updated sessions list
+                        getSessionsList().then((res) => {
+                            // console.log("Getting")
+                            setSessionsList({ data: res.response });
+                        }).catch((err) => console.log("error", err))
+                    }
                 >
                     <PopoverTrigger>
                         <Button
@@ -348,7 +355,6 @@ export default function DataRecordingControl(props) {
                                 }
                             </VStack>
                         </PopoverBody>
-
                     </PopoverContent>
                 </Popover>
                 </Box>
