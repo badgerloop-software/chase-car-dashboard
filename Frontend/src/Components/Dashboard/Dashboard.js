@@ -288,6 +288,9 @@ export default function Dashboard(props) {
 
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
+
+      <DataRecordingControl/>
+
       <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
         <GridItem
           minH="min-content"
@@ -317,7 +320,6 @@ export default function Dashboard(props) {
           }}> Get session data</Button>*/}
 
 
-          <DataRecordingControl/>
 
 
           <FaultsView data={state.data} />
