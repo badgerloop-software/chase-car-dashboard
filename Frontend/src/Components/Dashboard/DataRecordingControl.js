@@ -6,13 +6,14 @@ import {
     PopoverBody,
     PopoverCloseButton,
     PopoverContent,
-    PopoverTrigger, Select, useDisclosure,
+    PopoverTrigger, Select, useColorMode, useDisclosure,
     VStack
 } from "@chakra-ui/react";
 import Draggable, { DraggableCore } from 'react-draggable';
 import {BsFillRecordCircleFill} from "react-icons/bs";
 import {FaPause, FaPlay, FaStop} from "react-icons/fa";
 import { useState, useLayoutEffect, useRef } from "react";
+import colors from "../Shared/colors";
 
 // Importing toastify module
 import { toast } from 'react-toastify';
@@ -26,6 +27,45 @@ toast.configure()
 
 
 export default function DataRecordingControl(props) {
+    // ------------------------------------------ Color mode --------------------------------------------
+    const {colorMode} = useColorMode();
+
+    const colorPalette = colorMode === "light" ? colors.light : colors.dark;
+
+    const [createButtonColor, setCreateButtonColor] = useState(colorPalette.selectTxt);
+    const [processButtonColor, setProcessButtonColor] = useState(colorPalette.selectTxt);
+    const [recordButtonColor, setRecordButtonColor] = useState(colorPalette.selectTxt);
+
+    const changeButtonColor = (event) => {
+        switch(event.target.id) {
+            case 'create':
+                setCreateButtonColor(colorPalette.selectTxtFocus)
+                break;
+            case 'process':
+                setProcessButtonColor(colorPalette.selectTxtFocus)
+                break;
+            case 'record':
+                setRecordButtonColor(colorPalette.selectTxtFocus)
+                break;
+        }
+    }
+
+    const changeButtonColorBack = (event) => {
+        switch(event.target.id) {
+            case 'create':
+                setCreateButtonColor(colorPalette.selectTxt)
+                break;
+            case 'process':
+                setProcessButtonColor(colorPalette.selectTxt)
+                break;
+            case 'record':
+                setRecordButtonColor(colorPalette.selectTxt)
+                break;
+        }
+    }
+
+    // ------------------------------------------ Data recording controls --------------------------------------------
+
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const initialModalRef = useRef();
@@ -301,36 +341,64 @@ export default function DataRecordingControl(props) {
                                         })}
 
                                     </Select>
-                                    <Button ref={initialPopoverRef} width={"auto"} colorScheme='blue' size='sm' onClick={onOpen}>+ Create</Button>
+                                    <Button
+                                        id='create'
+                                        ref={initialPopoverRef}
+                                        width={"auto"}
+                                        bgColor={colorPalette.selectBg}
+                                        color={createButtonColor}
+                                        size='sm'
+                                        onClick={onOpen}
+                                        onMouseEnter={changeButtonColor}
+                                        onMouseLeave={changeButtonColorBack}
+                                    >
+                                        + Create
+                                    </Button>
                                 </HStack>
                                 {
                                     currentSession ?
                                         <>
 
                                             <HStack>
-                                                <Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
-                                                    if (currentSession) {
-                                                        getRecordedData().then((res) => {
-                                                            if (res.response) {
-                                                                setRecordedData({data: res.response});
-                                                                console.log("Rec Data::", res.response);
-                                                                localStorage.setItem("recordeData", JSON.stringify(res.response))
-                                                            }
-                                                        }).catch((err) => console.log(err));
-                                                    } else {
-                                                        alert("Please select a session to get the data from")
-                                                    }
+                                                <Button
+                                                    id='process'
+                                                    width={"auto"}
+                                                    bgColor={colorPalette.selectBg}
+                                                    color={processButtonColor}
+                                                    size='sm'
+                                                    onMouseEnter={changeButtonColor}
+                                                    onMouseLeave={changeButtonColorBack}
+                                                    onClick={async () => {
+                                                        if (currentSession) {
+                                                            getRecordedData().then((res) => {
+                                                                if (res.response) {
+                                                                    setRecordedData({data: res.response});
+                                                                    console.log("Rec Data::", res.response);
+                                                                    localStorage.setItem("recordeData", JSON.stringify(res.response))
+                                                                }
+                                                            }).catch((err) => console.log(err));
+                                                        } else {
+                                                            alert("Please select a session to get the data from")
+                                                        }
+                                                    }}
+                                                > Get session data</Button>
 
-                                                }}> Get session data</Button>
-
-                                                <Button width={"auto"} colorScheme='blue' size='sm'
-                                                        onClick={() => {
-                                                            if (currentSession) {
-                                                                recordCarData()
-                                                            } else {
-                                                                alert("No session created or selected")
-                                                            }
-                                                        }}>
+                                                <Button
+                                                    id='record'
+                                                    width={"auto"}
+                                                    bgColor={colorPalette.selectBg}
+                                                    color={recordButtonColor}
+                                                    size='sm'
+                                                    onMouseEnter={changeButtonColor}
+                                                    onMouseLeave={changeButtonColorBack}
+                                                    onClick={() => {
+                                                        if (currentSession) {
+                                                            recordCarData()
+                                                        } else {
+                                                            alert("No session created or selected")
+                                                        }
+                                                    }}
+                                                >
                                                     <BsFillRecordCircleFill color={isRecording ? "red" : null}/>
                                                 </Button>
 
@@ -383,14 +451,18 @@ export default function DataRecordingControl(props) {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={() => {
-                            if (sessionFileName === "") {
-                                alert("Error: Empty feild")
-                                return
-                            }
-                            createRecordingSession(sessionFileName);
-                            onClose()
-                        }}>
+                        <Button
+                            bg="#008640"
+                            mr={3}
+                            onClick={() => {
+                                if (sessionFileName === "") {
+                                    alert("Error: Empty feild")
+                                    return
+                                }
+                                createRecordingSession(sessionFileName);
+                                onClose()
+                            }}
+                        >
                             Create
                         </Button>
                         <Button onClick={onClose}>Cancel</Button>
