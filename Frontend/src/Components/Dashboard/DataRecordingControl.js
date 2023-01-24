@@ -245,7 +245,7 @@ export default function DataRecordingControl(props) {
 
     return (
         <>
-            <Draggable>
+            <Draggable bounds='parent'>
                 <Box
                     zIndex='overlay'
                     position='absolute'
