@@ -249,8 +249,8 @@ export default function DataRecordingControl(props) {
                 <Box
                     zIndex='overlay'
                     position='absolute'
-                    bottom='25px'
-                    left='25px'
+                    bottom='50px'
+                    left='50px'
                 >
                 <Popover
                     placement='right'
@@ -259,23 +259,22 @@ export default function DataRecordingControl(props) {
                     <PopoverTrigger>
                         <Button
                             ref={finalModalRef}
-                            w={75}
-                            h={75}
+                            w='46px'
+                            h='46px'
                             p={0}
-                            borderWidth={10}
+                            borderWidth='5px'
                             borderColor='#ff0000'
                             borderRadius='full'
                             boxShadow='md'
                             bgColor='#00000000'
                         >
-                            <Box w={35} h={35} borderRadius='full' m={0} bgColor='#ff0000' />
+                            <Box w='20px' h='20px' borderRadius='full' m={0} bgColor='#ff0000' />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent pt={5} w='max-content'>
                         <PopoverCloseButton/>
                         <PopoverBody>
                             <VStack>
-
                                 <HStack style={{marginBottom: "0.5em"}}>
                                     { /* TODO Add a refresh button to get (/set sessionsList to) the most recent list of sessions */ }
                                     <Select
@@ -354,41 +353,41 @@ export default function DataRecordingControl(props) {
                 </Popover>
                 </Box>
             </Draggable>
-        {/* Create new session popup */}
-        <Modal
-            initialFocusRef={initialModalRef}
-            finalFocusRef={finalModalRef}
-            isOpen={isOpen}
-            onClose={onClose}
-        >
-            <ModalOverlay/>
-            <ModalContent>
-                <ModalHeader>Create recording session</ModalHeader>
-                <ModalCloseButton/>
-                <ModalBody pb={6}>
-                    <FormControl>
-                        <FormLabel>File name</FormLabel>
-                        <Input ref={initialModalRef} placeholder='File name' onChange={(e) => {
-                            setSessionFileName(e.target.value)
-                        }}/>
-                    </FormControl>
-                </ModalBody>
+            {/* Create new session popup */}
+            <Modal
+                initialFocusRef={initialModalRef}
+                finalFocusRef={finalModalRef}
+                isOpen={isOpen}
+                onClose={onClose}
+            >
+                <ModalOverlay/>
+                <ModalContent>
+                    <ModalHeader>Create recording session</ModalHeader>
+                    <ModalCloseButton/>
+                    <ModalBody pb={6}>
+                        <FormControl>
+                            <FormLabel>File name</FormLabel>
+                            <Input ref={initialModalRef} placeholder='File name' onChange={(e) => {
+                                setSessionFileName(e.target.value)
+                            }}/>
+                        </FormControl>
+                    </ModalBody>
 
-                <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={() => {
-                        if (sessionFileName === "") {
-                            alert("Error: Empty feild")
-                            return
-                        }
-                        createRecordingSession(sessionFileName);
-                        onClose()
-                    }}>
-                        Create
-                    </Button>
-                    <Button onClick={onClose}>Cancel</Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    </>
+                    <ModalFooter>
+                        <Button colorScheme='blue' mr={3} onClick={() => {
+                            if (sessionFileName === "") {
+                                alert("Error: Empty feild")
+                                return
+                            }
+                            createRecordingSession(sessionFileName);
+                            onClose()
+                        }}>
+                            Create
+                        </Button>
+                        <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </>
     );
 }
