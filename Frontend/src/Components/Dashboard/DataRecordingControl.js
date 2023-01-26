@@ -73,7 +73,8 @@ export default function DataRecordingControl(props) {
     const initialModalRef = useRef();
     const finalModalRef = useRef();
 
-    const initialPopoverRef = useRef();
+    const createRef = useRef();
+    const recordRef = useRef();
 
     const [sessionsList, setSessionsList] = useState({ data: null });
 
@@ -296,7 +297,7 @@ export default function DataRecordingControl(props) {
                 >
                 <Popover
                     placement='right'
-                    initialFocusRef={isRecording ? null : initialPopoverRef}
+                    initialFocusRef={currentSession ? recordRef : createRef}
                     onOpen={() => {
                             if(sessionsList.data === null) {
                                 // Get the updated sessions list
@@ -348,7 +349,7 @@ export default function DataRecordingControl(props) {
                                         <Button
                                             id='create'
                                             disabled={isRecording}
-                                            ref={initialPopoverRef}
+                                            ref={createRef}
                                             width={"auto"}
                                             bgColor={colorPalette.selectBg}
                                             color={createButtonColor}
@@ -397,6 +398,7 @@ export default function DataRecordingControl(props) {
                                                 <Tooltip label={isRecording ? 'Stop recording' : 'Start recording'}>
                                                     <Button
                                                         id='record'
+                                                        ref={recordRef}
                                                         width={"auto"}
                                                         bgColor={colorPalette.selectBg}
                                                         color={recordButtonColor}
