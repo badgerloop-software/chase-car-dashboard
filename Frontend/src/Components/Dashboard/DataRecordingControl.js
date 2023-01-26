@@ -1,6 +1,6 @@
 import {
     Box,
-    Image,
+    Image, Tooltip,
     Button, FormControl, FormLabel,
     HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
     Popover,
@@ -343,68 +343,74 @@ export default function DataRecordingControl(props) {
                                         })}
 
                                     </Select>
-                                    <Button
-                                        id='create'
-                                        ref={initialPopoverRef}
-                                        width={"auto"}
-                                        bgColor={colorPalette.selectBg}
-                                        color={createButtonColor}
-                                        size='sm'
-                                        onClick={onOpen}
-                                        onMouseEnter={changeButtonColor}
-                                        onMouseLeave={changeButtonColorBack}
-                                    >
-                                        + Create
-                                    </Button>
+                                    <Tooltip label='Create new recording session'>
+                                        <Button
+                                            id='create'
+                                            ref={initialPopoverRef}
+                                            width={"auto"}
+                                            bgColor={colorPalette.selectBg}
+                                            color={createButtonColor}
+                                            size='sm'
+                                            onClick={onOpen}
+                                            onMouseEnter={changeButtonColor}
+                                            onMouseLeave={changeButtonColorBack}
+                                        >
+                                            + Create
+                                        </Button>
+                                    </Tooltip>
                                 </HStack>
                                 {
                                     currentSession ?
                                         <>
 
                                             <HStack>
-                                                <Button
-                                                    id='process'
-                                                    width={"auto"}
-                                                    bgColor={colorPalette.selectBg}
-                                                    color={processButtonColor}
-                                                    size='sm'
-                                                    onMouseEnter={changeButtonColor}
-                                                    onMouseLeave={changeButtonColorBack}
-                                                    onClick={async () => {
-                                                        if (currentSession) {
-                                                            getRecordedData().then((res) => {
-                                                                if (res.response) {
-                                                                    setRecordedData({data: res.response});
-                                                                    console.log("Rec Data::", res.response);
-                                                                    localStorage.setItem("recordeData", JSON.stringify(res.response))
-                                                                }
-                                                            }).catch((err) => console.log(err));
-                                                        } else {
-                                                            alert("Please select a session to get the data from")
-                                                        }
-                                                    }}
-                                                >
-                                                    <Image src={ConvertIcon} fit='scale-down' boxSize='2.75vh'/>
-                                                </Button>
+                                                <Tooltip label='Export to Excel'>
+                                                    <Button
+                                                        id='process'
+                                                        width={"auto"}
+                                                        bgColor={colorPalette.selectBg}
+                                                        color={processButtonColor}
+                                                        size='sm'
+                                                        onMouseEnter={changeButtonColor}
+                                                        onMouseLeave={changeButtonColorBack}
+                                                        onClick={async () => {
+                                                            if (currentSession) {
+                                                                getRecordedData().then((res) => {
+                                                                    if (res.response) {
+                                                                        setRecordedData({data: res.response});
+                                                                        console.log("Rec Data::", res.response);
+                                                                        localStorage.setItem("recordeData", JSON.stringify(res.response))
+                                                                    }
+                                                                }).catch((err) => console.log(err));
+                                                            } else {
+                                                                alert("Please select a session to get the data from")
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Image src={ConvertIcon} fit='scale-down' boxSize='2.75vh'/>
+                                                    </Button>
+                                                </Tooltip>
 
-                                                <Button
-                                                    id='record'
-                                                    width={"auto"}
-                                                    bgColor={colorPalette.selectBg}
-                                                    color={recordButtonColor}
-                                                    size='sm'
-                                                    onMouseEnter={changeButtonColor}
-                                                    onMouseLeave={changeButtonColorBack}
-                                                    onClick={() => {
-                                                        if (currentSession) {
-                                                            recordCarData()
-                                                        } else {
-                                                            alert("No session created or selected")
-                                                        }
-                                                    }}
-                                                >
-                                                    <BsFillRecordCircleFill color={isRecording ? "red" : null}/>
-                                                </Button>
+                                                <Tooltip label={isRecording ? 'Stop recording' : 'Start recording'}>
+                                                    <Button
+                                                        id='record'
+                                                        width={"auto"}
+                                                        bgColor={colorPalette.selectBg}
+                                                        color={recordButtonColor}
+                                                        size='sm'
+                                                        onMouseEnter={changeButtonColor}
+                                                        onMouseLeave={changeButtonColorBack}
+                                                        onClick={() => {
+                                                            if (currentSession) {
+                                                                recordCarData()
+                                                            } else {
+                                                                alert("No session created or selected")
+                                                            }
+                                                        }}
+                                                    >
+                                                        <BsFillRecordCircleFill color={isRecording ? "red" : null}/>
+                                                    </Button>
+                                                </Tooltip>
 
                                             </HStack>
 
