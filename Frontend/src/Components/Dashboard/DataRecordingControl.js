@@ -296,7 +296,7 @@ export default function DataRecordingControl(props) {
                 >
                 <Popover
                     placement='right'
-                    initialFocusRef={initialPopoverRef}
+                    initialFocusRef={isRecording ? null : initialPopoverRef}
                     onOpen={() => {
                             if(sessionsList.data === null) {
                                 // Get the updated sessions list
@@ -330,6 +330,7 @@ export default function DataRecordingControl(props) {
                                 <HStack style={{marginBottom: "0.5em"}}>
                                     { /* TODO Add a refresh button to get (/set sessionsList to) the most recent list of sessions */ }
                                     <Select
+                                        disabled={isRecording}
                                         width={"15em"}
                                         placeholder={"Select session to view"}
                                         value={currentSession}
@@ -346,6 +347,7 @@ export default function DataRecordingControl(props) {
                                     <Tooltip label='Create new recording session'>
                                         <Button
                                             id='create'
+                                            disabled={isRecording}
                                             ref={initialPopoverRef}
                                             width={"auto"}
                                             bgColor={colorPalette.selectBg}
@@ -367,6 +369,7 @@ export default function DataRecordingControl(props) {
                                                 <Tooltip label='Export to Excel'>
                                                     <Button
                                                         id='process'
+                                                        disabled={isRecording}
                                                         width={"auto"}
                                                         bgColor={colorPalette.selectBg}
                                                         color={processButtonColor}
