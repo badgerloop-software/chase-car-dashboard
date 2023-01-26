@@ -1,5 +1,6 @@
 import {
     Box,
+    Image,
     Button, FormControl, FormLabel,
     HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
     Popover,
@@ -10,9 +11,10 @@ import {
     VStack
 } from "@chakra-ui/react";
 import Draggable, { DraggableCore } from 'react-draggable';
-import {BsFillRecordCircleFill} from "react-icons/bs";
-import {FaPause, FaPlay, FaStop} from "react-icons/fa";
+import { BsFillRecordCircleFill } from "react-icons/bs";
+import { FaPause, FaPlay, FaStop } from "react-icons/fa";
 import { useState, useLayoutEffect, useRef } from "react";
+import ConvertIcon from "./Convert Icon.png";
 import colors from "../Shared/colors";
 
 // Importing toastify module
@@ -381,7 +383,9 @@ export default function DataRecordingControl(props) {
                                                             alert("Please select a session to get the data from")
                                                         }
                                                     }}
-                                                > Get session data</Button>
+                                                >
+                                                    <Image src={ConvertIcon} fit='scale-down' boxSize='2.75vh'/>
+                                                </Button>
 
                                                 <Button
                                                     id='record'
