@@ -10,9 +10,8 @@ import {
     PopoverTrigger, Select, useColorMode, useDisclosure,
     VStack
 } from "@chakra-ui/react";
-import Draggable, { DraggableCore } from 'react-draggable';
+import Draggable from 'react-draggable';
 import { BsFillRecordCircleFill } from "react-icons/bs";
-import { FaPause, FaPlay, FaStop } from "react-icons/fa";
 import { useState, useLayoutEffect, useRef } from "react";
 import ConvertIcon from "./Convert Icon.png";
 import colors from "../Shared/colors";
@@ -78,14 +77,8 @@ export default function DataRecordingControl(props) {
 
     const [sessionsList, setSessionsList] = useState({ data: null });
 
-    const [framePointer, setFramePointer] = useState(0);
-    let [frameIntervalId, setframeIntervalId] = useState(null);
-    const [playMode, setPlayMode] = useState(false);
-
     const [currentSession, setCurrentSession] = useState("");
-    const [recordedData, setRecordedData] = useState({ data: null });
     const [isRecording, setIsRecording] = useState(false);
-    const [isRecordingSessionCreated, setIsRecordingSessionCreated] = useState(false);
     const [sessionFileName, setSessionFileName] = useState("");
 
     const getSessionsList = async () => {
@@ -99,91 +92,16 @@ export default function DataRecordingControl(props) {
         return body;
     };
 
-    const getSessionData = (session) => {
-        fetch('http://localhost:4001/get-recorded-data/x', {
-            method: "POST",
-            body: JSON.stringify({ fileName: session }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        }).then(response => response.json()).then((data) => {
-            console.log("session res::", data)
-
-        }).catch((e) => {
-            setIsRecording(false)
-            console.log("Error:", e)
-        })
-    }
-
-
-
-
-    /*useLayoutEffect(() => {
-        //-------
-        if (playMode) {
-            if (framePointer >= recordedData.data.length) {
-                clearInterval(frameIntervalId)
-                setFramePointer(0)
-                console.log("End of frames")
-                toast("End of frames!!")
-
-            } else {
-                setState((prev) => prev.data = recordedData.data[framePointer])
-            }
-            console.log("frame:", framePointer)
-        } else {
-            callBackendAPI().then((res) => {
-                setState({ data: res.response })
-            }).catch((err) => console.log("/api error", err));
-        }
-
-
-    }, [state, framePointer]);
-
+    // Get the initial list of sessions
     useLayoutEffect(() => {
-        //-------
-        // console.log("Running once")
         getSessionsList().then((res) => {
             setSessionsList({ data: res.response });
         }).catch((err) => console.log("error", err));
     }, []);
 
 
-    const playData = (speed = 1) => {
-        let time = 1000 * speed // 1000 = 1000ms = 1sec
-        // check if already an interval has been set up
-        if (!recordedData.data || recordedData.data === null && recordedData.data?.length == 0) {
-            console.log("No data")
-            toast("No session data found.")
-            return
-        }
-
-        console.log("paying...", recordedData.data)
-        setPlayMode(true)
-        if (!frameIntervalId) {
-            setframeIntervalId(setInterval(() => {
-                //What to do during the interval
-                setFramePointer(prev => prev + 1)
-            }, time))
-        }
-    };
-
-    const pause = () => {
-        console.log("stopping:", frameIntervalId)
-        clearInterval(frameIntervalId)
-        setframeIntervalId(null)
-    }
-
-    const stop = () => {
-        console.log("stopping:", frameIntervalId)
-        clearInterval(frameIntervalId)
-        setframeIntervalId(null)
-        setFramePointer(0)
-    }*/
-
     // TODO Replace with something like "Convert Recorded Data" or "Process Recorded Data"
-    const getRecordedData = async () => {
+    const processRecordedData = async () => {
         const response = await fetch("/get-recorded-data");
         if (response.status === 200) {
             const body = await response.json();
@@ -232,11 +150,11 @@ export default function DataRecordingControl(props) {
             },
         }).then(response => response.json()).then((data) => {
             console.log("crs res::", data)
-            if (data.response == -1) {
+            if (data.response === -1) {
                 toast("Empty name")
                 return
             }
-            if (data.response == 200) {
+            if (data.response === 200) {
                 setCurrentSession(fileName)
                 toast("Current recording session is set !!")
             } else {
@@ -257,31 +175,27 @@ export default function DataRecordingControl(props) {
                 'Content-type': 'application/json; charset=UTF-8',
             },
         }).then(response => response.json()).then((data) => {
-            console.log("crs res::", data)
+            console.log("crs res::", data);
             if (data.response === "Empty") {
-                alert("Empty feild")
-                return
+                alert("Empty feild");
+                return;
             }
             if (data.response === "Created") {
                 // Get the updated sessions list
                 getSessionsList().then((res) => {
-                    // console.log("Getting")
                     setSessionsList({ data: res.response });
                 }).catch((err) => console.log("error", err));
-                setCurrentSession(fileName)
+                setCurrentSession(fileName);
 
-                // alert("Session file has been created!!")
-                toast("Session file has been created!!")
+                toast("Session file has been created!!");
                 //Then Request is sent
             } else {
-                setIsRecordingSessionCreated(false)
                 // Handle the error
-                alert("Something went wrong")
+                alert("Something went wrong");
             }
 
         }).catch((e) => {
-            setIsRecordingSessionCreated(false)
-            console.log("Error:", e)
+            console.log("Error:", e);
         });
     }
 
@@ -295,77 +209,64 @@ export default function DataRecordingControl(props) {
                     bottom='50px'
                     left='50px'
                 >
-                <Popover
-                    placement='right'
-                    initialFocusRef={currentSession ? recordRef : createRef}
-                    onOpen={() => {
-                            if(sessionsList.data === null) {
-                                // Get the updated sessions list
-                                getSessionsList().then((res) => {
-                                    // console.log("Getting")
-                                    setSessionsList({data: res.response});
-                                }).catch((err) => console.log("error", err));
-                            }
-                        }
-                    }
-                >
-                    <PopoverTrigger>
-                        <Button
-                            ref={finalModalRef}
-                            w='46px'
-                            h='46px'
-                            p={0}
-                            borderWidth='5px'
-                            borderColor='#ff0000'
-                            borderRadius='full'
-                            boxShadow='md'
-                            bgColor='#00000000'
-                        >
-                            <Box w='20px' h='20px' borderRadius='full' m={0} bgColor='#ff0000' />
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent pt={5} w='max-content'>
-                        <PopoverCloseButton/>
-                        <PopoverBody>
-                            <VStack>
-                                <HStack style={{marginBottom: "0.5em"}}>
-                                    { /* TODO Add a refresh button to get (/set sessionsList to) the most recent list of sessions */ }
-                                    <Select
-                                        disabled={isRecording}
-                                        width={"15em"}
-                                        placeholder={"Select session to view"}
-                                        value={currentSession}
-
-                                        onChange={(e) => {
-                                            console.log('current value', e.target.value)
-                                            setCurrentRecordingSession(e.target.value)
-                                        }}>
-                                        {sessionsList?.data?.map((name, i) => {
-                                            return (<option key={i} value={name}>{name}</option>)
-                                        })}
-
-                                    </Select>
-                                    <Tooltip label='Create new recording session'>
-                                        <Button
-                                            id='create'
+                    <Popover
+                        placement='right'
+                        initialFocusRef={currentSession ? recordRef : createRef}
+                    >
+                        <PopoverTrigger>
+                            <Button
+                                ref={finalModalRef}
+                                w='46px'
+                                h='46px'
+                                p={0}
+                                borderWidth='5px'
+                                borderColor='#ff0000'
+                                borderRadius='full'
+                                boxShadow='md'
+                                bgColor='#00000000'
+                            >
+                                <Box w='20px' h='20px' borderRadius='full' m={0} bgColor='#ff0000' />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent pt={5} w='max-content'>
+                            <PopoverCloseButton/>
+                            <PopoverBody>
+                                <VStack>
+                                    <HStack style={{marginBottom: "0.5em"}}>
+                                        <Select
                                             disabled={isRecording}
-                                            ref={createRef}
-                                            width={"auto"}
-                                            bgColor={colorPalette.selectBg}
-                                            color={createButtonColor}
-                                            size='sm'
-                                            onClick={onOpen}
-                                            onMouseEnter={changeButtonColor}
-                                            onMouseLeave={changeButtonColorBack}
-                                        >
-                                            + Create
-                                        </Button>
-                                    </Tooltip>
-                                </HStack>
-                                {
-                                    currentSession ?
-                                        <>
+                                            width={"15em"}
+                                            placeholder={"Select session to view"}
+                                            value={currentSession}
 
+                                            onChange={(e) => {
+                                                console.log('current value', e.target.value)
+                                                setCurrentRecordingSession(e.target.value)
+                                            }}>
+                                            {sessionsList?.data?.map((name, i) => {
+                                                return (<option key={i} value={name}>{name}</option>)
+                                            })}
+
+                                        </Select>
+                                        <Tooltip label='Create new recording session'>
+                                            <Button
+                                                id='create'
+                                                disabled={isRecording}
+                                                ref={createRef}
+                                                width={"auto"}
+                                                bgColor={colorPalette.selectBg}
+                                                color={createButtonColor}
+                                                size='sm'
+                                                onClick={onOpen}
+                                                onMouseEnter={changeButtonColor}
+                                                onMouseLeave={changeButtonColorBack}
+                                            >
+                                                + Create
+                                            </Button>
+                                        </Tooltip>
+                                    </HStack>
+                                    {
+                                        currentSession ?
                                             <HStack>
                                                 <Tooltip label='Export to Excel'>
                                                     <Button
@@ -378,17 +279,7 @@ export default function DataRecordingControl(props) {
                                                         onMouseEnter={changeButtonColor}
                                                         onMouseLeave={changeButtonColorBack}
                                                         onClick={async () => {
-                                                            if (currentSession) {
-                                                                getRecordedData().then((res) => {
-                                                                    if (res.response) {
-                                                                        setRecordedData({data: res.response});
-                                                                        console.log("Rec Data::", res.response);
-                                                                        localStorage.setItem("recordeData", JSON.stringify(res.response))
-                                                                    }
-                                                                }).catch((err) => console.log(err));
-                                                            } else {
-                                                                alert("Please select a session to get the data from")
-                                                            }
+                                                            processRecordedData()
                                                         }}
                                                     >
                                                         <Image src={ConvertIcon} fit='scale-down' boxSize='2.75vh'/>
@@ -416,33 +307,13 @@ export default function DataRecordingControl(props) {
                                                         <BsFillRecordCircleFill color={isRecording ? "red" : null}/>
                                                     </Button>
                                                 </Tooltip>
-
                                             </HStack>
-
-                                            {
-                                                recordedData.data ?
-                                                    <>
-                                                        <HStack>
-                                                            <Button width={"auto"} colorScheme='blue' size='sm'
-                                                                    /*onClick={() => playData()}*/> <FaPlay/> </Button>
-                                                            <Button width={"auto"} colorScheme='blue' size='sm'
-                                                                    /*onClick={() => pause()}*/><FaPause/> </Button>
-                                                            <Button width={"auto"} colorScheme='blue' size='sm'
-                                                                    /*onClick={() => stop()}*/><FaStop/></Button>
-
-                                                        </HStack>
-                                                        <Box><span>Data Frames: {framePointer}/{recordedData.data?.length}</span></Box>
-                                                    </>
-                                                    : null
-                                            }
-
-                                        </>
-                                        : null
-                                }
-                            </VStack>
-                        </PopoverBody>
-                    </PopoverContent>
-                </Popover>
+                                            : null
+                                    }
+                                </VStack>
+                            </PopoverBody>
+                        </PopoverContent>
+                    </Popover>
                 </Box>
             </Draggable>
             {/* Create new session popup */}
@@ -459,9 +330,13 @@ export default function DataRecordingControl(props) {
                     <ModalBody pb={6}>
                         <FormControl>
                             <FormLabel>File name</FormLabel>
-                            <Input ref={initialModalRef} placeholder='File name' onChange={(e) => {
-                                setSessionFileName(e.target.value)
-                            }}/>
+                            <Input
+                                ref={initialModalRef}
+                                placeholder='File name'
+                                onChange={(e) => {
+                                    setSessionFileName(e.target.value)
+                                }}
+                            />
                         </FormControl>
                     </ModalBody>
 

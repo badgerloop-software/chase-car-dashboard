@@ -225,18 +225,6 @@ export default function Dashboard(props) {
     }
   };
 
-  /*TODO const getRecordedData = async () => {
-    const response = await fetch("/get-recorded-data");
-    if (response.status === 200) {
-      console.log("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-      const body = response.json();
-      return body
-    } else {
-      console.log("Error getting Rec data")
-    }
-    return null;
-  };*/
-
   const {colorMode} = useColorMode();
 
   // TODO Just make the overall colorscheme change. Separate light and dark colors into two objects in colors.js.
@@ -302,26 +290,6 @@ export default function Dashboard(props) {
           borderWidth={1}
           p={2}
         >
-          {/*TODO
-          <Button width={"auto"} colorScheme='blue' size='sm' onClick={async () => {
-            //if(false) getRecordedData() // TODO
-            //if (currentSession) {
-              getRecordedData().then((res) => {
-                if (res.response) {
-                  //setRecordedData({ data: res.response });
-                  //console.log("Rec Data::", res.response);
-                  localStorage.setItem("recordedData", res.response)
-                }
-              }).catch((err) => console.log(err));
-            //} else {
-            //  alert("Please select a session to get the data from")
-            //}
-
-          }}> Get session data</Button>*/}
-
-
-
-
           <FaultsView data={state.data} />
         </GridItem>
         <GridItem
