@@ -114,10 +114,6 @@ while (f4.tell() < recordedDataSize): # Loop until there is no more data left in
 	timestamp = "::." # The timestamp string for the current set of data
 	row = [] # Row to be added to the file
 
-	# Array values indicate the status of the connection to the solar car. These will always be true when unpacking data
-	# TODO This will have to be accounted for eventually
-	# solar_car_connection = solarCarData["solar_car_connection"]
-
 	for property in keys:
 		dataType = format[property][1] # Get the data type of the next piece of data to read
 
@@ -176,10 +172,6 @@ while (f4.tell() < recordedDataSize): # Loop until there is no more data left in
 
 		# Add the piece of data to the row, provided it is not part of the timestamp
 		if (not property.startswith("tstamp")):
-			#print("\n----------\n" + "Offset: " + str(offset)) # TODO
-			#print("----------\n" + "File location: " + str(f4.tell())) # TODO
-			#print("----------\n" + property + ": " + str(data)) # TODO
-			#print("----------\nFirst element of " + property + ": " + str(data[0])) # TODO
 			row += [data[0]] # np.fromfile() returns an array, and the first element is the actual value, so add the first element to the row
 
     # Unpack solar car connection and add it to the end of the row
