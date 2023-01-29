@@ -11,6 +11,11 @@ const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA;
 let frontendData = INITIAL_FRONTEND_DATA;
 
+let bytesPerPacket = 0;
+for (const property in DATA_FORMAT) {
+  bytesPerPacket += DATA_FORMAT[property][0];
+}
+
 
 // Send data to front-end
 ROUTER.get("/api", (req, res) => {
@@ -186,7 +191,7 @@ function openSocket() {
 
   // Data received listener
   client.on("data", (data) => {
-    if(data.length === 297) {
+    if(data.length === bytesPerPacket) {
       // console.log(data);
       console.time("update data");
       unpackData(data);
