@@ -118,8 +118,6 @@ ROUTER.post("/process-recorded-data/x", async (req, res) => {
 ROUTER.get("/process-recorded-data", (req, res) => {
   // Execute Python script to convert recorded binary data to a formatted Excel file
 
-  // TODO Add installing python/pip (and any dependencies/additional modules, like `pip install numpy` and `pip install (--user most likely?) XlsxWriter`) in terminal in which npm is used to README
-
   console.log(currentSession)
 
   if (currentSession === "") {
