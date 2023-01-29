@@ -179,7 +179,7 @@ let timestamp = 0; // TODO This is just a variable to test adding an array of ti
 
 // The max number of data points to have in each array at one time
 // equivalent to 10 minutes' worth of data being sent 30 Hz
-const X_AXIS_CAP = 100; // TODO 18_000
+const X_AXIS_CAP = 18_000;
 
 
 
@@ -187,113 +187,6 @@ function recordData(data) {
   fs.appendFile("recordedData/sessions/" + currentSession + ".bin", data, (err) => {/*error handling*/ });
 }
 
-
-async function getrecordedData() {
-  fs.readFile('recordedData/sessions/' + currentSession + ".bin", (err, data) => {
-    let bytesOffset = 0;
-    for (const property in DATA_FORMAT) {
-      bytesOffset += DATA_FORMAT[property][0];
-    }
-    let RD = []
-
-    let end = false;
-    let indx = 0;
-    let i = 1
-    end = false
-    if (data) {
-      // end == false
-      while (end == false) {
-        console.log("Getting record data")
-        let buff = data.slice(indx, bytesOffset + indx)
-        // console.log("on data::", buff)
-        if (buff <= 0) {
-          //End of buffer
-          end = true
-          RecodedData = RD
-          return
-        }
-
-        RD.push(JSON.parse(JSON.stringify(unpackBufferData(buff))))
-        // console.log("unpack::", unpackBufferData(buff))
-        // console.log(i, ") DATA Slice:");
-        indx += bytesOffset;
-        // i++;
-      }
-    }
-  });
-
-}
-
-
-
-function unpackBufferData(BufferData) {
-  let buffOffset = 0; // Byte offset for the buffer array
-  const xAxisCap = 25; // The max number of data points to have in each array at one time
-  let timestamps = sessionSolarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
-
-  // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
-  timestamps.unshift(timestamp);
-  timestamp++;
-  if (timestamps.length > xAxisCap) {
-    timestamps.pop();
-  }
-
-  // let fdata = [];
-
-  sessionSolarCarData["timestamps"] = timestamps;
-
-  for (const property in DATA_FORMAT) {
-    let dataArray = []; // Holds the array of data specified by property that will be put in solarCarData
-    let dataType = ""; // Data type specified in the data format
-
-    if (sessionSolarCarData.hasOwnProperty(property)) {
-      dataArray = sessionSolarCarData[property];
-    }
-    dataType = DATA_FORMAT[property][1];
-
-    // Add the data from the buffer to solarCarData
-    switch (dataType) {
-      case "uint8":
-        // Add uint8 to the front of dataArray
-        dataArray.unshift(BufferData.readUInt8(buffOffset));
-        break;
-      case "float":
-        // Add float to the front of dataArray
-        dataArray.unshift(BufferData.readFloatLE(buffOffset));
-        break;
-      case "char":
-        // Add char to the front of dataArray
-        dataArray.unshift(String.fromCharCode(BufferData.readUInt8(buffOffset)));
-        break;
-      case "bool":
-        // Add bool to the front of dataArray
-        dataArray.unshift(Boolean(BufferData.readUInt8(buffOffset)));
-        break;
-      default:
-        // Log if an unexpected type is specified in the data format
-        // console.log(`No case for unpacking type ${dataType} (type specified for ${property} in format.json)`);
-        break;
-    }
-    // Limit dataArray to a length specified by xAxisCap
-    if (dataArray.length > xAxisCap) {
-      dataArray.pop();
-    }
-    // Write dataArray to solarCarData at the correct key
-    sessionSolarCarData[property] = dataArray;
-
-    // Increment offset by amount specified in data format
-    buffOffset += DATA_FORMAT[property][0];
-    //
-    // fdata.push(solarCarData);
-    // console.log(solarCarData)
-
-  }
-  // console.log("Set::", sessionSolarCarData)
-  return sessionSolarCarData
-
-  // Update the data to be passed to the front-end
-  // frontendData = solarCarData;
-};
 
 
 /**
