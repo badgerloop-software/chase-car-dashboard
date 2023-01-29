@@ -1,23 +1,36 @@
 import { Router } from "express";
 import net from "net";
-import {spawn} from "child_process"; // TODO
+import { spawn } from "child_process";
 import * as fs from "fs";
 const nReadlines = require('n-readlines');
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
-import SESSION_SOLAR_CAR_DATA from "../../Data/session_data.json";
+// TODO import SESSION_SOLAR_CAR_DATA from "../../Data/session_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
-// TODO ---------------------------------------------------------------------
-let doRecord = false; // Flag for whether we should be recording data or not
-let currentSession = ""
 
 const ROUTER = Router();
-let solarCarData = INITIAL_SOLAR_CAR_DATA
-let sessionSolarCarData = SESSION_SOLAR_CAR_DATA
+let solarCarData = INITIAL_SOLAR_CAR_DATA;
+// TODO let sessionSolarCarData = SESSION_SOLAR_CAR_DATA
 let frontendData = INITIAL_FRONTEND_DATA;
 
-let RecodedData = null
-let sessionsList = []
+
+// Send data to front-end
+ROUTER.get("/api", (req, res) => {
+  console.time("send http");
+  const temp = res.send({ response: frontendData }).status(200);
+  temp.addListener("finish", () => console.timeEnd("send http"));
+});
+
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// Data recording
+// --------------------------------------------------------------------------------------------------------------------
+
+let doRecord = false; // Flag for whether we should be recording data or not
+let currentSession = "";
+
+let sessionsList = [];
 
 const broadbandLines = new nReadlines('./recordedData/sessionsList.bin');
 let line;
@@ -31,24 +44,12 @@ while (line = broadbandLines.next()) {
 }
 console.log(sessionsList)
 
-// Send data to front-end
-ROUTER.get("/api", (req, res) => {
-  console.time("send http");
-  const temp = res.send({ response: frontendData }).status(200);
-  temp.addListener("finish", () => console.timeEnd("send http"));
-});
-
-
-// --------------------------------------------------------------------------------------------------------------------
-// Data recording
-// --------------------------------------------------------------------------------------------------------------------
 
 ROUTER.get("/sessionsList", (req, res) => {
   res.send({ response: sessionsList }).status(200);
 });
 
 
-// TODO ---------------------------------------------------------------------
 ROUTER.post("/create-recording-session", (req, res) => {
   if (req.body.fileName === "") {
     res.send({ response: "Empty" }).status(200);
@@ -73,7 +74,8 @@ ROUTER.post("/create-recording-session", (req, res) => {
   });
   console.log('req:', req.body);
 });
-// TODO ---------------------------------------------------------------------
+
+
 ROUTER.post("/current-recording-session", (req, res) => {
   if (req.body.fileName === "") {
     res.send({ response: -1 }).status(200);
@@ -87,8 +89,6 @@ ROUTER.post("/current-recording-session", (req, res) => {
 });
 
 
-
-
 // Set recording flag to true or false depeding on request
 ROUTER.post("/record-data", (req, res) => {
   if (currentSession === "") {
@@ -100,6 +100,7 @@ ROUTER.post("/record-data", (req, res) => {
   console.log("Record Status:", req.body)
 });
 
+
 ROUTER.post("/process-recorded-data/x", async (req, res) => {
   currentSession = req.body.fileName
   if (currentSession === "") {
@@ -107,86 +108,73 @@ ROUTER.post("/process-recorded-data/x", async (req, res) => {
     return
   }
 
-  console.log("Sess:", req.body)
-  // await getrecordedData()
-  // res.send({ response: RecodedData }).status(200)
+  res.send({ response: currentSession}).status(200)
 });
 
 
 ROUTER.get("/process-recorded-data", (req, res) => {
   // Execute Python script to convert recorded binary data to a formatted Excel file
 
-  var dataToSend = "";
-  // spawn new child process to call the python script
-  //const python = spawn('python', ['C:\\Users\\james\\badgerloop_repo\\chase-car-dashboard\\Backend\\src\\routes\\script1.py']);
+  // TODO Remove since we don't need to send data
+  //let dataToSend = "";
 
   // TODO Add installing python/pip (and any dependencies/additional modules, like `pip install numpy` and `pip install (--user most likely?) XlsxWriter`) in terminal in which npm is used to README
 
-  console.log(currentSession);
+  console.log(currentSession)
 
-  // TODO const python = spawn('python', ['./src/routes/exp_new_script1.py','./src/routes/demo3.bin','./Data/sc1-data-format/format.json','./src/routes/test.csv']);
+  if (currentSession === "") {
+    res.send({ response: "NoFileSelected" }).status(200);
+    return
+  }
+
+  // Spawn new child process to call the python script
   const python = spawn('python', ['./src/routes/exp_new_script1.py',
                                                 './recordedData/sessions/' + currentSession + '.bin',
                                                 './Data/sc1-data-format/format.json',
                                                 './src/routes/' + currentSession + '.csv']);
-  // collect data from script
+
+  // Collect data from script
   python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
-    dataToSend = data.toString();
-    console.log(dataToSend);
+    console.log(data.toString());
+    /* TODO dataToSend = data.toString();
+    console.log(dataToSend);*/
   });
+
   python.stderr.on('data', function (data) {
     console.log('Python script errored out ...');
-    dataToSend = data.toString();
-    console.log(dataToSend);
+    console.log(data.toString());
+    /* TODO dataToSend = data.toString();
+    console.log(dataToSend);*/
   });
-  // in close event we are sure that stream from child process is closed
+
+  // In close event we are sure that stream from child process is closed
   python.on('close', (code) => {
     console.log(`child process close all stdio with code ${code}`);
-    // send data to browser
-    //console.log(dataToSend);
-    // TODO res.send({ response: dataToSend }).status(200);
   });
 
-  /*if (currentSession == "") {
-    res.send({ response: "NoFileSelected" }).status(200);
-    return
-  }
-  getrecordedData()
-  res.send({ response: RecodedData }).status(200);*/
-
-  // ------------------------------------------------------------------------------------------------------------------
-
-  if (currentSession == "") {
-    res.send({ response: "NoFileSelected" }).status(200);
-    return
-  }
-  // TODO getrecordedData()
-
-  res.send({ response: RecodedData }).status(200);
+  res.send({ response: currentSession }).status(200);
 })
-
-
-
-//----------------------------------------------------- TCP -----------------------------------------------------------
-import { Socket } from "net";
-
-const CAR_PORT = 4003; // Port for TCP connection
-const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
-var client = new Socket();
-let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
-                   //      data) to solarCarData
-
-// The max number of data points to have in each array at one time
-// equivalent to 10 minutes' worth of data being sent 30 Hz
-const X_AXIS_CAP = 18_000;
-
 
 
 function recordData(data) {
   fs.appendFile("recordedData/sessions/" + currentSession + ".bin", data, (err) => {/*error handling*/ });
 }
 
+
+
+//----------------------------------------------------- TCP -----------------------------------------------------------
+// TODO import { Socket } from "net";
+
+const CAR_PORT = 4003; // Port for TCP connection
+const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
+// TODO var client = new Socket();
+// TODO let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
+                   //      data) to solarCarData
+
+// The max number of data points to have in each array at one time
+// equivalent to 10 minutes' worth of data being sent 30 Hz
+const X_AXIS_CAP = 18_000;
 
 
 /**
@@ -213,21 +201,7 @@ function openSocket() {
     if (doRecord) {
       recordData(data)
     }
-    // console.log(i++, ") Data::", data);
 
-    /*TODO fs.writeFile('./src/routes/demo3.bin', data, { flag: 'a' }, err => {
-      if (err) {
-        console.error(err)
-        return
-      }
-    }) // TODO
-    fs.writeFile('./src/routes/unpacked_demo3.txt', JSON.stringify(solarCarData), { flag: 'a' }, err => {
-      if (err) {
-        console.error(err)
-        return
-      }
-    }) // TODO
-    */
     console.timeEnd("update data");
   });
 
@@ -261,6 +235,7 @@ function openSocket() {
     setTimeout(openSocket, 1000);
   });
 }
+
 
 /**
  * Unpacks a Buffer and updates the data to be passed to the front-end
