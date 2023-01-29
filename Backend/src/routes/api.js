@@ -100,7 +100,7 @@ ROUTER.post("/record-data", (req, res) => {
   console.log("Record Status:", req.body)
 });
 
-ROUTER.post("/get-recorded-data/x", async (req, res) => {
+ROUTER.post("/process-recorded-data/x", async (req, res) => {
   currentSession = req.body.fileName
   if (currentSession === "") {
     res.send({ response: "NoFile" }).status(200)
@@ -113,7 +113,7 @@ ROUTER.post("/get-recorded-data/x", async (req, res) => {
 });
 
 
-ROUTER.get("/get-recorded-data", (req, res) => {
+ROUTER.get("/process-recorded-data", (req, res) => {
   // Execute Python script to convert recorded binary data to a formatted Excel file
 
   var dataToSend = "";
