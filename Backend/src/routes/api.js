@@ -149,7 +149,7 @@ ROUTER.get("/process-recorded-data", (req, res) => {
 
 
 function recordData(data) {
-  fs.appendFile("recordedData/sessions/" + currentSession + ".bin", data, (err) => {/*error handling*/ });
+  fs.appendFile("recordedData/sessions/" + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]), (err) => {if(err) {console.warn("ERROR: Error while appending to file")}/*error handling*/ });
 }
 
 
@@ -198,6 +198,23 @@ function openSocket() {
     if (solarCarData.solar_car_connection.length > 0) {
       solarCarData.solar_car_connection[0] = false;
       frontendData.solar_car_connection[0] = false;
+      // If recording, replace the latest solar_car_connection value in file with false
+      if(doRecord) {
+        fs.open("recordedData/sessions/" + currentSession + ".bin", "r+", (err, fd) => {
+          if(!err) {
+            fs.write(
+                fd, Buffer.alloc(1, false), 0, 1, fs.fstatSync(fd).size - 1,
+                (err, bw, buf) => {
+                  if(!err) {
+                    // Successfully wrote byte to offset
+                  } else {
+                    console.warn("ERROR: Error writing to file when lost connection");
+                  }
+                }
+            );
+          }
+        });
+      }
     }
 
     console.log(`Connection to car server (${CAR_PORT}) is closed`);

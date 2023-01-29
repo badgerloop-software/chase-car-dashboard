@@ -29,9 +29,9 @@ i=0
 for key in keys:
 	i += format[key][0]
 
-print("Bytes in data packet: " + str(i))
+print("Bytes in data packet: " + str(i + 1))
 print("Bytes in binary file: " + str(os.path.getsize(recordedDataPath)))
-print("Number of rows that should be loaded: " + str(os.path.getsize(recordedDataPath) / i))
+print("Number of rows that should be loaded: " + str(os.path.getsize(recordedDataPath) / (i + 1)))
 
 
 # Remove timestamp components from headers. If any of them cannot be found in the data format, print a descriptive message so the user knows what happened
@@ -82,6 +82,24 @@ for header in headers:
 	worksheet.set_column(c, c, 8.43, column_format)
 	worksheet.write(0, c, header, header_format)
 	c += 1
+
+column_format = workbook.add_format({'align': 'center', 'bottom_color': '#b0b0b0', 'bottom': 1, 'left': 1, 'right': 1})
+header_format = workbook.add_format({'align': 'center', 'bottom': 2, 'left': 1, 'right': 1, 'bold': True})
+
+if((c%2) == 0):
+    column_format.set_bg_color('#dddddd')
+    header_format.set_bg_color('#dddddd')
+
+worksheet.conditional_format(1, c, 1048575, c, {'type': 'blanks',
+                        'format': None,
+                        'stop_if_true': True})
+worksheet.conditional_format(1, c, 1048575, c, {'type': 'cell',
+                        'criteria': '<',
+                        'value': 1,
+                        'format': outofbounds_format})
+
+worksheet.set_column(c, c, 8.43, column_format)
+worksheet.write(0, c, 'Solar Car Connection', header_format)
 
 # Freeze headers and timestamps
 worksheet.freeze_panes(1,1)
@@ -164,6 +182,8 @@ while (f4.tell() < recordedDataSize): # Loop until there is no more data left in
 			#print("----------\nFirst element of " + property + ": " + str(data[0])) # TODO
 			row += [data[0]] # np.fromfile() returns an array, and the first element is the actual value, so add the first element to the row
 
+    # Unpack solar car connection and add it to the end of the row
+	row += [np.fromfile(f4, np.dtype('?'), 1, "", 0)[0]]
 	# Add the timestamp to the beginning of the row
 	row = [timestamp] + row
 
