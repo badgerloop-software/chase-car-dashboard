@@ -149,7 +149,7 @@ ROUTER.get("/process-recorded-data", (req, res) => {
 
 
 function recordData(data) {
-  fs.appendFile("recordedData/sessions/" + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]), (err) => {if(err) {console.warn("ERROR: Error while appending to file")}/*error handling*/ });
+  fs.appendFileSync("recordedData/sessions/" + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]));
 }
 
 
