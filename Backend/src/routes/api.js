@@ -123,7 +123,7 @@ ROUTER.get("/process-recorded-data", (req, res) => {
   }
 
   // Spawn new child process to call the python script
-  const python = spawn('python', ['./src/routes/exp_new_script1.py',
+  const python = spawn('python', ['./src/routes/process_recorded_data.py',
                                                 './recordedData/sessions/' + currentSession + '.bin',
                                                 './Data/sc1-data-format/format.json',
                                                 './src/routes/' + currentSession + '.csv']);
