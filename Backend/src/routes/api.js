@@ -149,7 +149,12 @@ ROUTER.get("/process-recorded-data", (req, res) => {
 
 
 function recordData(data) {
-  fs.appendFileSync("recordedData/sessions/" + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]));
+  fs.appendFile("recordedData/sessions/" + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]),
+        (err) => {
+                  if(err) {
+                    console.warn("ERROR: Error while appending to file");
+                  }
+  });
 }
 
 
@@ -181,15 +186,20 @@ function openSocket() {
 
   // Data received listener
   client.on("data", (data) => {
-    // console.log(data);
-    console.time("update data");
-    unpackData(data);
+    if(data.length === 297) {
+      // console.log(data);
+      console.time("update data");
+      unpackData(data);
 
-    if (doRecord) {
-      recordData(data)
+      if (doRecord) {
+        recordData(data)
+      }
+
+      console.timeEnd("update data");
+    } else {
+      console.warn("ERROR: Bad packet length ------------------------------------");
     }
 
-    console.timeEnd("update data");
   });
 
   // Socket closed listener
