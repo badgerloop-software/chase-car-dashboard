@@ -102,7 +102,7 @@ export default function DataRecordingControl(props) {
 
     // TODO Replace with something like "Convert Recorded Data" or "Process Recorded Data"
     const processRecordedData = async () => {
-        const response = await fetch("/get-recorded-data");
+        const response = await fetch("/process-recorded-data");
         if (response.status === 200) {
             const body = await response.json();
             return body
