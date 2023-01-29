@@ -22,7 +22,7 @@
 /**/.vscode
 
 # Data recording
-/Backend/recordedData/sessions/*
+/Backend/recordedData/sessions/*.bin
 /Backend/recordedData/sessionsList.bin
 /Backend/src/routes/*.csv
 
