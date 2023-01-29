@@ -5,12 +5,10 @@ import * as fs from "fs";
 const nReadlines = require('n-readlines');
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
-// TODO import SESSION_SOLAR_CAR_DATA from "../../Data/session_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA;
-// TODO let sessionSolarCarData = SESSION_SOLAR_CAR_DATA
 let frontendData = INITIAL_FRONTEND_DATA;
 
 
@@ -115,9 +113,6 @@ ROUTER.post("/process-recorded-data/x", async (req, res) => {
 ROUTER.get("/process-recorded-data", (req, res) => {
   // Execute Python script to convert recorded binary data to a formatted Excel file
 
-  // TODO Remove since we don't need to send data
-  //let dataToSend = "";
-
   // TODO Add installing python/pip (and any dependencies/additional modules, like `pip install numpy` and `pip install (--user most likely?) XlsxWriter`) in terminal in which npm is used to README
 
   console.log(currentSession)
@@ -137,15 +132,11 @@ ROUTER.get("/process-recorded-data", (req, res) => {
   python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
     console.log(data.toString());
-    /* TODO dataToSend = data.toString();
-    console.log(dataToSend);*/
   });
 
   python.stderr.on('data', function (data) {
     console.log('Python script errored out ...');
     console.log(data.toString());
-    /* TODO dataToSend = data.toString();
-    console.log(dataToSend);*/
   });
 
   // In close event we are sure that stream from child process is closed
@@ -164,13 +155,9 @@ function recordData(data) {
 
 
 //----------------------------------------------------- TCP -----------------------------------------------------------
-// TODO import { Socket } from "net";
 
 const CAR_PORT = 4003; // Port for TCP connection
 const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
-// TODO var client = new Socket();
-// TODO let timestamp = 0; // TODO This is just a variable to test adding an array of timestamps (for each set of solar car
-                   //      data) to solarCarData
 
 // The max number of data points to have in each array at one time
 // equivalent to 10 minutes' worth of data being sent 30 Hz
