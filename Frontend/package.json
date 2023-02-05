@@ -9,7 +9,6 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "chart.js": "^3.7.1",
     "chartjs-adapter-luxon": "^1.1.0",
@@ -24,7 +23,6 @@
     "react-scripts": "^5.0.1",
     "socket.io-client": "^4.5.3",
     "typescript": "^4.8.4",
-
     "web-vitals": "^3.0.4"
   },
   "scripts": {
@@ -58,6 +56,9 @@
     "@babel/cli": "^7.17.3",
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
-    "npm-run-all": "^4.1.5"
+    "@testing-library/react": "^13.4.0",
+    "jest-dom": "^4.0.0",
+    "npm-run-all": "^4.1.5",
+    "react-test-renderer": "^18.2.0"
   }
 }
