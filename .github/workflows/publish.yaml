@@ -9,8 +9,8 @@ jobs:
         name: Login to GitHub Container Registry
         with:
           registry: ghcr.io
-          username: ${{ github_actor }}
-          password: ${{ secrets_GITHUB_TOKEN }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         run: |
           docker build . --tag ghcr.io/badgerloop-software/chase-car-dashboard-image:latest
