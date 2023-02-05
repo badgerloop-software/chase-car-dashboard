@@ -1,18 +1,16 @@
 name: publish
 on: [push]
 jobs:
-  update docker:
-    name: my first docker
-publish-hello-docker-image:
-runs-on: node:latest
-steps:
-  - uses: actions/checkout@v2
-  - name: Login to GitHub Container Registry
-uses: docker/login-action@v1
-with:
-registry: ghcr.io
-username: ${{ github_actor }}
-password: ${{ secrets_GITHUB_TOKEN }}
-run: |
-  docker build . --tag ghcr.io/badgerloop-software/chase-car-dashboard-image:latest
-  docker push ghcr.io/badgerloop-software/chase-car-dashboard-image
+  publish-hello-docker-image:
+    runs-on: node:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GitHub Container Registry
+    uses: docker/login-action@v1
+    with:
+    registry: ghcr.io
+    username: ${{ github_actor }}
+    password: ${{ secrets_GITHUB_TOKEN }}
+    run: |
+      docker build . --tag ghcr.io/badgerloop-software/chase-car-dashboard-image:latest
+      docker push ghcr.io/badgerloop-software/chase-car-dashboard-image
