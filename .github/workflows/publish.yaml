@@ -1,6 +1,8 @@
 name: publish
 on: [push]
 jobs:
+  update docker:
+    name: my first docker
 publish-hello-docker-image:
 runs-on: node:latest
 steps:
