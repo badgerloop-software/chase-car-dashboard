@@ -1,20 +1,16 @@
 name: publish
 on: [push]
 jobs:
-  publish-hello-docker-image:
+  build_and_publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Login to GitHub Container Registry
-
-  next-step:
-    runs-on: ubuntu-latest
-    steps:
       - uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github_actor }}
           password: ${{ secrets_GITHUB_TOKEN }}
-        run: |
+      - run: |
           docker build . --tag ghcr.io/badgerloop-software/chase-car-dashboard-image:latest
           docker push ghcr.io/badgerloop-software/chase-car-dashboard-image
