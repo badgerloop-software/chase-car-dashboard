@@ -11,6 +11,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github_actor }}
           password: ${{ secrets_GITHUB_TOKEN }}
+      -
         run: |
           docker build . --tag ghcr.io/badgerloop-software/chase-car-dashboard-image:latest
           docker push ghcr.io/badgerloop-software/chase-car-dashboard-image
