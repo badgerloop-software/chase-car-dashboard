@@ -1,6 +1,6 @@
 # Solar Car 1 Engineering Dashboard
 
-## Libraries banaba
+## Libraries
 
 - [node.js and npm](https://nodejs.org/en/) - Package manager and server workhorse (node version **>16**)
 - [React](https://reactjs.org/) - Front-end library
