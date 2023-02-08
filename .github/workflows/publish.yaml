@@ -1,5 +1,9 @@
 name: publish
-on: [push]
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:    
+      - 'test-docker-push'
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
