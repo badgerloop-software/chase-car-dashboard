@@ -3,7 +3,7 @@ on:
   push:
     # Sequence of patterns matched against refs/heads
     branches:    
-      - 'main'
+      - 'docker-automation-git-action'
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
