@@ -7,4 +7,4 @@ EXPOSE 4000/udp
 COPY . .
 COPY ["package.json", "package-lock.json*", "./"]
 RUN npm install
-CMD ["npm", "run", "start-dev"]
+CMD ["npm", "start"]
