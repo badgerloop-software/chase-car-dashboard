@@ -49,13 +49,47 @@ const X_AXIS_CAP = CONSTANTS.X_AXIS_CAP;
 function openSocket() {
   // Establish connection with server
   console.log('CAR_PORT: ' + CAR_PORT);
-  var client = net.connect(CAR_PORT, CAR_ADDRESS); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
+  var client = net.connect(CAR_PORT, CAR_ADDRESS);
   client.setKeepAlive(true);
+
+  client.setTimeout(5000, () => {
+
+    if(solarCarData.solar_car_connection[0]) {
+      // Pull the most recent solar_car_connection values to false if connection was previously established
+      if (solarCarData.solar_car_connection.length > 0) {
+        solarCarData.solar_car_connection[0] = false;
+        frontendData.solar_car_connection[0] = false;
+      }
+
+      // Kill socket
+      client.destroy();
+      client.unref();
+
+      console.log(`Connection to car server (${CAR_PORT}) is closed - TIMEOUT`);
+
+      // Attempt to re-open socket
+      //setTimeout(openSocket, 1000);
+    }
+
+  })
 
   // Connection established listener
   client.on("connect", () => {
     console.log(`Connected to car server: ${client.remoteAddress}:${CAR_PORT}`);
   });
+
+
+  // Data received listener
+  /*client.on("end", (data) => {
+    // console.log(data);
+    console.log("LOST THE CONNECTION ----------------------------------------------------------------------------------------------------------------------------------------------------");
+  });
+
+  // Data received listener
+  client.on("drain", (data) => {
+    // console.log(data);
+    console.log("DRAIN");
+  });*/
 
   // Data received listener
   client.on("data", (data) => {
@@ -66,6 +100,25 @@ function openSocket() {
   });
 
   // Socket closed listener
+  /*client.on("timeout", function () {
+    // Pull the most recent solar_car_connection values to false if connection was previously established
+    if (solarCarData.solar_car_connection.length > 0) {
+      solarCarData.solar_car_connection[0] = false;
+      frontendData.solar_car_connection[0] = false;
+    }
+
+
+    // Kill socket
+    client.destroy();
+    client.unref();
+
+    console.log(`Connection to car server (${CAR_PORT}) is closed - TIMEOUT`);
+
+    // Attempt to re-open socket
+    setTimeout(openSocket, 1000);
+  });*/
+
+  // Socket closed listener
   client.on("close", function () {
     // Pull the most recent solar_car_connection values to false if connection was previously established
     if (solarCarData.solar_car_connection.length > 0) {
@@ -73,7 +126,15 @@ function openSocket() {
       frontendData.solar_car_connection[0] = false;
     }
 
+
+    // Kill socket
+    client.destroy();
+    client.unref();
+
     console.log(`Connection to car server (${CAR_PORT}) is closed`);
+
+    // Attempt to re-open socket
+    setTimeout(openSocket, 1000);
   });
 
   // Socket error listener
@@ -82,8 +143,8 @@ function openSocket() {
     console.log("Client errored out:", err);
 
     // Kill socket
-    client.destroy();
-    client.unref();
+    //client.destroy();
+    //client.unref();
 
     // Pull the most recent solar_car_connection values to false if connection was previously established
     if (solarCarData.solar_car_connection.length > 0) {
@@ -92,7 +153,7 @@ function openSocket() {
     }
 
     // Attempt to re-open socket
-    setTimeout(openSocket, 1000);
+    //setTimeout(openSocket, 1000);
   });
 }
 
