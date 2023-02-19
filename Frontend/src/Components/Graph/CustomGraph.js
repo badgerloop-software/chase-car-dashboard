@@ -211,10 +211,14 @@ export default function CustomGraph(props) {
   // an object that contains every selected dataset and a boolean to store whether it is enabled
   const [datasets, setDatasets] = useState(() => {
     const output = {};
-    for (const dataset of initialDatasets) {
-      output[dataset] = true;
+    console.log(initialDatasets)
+    if(initialDatasets){
+      for (const dataset of initialDatasets) {
+        output[dataset] = true;
+      }
+  
     }
-
+  
     // console.log("init datasets:", output, "from", initialDatasets);
 
     return output;

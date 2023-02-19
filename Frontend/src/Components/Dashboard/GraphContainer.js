@@ -54,30 +54,34 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
 
   const [neededGraphMetaData, setNeededGraphMetaData] = useState({meta: [] })
 
-
-
+  const sendNGM_toBackend = async (data) =>{
+    let response = await fetch("http://localhost:4001/api/needed-graph-metadata",{
+     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+     // mode: 'cors', // no-cors, *cors, same-origin
+     headers: {
+       'Accept': 'application/json',
+       'Content-type': 'application/json; charset=UTF-8',
+     },
+     body: JSON.stringify(data) // body data type must match "Content-Type"
+    })
+   
+    console.log("SENDING NGM:", data )
+   
+    console.log(response)
+   }
+   
+ // Request for needed graph
   const updateNeedGraphMetaData = useCallback((indx, data) => {
+   
     let obj = neededGraphMetaData
     obj.meta[indx] = data
+    
     setNeededGraphMetaData(obj)
-    console.log("index:", indx, "data:", data)
+    console.log("index:", indx,"Obj:",  obj.meta)
     sendNGM_toBackend(obj)
-  }, [neededGraphMetaData]
+  }, [neededGraphMetaData, sendNGM_toBackend]
 )
 
-const sendNGM_toBackend = async (data) =>{
- let response = await fetch("http://localhost:4001/api/needed-graph-metadata",{
-  method: 'POST', // *GET, POST, PUT, DELETE, etc.
-  // mode: 'cors', // no-cors, *cors, same-origin
-  headers: {
-    'Accept': 'application/json',
-    'Content-type': 'application/json; charset=UTF-8',
-  },
-  body: JSON.stringify(data) // body data type must match "Content-Type"
- })
-
- console.log(response)
-}
 
   /**
    * A function that makes the given graph display in the given place. If the graph is
@@ -92,10 +96,15 @@ const sendNGM_toBackend = async (data) =>{
       // save graph in old position, if needed
       // if (graphTitles[idx] && graphTitles[idx] !== "Custom")
       //   onSave(graphTitles[idx], datasets);
+      if(name === "Select"){
+        updateNeedGraphMetaData(idx, [])
+      }
 
+      if(name !== "Custom"){
+        console.log("Moved to:", idx, "selected Name:", name,"All titles ",graphTitles)
+      }
       // duplicate the graph titles
       const copy = graphTitles.slice();
-
       // check for special values
       if (name?.length && name !== "Custom") {
         const oldIdx = graphTitles.indexOf(name);
@@ -272,9 +281,9 @@ const sendNGM_toBackend = async (data) =>{
               onChange={(evt) => showGraph(evt.target.value, index)}
               onChangeCapture={removeSelectFocus}
             >
-              <GraphOptions titles={Object.keys(customGraphData)} txtColor={props.optionTxt} />
+              <GraphOptions  titles={Object.keys(customGraphData)} txtColor={props.optionTxt}  />
             </Select>
-            {graphTitles[index] === "" ? null : graphTitles[index] ===
+            {graphTitles[index] === ""|| graphTitles[index] === "Select" ? null : graphTitles[index] ===
               "Custom" ? (
                 <CustomGraph
                  _index={index}
@@ -299,9 +308,9 @@ const sendNGM_toBackend = async (data) =>{
                 title={graphTitles[index]}
                 // categories={categories}
                 packedData={packedData}
-                initialDatasets={customGraphData[graphTitles[index]].datasets}
+                initialDatasets={customGraphData[graphTitles[index]]?.datasets}
                 secondsRetained={
-                  customGraphData[graphTitles[index]].historyLength
+                  customGraphData[graphTitles[index]]?.historyLength
                 }
                 // allDatasets={allDatasets}
                 latestTime={latestTime}
@@ -321,10 +330,10 @@ const sendNGM_toBackend = async (data) =>{
  * @param {string[]} props.titles the list of graph titles to display in the dropdown
  * @returns a component containing all the given options and "Custom"
  */
-function GraphOptions({ titles, txtColor }) {
+function GraphOptions({titles, txtColor }) {
   return (
     <>
-      <option style={{ color: txtColor }} value="">Select option</option>
+      <option style={{ color: txtColor }}  value="Select" >Select option</option>
       {titles
         .filter((title) => title && title !== "Custom")
         .map((title) => (

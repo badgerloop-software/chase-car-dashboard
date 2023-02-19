@@ -26,10 +26,12 @@ for (const property in DATA_FORMAT) {
 ROUTER.get("/api", (req, res) => {
   // console.time("send http");
   // const temp = 
-  
+
   // if(graphsToSend.length){
-     let f_data = filterGraphsToSend(frontendData)
-     res.send({ response: f_data }).status(200);
+  // filtered graphs to send
+  let f_data = filterGraphsToSend(frontendData)
+  //console.log("SENDING GRAPH:", graphsToSend)
+  res.send({ response: f_data }).status(200);
   // } else{
   //   res.send({ response: {} }).status(200);
   // }
@@ -60,25 +62,25 @@ ROUTER.get("/api/specificdata", (req, res) => {
 });
 
 
-ROUTER.post("/api/needed-graph-metadata", (req, res) =>{
+ROUTER.post("/api/needed-graph-metadata", (req, res) => {
   // console.log("(BACKEND)needed-graph-metadata:", req.body.meta)
   updateGraphsToSend(req.body.meta)
-  res.send({status: "SUCCESS"}).status(200)
+  res.send({ status: "SUCCESS" }).status(200)
 });
 
-function filterGraphsToSend(data){
-   let obj = {}
-    graphsToSend.map((key) => {
-      obj[`${key}`] =  data[`${key}`]
-    })
-    obj["timestamps"] =  data["timestamps"] 
+function filterGraphsToSend(data) {
+  let obj = {}
+  graphsToSend.map((key) => {
+    obj[`${key}`] = data[`${key}`]
+  })
+  obj["timestamps"] = data["timestamps"]
   return obj
 }
 
-function getSingleValuesAtIndex(jsonData, index=0){
-  let newJson = {} 
-  for (const key in jsonData){
-    if(jsonData.hasOwnProperty(key)){
+function getSingleValuesAtIndex(jsonData, index = 0) {
+  let newJson = {}
+  for (const key in jsonData) {
+    if (jsonData.hasOwnProperty(key)) {
       newJson[`${key}`] = [jsonData[key][index]]
       // console.log(`${key} : ${jsonData[key]} \n`)
     }
@@ -86,15 +88,23 @@ function getSingleValuesAtIndex(jsonData, index=0){
   return newJson
 }
 
-function updateGraphsToSend(data){
+function updateGraphsToSend(data) {
   graphsToSend = []
-   data.map((item) =>{
-    item?.list.map((i)=>{
-      if(!graphsToSend.includes(i)){
-        graphsToSend.push(i)
+  console.log("[----------------REQ-----------------]\n","Data Set:", data )
+  if(data){
+    data?.map((item) => {
+      console.log("Item:", item)
+      if(item){
+        console.log(":----Looking into Item\n\n")
+        item?.list?.map((i) => {
+          if (!graphsToSend.includes(i)) {
+            graphsToSend.push(i)
+          }
+        })
       }
     })
-   })
+  }
+
   //  console.log("UPDATED:",graphsToSend )
 }
 
