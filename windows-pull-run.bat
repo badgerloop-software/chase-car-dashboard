@@ -8,7 +8,7 @@ if not "%1"=="" (
     )
 )
 docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:latest
-if not "%1"=="-o" start http://localhost:4000
+if not "%1"=="-o" start http://localhost:3000
 
 docker run -p 3000:3000 ghcr.io/badgerloop-software/chase-car-dashboard-image:latest
 
