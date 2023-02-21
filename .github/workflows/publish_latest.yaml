@@ -1,4 +1,4 @@
-name: publish
+name: publish_latest
 on:
   push:
     branches:    
