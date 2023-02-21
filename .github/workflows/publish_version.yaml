@@ -1,4 +1,4 @@
-name: publish
+name: publish_version
 on:
   push:
     tags:    
