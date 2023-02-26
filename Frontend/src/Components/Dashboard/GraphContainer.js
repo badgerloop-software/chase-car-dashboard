@@ -72,7 +72,6 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
    
  // Request for needed graph
   const updateNeedGraphMetaData = useCallback((indx, data) => {
-   
     let obj = neededGraphMetaData
     obj.meta[indx] = data
     
@@ -97,26 +96,43 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
       // if (graphTitles[idx] && graphTitles[idx] !== "Custom")
       //   onSave(graphTitles[idx], datasets);
       if(name === "Select"){
-        updateNeedGraphMetaData(idx, [])
+        updateNeedGraphMetaData(idx, [''])
       }
 
       if(name !== "Custom"){
-        console.log("Moved to:", idx, "selected Name:", name,"All titles ",graphTitles)
+        // console.log("Moved to:", idx, "selected Name:", name,"All titles ",graphTitles)
       }
       // duplicate the graph titles
-      const copy = graphTitles.slice();
+      let copy = graphTitles.slice();
+      let neededGraphMetaData_copy = neededGraphMetaData
       // check for special values
       if (name?.length && name !== "Custom") {
         const oldIdx = graphTitles.indexOf(name);
+        
 
         // found old position of graph, swap with new position
         if (oldIdx !== -1) {
           // see https://jsbench.me/snl20xx1g9/1 for reasoning behind this algorithm
+          // Swapping graph titles
           copy[oldIdx] = copy[idx];
           copy[idx] = name;
-          // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
-
           setGraphTitles(copy);
+          // Swapping neededGraphMetaData
+          let NGMD_temp = neededGraphMetaData_copy.meta[oldIdx]
+          // We need to clear out custom graphs that we are swapping if there is any
+          // Since we have swapped graphTitles already in copy[] we need to check for custom graph in the old position
+          if (copy[oldIdx] !== "Custom"){ 
+            neededGraphMetaData_copy.meta[oldIdx] =  neededGraphMetaData_copy.meta[idx]
+            neededGraphMetaData_copy.meta[idx] = NGMD_temp
+          }else{
+            neededGraphMetaData_copy.meta[oldIdx] = [""]  // Clear out custom graphs at the old position
+            neededGraphMetaData_copy.meta[idx] = NGMD_temp
+            sendNGM_toBackend(neededGraphMetaData_copy) // Since we cleared out the custom graph we need to tell the back end what graphs to send us based on the new needed graph list
+          }
+          setNeededGraphMetaData(neededGraphMetaData_copy)
+          // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
+ 
+          console.log("UPDATED copy",copy, "NGD:", neededGraphMetaData)
           return;
         }
       }
@@ -126,8 +142,9 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
       copy[idx] = name;
       // console.log(graphData, "[", idx, "] =", name, "=", graphData);
       setGraphTitles(copy);
+
     },
-    [graphTitles, setGraphTitles]
+    [graphTitles, neededGraphMetaData]
   );
 
   //------------------------- Saving custom graphs ----------------------------
