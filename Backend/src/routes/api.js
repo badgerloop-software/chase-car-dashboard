@@ -90,18 +90,22 @@ function getSingleValuesAtIndex(jsonData, index = 0) {
 
 function updateGraphsToSend(data) {
   graphsToSend = []
-  console.log("[----------------REQ-----------------]\n","Data Set:", data )
+  console.log("[----------------NEEDED GRAPHS REQUEST-----------------]")
   if(data){
     data?.map((item) => {
       console.log("Item:", item)
       if(item){
-        console.log(":----Looking into Item\n\n")
+        console.log(":----Looking into Item")
         item?.list?.map((i) => {
           if (!graphsToSend.includes(i)) {
             graphsToSend.push(i)
+            console.log(`   -> ${i} (Good to go)`)
+          }else{
+            console.log(`   -> ${i} (Duplicate handled)`)
           }
         })
       }
+      console.log("\n")
     })
   }
 
