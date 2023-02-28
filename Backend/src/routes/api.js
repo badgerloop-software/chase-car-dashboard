@@ -127,9 +127,9 @@ ROUTER.get("/process-recorded-data", (req, res) => {
 
   // Spawn new child process to call the python script
   const python = spawn('python', ['./src/routes/process_recorded_data.py',
-                                                './recordedData/sessions/' + currentSession + '.bin',
-                                                './Data/sc1-data-format/format.json',
-                                                './src/routes/' + currentSession + '.csv']);
+                                  './recordedData/sessions/' + currentSession + '.bin',
+                                  './Data/sc1-data-format/format.json',
+                                  './src/routes/' + currentSession + '.csv']);
 
   // Collect data from script
   python.stdout.on('data', function (data) {
@@ -153,9 +153,9 @@ ROUTER.get("/process-recorded-data", (req, res) => {
 
 function recordData(data) {
   fs.appendFile("recordedData/sessions/" + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]),
-        (err) => {
+                (err) => {
                   if(err) {
-                    console.warn("ERROR: Error while appending to file");
+                    console.error("ERROR: Error while appending to file");
                   }
   });
 }
@@ -218,10 +218,9 @@ function openSocket() {
             fs.write(
                 fd, Buffer.alloc(1, false), 0, 1, fs.fstatSync(fd).size - 1,
                 (err, bw, buf) => {
-                  if(!err) {
-                    // Successfully wrote byte to offset
-                  } else {
-                    console.warn("ERROR: Error writing to file when lost connection");
+                  if(err) {
+                    // Failed to write byte to offset
+                    console.error("ERROR: Error writing to file when lost connection");
                   }
                 }
             );
