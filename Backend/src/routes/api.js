@@ -11,9 +11,12 @@ const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA;
 let frontendData = INITIAL_FRONTEND_DATA;
 
+const NUM_BYTES_IDX = 0;
+const DATA_TYPE_IDX = 1;
+
 let bytesPerPacket = 0;
 for (const property in DATA_FORMAT) {
-  bytesPerPacket += DATA_FORMAT[property][0];
+  bytesPerPacket += DATA_FORMAT[property][NUM_BYTES_IDX];
 }
 
 
@@ -30,22 +33,34 @@ ROUTER.get("/api", (req, res) => {
 // Data recording
 // --------------------------------------------------------------------------------------------------------------------
 
+// Convert line to UTF-8 and remove return character
+function _convertLine(line) {
+	return line.toString('utf8').replace('\r', "");
+}
+
+
+const RECORDED_DATA_PATH = './recordedData/sessions/';
+const SESSIONS_LIST_PATH = './recordedData/sessionsList.bin';
+const PROCESS_SCRIPT_PATH = './src/routes/process_recorded_data.py';
+const DATA_FORMAT_PATH = './Data/sc1-data-format/format.json';
+const PROCESSED_DATA_PATH = './src/routes/';
+
 let doRecord = false; // Flag for whether we should be recording data or not
 let currentSession = "";
 
 let sessionsList = [];
 
-const broadbandLines = new nReadlines('./recordedData/sessionsList.bin');
+const broadbandLines = new nReadlines(SESSIONS_LIST_PATH);
 let line;
 let lineNumber = 1;
 
 // Getting all the created sessions from sessionsList.bin
 while (line = broadbandLines.next()) {
   // console.log(`Line ${lineNumber} has: ${line.toString('ascii')}`);
-  sessionsList.push(line.toString('utf8').replace('\r', ""))
+  sessionsList.push(_convertLine(line));
   lineNumber++;
 }
-console.log(sessionsList)
+console.log("Initial list of recorded sessions:", sessionsList)
 
 
 ROUTER.get("/sessionsList", (req, res) => {
@@ -59,7 +74,7 @@ ROUTER.post("/create-recording-session", (req, res) => {
     return
   }
 
-  fs.appendFile('./recordedData/sessionsList.bin', req.body.fileName + "\n", (err) => {
+  fs.appendFile(SESSIONS_LIST_PATH, req.body.fileName + "\n", (err) => {
     sessionsList.push(req.body.fileName)
     if (err) {
       res.send({ response: "Error" }).status(200);
@@ -67,7 +82,7 @@ ROUTER.post("/create-recording-session", (req, res) => {
     };
   });
 
-  fs.writeFile('./recordedData/sessions/' + req.body.fileName + '.bin', '', { flag: 'w' }, function (err) {
+  fs.writeFile(RECORDED_DATA_PATH + req.body.fileName + '.bin', '', { flag: 'w' }, function (err) {
     if (err) {
       res.send({ response: "Error" }).status(200);
       return console.error(err);
@@ -126,10 +141,10 @@ ROUTER.get("/process-recorded-data", (req, res) => {
   }
 
   // Spawn new child process to call the python script
-  const python = spawn('python', ['./src/routes/process_recorded_data.py',
-                                  './recordedData/sessions/' + currentSession + '.bin',
-                                  './Data/sc1-data-format/format.json',
-                                  './src/routes/' + currentSession + '.csv']);
+  const python = spawn('python', [PROCESS_SCRIPT_PATH,
+                                  RECORDED_DATA_PATH + currentSession + '.bin',
+                                  DATA_FORMAT_PATH,
+                                  PROCESSED_DATA_PATH + currentSession + '.csv']);
 
   // Collect data from script
   python.stdout.on('data', function (data) {
@@ -152,7 +167,7 @@ ROUTER.get("/process-recorded-data", (req, res) => {
 
 
 function recordData(data) {
-  fs.appendFile("recordedData/sessions/" + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]),
+  fs.appendFile(RECORDED_DATA_PATH + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]),
                 (err) => {
                   if(err) {
                     console.error("ERROR: Error while appending to file");
@@ -213,7 +228,7 @@ function openSocket() {
       frontendData.solar_car_connection[0] = false;
       // If recording, replace the latest solar_car_connection value in file with false
       if(doRecord) {
-        fs.open("recordedData/sessions/" + currentSession + ".bin", "r+", (err, fd) => {
+        fs.open(RECORDED_DATA_PATH + currentSession + ".bin", "r+", (err, fd) => {
           if(!err) {
             fs.write(
                 fd, Buffer.alloc(1, false), 0, 1, fs.fstatSync(fd).size - 1,
@@ -285,7 +300,7 @@ function unpackData(data) {
     if (solarCarData.hasOwnProperty(property)) {
       dataArray = solarCarData[property];
     }
-    dataType = DATA_FORMAT[property][1];
+    dataType = DATA_FORMAT[property][DATA_TYPE_IDX];
 
     // Add the data from the buffer to solarCarData
     switch (dataType) {
@@ -370,7 +385,7 @@ function unpackData(data) {
     }
 
     // Increment offset by amount specified in data format
-    buffOffset += DATA_FORMAT[property][0];
+    buffOffset += DATA_FORMAT[property][NUM_BYTES_IDX];
   }
 
   // Update the timestamps array in solarCarData
