@@ -103,7 +103,7 @@ const SERVER = NET.createServer((socket) => {
     }
 
     socket.write(buf1);
-  }, 67); // TODO 67
+  }, 67);
 });
 
 // Error listener
