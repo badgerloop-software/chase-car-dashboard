@@ -56,7 +56,7 @@ GOTO loop
 
 @REM settag: Block to set the image tag as specified by the CLAs
 :settag
-SET tag=%2%
+SET tag=%2
 
 echo %tag%|findstr /r /c:"^-.*"
 IF errorlevel 1 (
