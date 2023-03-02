@@ -2,11 +2,11 @@
 
 
 usage="SYNOPSIS
-\t./linux-pull-run.sh [\e[4mOPTIONS\e[0m]\n
+\t./linux-pull-run.sh [\033[4mOPTIONS\033[0m]\n
 OPTIONS
 \t-o, --no-open
 \t    Disables automatic opening of the dashboard.\n
-\t-t <\e[4mTAG\e[0m>, --tag=<\e[4mTAG\e[0m>
+\t-t <\033[4mTAG\033[0m>, --tag=<\033[4mTAG\033[0m>
 \t    Specifies the tag of the image to pull and run. If no tag is specified, the image tagged \"latest\" will be used."
 
 
@@ -17,7 +17,7 @@ _validate_arg() {
 	# Check if an argument was provided
 	if [[ -z $2 ]]; then
 		# An argument wasn't provided. Print error message/usage and exit
-		echo -e "\n\e[1;31m[ERROR] $1 requires a value to be provided.\e[0;97m\n\n$usage\n" >&2
+		echo -e "\n\033[1;31m[ERROR] $1 requires a value to be provided.\033[0;97m\n\n$usage\n" >&2
 		exit 1
 	fi
 }
@@ -27,7 +27,7 @@ _validate_arg() {
 _enforce_one_tag() {
 	# If a tag was already specified, print error message/usage and exit
 	if [[ -n $tag ]]; then
-		echo -e "\n\e[1;31m[ERROR] More than one tag specified.\e[0;97m\n\n$usage\n" >&2
+		echo -e "\n\033[1;31m[ERROR] More than one tag specified.\033[0;97m\n\n$usage\n" >&2
 		exit 1
 	fi
 }
@@ -66,7 +66,7 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
 		exit 0
 		;;
 	* )
-		echo -e "\n\e[1;31m[ERROR] Invalid option: $1\e[0;97m\n\n$usage\n" >&2
+		echo -e "\n\033[1;31m[ERROR] Invalid option: $1\033[0;97m\n\n$usage\n" >&2
 		exit 1
 		;;
 esac; shift; done
