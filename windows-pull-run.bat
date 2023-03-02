@@ -56,7 +56,7 @@ GOTO loop
 
 @REM settag: Block to set the image tag as specified by the CLAs
 :settag
-SET tag=%2%
+SET tag=%2
 
 echo %tag%|findstr /r /c:"^-.*"
 IF errorlevel 1 (
@@ -111,13 +111,13 @@ IF NOT "%1"=="" (
 IF "%tag%"=="" SET tag=latest
 
 @REM Pull the dashboard image
-echo docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
+docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
 
 @REM Open the dashboard if no open wasn't specified
-IF NOT "%no_open%"=="true" echo start http://localhost:3000
+IF NOT "%no_open%"=="true" start http://localhost:3000
 
 @REM Run the dashboard image
-echo docker run -p 3000:3000 ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
+docker run -p 3000:3000 ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
 
 @REM #The server will be run at http://localhost:3000, it will take one to two minutes to start up
 @REM #if this window does not automatically pop up then please enter the URL manually
