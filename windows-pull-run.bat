@@ -110,6 +110,9 @@ IF NOT "%1"=="" (
 @REM If a tag was not specified, use "latest" as the tag
 IF "%tag%"=="" SET tag=latest
 
+@REM Setting timezone correctly
+for /f %%i in ('powershell -executionpolicy remotesigned -File .\convertTZstamp.ps1') do set timezone=%%i
+
 @REM Pull the dashboard image
 docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
 
@@ -122,7 +125,7 @@ mkdir recordedData
 docker volume create --name chasecar --opt type=none --opt device=%recdatapath%/recordedData --opt o=bind
 
 @REM Run the dashboard image
-docker run -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
+docker run -e TZ=%timezone% -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
 
 @REM #The server will be run at http://localhost:3000, it will take one to two minutes to start up
 @REM #if this window does not automatically pop up then please enter the URL manually
