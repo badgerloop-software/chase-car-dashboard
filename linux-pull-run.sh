@@ -12,7 +12,7 @@ usage="\033[1mSYNOPSIS
 
 # validatearg: Checks if an argument was provided for a cerain field
 # - Parameters: 1) The field which requires an argument
-#				2) The argument passed for that field
+#               2) The argument passed for that field
 _validate_arg() {
 	# Check if an argument was provided
 	if [[ -z $2 ]]; then
