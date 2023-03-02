@@ -94,8 +94,12 @@ path=`pwd`
 mkdir -p recordedData
 docker volume create --name chasecar --opt type=none --opt device=${path}/recordedData --opt o=bind
 
+# Setting the time zone of host machine
+[[ $OSTYPE == 'darwin'* ]] && timezone=`readlink /etc/localtime | sed 's#/var/db/timezone/zoneinfo/##g'`
+[[ $OSTYPE != 'darwin'* ]] && timezone=`cat /etc/timezone`
+
 # Run the Docker image
-docker run -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
+docker run -e TZ=$timezone -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
 
 #The server will be run at http://localhost:3000, it will take one to two minutes to start up
 #if this window does not automatically pop up then please enter the URL manually
