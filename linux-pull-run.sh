@@ -76,8 +76,8 @@ if [[ "$1" == '--' ]]; then shift; fi
 tag=${tag:=latest}
 
 # Pull the Docker image with the specified tag
-docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
-
+#docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
+# == darwin signifies mac
 # Unless -o or --no-open was specified, open the dashboard
 if [[ ! $no_open ]]; then
 	[[ $OSTYPE != 'darwin'* ]] && cmd=xdg-open
@@ -89,6 +89,7 @@ if [[ ! $no_open ]]; then
 	fi
 fi
 
+<<<<<<< HEAD
 # Create the Docker volume
 path=`pwd`
 mkdir -p recordedData
@@ -96,6 +97,16 @@ docker volume create --name chasecar --opt type=none --opt device=${path}/record
 
 # Run the Docker image
 docker run -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
+=======
+# Setting the time zone of host machine
+[[ $OSTYPE == 'darwin'* ]] && timezone=`readlink /etc/localtime | sed 's#/var/db/timezone/zoneinfo/##g'`
+[[ $OSTYPE != 'darwin'* ]] && timezone=`cat /etc/timezone`
+  #timezone="date +%z"
+
+
+# Run the Docker image
+docker run -e TZ=$timezone -p 3000:3000 ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
+>>>>>>> b02bf82 (updates to linux and windows script for timezone)
 
 #The server will be run at http://localhost:3000, it will take one to two minutes to start up
 #if this window does not automatically pop up then please enter the URL manually

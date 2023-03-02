@@ -827,7 +827,7 @@
     "charge_enable": {
         "UNIT": "",
         "MIN": 0,
-        "MAX": 1
+        "MAX": 0
     },
     "discharge_enable": {
         "UNIT": "",
