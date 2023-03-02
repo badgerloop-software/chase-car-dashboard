@@ -80,13 +80,13 @@ docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
 
 # Unless -o or --no-open was specified, open the dashboard
 if [[ ! $no_open ]]; then
-    [[ $OSTYPE != 'darwin'* ]] && cmd=xdg-open
-    [[ $OSTYPE == 'darwin'* ]] && cmd=open
-    if [[ -n $(command -v $cmd) ]]; then
-        $cmd http://localhost:3000
-    else
-        echo -e "\nCould not run \`$cmd\`, please open 'http://localhost:3000' on your browser\n"
-    fi
+	[[ $OSTYPE != 'darwin'* ]] && cmd=xdg-open
+	[[ $OSTYPE == 'darwin'* ]] && cmd=open
+	if [[ -n $(command -v $cmd) ]]; then
+		$cmd http://localhost:3000
+	else
+		echo -e "\nCould not run \`$cmd\`, please open 'http://localhost:3000' on your browser\n"
+	fi
 fi
 
 # Run the Docker image
