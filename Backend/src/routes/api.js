@@ -34,7 +34,7 @@ let successCount = 0;
 
 async function setupVPSInterface() {
   // Get most recently created table that has a timestamp for a name
-  await fetch(`http://host:port/newest-timestamp-table`, {
+  await fetch(`http://150.136.104.125:3000/newest-timestamp-table`, {
     method: 'GET',
     headers: {
       "Content-type": "application/json"
@@ -50,7 +50,7 @@ async function setupVPSInterface() {
 
   // Get the first timestamp from the table and subtract 1 so that it is included
   // in the first group of retrieved entries
-  await fetch(`http://host:port/get-first-timestamp/${tableName}`, {
+  await fetch(`http://150.136.104.125:3000/get-first-timestamp/${tableName}`, {
     method: 'GET',
     headers: {
       "Content-type": "application/json"
@@ -72,7 +72,7 @@ async function setupVPSInterface() {
 
   // Fetch the newest rows TODO at regular intervals
   interval = setInterval(() => {
-    console.log(`Fetching http://host:port/get-new-rows/${tableName}/${latestTimestamp}`);
+    console.log(`Fetching http://150.136.104.125:3000/get-new-rows/${tableName}/${latestTimestamp}`);
 
     // TODO Maybe put this in a while loop and use `await` instead of having this repeat at constant intervals.
     //      I believe the constant 250ms intervals is what's causing the duplicate datasets: The backend fetches the
@@ -86,7 +86,7 @@ async function setupVPSInterface() {
     console.log("Fetch:",fetchCount,"\tSuccess:",successCount);
 
     if(fetchCount === (successCount + 1)) {
-      fetch(`http://host:port/get-new-rows/${tableName}/${latestTimestamp}`, {
+      fetch(`http://150.136.104.125:3000/get-new-rows/${tableName}/${latestTimestamp}`, {
         method: 'GET',
         headers: {
           "Content-type": "application/json"
@@ -420,6 +420,18 @@ function unpackData(data) {
     // Increment offset by amount specified in data format
     buffOffset += DATA_FORMAT[property][0];
   }
+
+  let currTime = new Date();
+  const currMillis = currTime.getMilliseconds();
+  let millisStr;
+  if (currMillis >= 100) {
+  	millisStr = currMillis;
+  } else if (currMillis >= 10) {
+    millisStr = '0' + currMillis;
+  } else {
+  	millisStr = '00' + currMillis;
+  }
+  console.log("Packet:", timestamps[0], "    Now:", currTime.getHours() + ":" + currTime.getMinutes() + ":" + currTime.getSeconds() + ":" + millisStr);
 
   // Update the timestamps array in solarCarData
   solarCarData["timestamps"] = timestamps;
