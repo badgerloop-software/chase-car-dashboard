@@ -89,8 +89,13 @@ if [[ ! $no_open ]]; then
 	fi
 fi
 
+# Create the Docker volume
+path=`pwd`
+mkdir -p recordedData
+docker volume create --name chasecar --opt type=none --opt device=${path}/recordedData --opt o=bind
+
 # Run the Docker image
-docker run -p 3000:3000 ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
+docker run -v chasecar:/chase-car-dashboard/Backend/src/recordedData ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
 
 #The server will be run at http://localhost:3000, it will take one to two minutes to start up
 #if this window does not automatically pop up then please enter the URL manually
