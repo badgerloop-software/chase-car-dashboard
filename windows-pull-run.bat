@@ -116,6 +116,11 @@ docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
 @REM Open the dashboard if no open wasn't specified
 IF NOT "%no_open%"=="true" start http://localhost:3000
 
+@REM Create the Docker volume
+path=%cd%
+lmkdir recordedData
+docker volume create --name chasecar --opt type=none --opt device=%path%/recordedData --opt o=bind
+
 @REM Run the dashboard image
 docker run -p 3000:3000 ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag%
 
