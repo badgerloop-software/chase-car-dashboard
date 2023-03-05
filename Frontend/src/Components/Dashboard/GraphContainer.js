@@ -97,9 +97,13 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
       //   onSave(graphTitles[idx], datasets);
       if(name === "Select"){
         updateNeedGraphMetaData(idx, [''])
+        let titles = graphTitles
+        titles[idx] = "Select"
+        setGraphTitles(titles)
+        return
       }
 
-      if(name !== "Custom"){
+      if(name !== "Custom" || name !== "Select"){
         // console.log("Moved to:", idx, "selected Name:", name,"All titles ",graphTitles)
       }
       // duplicate the graph titles
