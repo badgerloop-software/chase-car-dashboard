@@ -6,10 +6,6 @@ import os
 import xlsxwriter
 
 
-print("#Hello from python#")
-print("First param: " + sys.argv[1])
-print("Second param: " + sys.argv[2])
-
 recordedDataPath = sys.argv[1]
 
 f3 = open(sys.argv[2])
