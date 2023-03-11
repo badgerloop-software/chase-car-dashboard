@@ -39,7 +39,7 @@ import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
 import GraphData from "./graph-data.json";
-import colors from "../Shared/colors";
+import getColor from "../Shared/colors";
 
 ChartJS.register(
   LinearScale,
@@ -66,9 +66,9 @@ function getOptions(now, secondsRetained, colorMode) {
   // console.log("now:", now);
   // console.log("diff:", DateTime.now().diff(now).toHuman());
 
-  const gridColor = colorMode === "light" ? colors.light.grid : colors.dark.grid;
-  const gridBorderColor = colorMode === "light" ? colors.light.gridBorder : colors.dark.gridBorder;
-  const ticksColor = colorMode === "light" ? colors.light.ticks : colors.dark.ticks;
+  const gridColor = getColor("grid", colorMode);
+  const gridBorderColor = getColor("gridBorder", colorMode);
+  const ticksColor = getColor("ticks", colorMode);
 
   return {
     responsive: true,
@@ -171,7 +171,7 @@ function getOptions(now, secondsRetained, colorMode) {
 export default function CustomGraph(props) {
   const { colorMode } = useColorMode();
 
-  const borderCol = colorMode === "light" ? colors.light.border : colors.dark.border;
+  const borderCol = getColor("border", colorMode);
 
   // destructure props
   const {

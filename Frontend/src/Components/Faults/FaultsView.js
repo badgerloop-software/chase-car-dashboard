@@ -9,7 +9,7 @@ export default function Faults(props) {
   const { colorMode } = useColorMode();
 
   // Get set of images for light mode or dark mode
-  const Images = colorMode === "light" ? FaultsViewImages.light : FaultsViewImages.dark;
+  const Images = FaultsViewImages[`${colorMode}`];
 
   /**
    * Checks the boolean value specified by dataLabel against its nominal value. Returns true if the boolean value
@@ -380,8 +380,8 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
-      {props.data?.soc[0] < CONSTANTS.soc.MIN + 5 ? (
-        <Tooltip label={"Battery charge is low (<" + (CONSTANTS.soc.MIN + 5) + "%)"}>
+      {props.data?.soc[0] < CONSTANTS.soc.MIN ? (
+        <Tooltip label={`Battery charge is low (<${CONSTANTS.soc.MIN}%)`}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.LowBattery} />
         </Tooltip>
       ) : (

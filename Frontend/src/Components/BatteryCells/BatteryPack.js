@@ -1,12 +1,12 @@
 import {Flex, useColorMode} from "@chakra-ui/react";
 import DataPack from "./DataPack";
 import CONSTANTS from "../../data-constants.json";
-import colors from "../Shared/colors";
+import getColor from "../Shared/colors";
 
 export default function BatteryPack(props) {
     const { colorMode } = useColorMode();
 
-    const headerBg = colorMode === "light" ? colors.light.header : colors.dark.header;
+    const headerBg = getColor("header", colorMode);
 
     return (
         <Flex flex="auto" direction="column">

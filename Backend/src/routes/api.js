@@ -6,6 +6,7 @@ const nReadlines = require('n-readlines');
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
 import INITIAL_FRONTEND_DATA from "../../Data/cache_data.json";
+import CONSTANTS from "../../src/constants.json";
 
 const ROUTER = Router();
 let solarCarData = INITIAL_SOLAR_CAR_DATA;
@@ -177,24 +178,40 @@ function recordData(data) {
 
 
 
-//----------------------------------------------------- TCP -----------------------------------------------------------
+//----------------------------------------------------- TCP ----------------------------------------------------------
+const CAR_PORT = CONSTANTS.CAR_PORT; // Port for TCP connection
+let CAR_ADDRESS; // TCP server's IP address (PI_ADDRESS to connect to pi; TEST_ADDRESS to connect to data generator)
 
-const CAR_PORT = 4003; // Port for TCP connection
-const CAR_SERVER = "localhost"; // TCP server's IP address (Replace with pi's IP address to connect to pi)
+// Set CAR_ADDRESS according to the command used to start the backend
+if((process.argv.length === 3) && (process.argv.findIndex((val) => val === "dev") === 2)) {
+  // `npm start dev` was used. Connect to data generator
+  CAR_ADDRESS = CONSTANTS.TEST_ADDRESS;
+} else if(process.argv.length === 2) {
+  // `npm start` was used. Connect to the pi
+  CAR_ADDRESS = CONSTANTS.PI_ADDRESS;
+} else {
+  // An invalid command was used. Throw an error describing the usage
+  throw new Error('Invalid command. Correct usages:\n' +
+                  '\t`npm start`: Use to connect the backend to the pi\n' +
+                  '\t`npm run start-dev`: Use to connect the backend to the local data generator\n' +
+                  '\t`npm start dev` (from Backend/ only): Same as `npm run start-dev`\n');
+}
+
+console.log('CAR_ADDRESS: ' + CAR_ADDRESS);
 
 // The max number of data points to have in each array at one time
 // equivalent to 10 minutes' worth of data being sent 30 Hz
-const X_AXIS_CAP = 18_000;
-
+const X_AXIS_CAP = CONSTANTS.X_AXIS_CAP;
 
 /**
- * Creates a connection with the TCP server at port CAR_PORT and address CAR_SERVER. Then, sets listeners for connect,
+ * Creates a connection with the TCP server at port CAR_PORT and address CAR_ADDRESS. Then, sets listeners for connect,
  * data, close, and error events. In the event of an error, the client will attempt to re-open the socket at
  * regular intervals.
  */
 function openSocket() {
   // Establish connection with server
-  var client = net.connect(CAR_PORT, CAR_SERVER); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
+  console.log('CAR_PORT: ' + CAR_PORT);
+  var client = net.connect(CAR_PORT, CAR_ADDRESS); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
   client.setKeepAlive(true);
 
   // Connection established listener

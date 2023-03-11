@@ -1,11 +1,11 @@
 import {Box, Heading, useColorMode} from "@chakra-ui/react";
-import colors from "./colors";
+import getColor from "./colors";
 
 export default function HeadingCell(props) {
     const { colorMode } = useColorMode();
 
-    const headerBg = colorMode === "light" ? colors.light.header : colors.dark.header;
-    const borderCol = colorMode === "light" ? colors.light.border : colors.dark.border;
+    const headerBg = getColor("header", colorMode);
+    const borderCol = getColor("border", colorMode);
 
     return (
         <Box w={props.w ?? "100%"} bg={headerBg} borderColor={borderCol} borderTopWidth='1px' borderBottomWidth='1px' textAlign='center' lineHeight='1'>

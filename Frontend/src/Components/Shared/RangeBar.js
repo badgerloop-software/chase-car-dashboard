@@ -1,5 +1,5 @@
-import { Box, useColorModeValue } from "@chakra-ui/react";
-import colors from "./colors";
+import { Box, useColorMode } from "@chakra-ui/react";
+import getColor from "./colors";
 
 export default function RangeBar(props) {
   const clamp = (x, a, b) => Math.max(a, Math.min(x, b));
@@ -72,7 +72,9 @@ export default function RangeBar(props) {
 
   const colorStr = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 
-  const bgColorStr = useColorModeValue(colors.light.background, colors.dark.background);
+  const { colorMode } = useColorMode();
+
+  const bgColorStr = getColor("background", colorMode);
 
   return (
     <Box

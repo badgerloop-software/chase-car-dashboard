@@ -11,16 +11,12 @@ import {
     VStack
 } from "@chakra-ui/react";
 import Draggable from 'react-draggable';
-import { BsFillRecordCircleFill } from "react-icons/bs";
 import { useState, useLayoutEffect, useRef } from "react";
-import ConvertIcon from "./Convert Icon.png";
-import colors from "../Shared/colors";
-
-// Importing toastify module
 import { toast } from 'react-toastify';
-
-// Import toastify css file
 import 'react-toastify/dist/ReactToastify.css';
+import { BsFillRecordCircleFill } from "react-icons/bs";
+import ConvertIcon from "./Convert Icon.png";
+import getColor from "../Shared/colors";
 
 // toast-configuration method,
 // it is compulsory method.
@@ -29,24 +25,27 @@ toast.configure()
 
 export default function DataRecordingControl(props) {
     // ------------------------------------------ Color mode --------------------------------------------
+    // Get system color mode
     const {colorMode} = useColorMode();
+    // Get colors depending on color mode
+    const selectTxtCol = getColor("selectTxt", colorMode);
+    const selectTxtFocusCol = getColor("selectTxtFocus", colorMode);
+    const selectBgCol = getColor("selectBg", colorMode);
 
-    const colorPalette = colorMode === "light" ? colors.light : colors.dark;
-
-    const [createButtonColor, setCreateButtonColor] = useState(colorPalette.selectTxt);
-    const [processButtonColor, setProcessButtonColor] = useState(colorPalette.selectTxt);
-    const [recordButtonColor, setRecordButtonColor] = useState(colorPalette.selectTxt);
+    const [createButtonColor, setCreateButtonColor] = useState(selectTxtCol);
+    const [processButtonColor, setProcessButtonColor] = useState(selectTxtCol);
+    const [recordButtonColor, setRecordButtonColor] = useState(selectTxtCol);
 
     const changeButtonColor = (event) => {
         switch(event.target.id) {
             case 'create':
-                setCreateButtonColor(colorPalette.selectTxtFocus)
+                setCreateButtonColor(selectTxtFocusCol)
                 break;
             case 'process':
-                setProcessButtonColor(colorPalette.selectTxtFocus)
+                setProcessButtonColor(selectTxtFocusCol)
                 break;
             case 'record':
-                setRecordButtonColor(colorPalette.selectTxtFocus)
+                setRecordButtonColor(selectTxtFocusCol)
                 break;
         }
     }
@@ -54,13 +53,13 @@ export default function DataRecordingControl(props) {
     const changeButtonColorBack = (event) => {
         switch(event.target.id) {
             case 'create':
-                setCreateButtonColor(colorPalette.selectTxt)
+                setCreateButtonColor(selectTxtCol)
                 break;
             case 'process':
-                setProcessButtonColor(colorPalette.selectTxt)
+                setProcessButtonColor(selectTxtCol)
                 break;
             case 'record':
-                setRecordButtonColor(colorPalette.selectTxt)
+                setRecordButtonColor(selectTxtCol)
                 break;
         }
     }
@@ -254,7 +253,7 @@ export default function DataRecordingControl(props) {
                                                 disabled={isRecording}
                                                 ref={createRef}
                                                 width={"auto"}
-                                                bgColor={colorPalette.selectBg}
+                                                bgColor={selectBgCol}
                                                 color={createButtonColor}
                                                 size='sm'
                                                 onClick={onOpen}
@@ -273,7 +272,7 @@ export default function DataRecordingControl(props) {
                                                         id='process'
                                                         disabled={isRecording}
                                                         width={"auto"}
-                                                        bgColor={colorPalette.selectBg}
+                                                        bgColor={selectBgCol}
                                                         color={processButtonColor}
                                                         size='sm'
                                                         onMouseEnter={changeButtonColor}
@@ -291,7 +290,7 @@ export default function DataRecordingControl(props) {
                                                         id='record'
                                                         ref={recordRef}
                                                         width={"auto"}
-                                                        bgColor={colorPalette.selectBg}
+                                                        bgColor={selectBgCol}
                                                         color={recordButtonColor}
                                                         size='sm'
                                                         onMouseEnter={changeButtonColor}

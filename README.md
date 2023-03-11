@@ -28,7 +28,17 @@
 2. If you have not already, clone the `sc1-data-format` repository and initialize the submodule (see instructions above).
 3. Run `npm run update-data` to update the constants (e.g. nominal min/max values for all data) related to each piece of data listed in the submodule (see the "Updating Data" section).
 4. Run `npm i` to install the latest dependencies to your computer.
-5. In a terminal, run `npm start`. The console output may look messy, but that is due to three servers running at the same time. For a more organized console, please look below.
+5. In a terminal, run `npm start` or, if you want to run the engineering dashboard without the solar car dashboard, `npm run start-dev`. The console output may look messy, but that is due to three servers running at the same time. For a more organized console, please look below.
+
+## Running the Dashboard With Docker
+
+0. Install [Docker Desktop](https://docs.docker.com/get-docker/) or [Docker](https://docs.docker.com/engine/install/). 
+1. If you are not familiar with Docker, it is recommended to install Docker Desktop.
+2. Once it is installed, start Docker Desktop. If Docker is not started, you will see a message saying Docker Daemon is Starting. Wait for this to complete.
+3. Look for a script in this GitHub repo that matches your OS. If you're on Windows, that script is called `windows-pull-run.bat`, and for Linux and Mac it is called `linux-pull-run.sh`.
+4. To download the script, open the script in GitHub and then click "Raw". The file will open in a tab. Then do `Ctrl + S` or `Command + S`, depending on your OS, and save it to your Downloads folder. If operating on Windows make sure to remove the ".txt" when downloading. To run, look at the bullet points below:
+   - (Windows) Navigate to the Downloads folder and double click on the script. 
+   - (MacOS/Linux) Run these commands in your terminal `cd Downloads`, `chmod +x linux-pull-run.sh`, and `./linux-pull-run.sh`.
 
 ## Contributing to the Dashboard
 
@@ -41,15 +51,13 @@
    1. To avoid pushing changes that use obsolete data, update the submodule and data constants before you `git push` your changes. If there are changes to the data format, run the dashboard to make sure your code still works.
 5. Run `npm i` to install the latest dependencies to your computer. You will also need to do this when you `git pull` to get the most recent changes of the code on your branch.
 6. If you want to test the engineering dashboard with the solar car dashboard, do the following:
-   1. Change the value of `CAR_SERVER` in `Backend/src/routes/api.js` to the TCP server's address (either the Raspberry Pi's IP address or "localhost").
-   2. Open up two separate terminals.
-   3. In the first, `cd` into `Backend` and, while the solar car dashboard is running, run the command `npm start`.
-   4. With the other terminal, repeat the process with `Frontend`.
+   1. Open up two separate terminals.
+   2. In the first, `cd` into `Backend` and run the command `npm start dev`.
+   3. With the other terminal, cd into `Frontend` and run the command `npm start`.
 7. If you want to test the engineering dashboard without the solar car dashboard, do the following:
-   1. Make sure the value of `CAR_SERVER` in `Backend/src/routes/api.js` is "localhost".
-   2. Open up three separate terminals.
-   3. In the first, `cd` into `DataGenerator` and run the command `npm start`.
-   4. With the other two terminals, repeat the process with `Backend` and `Frontend`, in that order, after the previous has initialized and opened their port (4003 and 4001, respectively).
+   1. Open up three separate terminals.
+   2. In the first, `cd` into `DataGenerator` and run the command `npm start`.
+   3. With the other two terminals, repeat the process with `Backend` and `Frontend`, in that order, after the previous has initialized and opened their port (4003 and 4001, respectively).
 8. Once you have finished making your necessary changes to your code, switch to a new branch that has a good name for the feature or names the Jira issue (e.g. `SW-23/skeleton`).
 9. Commit related changes to that branch and push to this repository. (Do this often so that it is easy to finely revert to a previous state!)
 10. Once you are happy with the state of your code, open a pull request and request someone to conduct a code review. It may be kicked back with some suggestions or edits, but when it is accepted, it will be merged with `main`. Congrats! Now it's just time to rinse and repeat.

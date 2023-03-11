@@ -1,15 +1,15 @@
 import {Text, useColorMode, VStack} from "@chakra-ui/react";
 import CONSTANTS from "../../data-constants.json";
 import RangeBar from "../Shared/RangeBar";
-import colors from "../Shared/colors";
+import getColor from "../Shared/colors";
 
 export default function CellGroup(props) {
     const { colorMode } = useColorMode();
 
     const voltageConstants = CONSTANTS[`cell_group${props.groupNum}_voltage`];
     const bg = (props.voltage < voltageConstants.MIN || props.voltage > voltageConstants.MAX) ?
-        "#ff000055" : null;
-    const borderCol = colorMode === "light" ? colors.light.border : colors.dark.border;
+        getColor("errorBg", colorMode) : null;
+    const borderCol = getColor("border", colorMode);
 
     return (
         <VStack

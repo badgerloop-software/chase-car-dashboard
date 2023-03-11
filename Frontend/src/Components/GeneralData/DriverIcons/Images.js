@@ -26,4 +26,4 @@ const DriverImages = {
     }
 }
 
-export { DriverImages };
+export default DriverImages;

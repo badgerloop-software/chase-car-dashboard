@@ -2,12 +2,11 @@ import express from "express";
 import { createServer } from "http";
 import index from "./routes/api.js";
 import cors from 'cors';
-// var cors = require('cors');
+import CONSTANTS from "../src/constants.json";
 
-
-const PORT = 4001;
+const PORT = CONSTANTS.PORT;
 const APP = express();
-const bodyParser = require('body-parser'); 
+const bodyParser = require('body-parser');
 APP.use(bodyParser.json());
 APP.use(cors({
     // Accepted Origin
