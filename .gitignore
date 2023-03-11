@@ -20,7 +20,7 @@
 .env.production.local
 /**/.idea
 /**/.vscode
-/**/recordedData
+/recordedData
 
 # Data recording
 /Backend/recordedData/sessions/*.bin
