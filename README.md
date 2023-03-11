@@ -33,9 +33,9 @@
 1. If you are not familiar with Docker, it is recommended to install Docker Desktop.
 2. Once it is installed, start Docker Desktop. If Docker is not started, you will see a message saying Docker Daemon is Starting. Wait for this to complete.
 3. Look for a script in this GitHub repo that matches your OS. If you're on Windows, that script is called `windows-pull-run.bat`, and for Linux and Mac it is called `linux-pull-run.sh`.
-4. To download the script, open the script in GitHub and then click "Raw". The file will open in a tab. Then do `Ctrl + S` or `Command + S`, depending on your OS, and save it to your Downloads folder. If operating on Windows make sure to remove the ".txt" when downloading. To run, look at the bullet points below:
-   - (Windows) Navigate to the Downloads folder and double click on the script. 
-   - (MacOS/Linux) Run these commands in your terminal `cd Downloads`, `chmod +x linux-pull-run.sh`, and `./linux-pull-run.sh`.
+4. To download the script, open the script in GitHub and then click "Raw". The file will open in a tab. Then do `Ctrl + S` or `Command + S`, depending on your OS, and save it to your Downloads folder or another location if you choose. Note that the script will create folder called recordedData in the same directory that your script is in, so choose your location wisely. If operating on Windows make sure to remove the ".txt" when downloading. To run, look at the bullet points below:
+   - (Windows) Navigate to the Downloads folder (or wherever you downloaded it) and double click on the script. 
+   - (MacOS/Linux) Run these commands in your terminal `cd Downloads` (to whereever you downloaded the script), `chmod +x linux-pull-run.sh`, and `./linux-pull-run.sh`.
 
 ## Contributing to the Dashboard
 
