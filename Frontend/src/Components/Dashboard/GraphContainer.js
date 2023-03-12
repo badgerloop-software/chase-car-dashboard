@@ -51,35 +51,45 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
   // stores the list of graph names/id
   const [graphTitles, setGraphTitles] = useState(["", "", ""]);
 
+  const [savedGraphsMetadata, setSaveGraphsMetadata] = useState({}) //(NOTE: not linked to render) This will save saved graph titles and corresponding data keys
+  const [neededGraphMetadata, setNeededGraphMetadata] = useState({ meta: [] })
 
-  const [neededGraphMetaData, setNeededGraphMetaData] = useState({meta: [] })
-
-  const sendNGM_toBackend = async (data) =>{
-    let response = await fetch("http://localhost:4001/api/needed-graph-metadata",{
-     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-     // mode: 'cors', // no-cors, *cors, same-origin
-     headers: {
-       'Accept': 'application/json',
-       'Content-type': 'application/json; charset=UTF-8',
-     },
-     body: JSON.stringify(data) // body data type must match "Content-Type"
+  const sendNGM_toBackend = async (data) => {
+    let response = await fetch("http://localhost:4001/api/needed-graph-metadata", {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      // mode: 'cors', // no-cors, *cors, same-origin
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify(data) // body data type must match "Content-Type"
     })
-   
-    console.log("SENDING NGM:", data )
-   
+
+    console.log("SENDING NGM:", data)
+
     console.log(response)
-   }
-   
- // Request for needed graph
-  const updateNeedGraphMetaData = useCallback((indx, data) => {
-    let obj = neededGraphMetaData
-    obj.meta[indx] = data
+  }
+
+  const updateSavedGraphsMetadata = useCallback((graphName, graphKeys) => {
+    if ((graphName !== "Custom" || graphName !== "") && graphName) {
+      let temp = savedGraphsMetadata
+      temp[graphName] = graphKeys
+      setSaveGraphsMetadata(temp)
+      console.log("UPDATE(savedGraphs):", savedGraphsMetadata)
+    }
+
+  }, [savedGraphsMetadata])
+
+  // Update and Request for needed graph
+  const updateNeededGraphMetadata = useCallback((idx, data) => {
+    let obj = neededGraphMetadata
+    obj.meta[idx] = data
     
-    setNeededGraphMetaData(obj)
-    console.log("index:", indx,"Obj:",  obj.meta)
+    setNeededGraphMetadata(obj)
+    console.log("index:", idx, "Obj:", obj?.meta)
     sendNGM_toBackend(obj)
-  }, [neededGraphMetaData, sendNGM_toBackend]
-)
+  }, [neededGraphMetadata, sendNGM_toBackend]
+  )
 
 
   /**
@@ -95,24 +105,29 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
       // save graph in old position, if needed
       // if (graphTitles[idx] && graphTitles[idx] !== "Custom")
       //   onSave(graphTitles[idx], datasets);
-      if(name === "Select"){
-        updateNeedGraphMetaData(idx, [''])
+      if (name === "") {
+        updateNeededGraphMetadata(idx, null)
         let titles = graphTitles
-        titles[idx] = "Select"
+        titles[idx] = ""
         setGraphTitles(titles)
         return
       }
 
-      if(name !== "Custom" || name !== "Select"){
-        // console.log("Moved to:", idx, "selected Name:", name,"All titles ",graphTitles)
+      if ((name !== "Custom" || name !== "")) {
+         // When a saved key is selected and the destination is empty 
+        if(neededGraphMetadata.meta[idx] === null || neededGraphMetadata.meta[idx] === undefined){
+          updateNeededGraphMetadata(idx, savedGraphsMetadata[name])
+        }
       }
+
+      
       // duplicate the graph titles
       let copy = graphTitles.slice();
-      let neededGraphMetaData_copy = neededGraphMetaData
+      let neededGraphMetadata_copy = neededGraphMetadata
       // check for special values
       if (name?.length && name !== "Custom") {
         const oldIdx = graphTitles.indexOf(name);
-        
+
 
         // found old position of graph, swap with new position
         if (oldIdx !== -1) {
@@ -121,22 +136,28 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
           copy[oldIdx] = copy[idx];
           copy[idx] = name;
           setGraphTitles(copy);
-          // Swapping neededGraphMetaData
-          let NGMD_temp = neededGraphMetaData_copy.meta[oldIdx]
+          // Swapping neededGraphMetadata
+          let NGMD_temp = neededGraphMetadata_copy.meta[oldIdx]
           // We need to clear out custom graphs that we are swapping if there is any
           // Since we have swapped graphTitles already in copy[] we need to check for custom graph in the old position
-          if (copy[oldIdx] !== "Custom"){ 
-            neededGraphMetaData_copy.meta[oldIdx] =  neededGraphMetaData_copy.meta[idx]
-            neededGraphMetaData_copy.meta[idx] = NGMD_temp
-          }else{
-            neededGraphMetaData_copy.meta[oldIdx] = [""]  // Clear out custom graphs at the old position
-            neededGraphMetaData_copy.meta[idx] = NGMD_temp
-            sendNGM_toBackend(neededGraphMetaData_copy) // Since we cleared out the custom graph we need to tell the back end what graphs to send us based on the new needed graph list
+          if (copy[oldIdx] !== "Custom") {
+            if(graphTitles[idx] === ""){
+              neededGraphMetadata_copy.meta[oldIdx] = null
+              neededGraphMetadata_copy.meta[idx] = NGMD_temp
+            } else{
+              neededGraphMetadata_copy.meta[oldIdx] = neededGraphMetadata_copy.meta[idx]
+              neededGraphMetadata_copy.meta[idx] = NGMD_temp
+            }
+          } else {
+            
+            neededGraphMetadata_copy.meta[oldIdx] = null  // Clear out custom graphs at the old position
+            neededGraphMetadata_copy.meta[idx] = NGMD_temp
+            sendNGM_toBackend(neededGraphMetadata_copy) // Since we cleared out the custom graph we need to tell the back end what graphs to send us based on the new needed graph list
           }
-          setNeededGraphMetaData(neededGraphMetaData_copy)
+          setNeededGraphMetadata(neededGraphMetadata_copy)
           // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
- 
-          console.log("UPDATED copy",copy, "NGD:", neededGraphMetaData)
+
+          console.log("UPDATED copy", copy, "NGD:", neededGraphMetadata)
           return;
         }
       }
@@ -148,7 +169,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
       setGraphTitles(copy);
 
     },
-    [graphTitles, neededGraphMetaData]
+    [graphTitles, neededGraphMetadata]
   );
 
   //------------------------- Saving custom graphs ----------------------------
@@ -302,30 +323,32 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
               onChange={(evt) => showGraph(evt.target.value, index)}
               onChangeCapture={removeSelectFocus}
             >
-              <GraphOptions  titles={Object.keys(customGraphData)} txtColor={props.optionTxt}  />
+              <GraphOptions titles={Object.keys(customGraphData)} txtColor={props.optionTxt} />
             </Select>
-            {graphTitles[index] === ""|| graphTitles[index] === "Select" ? null : graphTitles[index] ===
+            {graphTitles[index] === "" || graphTitles[index] === "Select" ? null : graphTitles[index] ===
               "Custom" ? (
-                <CustomGraph
-                 _index={index}
-                  onUpdateGraphMetaData={updateNeedGraphMetaData}
-                  onSave={(title, isNew, data) =>
-                    onSave(title, isNew, data, index)
-                  }
-                  title=""
-                  // categories={categories}
-                  packedData={packedData}
-                  initialDatasets={[]}
-                  // allDatasets={allDatasets}
-                  latestTime={latestTime}
-                />
-            ) : (
-               <CustomGraph
-                _index = {index}
+              <CustomGraph
+                _index={index}
+                onUpdateGraphMetadata={updateNeededGraphMetadata}
+                onUpdateSavedGraphsMetadata={updateSavedGraphsMetadata}
                 onSave={(title, isNew, data) =>
                   onSave(title, isNew, data, index)
                 }
-                onUpdateGraphMetaData={updateNeedGraphMetaData}
+                title=""
+                // categories={categories}
+                packedData={packedData}
+                initialDatasets={[]}
+                // allDatasets={allDatasets}
+                latestTime={latestTime}
+              />
+            ) : (
+              <CustomGraph
+                _index={index}
+                onSave={(title, isNew, data) =>
+                  onSave(title, isNew, data, index)
+                }
+                onUpdateGraphMetadata={updateNeededGraphMetadata}
+                onUpdateSavedGraphsMetadata={updateSavedGraphsMetadata}
                 title={graphTitles[index]}
                 // categories={categories}
                 packedData={packedData}
@@ -351,10 +374,10 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
  * @param {string[]} props.titles the list of graph titles to display in the dropdown
  * @returns a component containing all the given options and "Custom"
  */
-function GraphOptions({titles, txtColor }) {
+function GraphOptions({ titles, txtColor }) {
   return (
     <>
-      <option style={{ color: txtColor }}  value="Select" >Select option</option>
+      <option style={{ color: txtColor }} value="" >Select option</option>
       {titles
         .filter((title) => title && title !== "Custom")
         .map((title) => (

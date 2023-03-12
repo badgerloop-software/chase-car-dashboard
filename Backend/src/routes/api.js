@@ -64,8 +64,13 @@ ROUTER.get("/api/specificdata", (req, res) => {
 
 ROUTER.post("/api/needed-graph-metadata", (req, res) => {
   // console.log("(BACKEND)needed-graph-metadata:", req.body.meta)
-  updateGraphsToSend(req.body.meta)
-  res.send({ status: "SUCCESS" }).status(200)
+  if(req.body){
+    updateGraphsToSend(req.body.meta)
+    res.send({ status: "SUCCESS" }).status(200)
+  }else{
+    res.send({ status: "EMPTY-REQ" }).status(200)
+  }
+  
 });
 
 function filterGraphsToSend(data) {

@@ -182,7 +182,8 @@ export default function CustomGraph(props) {
     secondsRetained,
     latestTime,
     _index,
-    onUpdateGraphMetaData,
+    onUpdateGraphMetadata,
+    onUpdateSavedGraphsMetadata,
     ...stackProps
   } = props;
 
@@ -211,7 +212,6 @@ export default function CustomGraph(props) {
   // an object that contains every selected dataset and a boolean to store whether it is enabled
   const [datasets, setDatasets] = useState(() => {
     const output = {};
-    console.log(initialDatasets)
     if(initialDatasets){
       for (const dataset of initialDatasets) {
         output[dataset] = true;
@@ -238,13 +238,20 @@ export default function CustomGraph(props) {
   const [datasetKeys, setDatasetKeys] = useState(Object.keys(datasets));
   // called when the name is to be saved for the first time, memoized for performance
   const onNewSave = useCallback(
-    (name) => onSave(name, true, { datasets: datasetKeys, historyLength }),
+    (name) => {
+      onSave(name, true, { datasets: datasetKeys, historyLength })
+      let obj = {
+        list: datasetKeys,
+        historyLength: historyLength
+      }
+      onUpdateSavedGraphsMetadata(name, obj)
+    },
     [onSave, datasetKeys, historyLength]
   );
 
   // side-effects for when new datasets are chosen
   useEffect(() => {
-    // console.log("yo, new datasets dropped:", datasetKeys);
+   
     // console.log("keys:", keys);
 
     // update dataset object {key: boolean}
@@ -287,12 +294,17 @@ export default function CustomGraph(props) {
     const onSelectSave = (newDatasetKeys, newHistoryLength) => {
       setDatasetKeys(newDatasetKeys);
       setHistoryLength(newHistoryLength);
+     
       let obj = {
         list: newDatasetKeys,
         historyLength: newHistoryLength
       }
-      onUpdateGraphMetaData(_index, obj)
-    };
+      onUpdateSavedGraphsMetadata(title, obj)
+      // if(onUpdateGraphMetadata){
+        // console.log("SEND")
+        onUpdateGraphMetadata(_index, obj)
+      // }
+    }
     return (
       <GraphSelectModal
         isOpen={isDataSelectOpen}
@@ -303,6 +315,7 @@ export default function CustomGraph(props) {
       />
     );
   }, [
+    // onUpdateGraphMetadata,
     isDataSelectOpen,
     onDataSelectClose,
     datasetKeys,
