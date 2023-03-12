@@ -117,7 +117,7 @@ export default function Dashboard(props) {
         // console.timeEnd("update react");
       })
       .catch((err) => console.log(err));
-  }, [state]);
+  }, [queue]);
 
   useEffect(() =>{
      callBackendAPI_SingleValues().then((res) =>{
