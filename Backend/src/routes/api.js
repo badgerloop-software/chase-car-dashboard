@@ -44,7 +44,7 @@ const RECORDED_DATA_PATH = './recordedData/sessions/';
 const SESSIONS_LIST_PATH = './recordedData/sessionsList.bin';
 const PROCESS_SCRIPT_PATH = './src/routes/process_recorded_data.py';
 const DATA_FORMAT_PATH = './Data/sc1-data-format/format.json';
-const PROCESSED_DATA_PATH = './src/routes/';
+const PROCESSED_DATA_PATH = './recordedData/processedData/';
 
 let doRecord = false; // Flag for whether we should be recording data or not
 let currentSession = "";
