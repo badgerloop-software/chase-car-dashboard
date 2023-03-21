@@ -1,4 +1,11 @@
-import { Box, Grid, GridItem, HStack, Select, useColorMode } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  HStack,
+  Select,
+  useColorMode
+} from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
 import DriverComms from "../GeneralData/DriverComms";
@@ -7,6 +14,7 @@ import BatteryCells from "../BatteryCells/BatteryCells";
 import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import GraphContainer from "./GraphContainer";
+import DataRecordingControl from "./DataRecordingControl";
 import dvOptions from "./dataViewOptions";
 import getColor from "../Shared/colors";
 
@@ -253,6 +261,9 @@ export default function Dashboard(props) {
 
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
+
+      <DataRecordingControl/>
+
       <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
         <GridItem
           minH="min-content"
