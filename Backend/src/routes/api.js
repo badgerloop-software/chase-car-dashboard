@@ -57,7 +57,6 @@ let lineNumber = 1;
 
 // Getting all the created sessions from sessionsList.bin
 while (line = broadbandLines.next()) {
-  // console.log(`Line ${lineNumber} has: ${line.toString('ascii')}`);
   sessionsList.push(_convertLine(line));
   lineNumber++;
 }
@@ -211,7 +210,6 @@ function openSocket() {
   // Data received listener
   client.on("data", (data) => {
     if(data.length === bytesPerPacket) {
-      // console.log(data);
       console.time("update data");
       unpackData(data);
 
@@ -284,9 +282,6 @@ function unpackData(data) {
   let timestamps = solarCarData["timestamps"]; // The array of timestamps for each set of data added to solarCarData
   // Array values indicate the status of the connection to the solar car. These will always be true when unpacking data
   let solar_car_connection = solarCarData["solar_car_connection"];
-
-  // Add the current timestamp to timestamps, limit its length, and update the array in solarCarData
-  // timestamps.unshift(DateTime.now().toString());
 
   // Add separators for timestamp to timestamps and limit array's length
   timestamps.unshift("::.");
