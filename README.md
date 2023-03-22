@@ -38,7 +38,7 @@
 3. Look for a script in this GitHub repo that matches your OS. If you're on Windows, that script is called `windows-pull-run.bat`, and for Linux and Mac it is called `linux-pull-run.sh`.
 4. To download the script, open the script in GitHub and then click "Raw". The file will open in a tab. Then do `Ctrl + S` or `Command + S`, depending on your OS, and save it. This script will create a folder called recordedData in the same spot as your script, so keep that in mind when choosing where to download it.  If operating on Windows make sure to remove the ".txt" when downloading. To run, look at the bullet points below:
    - (Windows) Navigate to the folder storing the script and double click on it. 
-   - (MacOS/Linux) Cd into the directory storing the script, and then run these commands: `chmod +x linux-pull-run.sh`, and `./linux-pull-run.sh`.
+   - (MacOS/Linux) `cd` into the directory storing the script, and then run these commands: `chmod +x linux-pull-run.sh` and `./linux-pull-run.sh`.
 
 ## Contributing to the Dashboard
 
@@ -64,4 +64,4 @@
 
 ## Data Recording
 
-Raw recorded data is saved in .bin files in `Backend/recordedData/sessions/`. However, the dashboard can be used to convert this raw binary data to Excel format. The generated Excel workbooks (.csv files) are located in `Backend/src/routes/`.
+Raw recorded data is saved in .bin files in `Backend/recordedData/sessions/`. However, the dashboard can be used to convert this raw binary data to Excel format. The generated Excel workbooks (.csv files) are located in `Backend/recordedData/processedData/`. However, if you are running the dashboard using Docker, recorded data will be organized as described in [Running the Dashboard With Docker](https://github.com/badgerloop-software/chase-car-dashboard#running-the-dashboard-with-docker).

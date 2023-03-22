@@ -9,7 +9,7 @@ import xlsxwriter
 recordedDataPath = sys.argv[1]
 
 f3 = open(sys.argv[2])
-f4 = open(recordedDataPath, "rb")  # TODO Check the file name
+f4 = open(recordedDataPath, "rb")
 
 # Open Excel file and create first sheet (same name as the file)
 workbook = xlsxwriter.Workbook(sys.argv[3])
@@ -20,20 +20,6 @@ worksheet = workbook.add_worksheet(
 # Load data format JSON and get the keys in it
 format = json.load(f3)
 keys = format.keys()
-
-
-# TODO Remove this miscellaneous stuff
-i = 0
-for key in keys:
-    i += format[key][0]
-
-print("Bytes in data packet: " + str(i + 1))
-print("Bytes in binary file: " + str(os.path.getsize(recordedDataPath)))
-print(
-    "Number of rows that should be loaded: "
-    + str(os.path.getsize(recordedDataPath) / (i + 1))
-)
-
 
 # Remove timestamp components from headers. If any of them cannot be found in the data format, print a descriptive message so the user knows what happened
 headers = list(keys)
@@ -133,8 +119,6 @@ worksheet.write(0, c, "Solar Car Connection", header_format)
 # Freeze headers and timestamps
 worksheet.freeze_panes(1, 1)
 
-# TODO Showed the tstamp_ms value: print(np.fromfile(f4, np.dtype('>u2'), 1, "", 51))
-
 # Get the size of the recorded data file
 recordedDataSize = os.path.getsize(recordedDataPath)
 rownum = 2
@@ -168,12 +152,11 @@ while f4.tell() < recordedDataSize:  # Loop until there is no more data left in 
                     ":.", ":" + (("0" + str(data)) if (data < 10) else str(data)) + "."
                 )
         elif dataType == "float":
-            data = np.fromfile(f4, np.dtype("<f4"), 1, "", 0)  # TODO Remove the 4 in the data type?
+            data = np.fromfile(f4, np.dtype("<f4"), 1, "", 0)
         elif dataType == "bool":
             data = np.fromfile(f4, np.dtype("?"), 1, "", 0)
         elif dataType == "char":
-            # TODO Should be able to use i1 instead of u1 since the random number generator in DataGenerator and the actual values will never go above 100 (and will not have a msb of 1)
-            data = np.fromfile(f4, np.dtype("u1"), 1, "", 0)  # TODO Check data type
+            data = np.fromfile(f4, np.dtype("u1"), 1, "", 0)
             data = chr(int(data))
         elif dataType == "uint16":
             data = np.fromfile(f4, np.dtype(">u2"), 1, "", 0)[0]
