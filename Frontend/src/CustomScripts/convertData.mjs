@@ -18,7 +18,10 @@ const allDatasets = OldGraphData.categories.flatMap(
 // console.log(allDatasets);
 
 // the JSON list of categories to be written to the file
-const categories = [];
+const categories = [{
+  category: "Software;Communication",
+  values: []
+}];
 
 // go through every item in the data format
 for (const key of Object.keys(SC1DataFormat)) {
@@ -56,7 +59,7 @@ for (const key of Object.keys(SC1DataFormat)) {
 
 // add solar_car_connection dataset
 categories
-  .find((category) => category.category === "General")
+  .find((category) => category.category === "Software;Communication")
   .values.push({
     key: "solar_car_connection",
     name: "Solar Car Connection",
