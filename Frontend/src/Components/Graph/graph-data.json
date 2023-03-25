@@ -1,22 +1,208 @@
 {
   "categories": [
     {
-      "category": "General",
+      "category": "Software;Communication",
+      "values": [
+        {
+          "key": "solar_car_connection",
+          "name": "Solar Car Connection",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "MCC;Motor Controller I/O",
       "values": [
         {
           "key": "speed",
           "name": "Speed",
           "unit": "mph",
           "min": 0,
-          "max": 70
+          "max": 100
         },
+        {
+          "key": "fr_out",
+          "name": "fr_out",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "accelerator_out",
+          "name": "accelerator_out",
+          "unit": "V",
+          "min": 0,
+          "max": 3.3
+        },
+        {
+          "key": "mc_status",
+          "name": "mc_status",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        }
+      ]
+    },
+    {
+      "category": "Main IO;Shutdown",
+      "values": [
+        {
+          "key": "driver_eStop",
+          "name": "driver_eStop",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "external_eStop",
+          "name": "external_eStop",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "crash",
+          "name": "Crash",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "door",
+          "name": "Door",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "door_lim_out",
+          "name": "door_lim_out",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "mcu_check",
+          "name": "mcu_check",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "mcu_stat_fdbk",
+          "name": "mcu_stat_fdbk",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "mcu_hv_en",
+          "name": "mcu_hv_en",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "imd_status",
+          "name": "imd_status",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "mcu_latch",
+          "name": "mcu_latch",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "MCC;Firmware",
+      "values": [
         {
           "key": "state",
           "name": "State",
           "unit": "",
           "min": 0,
-          "max": 256
+          "max": 255
         },
+        {
+          "key": "crz_pwr_setpt",
+          "name": "crz_pwr_setpt",
+          "unit": "W",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "crz_spd_setpt",
+          "name": "crz_spd_setpt",
+          "unit": "mph",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "crz_state",
+          "name": "crz_state",
+          "unit": "",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "motor_power",
+          "name": "motor_power",
+          "unit": "W",
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "category": "MCC;Driver Buttons/Switches",
+      "values": [
+        {
+          "key": "fr_telem",
+          "name": "fr_telem",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "crz_pwr_mode",
+          "name": "crz_pwr_mode",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "crz_spd_mode",
+          "name": "crz_spd_mode",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "eco",
+          "name": "eco",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "main_telem",
+          "name": "main_telem",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "Main IO;Sensors",
+      "values": [
         {
           "key": "linear_accel_x",
           "name": "linear_accel_x",
@@ -60,8 +246,29 @@
           "max": 100
         },
         {
-          "key": "cabin_temp",
-          "name": "Cabin Temperature",
+          "key": "motor_temp",
+          "name": "Motor Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "motor_controller_temp",
+          "name": "motor_controller_temp",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "dcdc_temp",
+          "name": "dcdc_temp",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "mainIO_temp",
+          "name": "Main IO Temperature",
           "unit": "°C",
           "min": 0,
           "max": 100
@@ -86,14 +293,90 @@
           "unit": "°C",
           "min": 0,
           "max": 100
+        }
+      ]
+    },
+    {
+      "category": "Driver IO;Sensors",
+      "values": [
+        {
+          "key": "driverIO_temp",
+          "name": "Driver IO Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
         },
         {
-          "key": "cruise",
-          "name": "Cruise",
+          "key": "cabin_temp",
+          "name": "Cabin Temperature",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "category": "Main IO;Lights",
+      "values": [
+        {
+          "key": "bl_turn_led_en",
+          "name": "bl_turn_led_en",
           "unit": "",
           "min": 0,
           "max": 1
         },
+        {
+          "key": "br_turn_led_en",
+          "name": "br_turn_led_en",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "bc_brake_led_en",
+          "name": "bc_brake_led_en",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "bc_bps_led_en",
+          "name": "bc_bps_led_en",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "Driver IO;Lights",
+      "values": [
+        {
+          "key": "headlights_led_en",
+          "name": "headlights_led_en",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "fl_turn_led_en",
+          "name": "fl_turn_led_en",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "fr_turn_led_en",
+          "name": "fr_turn_led_en",
+          "unit": "",
+          "min": 0,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "Driver IO;Driver Inputs",
+      "values": [
         {
           "key": "left_turn",
           "name": "Left Turn",
@@ -123,15 +406,8 @@
           "max": 1
         },
         {
-          "key": "accelerator",
-          "name": "Accelerator",
-          "unit": "V",
-          "min": 0,
-          "max": 5
-        },
-        {
-          "key": "solar_car_connection",
-          "name": "Solar Car Connection",
+          "key": "horn_status",
+          "name": "horn_status",
           "unit": "",
           "min": 0,
           "max": 1
@@ -139,46 +415,239 @@
       ]
     },
     {
-      "category": "Shutdown",
+      "category": "MCC;Sensors",
       "values": [
         {
-          "key": "driver_eStop",
-          "name": "driver_eStop",
+          "key": "brake_status",
+          "name": "brake_status",
           "unit": "",
           "min": 0,
-          "max": 0
+          "max": 1
         },
         {
-          "key": "external_eStop",
-          "name": "external_eStop",
+          "key": "mech_brake_status",
+          "name": "mech_brake_status",
           "unit": "",
           "min": 0,
-          "max": 0
+          "max": 1
         },
         {
-          "key": "battery_eStop",
-          "name": "battery_eStop",
+          "key": "parking_brake",
+          "name": "parking_brake",
           "unit": "",
           "min": 0,
-          "max": 0
+          "max": 1
         },
         {
-          "key": "crash",
-          "name": "Crash",
-          "unit": "",
+          "key": "accelerator",
+          "name": "Accelerator",
+          "unit": "%",
           "min": 0,
-          "max": 0
+          "max": 1
         },
         {
-          "key": "door",
-          "name": "Door",
+          "key": "motor_current",
+          "name": "motor_current",
+          "unit": "A",
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "category": "Main IO;Firmware",
+      "values": [
+        {
+          "key": "mppt_can_heartbeat",
+          "name": "mppt_can_heartbeat",
           "unit": "",
           "min": 1,
           "max": 1
         },
         {
-          "key": "mcu_check",
-          "name": "mcu_check",
+          "key": "mcc_can_heartbeat",
+          "name": "mcc_can_heartbeat",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "bms_can_heartbeat",
+          "name": "bms_can_heartbeat",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "mainIO_heartbeat",
+          "name": "mainIO_heartbeat",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "Main IO;Power Monitor",
+      "values": [
+        {
+          "key": "main_5V_bus",
+          "name": "main_5V_bus",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "main_12V_bus",
+          "name": "main_12V_bus",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "main_vbus",
+          "name": "main_vbus",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "main_vbus_current",
+          "name": "main_vbus_current",
+          "unit": "A",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "main_power_critical",
+          "name": "main_power_critical",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "main_power_warning",
+          "name": "main_power_warning",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "main_power_tc",
+          "name": "main_power_tc",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "main_power_valid",
+          "name": "main_power_valid",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "Driver IO;Power Monitor",
+      "values": [
+        {
+          "key": "driver_5V_bus",
+          "name": "driver_5V_bus",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "driver_12V_bus",
+          "name": "driver_12V_bus",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "driver_vbus",
+          "name": "driver_vbus",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "driver_vbus_current",
+          "name": "driver_vbus_current",
+          "unit": "A",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "driver_power_critical",
+          "name": "driver_power_critical",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "driver_power_warning",
+          "name": "driver_power_warning",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "driver_power_tc",
+          "name": "driver_power_tc",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "driver_power_valid",
+          "name": "driver_power_valid",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "High Voltage;MPS",
+      "values": [
+        {
+          "key": "mppt_contactor",
+          "name": "mppt_contactor",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "motor_controller_contactor",
+          "name": "motor_controller_contactor",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "low_contactor",
+          "name": "low_contactor",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    },
+    {
+      "category": "High Voltage;PPC",
+      "values": [
+        {
+          "key": "dcdc_valid",
+          "name": "dcdc_valid",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "supplemental_valid",
+          "name": "supplemental_valid",
           "unit": "",
           "min": 0,
           "max": 0
@@ -186,15 +655,48 @@
       ]
     },
     {
-      "category": "BMS",
+      "category": "Solar Array;MPPT",
       "values": [
         {
-          "key": "imd_status",
-          "name": "imd_status",
+          "key": "mppt_mode",
+          "name": "mppt_mode",
           "unit": "",
           "min": 0,
-          "max": 0
+          "max": 1
         },
+        {
+          "key": "mppt_current_out",
+          "name": "mppt_current_out",
+          "unit": "A",
+          "min": 0,
+          "max": 7
+        },
+        {
+          "key": "string1_temp",
+          "name": "String 1 Temperature",
+          "unit": "°C",
+          "min": 20,
+          "max": 50
+        },
+        {
+          "key": "string2_temp",
+          "name": "String 2 Temperature",
+          "unit": "°C",
+          "min": 20,
+          "max": 50
+        },
+        {
+          "key": "string3_temp",
+          "name": "String 3 Temperature",
+          "unit": "°C",
+          "min": 20,
+          "max": 50
+        }
+      ]
+    },
+    {
+      "category": "Battery;BMS CAN",
+      "values": [
         {
           "key": "pack_temp",
           "name": "Pack Temperature",
@@ -203,11 +705,18 @@
           "max": 60
         },
         {
+          "key": "pack_internal_temp",
+          "name": "pack_internal_temp",
+          "unit": "°C",
+          "min": 0,
+          "max": 100
+        },
+        {
           "key": "pack_current",
           "name": "Pack Current",
           "unit": "A",
-          "min": 0,
-          "max": 100
+          "min": -10,
+          "max": 40
         },
         {
           "key": "pack_voltage",
@@ -216,6 +725,315 @@
           "min": 69,
           "max": 108
         },
+        {
+          "key": "populated_cells",
+          "name": "populated_cells",
+          "unit": "",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "soc",
+          "name": "soc",
+          "unit": "%",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "soh",
+          "name": "soh",
+          "unit": "Ah",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "pack_capacity",
+          "name": "Pack Capacity",
+          "unit": "Ah",
+          "min": 57,
+          "max": 57
+        },
+        {
+          "key": "adaptive_total_capacity",
+          "name": "Adaptive Total Capacity",
+          "unit": "Ah",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "fan_speed",
+          "name": "Fan Speed",
+          "unit": "",
+          "min": 0,
+          "max": 6
+        },
+        {
+          "key": "voltage_failsafe",
+          "name": "Voltage Failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "current_failsafe",
+          "name": "Current Failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "relay_failsafe",
+          "name": "Relay Failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "cell_balancing_active",
+          "name": "cell_balancing_active",
+          "unit": "",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "key": "charge_interlock_failsafe",
+          "name": "charge_interlock_failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "thermistor_b_value_table_invalid",
+          "name": "thermistor_b_value_table_invalid",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "input_power_supply_failsafe",
+          "name": "input_power_supply_failsafe",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "discharge_limit_enforcement_fault",
+          "name": "discharge_limit_enforcement_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "charger_safety_relay_fault",
+          "name": "charger_safety_relay_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "internal_hardware_fault",
+          "name": "internal_hardware_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "internal_heatsink_fault",
+          "name": "internal_heatsink_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "internal_software_fault",
+          "name": "internal_software_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "highest_cell_voltage_too_high_fault",
+          "name": "highest_cell_voltage_too_high_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "lowest_cell_voltage_too_low_fault",
+          "name": "lowest_cell_voltage_too_low_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "pack_too_hot_fault",
+          "name": "pack_too_hot_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "internal_communication_fault",
+          "name": "internal_communication_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "cell_balancing_stuck_off_fault",
+          "name": "cell_balancing_stuck_off_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "weak_cell_fault",
+          "name": "weak_cell_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "low_cell_voltage_fault",
+          "name": "low_cell_voltage_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "open_wiring_fault",
+          "name": "open_wiring_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "current_sensor_fault",
+          "name": "current_sensor_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "highest_cell_voltage_over_5V_fault",
+          "name": "highest_cell_voltage_over_5V_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "cell_asic_fault",
+          "name": "cell_asic_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "weak_pack_fault",
+          "name": "weak_pack_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "fan_monitor_fault",
+          "name": "fan_monitor_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "thermistor_fault",
+          "name": "thermistor_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "external_communication_fault",
+          "name": "external_communication_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "redundant_power_supply_fault",
+          "name": "redundant_power_supply_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "high_voltage_isolation_fault",
+          "name": "high_voltage_isolation_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "input_power_supply_fault",
+          "name": "input_power_supply_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "charge_limit_enforcement_fault",
+          "name": "charge_limit_enforcement_fault",
+          "unit": "",
+          "min": 0,
+          "max": 0
+        },
+        {
+          "key": "pack_resistance",
+          "name": "Pack Resistance",
+          "unit": "mOhm",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "bms_input_voltage",
+          "name": "BMS Input Voltage",
+          "unit": "V",
+          "min": 12,
+          "max": 24
+        }
+      ]
+    },
+    {
+      "category": "Battery;Firmware",
+      "values": [
+        {
+          "key": "pack_power",
+          "name": "pack_power",
+          "unit": "W",
+          "min": -1080,
+          "max": 4320
+        }
+      ]
+    },
+    {
+      "category": "Battery;Supplemental",
+      "values": [
+        {
+          "key": "supplemental_voltage",
+          "name": "supplemental_voltage",
+          "unit": "V",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "key": "est_supplemental_soc",
+          "name": "est_supplemental_soc",
+          "unit": "%",
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "category": "Battery;BMS",
+      "values": [
         {
           "key": "cell_group1_voltage",
           "name": "Cell Group 1 Voltage",
@@ -427,32 +1245,11 @@
           "max": 7.2
         },
         {
-          "key": "soc",
-          "name": "soc",
-          "unit": "%",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "soh",
-          "name": "soh",
-          "unit": "Ah",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "pack_capacity",
-          "name": "Pack Capacity",
-          "unit": "Ah",
-          "min": 57,
-          "max": 57
-        },
-        {
-          "key": "adaptive_total_capacity",
-          "name": "Adaptive Total Capacity",
-          "unit": "Ah",
-          "min": 0,
-          "max": 100
+          "key": "cell_group31_voltage",
+          "name": "cell_group31_voltage",
+          "unit": "V",
+          "min": 6.4,
+          "max": 7.2
         },
         {
           "key": "bps_fault",
@@ -462,267 +1259,30 @@
           "max": 0
         },
         {
-          "key": "fan_speed",
-          "name": "Fan Speed",
+          "key": "fan_enable",
+          "name": "fan_enable",
           "unit": "",
           "min": 0,
-          "max": 6
-        },
-        {
-          "key": "voltage_failsafe",
-          "name": "Voltage Failsafe",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        },
-        {
-          "key": "current_failsafe",
-          "name": "Current Failsafe",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        },
-        {
-          "key": "supply_power_failsafe",
-          "name": "Power Supply Failsafe",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        },
-        {
-          "key": "memory_failsafe",
-          "name": "Memory Failsafe",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        },
-        {
-          "key": "relay_failsafe",
-          "name": "Relay Failsafe",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        },
-        {
-          "key": "bms_canbus_failure",
-          "name": "BMS CAN-bus Failure",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        },
-        {
-          "key": "pack_resistance",
-          "name": "Pack Resistance",
-          "unit": "mOhm",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "avg_cell_resistance",
-          "name": "Average Cell Resistance",
-          "unit": "mOhm",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "bms_input_voltage",
-          "name": "BMS Input Voltage",
-          "unit": "V",
-          "min": 12,
-          "max": 24
-        }
-      ]
-    },
-    {
-      "category": "Motor",
-      "values": [
-        {
-          "key": "motor_temp",
-          "name": "Motor Temperature",
-          "unit": "°C",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "motor_controller_temp",
-          "name": "motor_controller_temp",
-          "unit": "°C",
-          "min": 0,
-          "max": 100
-        }
-      ]
-    },
-    {
-      "category": "PPC",
-      "values": [
-        {
-          "key": "dcdc_temp",
-          "name": "dcdc_temp",
-          "unit": "°C",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "dcdc_valid",
-          "name": "dcdc_valid",
-          "unit": "",
-          "min": 1,
           "max": 1
         },
         {
-          "key": "supplemental_valid",
-          "name": "supplemental_valid",
+          "key": "charge_enable",
+          "name": "charge_enable",
           "unit": "",
           "min": 0,
-          "max": 0
-        }
-      ]
-    },
-    {
-      "category": "LV Boards",
-      "values": [
-        {
-          "key": "driverIO_temp",
-          "name": "Driver IO Temperature",
-          "unit": "°C",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "mainIO_temp",
-          "name": "Main IO Temperature",
-          "unit": "°C",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "mainIO_heartbeat",
-          "name": "mainIO_heartbeat",
-          "unit": "",
-          "min": 1,
-          "max": 1
-        },
-        {
-          "key": "bus_5V",
-          "name": "5V Bus",
-          "unit": "V",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "bus_12V",
-          "name": "12V Bus",
-          "unit": "V",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "mainIO_current_in",
-          "name": "Main IO Current In",
-          "unit": "A",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "driverIO_current_in",
-          "name": "Driver IO Current In",
-          "unit": "A",
-          "min": 0,
-          "max": 100
-        },
-        {
-          "key": "power_critical",
-          "name": "power_critical",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        },
-        {
-          "key": "power_warning",
-          "name": "power_warning",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        },
-        {
-          "key": "power_tc",
-          "name": "power_tc",
-          "unit": "",
-          "min": 0,
-          "max": 0
-        }
-      ]
-    },
-    {
-      "category": "MPS",
-      "values": [
-        {
-          "key": "mps_enable",
-          "name": "mps_enable",
-          "unit": "",
-          "min": 1,
-          "max": 1
-        },
-        {
-          "key": "mppt_contactor",
-          "name": "mppt_contactor",
-          "unit": "",
-          "min": 1,
-          "max": 1
-        },
-        {
-          "key": "motor_controller_contactor",
-          "name": "motor_controller_contactor",
-          "unit": "",
-          "min": 1,
-          "max": 1
-        },
-        {
-          "key": "low_contactor",
-          "name": "low_contactor",
-          "unit": "",
-          "min": 1,
           "max": 1
         }
       ]
     },
     {
-      "category": "MPPT",
+      "category": "Battery;Shutdown",
       "values": [
         {
-          "key": "mppt_mode",
-          "name": "mppt_mode",
+          "key": "discharge_enable",
+          "name": "discharge_enable",
           "unit": "",
           "min": 0,
-          "max": 1
-        },
-        {
-          "key": "mppt_current_out",
-          "name": "mppt_current_out",
-          "unit": "A",
-          "min": 0,
-          "max": 7
-        },
-        {
-          "key": "string1_temp",
-          "name": "String 1 Temperature",
-          "unit": "°C",
-          "min": 20,
-          "max": 50
-        },
-        {
-          "key": "string2_temp",
-          "name": "String 2 Temperature",
-          "unit": "°C",
-          "min": 20,
-          "max": 50
-        },
-        {
-          "key": "string3_temp",
-          "name": "String 3 Temperature",
-          "unit": "°C",
-          "min": 20,
-          "max": 50
+          "max": 0
         }
       ]
     }
