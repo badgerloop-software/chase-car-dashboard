@@ -73,9 +73,6 @@ export default function Faults(props) {
     // Add any pressed E-stops to eStopStrings
     // The first element pushed to eStopStrings/added to the list of E-stops should be capitalized, and any
     // additional E-stops should not be capitalized
-    if (_checkBooleanData("battery_eStop")) {
-      eStopStrings.push("Battery");
-    }
     if (_checkBooleanData("driver_eStop")) {
       eStopStrings.push(eStopStrings.length === 0 ? "Driver" : "driver");
     }
@@ -100,8 +97,7 @@ export default function Faults(props) {
     return (
       _checkBooleanData("voltage_failsafe") ||
       _checkBooleanData("current_failsafe") ||
-      _checkBooleanData("supply_power_failsafe") ||
-      _checkBooleanData("memory_failsafe") ||
+      _checkBooleanData("input_power_supply_failsafe") ||
       _checkBooleanData("relay_failsafe")
     );
   };
@@ -125,11 +121,8 @@ export default function Faults(props) {
         failsafeStrings.length === 0 ? "Current" : "current"
       );
     }
-    if (_checkBooleanData("supply_power_failsafe")) {
+    if (_checkBooleanData("input_power_supply_failsafe")) {
       failsafeStrings.push(failsafeStrings.length === 0 ? "Supply" : "supply");
-    }
-    if (_checkBooleanData("memory_failsafe")) {
-      failsafeStrings.push(failsafeStrings.length === 0 ? "Memory" : "memory");
     }
     if (_checkBooleanData("relay_failsafe")) {
       failsafeStrings.push(failsafeStrings.length === 0 ? "Relay" : "relay");
@@ -325,8 +318,7 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
-      {_checkBooleanData("battery_eStop") ||
-      _checkBooleanData("driver_eStop") ||
+      {_checkBooleanData("driver_eStop") ||
       _checkBooleanData("external_eStop") ? (
         <Tooltip label={getEStopString()}>
           <Image fit={fitType} boxSize={imageHeight} src={Images.EStop} />
@@ -431,27 +423,7 @@ export default function Faults(props) {
       ) : (
         <Box h={imageHeight} />
       )}
-      {_checkBooleanData("bms_canbus_failure") ? (
-        _checkBooleanData("mainIO_heartbeat") ? (
-          <Tooltip
-            label={"BMS CANBUS failure and Driver IO/Main IO connection lost"}
-          >
-            <Image
-              fit={fitType}
-              boxSize={imageHeight}
-              src={Images.PhysicalConnection}
-            />
-          </Tooltip>
-        ) : (
-          <Tooltip label={"BMS CANBUS failure"}>
-            <Image
-              fit={fitType}
-              boxSize={imageHeight}
-              src={Images.PhysicalConnection}
-            />
-          </Tooltip>
-        )
-      ) : _checkBooleanData("mainIO_heartbeat") ? (
+      {_checkBooleanData("mainIO_heartbeat") ? (
         <Tooltip label={"Driver IO/Main IO connection lost"}>
           <Image
             fit={fitType}
