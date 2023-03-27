@@ -82,15 +82,6 @@ export default function BatteryPack(props) {
                 DecimalPoint='3'
             />
             <DataPack
-                dataTitle="Avg. Cell Int. Resist"
-                dataValue={props.data?.avg_cell_resistance[0] ?? -1.0}
-                dataUnit="m&#937;"
-                dataMin={CONSTANTS.avg_cell_resistance.MIN}
-                dataMax={CONSTANTS.avg_cell_resistance.MAX}
-                bg={headerBg}
-                DecimalPoint='3'
-            />
-            <DataPack
                 dataTitle="Pack Capacity"
                 dataValue={props.data?.pack_capacity[0] ?? -1.0}
                 dataUnit={CONSTANTS.pack_capacity.UNIT}
