@@ -7,7 +7,7 @@ import {
   useColorMode
 } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
-import FaultsView from "../Faults/FaultsView";
+// import FaultsView from "../Faults/FaultsView";
 import DriverComms from "../GeneralData/DriverComms";
 import IOView from "../GeneralData/IOView";
 import BatteryCells from "../BatteryCells/BatteryCells";
@@ -275,7 +275,7 @@ export default function Dashboard(props) {
           borderWidth={1}
           p={2}
         >
-          <FaultsView data={state.data} />
+          {/* <FaultsView data={state.data} /> */}
         </GridItem>
         <GridItem
           minH="min-content"

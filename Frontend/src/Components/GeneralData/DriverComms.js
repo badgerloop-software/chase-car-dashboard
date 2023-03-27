@@ -82,7 +82,6 @@ export default function DriverComms(props) {
                         </Center>
                         {props.data?.headlights[0] ? <Image boxSize='35px' src={Images.Headlights}/> : <Box h='35px'/>}
                         {props.data?.hazards[0] ? <Image boxSize='35px' src={Images.Hazards}/> : <Box h='35px'/>}
-                        {props.data?.cruise[0] ? <Image boxSize='35px' src={Images.Cruise}/> : <Box h='35px'/>}
                         {props.data?.left_turn[0] ? <Image boxSize='35px' src={Images.Left}/> : <Box h='35px'/>}
                         {props.data?.right_turn[0] ? <Image boxSize='35px' src={Images.Right}/> : <Box h='35px'/>}
                     </SimpleGrid>
@@ -101,10 +100,6 @@ export default function DriverComms(props) {
                 <CommsLabel
                     boolean={props.data?.mainIO_heartbeat[0]}
                     label='Driver I/O - Main I/O'
-                />
-                <CommsLabel
-                    boolean={props.data?.bms_canbus_failure[0]}
-                    label='BMS CANBUS'
                 />
             </Flex>
         </Flex>
