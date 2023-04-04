@@ -8,8 +8,9 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
-import DriverComms from "../GeneralData/DriverComms";
-import IOView from "../GeneralData/IOView";
+import DriverComms from "../Communication/DriverComms";
+import Communication from "../Communication/Communication";
+import IOView from "../Communication/IOView";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
@@ -194,6 +195,8 @@ export default function Dashboard(props) {
         return <PPC_MPPT data={state.data}/>;
       case dvOptions.driver_comms:
         return <DriverComms data={state.data}/>;
+      case dvOptions.communication:
+        return <Communication data={state.data}/>;
       case dvOptions.io_boards:
         return <IOView data={state.data}/>;
       case dvOptions.select:
@@ -417,6 +420,7 @@ function DataViewOptions(props) {
       <option style={{color: props.txtColor}} value={dvOptions.cell_groups}>BMS - Cell Groups</option>
       <option style={{color: props.txtColor}} value={dvOptions.ppc_mppt}>PPC and MPPT</option>
       <option style={{color: props.txtColor}} value={dvOptions.driver_comms}>Driver/Cabin and Communication</option>
+      <option style={{color: props.txtColor}} value={dvOptions.communication}>Communication</option>
       <option style={{color: props.txtColor}} value={dvOptions.io_boards}>I/O Boards</option>
     </>
   );
