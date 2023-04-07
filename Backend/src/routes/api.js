@@ -15,6 +15,9 @@ let frontendData = INITIAL_FRONTEND_DATA;
 const NUM_BYTES_IDX = 0;
 const DATA_TYPE_IDX = 1;
 
+let graphsToSend = [];
+let graphsMetadata = {}  // template => { "0": {"historyLength":20, "datasets":[A, B, C]}}
+
 let bytesPerPacket = 0;
 for (const property in DATA_FORMAT) {
   bytesPerPacket += DATA_FORMAT[property][NUM_BYTES_IDX];
@@ -22,7 +25,7 @@ for (const property in DATA_FORMAT) {
 
 
 // Send data to front-end
-ROUTER.get("/api", (req, res) => {
+ROUTER.get(CONSTANTS.ROUTES.GET_GRAPH_DATA, (req, res) => {
   console.time("send http");
   const temp = res.send({ response: frontendData }).status(200);
   temp.addListener("finish", () => console.timeEnd("send http"));
@@ -36,7 +39,7 @@ ROUTER.get("/api", (req, res) => {
 
 // Convert line to UTF-8 and remove return character
 function _convertLine(line) {
-	return line.toString('utf8').replace('\r', "");
+  return line.toString('utf8').replace('\r', "");
 }
 
 
@@ -63,12 +66,12 @@ while (line = broadbandLines.next()) {
 console.log("Initial list of recorded sessions:", sessionsList)
 
 
-ROUTER.get("/sessionsList", (req, res) => {
+ROUTER.get(CONSTANTS.ROUTES.GET_SESSION_LIST, (req, res) => {
   res.send({ response: sessionsList }).status(200);
 });
 
 
-ROUTER.post("/create-recording-session", (req, res) => {
+ROUTER.post(CONSTANTS.ROUTES.CREATE_RECORDING_SESSION, (req, res) => {
   if (req.body.fileName === "") {
     res.send({ response: "Empty" }).status(200);
     return
@@ -94,7 +97,7 @@ ROUTER.post("/create-recording-session", (req, res) => {
 });
 
 
-ROUTER.post("/current-recording-session", (req, res) => {
+ROUTER.post(CONSTANTS.ROUTES.SET_RECORDING_SESSION, (req, res) => {
   if (req.body.fileName === "") {
     res.send({ response: -1 }).status(200);
     return
@@ -108,7 +111,7 @@ ROUTER.post("/current-recording-session", (req, res) => {
 
 
 // Set recording flag to true or false depeding on request
-ROUTER.post("/record-data", (req, res) => {
+ROUTER.post(CONSTANTS.ROUTES.SET_RECORD, (req, res) => {
   if (currentSession === "") {
     res.send({ response: "NoFile" }).status(200)
     return
@@ -119,7 +122,7 @@ ROUTER.post("/record-data", (req, res) => {
 });
 
 
-ROUTER.get("/process-recorded-data", (req, res) => {
+ROUTER.get(CONSTANTS.ROUTES.PROCESS_RECORDED_DATA, (req, res) => {
   // Execute Python script to convert recorded binary data to a formatted Excel file
 
   console.log(currentSession)
@@ -131,9 +134,9 @@ ROUTER.get("/process-recorded-data", (req, res) => {
 
   // Spawn new child process to call the python script
   const python = spawn('python', [PROCESS_SCRIPT_PATH,
-                                  RECORDED_DATA_PATH + currentSession + '.bin',
-                                  DATA_FORMAT_PATH,
-                                  PROCESSED_DATA_PATH + currentSession + '.csv']);
+    RECORDED_DATA_PATH + currentSession + '.bin',
+    DATA_FORMAT_PATH,
+    PROCESSED_DATA_PATH + currentSession + '.csv']);
 
   // Collect data from script
   python.stdout.on('data', function (data) {
@@ -157,13 +160,65 @@ ROUTER.get("/process-recorded-data", (req, res) => {
 
 function recordData(data) {
   fs.appendFile(RECORDED_DATA_PATH + currentSession + ".bin", Buffer.concat([data, Buffer.alloc(1, true)]),
-                (err) => {
-                  if(err) {
-                    console.error("ERROR: Error while appending to file");
-                  }
-  });
+    (err) => {
+      if (err) {
+        console.error("ERROR: Error while appending to file");
+      }
+    });
 }
 
+
+ROUTER.post(CONSTANTS.ROUTES.UPDATE_GRAPHS_METADATA, (req, res) => {
+  // console.log("(BACKEND)needed-graph-metadata:", req.body.meta)
+  if (req.body) {
+    updateGraphsMetadata(req.body.meta)
+    res.send({ status: "SUCCESS" }).status(200)
+  } else {
+    res.send({ status: "EMPTY-REQ" }).status(200)
+  }
+
+});
+
+function filterGraphsToSend(data) {
+  let obj = {}
+  graphsToSend.map(() => {
+    obj[`${key}`] = data[`${key}`]
+  })
+
+  obj["timestamp"] = data["timestamps"]
+  return obj
+}
+
+
+function updateGraphsMetadata(data) {
+  graphsToSend = []
+  console.log("[----------------NEEDED GRAPHS REQUEST (updateGraphsMetadata)-----------------]")
+
+  for (const [key, value] of Object.entries(data)) {
+    // let newObj = {key: value} 
+    graphsMetadata[`${key}`] = value
+    updateGraphsToSend(value)
+  }
+
+}
+
+
+function updateGraphsToSend(data) {
+  graphsToSend = []
+  console.log("[----------------NEEDED GRAPHS REQUEST (updateGraphsToSend)-----------------]")
+  if (data) {
+    console.log(":----Looking into Item: ")
+    data?.datasets?.map((i) => {
+      if (!graphsToSend.includes(i)) {
+        graphsToSend.push(i)
+        console.log(`   -> ${i} (Good to go)`)
+      } else {
+        console.log(`   -> ${i} (Duplicate handled)`)
+      }
+    })
+    //  console.log("UPDATED:",graphsToSend )
+  }
+}
 
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
@@ -171,18 +226,18 @@ const CAR_PORT = CONSTANTS.CAR_PORT; // Port for TCP connection
 let CAR_ADDRESS; // TCP server's IP address (PI_ADDRESS to connect to pi; TEST_ADDRESS to connect to data generator)
 
 // Set CAR_ADDRESS according to the command used to start the backend
-if((process.argv.length === 3) && (process.argv.findIndex((val) => val === "dev") === 2)) {
+if ((process.argv.length === 3) && (process.argv.findIndex((val) => val === "dev") === 2)) {
   // `npm start dev` was used. Connect to data generator
   CAR_ADDRESS = CONSTANTS.TEST_ADDRESS;
-} else if(process.argv.length === 2) {
+} else if (process.argv.length === 2) {
   // `npm start` was used. Connect to the pi
   CAR_ADDRESS = CONSTANTS.PI_ADDRESS;
 } else {
   // An invalid command was used. Throw an error describing the usage
   throw new Error('Invalid command. Correct usages:\n' +
-                  '\t`npm start`: Use to connect the backend to the pi\n' +
-                  '\t`npm run start-dev`: Use to connect the backend to the local data generator\n' +
-                  '\t`npm start dev` (from Backend/ only): Same as `npm run start-dev`\n');
+    '\t`npm start`: Use to connect the backend to the pi\n' +
+    '\t`npm run start-dev`: Use to connect the backend to the local data generator\n' +
+    '\t`npm start dev` (from Backend/ only): Same as `npm run start-dev`\n');
 }
 
 console.log('CAR_ADDRESS: ' + CAR_ADDRESS);
@@ -209,7 +264,7 @@ function openSocket() {
 
   // Data received listener
   client.on("data", (data) => {
-    if(data.length === bytesPerPacket) {
+    if (data.length === bytesPerPacket) {
       console.time("update data");
       unpackData(data);
 
@@ -231,17 +286,17 @@ function openSocket() {
       solarCarData.solar_car_connection[0] = false;
       frontendData.solar_car_connection[0] = false;
       // If recording, replace the latest solar_car_connection value in file with false
-      if(doRecord) {
+      if (doRecord) {
         fs.open(RECORDED_DATA_PATH + currentSession + ".bin", "r+", (err, fd) => {
-          if(!err) {
+          if (!err) {
             fs.write(
-                fd, Buffer.alloc(1, false), 0, 1, fs.fstatSync(fd).size - 1,
-                (err, bw, buf) => {
-                  if(err) {
-                    // Failed to write byte to offset
-                    console.error("ERROR: Error writing to file when lost connection");
-                  }
+              fd, Buffer.alloc(1, false), 0, 1, fs.fstatSync(fd).size - 1,
+              (err, bw, buf) => {
+                if (err) {
+                  // Failed to write byte to offset
+                  console.error("ERROR: Error writing to file when lost connection");
                 }
+              }
             );
           }
         });
