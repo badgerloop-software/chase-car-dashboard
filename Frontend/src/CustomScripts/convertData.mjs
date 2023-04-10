@@ -8,7 +8,19 @@ import OldGraphData from "../Components/Graph/graph-data.json" assert { type: "j
  * @returns {string} the formatted unit value
  */
 function expandUnit(unit) {
-  return unit.replaceAll("degC", "°C"); // degC => °C
+  // deg => °; ohm => Ω; ^2 => ²
+  return unit.replace(/(?<deg>deg)|(?<ohm>[Oo]hm)|(?<square>\^2)/gm, (match, deg, ohm, square) => {
+    switch(match) {
+      case deg:
+        return "°";
+      case ohm:
+        return "Ω";
+      case square:
+        return "²";
+      default:
+        return "";
+    }
+  });
 }
 
 // flatpack the old graph data to easily access old data

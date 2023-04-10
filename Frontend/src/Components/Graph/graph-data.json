@@ -206,42 +206,42 @@
         {
           "key": "linear_accel_x",
           "name": "linear_accel_x",
-          "unit": "m/s^2",
+          "unit": "m/s²",
           "min": 0,
           "max": 100
         },
         {
           "key": "linear_accel_y",
           "name": "linear_accel_y",
-          "unit": "m/s^2",
+          "unit": "m/s²",
           "min": 0,
           "max": 100
         },
         {
           "key": "linear_accel_z",
           "name": "linear_accel_z",
-          "unit": "m/s^2",
+          "unit": "m/s²",
           "min": 0,
           "max": 100
         },
         {
           "key": "angular_rate_pitch",
           "name": "angular_rate_pitch",
-          "unit": "deg/s",
+          "unit": "°/s",
           "min": 0,
           "max": 100
         },
         {
           "key": "angular_rate_roll",
           "name": "angular_rate_roll",
-          "unit": "deg/s",
+          "unit": "°/s",
           "min": 0,
           "max": 100
         },
         {
           "key": "angular_rate_yaw",
           "name": "angular_rate_yaw",
-          "unit": "deg/s",
+          "unit": "°/s",
           "min": 0,
           "max": 100
         },
@@ -987,7 +987,7 @@
         {
           "key": "pack_resistance",
           "name": "Pack Resistance",
-          "unit": "mOhm",
+          "unit": "mΩ",
           "min": 0,
           "max": 100
         },

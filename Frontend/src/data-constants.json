@@ -70,77 +70,77 @@
         "MAX": 1
     },
     "linear_accel_x": {
-        "UNIT": "m/s^2",
+        "UNIT": "m/s²",
         "MIN": 0,
         "MAX": 100
     },
     "linear_accel_y": {
-        "UNIT": "m/s^2",
+        "UNIT": "m/s²",
         "MIN": 0,
         "MAX": 100
     },
     "linear_accel_z": {
-        "UNIT": "m/s^2",
+        "UNIT": "m/s²",
         "MIN": 0,
         "MAX": 100
     },
     "angular_rate_pitch": {
-        "UNIT": "deg/s",
+        "UNIT": "°/s",
         "MIN": 0,
         "MAX": 100
     },
     "angular_rate_roll": {
-        "UNIT": "deg/s",
+        "UNIT": "°/s",
         "MIN": 0,
         "MAX": 100
     },
     "angular_rate_yaw": {
-        "UNIT": "deg/s",
+        "UNIT": "°/s",
         "MIN": 0,
         "MAX": 100
     },
     "motor_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
     "motor_controller_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
     "dcdc_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
     "driverIO_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
     "mainIO_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
     "cabin_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
     "road_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
     "brake_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
     "air_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
@@ -415,27 +415,27 @@
         "MAX": 7
     },
     "string1_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 20,
         "MAX": 50
     },
     "string2_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 20,
         "MAX": 50
     },
     "string3_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 20,
         "MAX": 50
     },
     "pack_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 60
     },
     "pack_internal_temp": {
-        "UNIT": "degC",
+        "UNIT": "°C",
         "MIN": 0,
         "MAX": 100
     },
@@ -815,7 +815,7 @@
         "MAX": 0
     },
     "pack_resistance": {
-        "UNIT": "mOhm",
+        "UNIT": "mΩ",
         "MIN": 0,
         "MAX": 100
     },
