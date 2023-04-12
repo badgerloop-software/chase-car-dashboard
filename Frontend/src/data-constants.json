@@ -429,6 +429,36 @@
         "MIN": 20,
         "MAX": 50
     },
+    "string1_V_in": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 60
+    },
+    "string2_V_in": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 60
+    },
+    "string3_V_in": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 60
+    },
+    "string1_I_in": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 7
+    },
+    "string2_I_in": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 7
+    },
+    "string3_I_in": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 7
+    },
     "pack_temp": {
         "UNIT": "°C",
         "MIN": 0,
@@ -827,7 +857,7 @@
     "charge_enable": {
         "UNIT": "",
         "MIN": 0,
-        "MAX": 1
+        "MAX": 0
     },
     "discharge_enable": {
         "UNIT": "",
