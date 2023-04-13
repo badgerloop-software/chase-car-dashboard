@@ -176,11 +176,13 @@ export default function CustomGraph(props) {
   // destructure props
   const {
     onSave,
+    updateGraphsMetaData,
     title,
     packedData,
     initialDatasets,
     secondsRetained,
     latestTime,
+    index,
     ...stackProps
   } = props;
 
@@ -278,6 +280,13 @@ export default function CustomGraph(props) {
   // the modal that appears when the user wants to update the datasets that are shown
   const graphSelectModal = useMemo(() => {
     const onSelectSave = (newDatasetKeys, newHistoryLength) => {
+      updateGraphsMetaData({
+        [index]: {
+          "historyLength": newHistoryLength,
+          "datasets": newDatasetKeys
+        }
+      });
+
       setDatasetKeys(newDatasetKeys);
       setHistoryLength(newHistoryLength);
     };

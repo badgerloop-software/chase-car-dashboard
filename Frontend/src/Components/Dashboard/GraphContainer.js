@@ -2,6 +2,7 @@ import { Select, useConst, VStack } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import CustomGraph from "../Graph/CustomGraph";
 import GraphData from "../Graph/graph-data.json";
+import { ROUTES } from "../Shared/misc-constants";
 
 /**
  * Generates color data for all categories/datasets and packs the data nicely
@@ -38,6 +39,32 @@ function generateCategories() {
 }
 
 /**
+ * Sends new metadata to the backend describing what datasets should be shown for graphs
+ * at specified indices.
+ *
+ * @param graphsMetadata The data needed by the graphs. The object is of the form:
+ * {
+ *     "<index>": {
+ *         "historyLength": int,
+ *         "datasets": string array,
+ *     },
+ *     ...
+ * }
+ */
+async function updateGraphsMetaData(graphsMetadata) {
+  let response = await fetch("http://localhost:4001" + ROUTES.UPDATE_GRAPHS_METADATA, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(graphsMetadata)
+  });
+
+  console.log("Response from UPDATE_GRAPHS_METADATA:", response);
+}
+
+/**
  * Creates a new GraphContainer component
  *
  * @param {any} props the props to pass to this graph container
@@ -70,7 +97,9 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
 
       // check for special values
       if (name?.length && name !== "Custom") {
+        // Get information about the graph being shown
         const oldIdx = graphTitles.indexOf(name);
+        const graphMetadataIdx = customGraphData[name];
 
         // found old position of graph, swap with new position
         if (oldIdx !== -1) {
@@ -79,9 +108,43 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
           copy[idx] = name;
           // console.log(graphTitles, "[", idx, "] =", name, "=", graphTitles);
 
+          // Get metadata of graph that is being swapped with
+          let graphMetadataOldIdx;
+          console.log("Does customGraphData have property \"\"?", customGraphData?.hasOwnProperty("")); // TODO
+          if (customGraphData?.hasOwnProperty(copy[oldIdx])) {
+            // The graph that the selected one is being swapped with is a saved graph
+            graphMetadataOldIdx = customGraphData[copy[oldIdx]];
+          } else {
+            // The graph that the selected one is being swapped with is empty or a Custom graph whose datasets and
+            // historyLength will be cleared
+            graphMetadataOldIdx = {
+              "historyLength": null,
+              "datasets": null
+            };
+          }
+
+          // The graph being shown is being swapped with another graph
+          updateGraphsMetaData({
+            [oldIdx]: graphMetadataOldIdx,
+            [idx]: graphMetadataIdx
+          });
+
           setGraphTitles(copy);
           return;
         }
+
+        // The graph being shown is a saved graph that is not being swapped with another graph
+        updateGraphsMetaData({
+          [idx]: graphMetadataIdx
+        });
+      } else {
+        // The graph being shown is a new Custom graph, or a graph is being closed
+        updateGraphsMetaData({
+          [idx]: {
+            "historyLength": null,
+            "datasets": null
+          }
+        });
       }
 
       // default set: if new custom/empty graph or replacing new custom/empty graph
@@ -250,17 +313,24 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
                 onSave={(title, isNew, data) =>
                   onSave(title, isNew, data, index)
                 }
+                updateGraphsMetaData={(graphsMetadata) =>
+                  updateGraphsMetaData(graphsMetadata)
+                }
                 title=""
                 // categories={categories}
                 packedData={packedData}
                 initialDatasets={[]}
                 // allDatasets={allDatasets}
                 latestTime={latestTime}
+                index={index}
               />
             ) : (
               <CustomGraph
                 onSave={(title, isNew, data) =>
                   onSave(title, isNew, data, index)
+                }
+                updateGraphsMetaData={(graphsMetadata) =>
+                  updateGraphsMetaData(graphsMetadata)
                 }
                 title={graphTitles[index]}
                 // categories={categories}
@@ -271,6 +341,7 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
                 }
                 // allDatasets={allDatasets}
                 latestTime={latestTime}
+                index={index}
               />
             )}
           </VStack>
