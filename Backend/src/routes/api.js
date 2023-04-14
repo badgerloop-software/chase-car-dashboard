@@ -24,11 +24,22 @@ for (const property in DATA_FORMAT) {
 }
 
 
-// Send data to front-end
+// Send graph data to front-end
 ROUTER.get(CONSTANTS.ROUTES.GET_GRAPH_DATA, (req, res) => {
-  console.time("send http");
-  const temp = res.send({ response: frontendData }).status(200);
-  temp.addListener("finish", () => console.timeEnd("send http"));
+  //console.time("send http");
+  let final_data = filterGraphsToSend(frontendData)
+  const temp = res.send({ response: final_data }).status(200);
+  //temp.addListener("finish", () => console.timeEnd("send http"));
+});
+
+
+// Send single values to front-end
+ROUTER.get(CONSTANTS.ROUTES.GET_SINGLE_VALUES, (req, res) => {
+  // console.time("send http");
+  let singleValuesJSON = getSingleValuesAtIndex(frontendData, 0)
+  // const temp =
+  res.send({ response: singleValuesJSON }).status(200);
+  // temp.addListener("finish", () => console.timeEnd("send http"));
 });
 
 
@@ -168,10 +179,15 @@ function recordData(data) {
 }
 
 
+
+// --------------------------------------------------------------------------------------------------------------------
+// Performance improvements
+// --------------------------------------------------------------------------------------------------------------------
+
 ROUTER.post(CONSTANTS.ROUTES.UPDATE_GRAPHS_METADATA, (req, res) => {
   // console.log("(BACKEND)needed-graph-metadata:", req.body.meta)
   if (req.body) {
-    updateGraphsMetadata(req.body.meta)
+    updateGraphsMetadata(req.body)
     res.send({ status: "SUCCESS" }).status(200)
   } else {
     res.send({ status: "EMPTY-REQ" }).status(200)
@@ -181,14 +197,13 @@ ROUTER.post(CONSTANTS.ROUTES.UPDATE_GRAPHS_METADATA, (req, res) => {
 
 function filterGraphsToSend(data) {
   let obj = {}
-  graphsToSend.map(() => {
+  graphsToSend.map((key) => {
     obj[`${key}`] = data[`${key}`]
   })
 
-  obj["timestamp"] = data["timestamps"]
+  obj["timestamps"] = data["timestamps"]
   return obj
 }
-
 
 function updateGraphsMetadata(data) {
   graphsToSend = []
@@ -197,14 +212,28 @@ function updateGraphsMetadata(data) {
   for (const [key, value] of Object.entries(data)) {
     // let newObj = {key: value} 
     graphsMetadata[`${key}`] = value
-    updateGraphsToSend(value)
+    console.log("graphs metadata:", graphsMetadata);
+  }
+  graphsToSend = []
+  for (const key in graphsMetadata) {
+    const data = graphsMetadata[key];
+    updateGraphsToSend(data)
   }
 
 }
 
+function getSingleValuesAtIndex(jsonData, index = 0) {
+  let newJson = {}
+  for (const key in jsonData) {
+    if (jsonData.hasOwnProperty(key)) {
+      newJson[`${key}`] = [jsonData[key][index]]
+      // console.log(`${key} : ${jsonData[key]} \n`)
+    }
+  }
+  return newJson
+}
 
 function updateGraphsToSend(data) {
-  graphsToSend = []
   console.log("[----------------NEEDED GRAPHS REQUEST (updateGraphsToSend)-----------------]")
   if (data) {
     console.log(":----Looking into Item: ")
@@ -265,14 +294,14 @@ function openSocket() {
   // Data received listener
   client.on("data", (data) => {
     if (data.length === bytesPerPacket) {
-      console.time("update data");
+      //console.time("update data");
       unpackData(data);
 
       if (doRecord) {
         recordData(data)
       }
 
-      console.timeEnd("update data");
+      //console.timeEnd("update data");
     } else {
       console.warn("ERROR: Bad packet length ------------------------------------");
     }
