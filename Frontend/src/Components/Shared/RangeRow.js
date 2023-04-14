@@ -2,11 +2,11 @@ import {Flex, Center, Text, Spacer, useColorMode} from "@chakra-ui/react";
 import getColor from "../Shared/colors";
 import RangeBar from "./RangeBar";
 
-export default function RangePack(props) {
+export default function RangeRow(props) {
     const { colorMode } = useColorMode();
     const borderColor = getColor("border", colorMode);
 
-    const bg = (props.dataValue < props.dataMin || props.dataValue > props.dataMax) ?
+    const bg = (props.dataValue < props.dataConstant.MIN || props.dataValue > props.dataConstant.MAX) ?
         getColor("errorBg", colorMode) : props.bg;
 
     // set the decimal point to 3 by default
@@ -41,18 +41,17 @@ export default function RangePack(props) {
             <Flex w='95%'>
                 <Text fontSize={textSize}>{props.dataTitle}:</Text>
                 <Spacer />
-                <Text fontSize={textSize}>
-                    {props.dataValue.toFixed(decPoint)} {props.dataUnit}
+                <Text fontSize={textSize} css={{paddingRight: "0.5em"}}>
+                    {props.dataValue.toFixed(decPoint)} {props.dataConstant.UNIT}
                 </Text>
-                <Spacer />
                 <RangeBar 
                     w={props.w ?? '3em'} 
                     h={rangeBarHeight}
                     borderRadius='0px' 
 
                     val={props.dataValue}
-                    min={props.dataMin}
-                    max={props.dataMax}
+                    min={props.dataConstant.MIN}
+                    max={props.dataConstant.MAX}
                 />
             </Flex>
         </Center>
