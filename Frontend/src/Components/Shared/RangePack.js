@@ -11,6 +11,23 @@ export default function RangePack(props) {
 
     // set the decimal point to 3 by default
     const decPoint = (props.DecimalPoint !== undefined) ? props.DecimalPoint : 3;
+    
+    let lineHeight;
+    let textSize;
+    let rangeBarHeight;
+    if (props.size === 'sm' || props.size === undefined) {
+        lineHeight = '1.2em';
+        textSize = 'sm';
+        rangeBarHeight = '1em';
+    } else if (props.size === 'md') {
+        lineHeight = '1.6em';
+        textSize = 'md';
+        rangeBarHeight = '1.4em';
+    } else if (props.size === 'lg') {
+        lineHeight = '2em';
+        textSize = 'lg';
+        rangeBarHeight = '1.8em';
+    }
 
     return (
         <Center
@@ -18,19 +35,19 @@ export default function RangePack(props) {
             borderBottomWidth={props.borderBottomWidth ?? 1}
             borderColor={borderColor}
             bg={bg}
-            lineHeight='1.2em'
+            lineHeight={lineHeight}
             height='100%'
         >
             <Flex w='95%'>
-                <Text fontSize='sm'>{props.dataTitle}:</Text>
+                <Text fontSize={textSize}>{props.dataTitle}:</Text>
                 <Spacer />
-                <Text fontSize='sm'>
+                <Text fontSize={textSize}>
                     {props.dataValue.toFixed(decPoint)} {props.dataUnit}
                 </Text>
                 <Spacer />
                 <RangeBar 
                     w={props.w ?? '3em'} 
-                    h='1em'
+                    h={rangeBarHeight}
                     borderRadius='0px' 
 
                     val={props.dataValue}
