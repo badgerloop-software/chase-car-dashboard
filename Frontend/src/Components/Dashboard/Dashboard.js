@@ -52,23 +52,45 @@ function reducer([currentQueue], newData) {
 }
 
 /**
- * Requests the API endpoint and returns the response
- * @returns the JSON response from the API
+ * Requests the graph data API endpoint and returns the response
+ * @returns the JSON response from the graph data API
  */
-async function callBackendAPI() {
-  console.time("http call");
+async function callBackendGraphDataAPI() {
+  console.time("graph data http call");
 
   const response = await fetch(ROUTES.GET_GRAPH_DATA);
-  console.timeLog("http call", "fetch finished");
+  console.timeLog("graph data http call", "fetch finished");
   const body = await response.json();
-  console.timeLog("http call", "json extracted");
+  console.timeLog("graph data http call", "json extracted");
 
   if (response.status !== 200) {
-    console.error("api: error");
+    console.error("graph data api: error");
     throw Error(body.message);
   }
 
-  console.timeEnd("http call");
+  console.timeEnd("graph data http call");
+  // console.log("body", body);
+  return body;
+}
+
+/**
+ * Requests the single values API endpoint and returns the response
+ * @returns the JSON response from the single values API
+ */
+async function callBackendSingleValuesAPI() {
+  console.time("http call");
+
+  const response = await fetch(ROUTES.GET_SINGLE_VALUES);
+  console.timeLog("single values http call", "fetch finished");
+  const body = await response.json();
+  console.timeLog("single values http call", "json extracted");
+
+  if (response.status !== 200) {
+    console.error("single values api: error");
+    throw Error(body.message);
+  }
+
+  console.timeEnd("single values http call");
   // console.log("body", body);
   return body;
 }
@@ -85,20 +107,29 @@ export default function Dashboard(props) {
     {},
     null,
   ]);
+  useEffect(() => {
+    callBackendGraphDataAPI()
+      .then((res) => {
+        //console.time("update react");
+
+        updateQueue(res.response);
+
+        //console.timeEnd("update react");
+      })
+      .catch((err) => console.log(err));
+  }, [queue]);
 
   const [state, setState] = useState({ data: null });
   useEffect(() => {
-    callBackendAPI()
-      .then((res) => {
-        console.time("update react");
+    callBackendSingleValuesAPI()
+        .then((res) => {
+          //console.time("update react");
 
-        setState({ data: res.response });
-        updateQueue(res.response);
-        // console.log("api::", res.response);
+          setState({ data: res.response });
 
-        console.timeEnd("update react");
-      })
-      .catch((err) => console.log(err));
+          //console.timeEnd("update react");
+        })
+        .catch((err) => console.log(err));
   }, [state]);
 
   //------------------- Choosing data views using Select components -------------------
