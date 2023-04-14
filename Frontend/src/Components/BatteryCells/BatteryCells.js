@@ -3,9 +3,9 @@ import CellGroup from "./CellGroup";
 
 export default function BatteryCells(props) {
     const cellGroupsPerRow = 3; // Number of items/cell groups per row in the grid
-    const cellGroupsPerCol = 10; // Number of items/cell groups per column in the grid
+    const cellGroupsPerCol = 11; // Number of items/cell groups per column in the grid
     // Array with the same number of elements as the SimpleGrid containing all the CellGroups
-    const gridSizedArray = Array(cellGroupsPerRow * cellGroupsPerCol).fill(0);
+    const gridSizedArray = Array(31).fill(0);
 
     return (
         <SimpleGrid
@@ -18,8 +18,8 @@ export default function BatteryCells(props) {
             borderTopWidth={1}
         >
             { /* Map the CellGroups using gridSizedArray */
-                gridSizedArray.map((val,idx) => {
-                    return(
+                gridSizedArray.map((val, idx) => {
+                    return (
                         <CellGroup
                             key={idx + 1}
                             groupNum={idx + 1}
