@@ -27,7 +27,7 @@ for (const property in DATA_FORMAT) {
 // Send graph data to front-end
 ROUTER.get(CONSTANTS.ROUTES.GET_GRAPH_DATA, (req, res) => {
   //console.time("send http");
-  let final_data = filterGraphsToSend(frontendData)
+  let final_data = filterGraphsToSend();
   const temp = res.send({ response: final_data }).status(200);
   //temp.addListener("finish", () => console.timeEnd("send http"));
 });
@@ -36,7 +36,7 @@ ROUTER.get(CONSTANTS.ROUTES.GET_GRAPH_DATA, (req, res) => {
 // Send single values to front-end
 ROUTER.get(CONSTANTS.ROUTES.GET_SINGLE_VALUES, (req, res) => {
   // console.time("send http");
-  let singleValuesJSON = getSingleValuesAtIndex(frontendData, 0)
+  let singleValuesJSON = getSingleValues(frontendData)
   // const temp =
   res.send({ response: singleValuesJSON }).status(200);
   // temp.addListener("finish", () => console.timeEnd("send http"));
@@ -195,26 +195,49 @@ ROUTER.post(CONSTANTS.ROUTES.UPDATE_GRAPHS_METADATA, (req, res) => {
 
 });
 
-function filterGraphsToSend(data) {
-  let obj = {}
-  graphsToSend.map((key) => {
-    obj[`${key}`] = data[`${key}`]
+function getSingleValues(jsonData) {
+  let newJson = {}
+
+  for (const key in jsonData) {
+    if (jsonData.hasOwnProperty(key)) {
+      newJson[key] = [jsonData[key][0]]
+    }
+  }
+
+  return newJson
+}
+
+function filterGraphsToSend() {
+  let obj = {};
+  let maxNumValues = 1; // Needs to be 1 so that we have at least one timestamp
+
+  graphsToSend.map((element) => {
+    const numValues = (element[1] / 600) * X_AXIS_CAP; // TODO Update this with a non-static X_AXIS_CAP
+
+    obj[`${element[0]}`] = frontendData[`${element[0]}`].slice(0, Math.round(numValues));
+
+    if(numValues > maxNumValues) {
+      maxNumValues = numValues;
+    }
   })
 
-  obj["timestamps"] = data["timestamps"]
+  obj["timestamps"] = frontendData["timestamps"].slice(0, Math.round(maxNumValues));
+  /* Logs for checking lengths of each dataset and timestamps
+  console.log("Max num values:", Math.round(maxNumValues))
+  for (const key in obj) {
+    console.log(`${key}: ${obj[key].length}`);
+  }*/
+
   return obj
 }
 
 function updateGraphsMetadata(data) {
   graphsToSend = []
-  console.log("[----------------NEEDED GRAPHS REQUEST (updateGraphsMetadata)-----------------]")
 
   for (const [key, value] of Object.entries(data)) {
-    // let newObj = {key: value} 
     graphsMetadata[`${key}`] = value
-    console.log("graphs metadata:", graphsMetadata);
   }
-  graphsToSend = []
+
   for (const key in graphsMetadata) {
     const data = graphsMetadata[key];
     updateGraphsToSend(data)
@@ -222,32 +245,28 @@ function updateGraphsMetadata(data) {
 
 }
 
-function getSingleValuesAtIndex(jsonData, index = 0) {
-  let newJson = {}
-  for (const key in jsonData) {
-    if (jsonData.hasOwnProperty(key)) {
-      newJson[`${key}`] = [jsonData[key][index]]
-      // console.log(`${key} : ${jsonData[key]} \n`)
-    }
-  }
-  return newJson
-}
-
 function updateGraphsToSend(data) {
   console.log("[----------------NEEDED GRAPHS REQUEST (updateGraphsToSend)-----------------]")
   if (data) {
     console.log(":----Looking into Item: ")
-    data?.datasets?.map((i) => {
-      if (!graphsToSend.includes(i)) {
-        graphsToSend.push(i)
-        console.log(`   -> ${i} (Good to go)`)
+    for (let i = 0; i < data?.datasets?.length; i++) {
+      const dataset = data?.datasets[i];
+      const historyLength = data?.historyLength;
+      const datasetIdx = graphsToSend.map(element => element[0]).indexOf(dataset);
+
+      if (datasetIdx === -1) {
+        graphsToSend.push([dataset, historyLength]);
+        console.log(`   - > ${i} (Good to go)`)
       } else {
-        console.log(`   -> ${i} (Duplicate handled)`)
+        if(graphsToSend[datasetIdx][1] <= historyLength) {
+          graphsToSend.push([dataset, historyLength]);
+        }
+        console.log(`   -> ${i} (Duplicate handled)`);
       }
-    })
-    //  console.log("UPDATED:",graphsToSend )
+    }
   }
 }
+
 
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
