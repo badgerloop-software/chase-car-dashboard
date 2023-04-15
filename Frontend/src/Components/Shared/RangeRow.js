@@ -41,7 +41,7 @@ export default function RangeRow(props) {
             <Flex w='95%'>
                 <Text fontSize={textSize}>{props.dataTitle}:</Text>
                 <Spacer />
-                <Text fontSize={textSize} css={{paddingRight: "0.5em"}}>
+                <Text fontSize={textSize} paddingRight='0.5em'>
                     {props.dataValue.toFixed(decPoint)} {props.dataConstant.UNIT}
                 </Text>
 
