@@ -17,6 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BsFillRecordCircleFill } from "react-icons/bs";
 import ConvertIcon from "./Convert Icon.png";
 import getColor from "../Shared/colors";
+import { ROUTES } from "../Shared/misc-constants";
 
 // Compulsory toast-configuration method
 toast.configure();
@@ -81,7 +82,7 @@ export default function DataRecordingControl(props) {
 
     // Get the list of available sessions from the backend
     const getSessionsList = async () => {
-        const response = await fetch("/sessionsList");
+        const response = await fetch(ROUTES.GET_SESSION_LIST);
         if (response.status === 200) {
             const body = await response.json();
             return body;
@@ -99,7 +100,7 @@ export default function DataRecordingControl(props) {
 
     // Convert recorded raw binary data to a formatted Excel csv
     const processRecordedData = async () => {
-        const response = await fetch("/process-recorded-data");
+        const response = await fetch(ROUTES.PROCESS_RECORDED_DATA);
         if (response.status === 200) {
             const body = await response.json();
             return body;
@@ -110,7 +111,7 @@ export default function DataRecordingControl(props) {
 
     // Toggle isRecording and send it to the backend to toggle its recording state
     const recordCarData = () => {
-        fetch('http://localhost:4001/record-data', {
+        fetch('http://localhost:4001' + ROUTES.SET_RECORD, {
             method: "POST",
             body: JSON.stringify({ doRecord: !isRecording }),
             headers: {
@@ -138,7 +139,7 @@ export default function DataRecordingControl(props) {
 
     // Set the current recording session according to the file name selected
     const setCurrentRecordingSession = (fileName) => {
-        fetch('http://localhost:4001/current-recording-session', {
+        fetch('http://localhost:4001' + ROUTES.SET_RECORDING_SESSION, {
             method: "POST",
             body: JSON.stringify({ fileName: fileName }),
             headers: {
@@ -165,7 +166,7 @@ export default function DataRecordingControl(props) {
 
     // Create a new recording session with the specified file name
     const createRecordingSession = (fileName) => {
-        fetch('http://localhost:4001/create-recording-session', {
+        fetch('http://localhost:4001' + ROUTES.CREATE_RECORDING_SESSION, {
             method: "POST",
             body: JSON.stringify({ fileName: fileName }),
             headers: {
