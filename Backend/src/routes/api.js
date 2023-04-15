@@ -36,7 +36,7 @@ ROUTER.get(CONSTANTS.ROUTES.GET_GRAPH_DATA, (req, res) => {
 // Send single values to front-end
 ROUTER.get(CONSTANTS.ROUTES.GET_SINGLE_VALUES, (req, res) => {
   // console.time("send http");
-  let singleValuesJSON = getSingleValues(frontendData)
+  let singleValuesJSON = getSingleValues(frontendData);
   // const temp =
   res.send({ response: singleValuesJSON }).status(200);
   // temp.addListener("finish", () => console.timeEnd("send http"));
@@ -74,7 +74,7 @@ while (line = broadbandLines.next()) {
   sessionsList.push(_convertLine(line));
   lineNumber++;
 }
-console.log("Initial list of recorded sessions:", sessionsList)
+console.log("Initial list of recorded sessions:", sessionsList);
 
 
 ROUTER.get(CONSTANTS.ROUTES.GET_SESSION_LIST, (req, res) => {
@@ -85,11 +85,11 @@ ROUTER.get(CONSTANTS.ROUTES.GET_SESSION_LIST, (req, res) => {
 ROUTER.post(CONSTANTS.ROUTES.CREATE_RECORDING_SESSION, (req, res) => {
   if (req.body.fileName === "") {
     res.send({ response: "Empty" }).status(200);
-    return
+    return;
   }
 
   fs.appendFile(SESSIONS_LIST_PATH, req.body.fileName + "\n", (err) => {
-    sessionsList.push(req.body.fileName)
+    sessionsList.push(req.body.fileName);
     if (err) {
       res.send({ response: "Error" }).status(200);
       return console.error(err);
@@ -101,8 +101,8 @@ ROUTER.post(CONSTANTS.ROUTES.CREATE_RECORDING_SESSION, (req, res) => {
       res.send({ response: "Error" }).status(200);
       return console.error(err);
     }
-    res.send({ response: "Created" }).status(200)
-    currentSession = req.body.fileName
+    res.send({ response: "Created" }).status(200);
+    currentSession = req.body.fileName;
   });
   console.log('req:', req.body);
 });
@@ -111,11 +111,11 @@ ROUTER.post(CONSTANTS.ROUTES.CREATE_RECORDING_SESSION, (req, res) => {
 ROUTER.post(CONSTANTS.ROUTES.SET_RECORDING_SESSION, (req, res) => {
   if (req.body.fileName === "") {
     res.send({ response: -1 }).status(200);
-    return
+    return;
   }
 
-  res.send({ response: 200 }).status(200)
-  currentSession = req.body.fileName
+  res.send({ response: 200 }).status(200);
+  currentSession = req.body.fileName;
 
   console.log('req:', req.body);
 });
@@ -124,23 +124,23 @@ ROUTER.post(CONSTANTS.ROUTES.SET_RECORDING_SESSION, (req, res) => {
 // Set recording flag to true or false depeding on request
 ROUTER.post(CONSTANTS.ROUTES.SET_RECORD, (req, res) => {
   if (currentSession === "") {
-    res.send({ response: "NoFile" }).status(200)
-    return
+    res.send({ response: "NoFile" }).status(200);
+    return;
   }
-  res.send({ response: "Recording" }).status(200)
-  doRecord = req.body.doRecord
-  console.log("Record Status:", req.body)
+  res.send({ response: "Recording" }).status(200);
+  doRecord = req.body.doRecord;
+  console.log("Record Status:", req.body);
 });
 
 
 ROUTER.get(CONSTANTS.ROUTES.PROCESS_RECORDED_DATA, (req, res) => {
   // Execute Python script to convert recorded binary data to a formatted Excel file
 
-  console.log(currentSession)
+  console.log(currentSession);
 
   if (currentSession === "") {
     res.send({ response: "NoFileSelected" }).status(200);
-    return
+    return;
   }
 
   // Spawn new child process to call the python script
@@ -166,7 +166,7 @@ ROUTER.get(CONSTANTS.ROUTES.PROCESS_RECORDED_DATA, (req, res) => {
   });
 
   res.send({ response: currentSession }).status(200);
-})
+});
 
 
 function recordData(data) {
@@ -185,26 +185,25 @@ function recordData(data) {
 // --------------------------------------------------------------------------------------------------------------------
 
 ROUTER.post(CONSTANTS.ROUTES.UPDATE_GRAPHS_METADATA, (req, res) => {
-  // console.log("(BACKEND)needed-graph-metadata:", req.body.meta)
   if (req.body) {
-    updateGraphsMetadata(req.body)
-    res.send({ status: "SUCCESS" }).status(200)
+    updateGraphsMetadata(req.body);
+    res.send({ status: "SUCCESS" }).status(200);
   } else {
-    res.send({ status: "EMPTY-REQ" }).status(200)
+    res.send({ status: "EMPTY-REQ" }).status(200);
   }
 
 });
 
 function getSingleValues(jsonData) {
-  let newJson = {}
+  let newJson = {};
 
   for (const key in jsonData) {
     if (jsonData.hasOwnProperty(key)) {
-      newJson[key] = [jsonData[key][0]]
+      newJson[key] = [jsonData[key][0]];
     }
   }
 
-  return newJson
+  return newJson;
 }
 
 function filterGraphsToSend() {
@@ -219,49 +218,47 @@ function filterGraphsToSend() {
     if(numValues > maxNumValues) {
       maxNumValues = numValues;
     }
-  })
+  });
 
   obj["timestamps"] = frontendData["timestamps"].slice(0, Math.round(maxNumValues));
-  /* Logs for checking lengths of each dataset and timestamps
+  // Logs for checking lengths of each dataset and timestamps
   console.log("Max num values:", Math.round(maxNumValues))
   for (const key in obj) {
     console.log(`${key}: ${obj[key].length}`);
-  }*/
+  }
 
-  return obj
+  return obj;
 }
 
 function updateGraphsMetadata(data) {
-  graphsToSend = []
+  graphsToSend = [];
 
   for (const [key, value] of Object.entries(data)) {
-    graphsMetadata[`${key}`] = value
+    graphsMetadata[`${key}`] = value;
   }
 
   for (const key in graphsMetadata) {
     const data = graphsMetadata[key];
-    updateGraphsToSend(data)
+    updateGraphsToSend(data);
   }
 
 }
 
 function updateGraphsToSend(data) {
-  console.log("[----------------NEEDED GRAPHS REQUEST (updateGraphsToSend)-----------------]")
   if (data) {
-    console.log(":----Looking into Item: ")
     for (let i = 0; i < data?.datasets?.length; i++) {
       const dataset = data?.datasets[i];
       const historyLength = data?.historyLength;
+
+      // Try to find the current dataset in the list of datasets to be sent to the frontend
+      // datasetIdx == -1 => The dataset is not yet in the list. Add it to the list
+      // datasetIdx != -1 => The dataset is already in the list. Possibly update the historyLength
       const datasetIdx = graphsToSend.map(element => element[0]).indexOf(dataset);
 
       if (datasetIdx === -1) {
         graphsToSend.push([dataset, historyLength]);
-        console.log(`   - > ${i} (Good to go)`)
-      } else {
-        if(graphsToSend[datasetIdx][1] <= historyLength) {
-          graphsToSend.push([dataset, historyLength]);
-        }
-        console.log(`   -> ${i} (Duplicate handled)`);
+      } else if (graphsToSend[datasetIdx][1] <= historyLength) {
+        graphsToSend[datasetIdx][1] = historyLength;
       }
     }
   }
@@ -313,14 +310,12 @@ function openSocket() {
   // Data received listener
   client.on("data", (data) => {
     if (data.length === bytesPerPacket) {
-      //console.time("update data");
       unpackData(data);
 
       if (doRecord) {
-        recordData(data)
+        recordData(data);
       }
 
-      //console.timeEnd("update data");
     } else {
       console.warn("ERROR: Bad packet length ------------------------------------");
     }

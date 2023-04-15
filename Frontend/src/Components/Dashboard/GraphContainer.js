@@ -110,7 +110,6 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
 
           // Get metadata of graph that is being swapped with
           let graphMetadataOldIdx;
-          console.log("Does customGraphData have property \"\"?", customGraphData?.hasOwnProperty("")); // TODO
           if (customGraphData?.hasOwnProperty(copy[oldIdx])) {
             // The graph that the selected one is being swapped with is a saved graph
             graphMetadataOldIdx = customGraphData[copy[oldIdx]];
