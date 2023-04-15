@@ -18,6 +18,7 @@ import GraphContainer from "./GraphContainer";
 import DataRecordingControl from "./DataRecordingControl";
 import dvOptions from "./dataViewOptions";
 import getColor from "../Shared/colors";
+import { ROUTES } from "../Shared/misc-constants";
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
@@ -57,7 +58,7 @@ function reducer([currentQueue], newData) {
 async function callBackendAPI() {
   console.time("http call");
 
-  const response = await fetch("/api");
+  const response = await fetch(ROUTES.GET_GRAPH_DATA);
   console.timeLog("http call", "fetch finished");
   const body = await response.json();
   console.timeLog("http call", "json extracted");
