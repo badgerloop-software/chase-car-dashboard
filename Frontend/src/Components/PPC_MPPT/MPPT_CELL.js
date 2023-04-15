@@ -16,10 +16,10 @@ export default function MPPT_CELL(props){
             bg={props.isCurrMode ? greenBgCol : redBgCol}
             borderColor={borderCol}
             borderWidth='2px'
-            lineHeight='1.6em'
+            textAlign='center'
+            lineHeight='1vh'
         >
-            <Text as='b' fontSize='1.3vw' color={props.isCurrMode ? greenTxtCol : redTxtCol}>{props.label}</Text>
+            <Text as='b' fontSize='1.7vh' color={props.isCurrMode ? greenTxtCol : redTxtCol}>{props.label}</Text>
         </Center>
     )
-
 }
