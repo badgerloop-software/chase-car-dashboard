@@ -17,7 +17,7 @@ export default function PPC_CELL(props) {
             borderColor={borderCol}
             borderWidth='2px'
             textAlign='center'
-            lineHeight='2vh'
+            lineHeight='2.25vh'
         >
             <Text as='b' fontSize='1vw' color={props.isCurrSource ? greenTxtCol : redTxtCol}>{props.label}</Text>
         </Center>
