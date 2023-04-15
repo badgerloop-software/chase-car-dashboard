@@ -44,15 +44,21 @@ export default function RangeRow(props) {
                 <Text fontSize={textSize} css={{paddingRight: "0.5em"}}>
                     {props.dataValue.toFixed(decPoint)} {props.dataConstant.UNIT}
                 </Text>
-                <RangeBar 
-                    w={props.w ?? '3em'} 
-                    h={rangeBarHeight}
-                    borderRadius='0px' 
 
-                    val={props.dataValue}
-                    min={props.dataConstant.MIN}
-                    max={props.dataConstant.MAX}
-                />
+                {/* Hold the RangeBar within a vertical Flex to vertically center it */}
+                <Flex direction='column'>
+                    <Spacer />
+                    <RangeBar 
+                        w={props.w ?? '3em'} 
+                        h={rangeBarHeight}
+                        borderRadius='0px' 
+
+                        val={props.dataValue}
+                        min={props.dataConstant.MIN}
+                        max={props.dataConstant.MAX}
+                    />
+                    <Spacer />
+                </Flex>
             </Flex>
         </Center>
     );
