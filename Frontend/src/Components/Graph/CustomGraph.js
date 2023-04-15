@@ -289,6 +289,11 @@ export default function CustomGraph(props) {
 
       setDatasetKeys(newDatasetKeys);
       setHistoryLength(newHistoryLength);
+
+      // Save edits to graphs that are named
+      if(title?.length && title !== "Custom") {
+        onSave(title, false, { datasets: newDatasetKeys, historyLength: newHistoryLength });
+      }
     };
     return (
       <GraphSelectModal
