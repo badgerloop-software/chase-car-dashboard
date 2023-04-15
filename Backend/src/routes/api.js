@@ -2,6 +2,7 @@ import { Router } from "express";
 import net from "net";
 import { spawn } from "child_process";
 import * as fs from "fs";
+import fetch from 'node-fetch';
 const nReadlines = require('n-readlines');
 import DATA_FORMAT from "../../Data/sc1-data-format/format.json";
 import INITIAL_SOLAR_CAR_DATA from "../../Data/dynamic_data.json";
@@ -41,6 +42,131 @@ ROUTER.get(CONSTANTS.ROUTES.GET_SINGLE_VALUES, (req, res) => {
   res.send({ response: singleValuesJSON }).status(200);
   // temp.addListener("finish", () => console.timeEnd("send http"));
 });
+
+
+
+//----------------------------------------------------- LTE ----------------------------------------------------------
+let interval;
+let tableName;
+let latestTimestamp;
+// Counts for the total number of fetches and successes
+let fetchCount = 0;
+let successCount = 0;
+
+// TODO Wouldn't be a bad idea to add a simple/small frontend control for refreshing the latest table
+//      This would re-fetch newest-timestamp-table and update. This could be useful for avoiding having to restart the
+//      backend every time the driver dashboard is restarted. It would also allow the engineering dashboard to be started
+//      before the driver dashboard because, if the driver dashboard hasn't started/created a new table yet, the backend
+//      will fetch the wrong table using newest-timestamp-table.
+
+async function setupVPSInterface() {
+  // Get most recently created table that has a timestamp for a name
+  await fetch(`http://150.136.104.125:3000/newest-timestamp-table`, {
+    method: 'GET',
+    headers: {
+      "Content-type": "application/json"
+    }
+  })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        tableName = data.response;
+        console.log(`Got table name: ${tableName}`);
+      });
+
+  // Get the first timestamp from the table and subtract 1 so that it is included
+  // in the first group of retrieved entries
+  await fetch(`http://150.136.104.125:3000/get-first-timestamp/${tableName}`, {
+    method: 'GET',
+    headers: {
+      "Content-type": "application/json"
+    }
+  })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        // Get the first timestamp in the table (minus 1)
+        latestTimestamp = data.response - 1;
+        // Get millisecond timestamp from ten minutes ago
+        const tenMinutesEarlier = Date.now() - 600000; // TODO Good place to add SECONDS_PER_MINUTE and MILLIS_PER_SECOND
+
+        // Set latestTimestamp to whichever is later: ten minutes ago or the first timestamp in the table (minus 1)
+        latestTimestamp = (latestTimestamp >= tenMinutesEarlier) ? latestTimestamp : tenMinutesEarlier;
+        console.log(`Got latest timestamp: ${latestTimestamp}`);
+      });
+
+  // Fetch the newest rows TODO at regular intervals
+  interval = setInterval(() => {
+    console.log(`Fetching http://150.136.104.125:3000/get-new-rows/${tableName}/${latestTimestamp}`);
+
+    // TODO Maybe put this in a while loop and use `await` instead of having this repeat at constant intervals.
+    //      I believe the constant 250ms intervals is what's causing the duplicate datasets: The backend fetches the
+    //      same url a second time before the first response is sent back
+    //      If a while loop with await fetch() repeats too quickly/blocks the rest of the backend (shouldn't block),
+    //      try to set up a *MINIMUM* interval of 250ms
+
+    // Increment the total number of fetches
+    fetchCount ++;
+
+    console.log("Fetch:",fetchCount,"\tSuccess:",successCount);
+
+    if(fetchCount === (successCount + 1)) {
+      fetch(`http://150.136.104.125:3000/get-new-rows/${tableName}/${latestTimestamp}`, {
+        method: 'GET',
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            console.log("Getting new rows", data);
+
+            // Get the rows of timestamps and data from the response
+            let rows = data.response;
+
+            // Make sure there was at least 1 row returned
+            if(data.response.length > 0) {
+              // Iterate through the rows and print the timestamps and payloads
+              //                          and unpack the payloads
+              let i;
+              for(i in rows) {
+                console.log('\ttimestamp:', rows[i].timestamp, '\nBytes:', Buffer.from(rows[i].payload.data));
+                if(Buffer.from(rows[i].payload.data).length === bytesPerPacket) {
+                  unpackData(Buffer.from(rows[i].payload.data)); // TODO
+
+                  if (doRecord) {
+                    recordData(Buffer.from(rows[i].payload.data))
+                  }
+                }
+              }
+
+              // Update the latest timestamp
+              latestTimestamp = rows[i].timestamp;
+            }
+
+            // Increment total number of successes
+            successCount ++;
+            // Reset fetchCount to match successCount so that on the next iteration, the get-new-rows will be fetched
+            fetchCount = successCount;
+
+            // TODO Gets the first item of the response
+            // console.log('Request succeeded with JSON response', data);
+            // TODO console.log('Count:', data.count, '\ttimestamp:', data.tStamp, '\nBytes:', Buffer.from(data.bytes.data));
+          })
+          .catch(function(error) {
+            console.log('Request failed', error);
+            fetchCount = successCount;
+            // TODO Set fetchCount equal to successCount so that get-new-rows can still be fetched
+          });
+    }
+  }, 250);
+}
+
+setupVPSInterface();
 
 
 

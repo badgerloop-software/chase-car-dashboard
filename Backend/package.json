@@ -17,6 +17,7 @@
     "latest": "^0.2.0",
     "luxon": "^2.3.0",
     "cors": "^2.8.5",
+    "node-fetch": "^2.6.7",
     "n-readlines": "^1.0.1",
     "socket.io": "^2.2.0"
   },
