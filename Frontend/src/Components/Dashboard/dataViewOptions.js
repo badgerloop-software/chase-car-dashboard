@@ -5,6 +5,7 @@ const dvOptions = {
     ppc_mppt: "ppc_mppt",
     driver_comms: "driver_comms",
     io_boards: "io_boards",
+    motor_motion: "motor_motion",
     select: ""
 };
 

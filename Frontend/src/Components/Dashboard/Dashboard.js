@@ -13,6 +13,7 @@ import IOView from "../GeneralData/IOView";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
+import Motor_Motion from "../Motor_Motion/Motor_Motion";
 import GraphContainer from "./GraphContainer";
 import DataRecordingControl from "./DataRecordingControl";
 import dvOptions from "./dataViewOptions";
@@ -196,6 +197,8 @@ export default function Dashboard(props) {
         return <DriverComms data={state.data}/>;
       case dvOptions.io_boards:
         return <IOView data={state.data}/>;
+      case dvOptions.motor_motion:
+        return <Motor_Motion data={state.data}/>
       case dvOptions.select:
         return <Box />;
       default:
@@ -418,6 +421,7 @@ function DataViewOptions(props) {
       <option style={{color: props.txtColor}} value={dvOptions.ppc_mppt}>PPC and MPPT</option>
       <option style={{color: props.txtColor}} value={dvOptions.driver_comms}>Driver/Cabin and Communication</option>
       <option style={{color: props.txtColor}} value={dvOptions.io_boards}>I/O Boards</option>
+      <option style={{color: props.txtColor}} value={dvOptions.motor_motion}>Motor/Motion</option>
     </>
   );
 }
