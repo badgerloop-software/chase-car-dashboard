@@ -20,6 +20,7 @@ import DataRecordingControl from "./DataRecordingControl";
 import dvOptions from "./dataViewOptions";
 import getColor from "../Shared/colors";
 import { ROUTES } from "../Shared/misc-constants";
+import fauxQueue from "../Graph/faux-queue.json";
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
@@ -57,19 +58,20 @@ function reducer([currentQueue], newData) {
  * @returns the JSON response from the graph data API
  */
 async function callBackendGraphDataAPI() {
-  console.time("graph data http call");
+  // console.time("graph data http call");
 
   const response = await fetch(ROUTES.GET_GRAPH_DATA);
-  console.timeLog("graph data http call", "fetch finished");
+  // console.timeLog("graph data http call", "fetch finished");
+  
   const body = await response.json();
-  console.timeLog("graph data http call", "json extracted");
+  // console.timeLog("graph data http call", "json extracted");
 
   if (response.status !== 200) {
     console.error("graph data api: error");
     throw Error(body.message);
   }
-
-  console.timeEnd("graph data http call");
+  
+  // console.timeEnd("graph data http call");
   // console.log("body", body);
   return body;
 }
@@ -79,19 +81,19 @@ async function callBackendGraphDataAPI() {
  * @returns the JSON response from the single values API
  */
 async function callBackendSingleValuesAPI() {
-  console.time("http call");
+  // console.time("single values http call");
 
   const response = await fetch(ROUTES.GET_SINGLE_VALUES);
-  console.timeLog("single values http call", "fetch finished");
+  // console.timeLog("single values http call", "fetch finished");
   const body = await response.json();
-  console.timeLog("single values http call", "json extracted");
+  // console.timeLog("single values http call", "json extracted");
 
   if (response.status !== 200) {
     console.error("single values api: error");
     throw Error(body.message);
   }
 
-  console.timeEnd("single values http call");
+  // console.timeEnd("single values http call");
   // console.log("body", body);
   return body;
 }
@@ -113,7 +115,15 @@ export default function Dashboard(props) {
       .then((res) => {
         //console.time("update react");
 
-        updateQueue(res.response);
+        // when the car/data generator is offline, res.response is going to be null,
+        //  so we need to set variables to a default value that will prevent a TypeError
+        //  when we try reading the properties of an undefined variable
+        if (res.response === null) {
+          // this object can't be null for the graph data, so we'll set it to a faux object
+          updateQueue(fauxQueue);
+        } else {
+          updateQueue(res.response);
+        }
 
         //console.timeEnd("update react");
       })
@@ -126,6 +136,7 @@ export default function Dashboard(props) {
         .then((res) => {
           //console.time("update react");
 
+          // when the car/data generator is offline, res.response is going to be null
           setState({ data: res.response });
 
           //console.timeEnd("update react");

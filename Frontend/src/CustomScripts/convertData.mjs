@@ -110,4 +110,10 @@ const newFileOutput = {
 // console.log(output)
 writeFileSync("./src/Components/Graph/graph-data.json", JSON.stringify(newFileOutput, null, 2))
 
-// export {}
+// generate the faux queue object for when the car/data generator isn't connected
+let fauxQueue = { timestamps: ['00:00:00.000'] };
+for (const key of Object.keys(SC1DataFormat)) {
+  fauxQueue[key] = [null];
+}
+
+writeFileSync("./src/Components/Graph/faux-queue.json", JSON.stringify(fauxQueue, null, 2));
