@@ -1,0 +1,536 @@
+{
+  "timestamps": [
+    "00:00:00.000"
+  ],
+  "speed": [
+    null
+  ],
+  "driver_eStop": [
+    null
+  ],
+  "external_eStop": [
+    null
+  ],
+  "crash": [
+    null
+  ],
+  "door": [
+    null
+  ],
+  "door_lim_out": [
+    null
+  ],
+  "mcu_check": [
+    null
+  ],
+  "mcu_stat_fdbk": [
+    null
+  ],
+  "mcu_hv_en": [
+    null
+  ],
+  "imd_status": [
+    null
+  ],
+  "mcu_latch": [
+    null
+  ],
+  "state": [
+    null
+  ],
+  "fr_telem": [
+    null
+  ],
+  "fr_out": [
+    null
+  ],
+  "linear_accel_x": [
+    null
+  ],
+  "linear_accel_y": [
+    null
+  ],
+  "linear_accel_z": [
+    null
+  ],
+  "angular_rate_pitch": [
+    null
+  ],
+  "angular_rate_roll": [
+    null
+  ],
+  "angular_rate_yaw": [
+    null
+  ],
+  "motor_temp": [
+    null
+  ],
+  "motor_controller_temp": [
+    null
+  ],
+  "dcdc_temp": [
+    null
+  ],
+  "driverIO_temp": [
+    null
+  ],
+  "mainIO_temp": [
+    null
+  ],
+  "cabin_temp": [
+    null
+  ],
+  "road_temp": [
+    null
+  ],
+  "brake_temp": [
+    null
+  ],
+  "air_temp": [
+    null
+  ],
+  "bl_turn_led_en": [
+    null
+  ],
+  "br_turn_led_en": [
+    null
+  ],
+  "bc_brake_led_en": [
+    null
+  ],
+  "bc_bps_led_en": [
+    null
+  ],
+  "headlights_led_en": [
+    null
+  ],
+  "fl_turn_led_en": [
+    null
+  ],
+  "fr_turn_led_en": [
+    null
+  ],
+  "left_turn": [
+    null
+  ],
+  "right_turn": [
+    null
+  ],
+  "hazards": [
+    null
+  ],
+  "headlights": [
+    null
+  ],
+  "horn_status": [
+    null
+  ],
+  "crz_pwr_mode": [
+    null
+  ],
+  "crz_spd_mode": [
+    null
+  ],
+  "crz_pwr_setpt": [
+    null
+  ],
+  "crz_spd_setpt": [
+    null
+  ],
+  "crz_state": [
+    null
+  ],
+  "eco": [
+    null
+  ],
+  "main_telem": [
+    null
+  ],
+  "brake_status": [
+    null
+  ],
+  "mech_brake_status": [
+    null
+  ],
+  "parking_brake": [
+    null
+  ],
+  "accelerator": [
+    null
+  ],
+  "accelerator_out": [
+    null
+  ],
+  "motor_current": [
+    null
+  ],
+  "motor_power": [
+    null
+  ],
+  "mc_status": [
+    null
+  ],
+  "mppt_can_heartbeat": [
+    null
+  ],
+  "mcc_can_heartbeat": [
+    null
+  ],
+  "bms_can_heartbeat": [
+    null
+  ],
+  "mainIO_heartbeat": [
+    null
+  ],
+  "main_5V_bus": [
+    null
+  ],
+  "main_12V_bus": [
+    null
+  ],
+  "main_vbus": [
+    null
+  ],
+  "main_vbus_current": [
+    null
+  ],
+  "driver_5V_bus": [
+    null
+  ],
+  "driver_12V_bus": [
+    null
+  ],
+  "driver_vbus": [
+    null
+  ],
+  "driver_vbus_current": [
+    null
+  ],
+  "main_power_critical": [
+    null
+  ],
+  "main_power_warning": [
+    null
+  ],
+  "main_power_tc": [
+    null
+  ],
+  "main_power_valid": [
+    null
+  ],
+  "driver_power_critical": [
+    null
+  ],
+  "driver_power_warning": [
+    null
+  ],
+  "driver_power_tc": [
+    null
+  ],
+  "driver_power_valid": [
+    null
+  ],
+  "tstamp_ms": [
+    null
+  ],
+  "tstamp_sc": [
+    null
+  ],
+  "tstamp_mn": [
+    null
+  ],
+  "tstamp_hr": [
+    null
+  ],
+  "mppt_contactor": [
+    null
+  ],
+  "motor_controller_contactor": [
+    null
+  ],
+  "low_contactor": [
+    null
+  ],
+  "dcdc_valid": [
+    null
+  ],
+  "supplemental_valid": [
+    null
+  ],
+  "mppt_mode": [
+    null
+  ],
+  "mppt_current_out": [
+    null
+  ],
+  "string1_temp": [
+    null
+  ],
+  "string2_temp": [
+    null
+  ],
+  "string3_temp": [
+    null
+  ],
+  "string1_V_in": [
+    null
+  ],
+  "string2_V_in": [
+    null
+  ],
+  "string3_V_in": [
+    null
+  ],
+  "string1_I_in": [
+    null
+  ],
+  "string2_I_in": [
+    null
+  ],
+  "string3_I_in": [
+    null
+  ],
+  "pack_temp": [
+    null
+  ],
+  "pack_internal_temp": [
+    null
+  ],
+  "pack_current": [
+    null
+  ],
+  "pack_voltage": [
+    null
+  ],
+  "pack_power": [
+    null
+  ],
+  "supplemental_voltage": [
+    null
+  ],
+  "cell_group1_voltage": [
+    null
+  ],
+  "cell_group2_voltage": [
+    null
+  ],
+  "cell_group3_voltage": [
+    null
+  ],
+  "cell_group4_voltage": [
+    null
+  ],
+  "cell_group5_voltage": [
+    null
+  ],
+  "cell_group6_voltage": [
+    null
+  ],
+  "cell_group7_voltage": [
+    null
+  ],
+  "cell_group8_voltage": [
+    null
+  ],
+  "cell_group9_voltage": [
+    null
+  ],
+  "cell_group10_voltage": [
+    null
+  ],
+  "cell_group11_voltage": [
+    null
+  ],
+  "cell_group12_voltage": [
+    null
+  ],
+  "cell_group13_voltage": [
+    null
+  ],
+  "cell_group14_voltage": [
+    null
+  ],
+  "cell_group15_voltage": [
+    null
+  ],
+  "cell_group16_voltage": [
+    null
+  ],
+  "cell_group17_voltage": [
+    null
+  ],
+  "cell_group18_voltage": [
+    null
+  ],
+  "cell_group19_voltage": [
+    null
+  ],
+  "cell_group20_voltage": [
+    null
+  ],
+  "cell_group21_voltage": [
+    null
+  ],
+  "cell_group22_voltage": [
+    null
+  ],
+  "cell_group23_voltage": [
+    null
+  ],
+  "cell_group24_voltage": [
+    null
+  ],
+  "cell_group25_voltage": [
+    null
+  ],
+  "cell_group26_voltage": [
+    null
+  ],
+  "cell_group27_voltage": [
+    null
+  ],
+  "cell_group28_voltage": [
+    null
+  ],
+  "cell_group29_voltage": [
+    null
+  ],
+  "cell_group30_voltage": [
+    null
+  ],
+  "cell_group31_voltage": [
+    null
+  ],
+  "populated_cells": [
+    null
+  ],
+  "soc": [
+    null
+  ],
+  "est_supplemental_soc": [
+    null
+  ],
+  "soh": [
+    null
+  ],
+  "pack_capacity": [
+    null
+  ],
+  "adaptive_total_capacity": [
+    null
+  ],
+  "bps_fault": [
+    null
+  ],
+  "fan_enable": [
+    null
+  ],
+  "fan_speed": [
+    null
+  ],
+  "voltage_failsafe": [
+    null
+  ],
+  "current_failsafe": [
+    null
+  ],
+  "relay_failsafe": [
+    null
+  ],
+  "cell_balancing_active": [
+    null
+  ],
+  "charge_interlock_failsafe": [
+    null
+  ],
+  "thermistor_b_value_table_invalid": [
+    null
+  ],
+  "input_power_supply_failsafe": [
+    null
+  ],
+  "discharge_limit_enforcement_fault": [
+    null
+  ],
+  "charger_safety_relay_fault": [
+    null
+  ],
+  "internal_hardware_fault": [
+    null
+  ],
+  "internal_heatsink_fault": [
+    null
+  ],
+  "internal_software_fault": [
+    null
+  ],
+  "highest_cell_voltage_too_high_fault": [
+    null
+  ],
+  "lowest_cell_voltage_too_low_fault": [
+    null
+  ],
+  "pack_too_hot_fault": [
+    null
+  ],
+  "internal_communication_fault": [
+    null
+  ],
+  "cell_balancing_stuck_off_fault": [
+    null
+  ],
+  "weak_cell_fault": [
+    null
+  ],
+  "low_cell_voltage_fault": [
+    null
+  ],
+  "open_wiring_fault": [
+    null
+  ],
+  "current_sensor_fault": [
+    null
+  ],
+  "highest_cell_voltage_over_5V_fault": [
+    null
+  ],
+  "cell_asic_fault": [
+    null
+  ],
+  "weak_pack_fault": [
+    null
+  ],
+  "fan_monitor_fault": [
+    null
+  ],
+  "thermistor_fault": [
+    null
+  ],
+  "external_communication_fault": [
+    null
+  ],
+  "redundant_power_supply_fault": [
+    null
+  ],
+  "high_voltage_isolation_fault": [
+    null
+  ],
+  "input_power_supply_fault": [
+    null
+  ],
+  "charge_limit_enforcement_fault": [
+    null
+  ],
+  "pack_resistance": [
+    null
+  ],
+  "bms_input_voltage": [
+    null
+  ],
+  "charge_enable": [
+    null
+  ],
+  "discharge_enable": [
+    null
+  ]
+}

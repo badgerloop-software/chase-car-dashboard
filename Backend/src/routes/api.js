@@ -27,7 +27,12 @@ for (const property in DATA_FORMAT) {
 // Send graph data to front-end
 ROUTER.get(CONSTANTS.ROUTES.GET_GRAPH_DATA, (req, res) => {
   //console.time("send http");
-  let final_data = filterGraphsToSend();
+  let final_data;
+  if (Object.keys(frontendData).length !== 0) {
+    final_data = filterGraphsToSend();
+  } else {
+    final_data = null;
+  }
   const temp = res.send({ response: final_data }).status(200);
   //temp.addListener("finish", () => console.timeEnd("send http"));
 });
@@ -36,7 +41,12 @@ ROUTER.get(CONSTANTS.ROUTES.GET_GRAPH_DATA, (req, res) => {
 // Send single values to front-end
 ROUTER.get(CONSTANTS.ROUTES.GET_SINGLE_VALUES, (req, res) => {
   // console.time("send http");
-  let singleValuesJSON = getSingleValues(frontendData);
+  let singleValuesJSON;
+  if (Object.keys(frontendData).length !== 0) { 
+    singleValuesJSON = getSingleValues(frontendData);
+  } else {
+    singleValuesJSON = null;
+  }
   // const temp =
   res.send({ response: singleValuesJSON }).status(200);
   // temp.addListener("finish", () => console.timeEnd("send http"));
