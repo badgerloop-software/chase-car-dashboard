@@ -88,7 +88,49 @@ const json = { categories, defaultHistoryLength };
 
 // write this JSON object
 const output = JSON.stringify(json, null, 2);
+
+const cats = json.categories
+let newCategories = []
+
+for (let i = 0; i < cats.length; i++) {
+  let res = cats[i].category.split(';')
+
+  let c = res[0]
+  let subc = res[1]
+  let ind = undefined;
+  for (let j = 0; j < newCategories.length; j++) {
+    if (newCategories[j].category.localeCompare(c) == 0) {
+      ind = j
+      break
+    }
+  }
+
+  if (ind) {
+    newCategories[ind].subcategories.push({
+      'subcategory': subc,
+      'values': cats[i]['values']
+    })
+  } else {
+    newCategories.push({
+      'category': c,
+      'subcategories': [
+        {
+          'subcategory': subc,
+          'values': cats[i]['values']
+        }
+      ]
+    })
+  }
+}
+
+// console.log(newCategories)
+
+const newFileOutput = {
+  'Input': 'summary',
+  'key': ['size, type, units, min, max', "category;subcategory"],
+  'Output': newCategories
+}
 // console.log(output);
-writeFileSync("./src/Components/Graph/graph-data.json", output);
+writeFileSync("./Frontend/src/Components/Graph/graph-data1.json", JSON.stringify(newFileOutput, null, 2));
 
 // export {};

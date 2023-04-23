@@ -19,7 +19,8 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useReducer } from "react";
-import GraphData from "./graph-data.json";
+import GraphData from "./graph-data1.json";
+import Expandable from "./ExpandableContent";
 
 /**
  * The reducer for the dataKeys state variable
@@ -85,37 +86,45 @@ function GraphSelectModal(props) {
   const [historyLength, setHistoryLength] = useState(initialHistoryLength);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
+    <Modal isOpen={isOpen} onClose={onClose} size="3xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Select Datasets</ModalHeader>
         <ModalCloseButton />
-
         <ModalBody>
           <VStack align="stretch">
-            {GraphData.categories.map((category) => (
+            <hr />
+            {GraphData.Output.map((category) => (
               <VStack align="stretch" key={category.category}>
-                <Heading size="md">{category.category}</Heading>
-                <SimpleGrid columns={2}>
-                  {category.values.map((value) => (
-                    <Checkbox
-                      defaultChecked={dataKeys.includes(value.key)}
-                      onInput={(e) => {
-                        // console.log(value.name, e.target.checked);
-                        if (e.target.checked) {
-                          // checked => add to checked datasets
-                          changeDataKeys({ action: "add", key: value.key });
-                        } else {
-                          // unchecked => remove from checked datasets
-                          changeDataKeys({ action: "remove", key: value.key });
-                        }
-                      }}
-                      key={value.key}
-                    >
-                      {value.name}
-                    </Checkbox>
+                <Expandable label={category.category} size="md">
+                  {category.subcategories.map((subcategory) => (
+                    <VStack align="strech" key={subcategory.subcategory}>
+                      <Heading pt="2" size="sm">{subcategory.subcategory}</Heading>
+                      <SimpleGrid columns={2}>
+                        {subcategory.values.map((value) => (
+                          <Checkbox
+                            defaultChecked={dataKeys.includes(value.key)}
+                            onInput={(e) => {
+                              // console.log(value.name, e.target.checked);
+                              if (e.target.checked) {
+                                // checked => add to checked datasets
+                                changeDataKeys({ action: "add", key: value.key });
+                              } else {
+                                // unchecked => remove from checked datasets
+                                changeDataKeys({ action: "remove", key: value.key });
+                              }
+                            }}
+                            key={value.key}
+                          >
+                            {value.name}
+                          </Checkbox>
+                        ))}
+                      </SimpleGrid>
+                    </VStack>
                   ))}
-                </SimpleGrid>
+                </Expandable>
+
+                <hr />
               </VStack>
             ))}
             <VStack align="stretch" pb={5}>
