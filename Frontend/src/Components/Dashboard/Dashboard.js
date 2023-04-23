@@ -16,6 +16,7 @@ import BatteryPack from "../BatteryCells/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import GraphContainer from "./GraphContainer";
 import DataRecordingControl from "./DataRecordingControl";
+import TempView from "../Temperature/TempView";
 import dvOptions from "./dataViewOptions";
 import getColor from "../Shared/colors";
 
@@ -197,6 +198,8 @@ export default function Dashboard(props) {
         return <DriverComms data={state.data}/>;
       case dvOptions.communication:
         return <Communication data={state.data}/>;
+      case dvOptions.temperature:
+        return <TempView data={state.data}/>
       case dvOptions.io_boards:
         return <IOView data={state.data}/>;
       case dvOptions.select:
@@ -420,6 +423,7 @@ function DataViewOptions(props) {
       <option style={{color: props.txtColor}} value={dvOptions.cell_groups}>BMS - Cell Groups</option>
       <option style={{color: props.txtColor}} value={dvOptions.ppc_mppt}>PPC and MPPT</option>
       <option style={{color: props.txtColor}} value={dvOptions.driver_comms}>Driver/Cabin and Communication</option>
+      <option style={{color: props.txtColor}} value={dvOptions.temperature}>Temperature</option>
       <option style={{color: props.txtColor}} value={dvOptions.communication}>Communication</option>
       <option style={{color: props.txtColor}} value={dvOptions.io_boards}>I/O Boards</option>
     </>
