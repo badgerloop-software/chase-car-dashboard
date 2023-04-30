@@ -16,11 +16,13 @@ import {
   SliderThumb,
   SliderTrack,
   VStack,
+  useColorMode
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useReducer } from "react";
-import GraphData from "./graph-data1.json";
+import GraphData from "./graph-data.json";
 import Expandable from "./ExpandableContent";
+import getColor from "../Shared/colors"
 
 /**
  * The reducer for the dataKeys state variable
@@ -77,6 +79,9 @@ function GraphSelectModal(props) {
   const { isOpen, onClose, initialDatasets, initialHistoryLength, onSave } =
     props;
 
+  const {colorMode} = useColorMode()
+  const contentBg = getColor('contentBg', colorMode);
+
   // a state variable that keeps track of which datasets are selected to be shown
   const [dataKeys, changeDataKeys] = useReducer(
     dataKeysReducer,
@@ -93,10 +98,10 @@ function GraphSelectModal(props) {
         <ModalCloseButton />
         <ModalBody>
           <VStack align="stretch">
-            <hr />
+            <hr/>
             {GraphData.Output.map((category) => (
               <VStack align="stretch" key={category.category}>
-                <Expandable label={category.category} size="md">
+                <Expandable label={category.category} contentBg={contentBg} size="md">
                   {category.subcategories.map((subcategory) => (
                     <VStack align="strech" key={subcategory.subcategory}>
                       <Heading pt="2" size="sm">{subcategory.subcategory}</Heading>
@@ -105,7 +110,6 @@ function GraphSelectModal(props) {
                           <Checkbox
                             defaultChecked={dataKeys.includes(value.key)}
                             onInput={(e) => {
-                              // console.log(value.name, e.target.checked);
                               if (e.target.checked) {
                                 // checked => add to checked datasets
                                 changeDataKeys({ action: "add", key: value.key });
@@ -123,8 +127,7 @@ function GraphSelectModal(props) {
                     </VStack>
                   ))}
                 </Expandable>
-
-                <hr />
+                <hr/>
               </VStack>
             ))}
             <VStack align="stretch" pb={5}>

@@ -55,9 +55,11 @@ ChartJS.register(
  * Stores all the units in the graph-data json file as key: value pairs
  */
 const units = {};
-for (const category of GraphData.categories) {
-  for (const dataset of category.values) {
-    units[dataset.key] = dataset.unit;
+for (const category of GraphData.Output) {
+  for (const subcategory of category.subcategories) {
+    for (const dataset of subcategory.values) {
+      units[dataset.key] = dataset.unit;
+    }
   }
 }
 

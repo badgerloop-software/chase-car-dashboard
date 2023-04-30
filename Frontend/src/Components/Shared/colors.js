@@ -14,7 +14,8 @@ const colors = {
         ppc_mppt_txtRedBg: "#000000",
         ppc_mppt_greenBg: "#05FF00",
         ppc_mppt_txtGreenBg: "#000000",
-        errorBg: "#ff000055"
+        errorBg: "#ff000055",
+        contentBg: '#f7fafc'
     },
     dark: {
         background: "#1A202C",
@@ -31,7 +32,8 @@ const colors = {
         ppc_mppt_txtRedBg: "#ffffff",
         ppc_mppt_greenBg: "#05FF00",
         ppc_mppt_txtGreenBg: "#282828",
-        errorBg: "#ff000055"
+        errorBg: "#ff000055",
+        contentBg: "#4a5568"
     }
 };
 

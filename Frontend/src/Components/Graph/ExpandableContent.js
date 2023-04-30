@@ -7,22 +7,20 @@ function Expandable(props) {
 
   return (
     <Box maxW="2xl">
-      <Box>
-        <Button
-          onClick={() => setIsExpanded(!isExpanded)}
-          leftIcon={<ChevronDownIcon />}
-          variant="ghost"
-          colorScheme="gray"
-          size={props.size}
-        >
-          {props.label}
-        </Button>
-      </Box>
+      <Button
+        onClick={() => setIsExpanded(!isExpanded)}
+        leftIcon={<ChevronDownIcon />}
+        variant="ghost"
+        colorScheme="gray"
+        size={props.size}
+        w="100%"
+        justifyContent="left"
+      >
+        {props.label}
+      </Button>
       <Collapse in={isExpanded} animateOpacity>
-        <Box p="3">
-          <Box p="4" bg="gray.50" rounded="md" shadow="md">
-            {props.children}
-          </Box>
+        <Box m="3" p="4" bg={props.contentBg} rounded="lg" shadow="md">
+          {props.children}
         </Box>
       </Collapse>
     </Box>
