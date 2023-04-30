@@ -6,6 +6,7 @@ const dvOptions = {
     driver_comms: "driver_comms",
     io_boards: "io_boards",
     communication: "communication",
+    system_power: "system_power",
     select: ""
 };
 
