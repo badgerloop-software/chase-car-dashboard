@@ -24,7 +24,9 @@ import { ROUTES } from "../Shared/misc-constants";
  * @returns a list of categories taken from the JSON file with randomly generated colors
  */
 function generateCategories() {
-  const allDatasets = GraphData.categories
+  const subcategories = GraphData.Output
+    .flatMap((category) => category.subcategories)
+  const allDatasets = subcategories
     .flatMap((category) => category.values)
     .map((obj) => {
       const colorNum = Math.floor(Math.random() * 0x3fffff + 0x3fffff);
