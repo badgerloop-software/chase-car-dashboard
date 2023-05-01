@@ -17,7 +17,6 @@ export default function Motor_Motion(props) {
 
     const fitType = "scale-down";
 
-
     const Images = images[`${colorMode}`];
     
     return (
