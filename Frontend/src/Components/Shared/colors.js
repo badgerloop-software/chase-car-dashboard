@@ -10,10 +10,10 @@ const colors = {
         grid: "#E5E5E5",
         gridBorder: "#CECECE",
         ticks: "#666666",
-        ppc_mppt_redBg: "#FF010140",
-        ppc_mppt_txtRedBg: "#000000",
-        ppc_mppt_greenBg: "#05FF00",
-        ppc_mppt_txtGreenBg: "#000000",
+        redBg: "#FF010140",
+        txtRedBg: "#000000",
+        greenBg: "#05FF00",
+        txtGreenBg: "#000000",
         errorBg: "#ff000055"
     },
     dark: {
@@ -27,10 +27,10 @@ const colors = {
         grid: "#646464",
         gridBorder: "#4D4D4D",
         ticks: "#FFFFFF",
-        ppc_mppt_redBg: "#FF010140",
-        ppc_mppt_txtRedBg: "#ffffff",
-        ppc_mppt_greenBg: "#05FF00",
-        ppc_mppt_txtGreenBg: "#282828",
+        redBg: "#FF010140",
+        txtRedBg: "#ffffff",
+        greenBg: "#05FF00",
+        txtGreenBg: "#282828",
         errorBg: "#ff000055"
     }
 };
