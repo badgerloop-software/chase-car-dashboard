@@ -33,6 +33,7 @@ export default function RangeRow(props) {
         <Center
             borderTopWidth={1}
             borderBottomWidth={props.borderBottomWidth ?? 1}
+            borderRightWidth={props.borderRightWidth ?? 1}
             borderColor={borderColor}
             bg={bg}
             lineHeight={lineHeight}
