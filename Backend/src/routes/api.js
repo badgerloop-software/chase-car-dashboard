@@ -299,7 +299,7 @@ const X_AXIS_CAP = CONSTANTS.X_AXIS_CAP;
 function openSocket() {
   // Establish connection with server
   console.log('CAR_PORT: ' + CAR_PORT);
-  var client = net.connect(CAR_PORT, CAR_ADDRESS); // TODO Add third parameter (timeout in ms) if we want to timeout due to inactivity
+  var client = net.connect(CAR_PORT, CAR_ADDRESS);
   client.setKeepAlive(true);
 
   // Connection established listener
@@ -323,7 +323,7 @@ function openSocket() {
   });
 
   // Socket closed listener
-  client.on("close", function () {
+  client.on("close", () => {
     // Pull the most recent solar_car_connection values to false if connection was previously established
     if (solarCarData.solar_car_connection.length > 0) {
       solarCarData.solar_car_connection[0] = false;
@@ -331,7 +331,7 @@ function openSocket() {
       // If recording, replace the latest solar_car_connection value in file with false
       if (doRecord) {
         fs.open(RECORDED_DATA_PATH + currentSession + ".bin", "r+", (err, fd) => {
-          if (!err) {
+          if (!err && fs.fstatSync(fd).size > 0) {
             fs.write(
               fd, Buffer.alloc(1, false), 0, 1, fs.fstatSync(fd).size - 1,
               (err, bw, buf) => {
@@ -346,26 +346,20 @@ function openSocket() {
       }
     }
 
-    console.log(`Connection to car server (${CAR_PORT}) is closed`);
+    // Kill socket
+    client.destroy();
+    client.unref();
+
+    console.warn(`Connection to car server (${CAR_PORT}) is closed`);
+
+    // Attempt to re-open socket
+    setTimeout(openSocket, 1000);
   });
 
   // Socket error listener
   client.on("error", (err) => {
     // Log error
-    console.log("Client errored out:", err);
-
-    // Kill socket
-    client.destroy();
-    client.unref();
-
-    // Pull the most recent solar_car_connection values to false if connection was previously established
-    if (solarCarData.solar_car_connection.length > 0) {
-      solarCarData.solar_car_connection[0] = false;
-      frontendData.solar_car_connection[0] = false;
-    }
-
-    // Attempt to re-open socket
-    setTimeout(openSocket, 1000);
+    console.error("Client errored out:", err);
   });
 }
 
