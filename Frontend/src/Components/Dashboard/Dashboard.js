@@ -12,7 +12,7 @@ import DriverComms from "../Communication/DriverComms";
 import Communication from "../Communication/Communication";
 import IOView from "../Communication/IOView";
 import BatteryCells from "../BatteryCells/BatteryCells";
-import BatteryPack from "../BatteryCells/BatteryPack";
+import BatteryPack from "../BatteryPack/BatteryPack";
 import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
 import SystemPower from "../SystemPower/SystemPower"
 import GraphContainer from "./GraphContainer";
