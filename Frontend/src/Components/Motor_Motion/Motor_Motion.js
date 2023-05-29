@@ -68,6 +68,7 @@ export default function Motor_Motion(props) {
                         borderColor={borderCol}
                         borderWidth='2px'
                         lineHeight='1.6em'
+                        h='71.4%'
                     >
                         <Text as='b' fontSize='xs' color={props.data?.motor_controller_contactor[0] ? greenTxtCol : redTxtCol}>Motor {props.data?.motor_controller_contactor[0] ? 'On' : 'Off'}</Text>
                     </Center>
@@ -124,6 +125,7 @@ export default function Motor_Motion(props) {
                 >
                     <RangeCell
                         fontSize='xs'
+                        rangeBarH='1vh'
                         label='Motor Power'
                         data={props.data?.motor_power[0] ?? -1.0}
                         digits={0}
@@ -145,6 +147,7 @@ export default function Motor_Motion(props) {
                 >
                     <RangeCell
                         fontSize='xs'
+                        rangeBarH='1vh'
                         label='Motor Current'
                         data={props.data?.motor_current[0] ?? -1.0}
                         digits={0}
@@ -360,7 +363,7 @@ export default function Motor_Motion(props) {
                 templateColumns="1fr 1fr 1fr 1fr 1fr"
                 h='25%'
                 pt = '1'
-                pb = '1'
+                pb = '0.25'
                 pl = '1'
                 pr = '1'
             >

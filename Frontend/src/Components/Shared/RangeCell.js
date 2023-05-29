@@ -19,6 +19,7 @@ export default function RangeCell(props) {
                 min={props.min ?? -1}
                 max={props.max ?? 0}
                 w={props.w}
+                h={props.rangeBarH}
             />
         </Flex>
     );
