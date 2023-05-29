@@ -25,41 +25,41 @@ export default function Motor_Motion(props) {
             <Grid 
                 flex='2'
                 templateRows="1fr 1fr 1fr 1.4fr 1.4fr" 
-                templateColumns="1fr 2fr 1fr"
+                templateColumns="1fr 1fr 4fr 2fr"
                 h='25%'
                 pt='1'
                 pb='1'
             >
+
                 <GridItem
                     rowStart={1}
                     rowSpan={2}
                     colStart={1}
-                    pt='2'
-                    pl='1'
-                    pr='1'
                 >
-                    <Center>
-                        <Center w='94%'>
-                            <VStack lineHeight='0.1'>
-                                <Text fontSize='1.20vh'>F/R</Text>
-                                <Center h='30px' w='30px' borderWidth='2px' borderRadius='md' textAlign='center'>
-                                    <Text as='b' fontSize='2vh'>{props.data?.fr_out[0] ? 'T' : 'F'}</Text>
-                                </Center>
-                            </VStack>
-                            <Spacer/>
-                            <VStack lineHeight='0.1'>
-                                <Text fontSize='1.20vh'>State</Text>
-                                <Center h='30px' w='30px' borderWidth='2px' borderRadius='md' textAlign='center'>
-                                    <Text as='b' fontSize='2vh'>{props.data?.state[0] ?? "?"}</Text>
-                                </Center>
-                            </VStack>
+                    <VStack spacing='0px'>
+                        <Text fontSize='1.20vh'>F/R</Text>
+                        <Center h='2.5vh' w='2.5vh' borderWidth='2px' borderRadius='md' textAlign='center'>
+                            <Text as='b' fontSize='1.36vh'>{props.data?.fr_out[0] ? 'T' : 'F'}</Text>
                         </Center>
-                    </Center>
+                    </VStack>
+                </GridItem>
+                <GridItem
+                    rowStart={1}
+                    rowSpan={2}
+                    colStart={2}
+                >
+                    <VStack spacing='0px'>
+                        <Text fontSize='1.20vh'>State</Text>
+                        <Center h='2.5vh' w='2.5vh' borderWidth='2px' borderRadius='md' textAlign='center'>
+                            <Text as='b' fontSize='1.36vh'>{props.data?.state[0] ?? "?"}</Text>
+                        </Center>
+                    </VStack>
                 </GridItem>
 
                 <GridItem
                     rowStart={4}
                     colStart={1}
+                    colSpan={2}
                     pl='1'
                     pr='1'
                 >
@@ -76,7 +76,7 @@ export default function Motor_Motion(props) {
 
                 <GridItem
                     rowStart={1}
-                    colStart={2}
+                    colStart={3}
                     borderTop='1px'
                     borderLeft='1px'
                     borderRight='1px'
@@ -89,7 +89,7 @@ export default function Motor_Motion(props) {
                 </GridItem>
                 <GridItem
                     rowStart={2}
-                    colStart={2}
+                    colStart={3}
                     borderTop='1px'
                     borderLeft='1px'
                     borderRight='1px'
@@ -102,7 +102,7 @@ export default function Motor_Motion(props) {
                 </GridItem>
                 <GridItem
                     rowStart={3}
-                    colStart={2}
+                    colStart={3}
                     borderTop='1px'
                     borderLeft='1px'
                     borderRight='1px'
@@ -115,7 +115,7 @@ export default function Motor_Motion(props) {
                 </GridItem>
                 <GridItem
                     rowStart={4}
-                    colStart={2}
+                    colStart={3}
                     borderTop='1px'
                     borderLeft='1px'
                     borderRight='1px'
@@ -136,7 +136,7 @@ export default function Motor_Motion(props) {
                 </GridItem>
                 <GridItem
                     rowStart={5}
-                    colStart={2}
+                    colStart={3}
                     borderTop='1px'
                     borderLeft='1px'
                     borderRight='1px'
@@ -158,7 +158,7 @@ export default function Motor_Motion(props) {
                 </GridItem>
                 <GridItem
                     rowStart={2}
-                    colStart={3}
+                    colStart={4}
                     pl='1'
                     pr='1'
                 >
@@ -174,7 +174,7 @@ export default function Motor_Motion(props) {
                 </GridItem>
                 <GridItem
                     rowStart={3}
-                    colStart={3}
+                    colStart={4}
                     pl='1'
                     pr='1'
                 >
@@ -197,7 +197,7 @@ export default function Motor_Motion(props) {
                 </GridItem>
                 <GridItem
                     rowStart={4}
-                    colStart={3}
+                    colStart={4}
                     pl='1'
                     pr='1'
                 >
@@ -222,7 +222,7 @@ export default function Motor_Motion(props) {
 
                 <GridItem
                     rowStart={5}
-                    colStart={3}
+                    colStart={4}
                 >
                     <Center>
                         {(props.data?.state[0] == '4') ? <Image fit={fitType} boxSize='35px' src={Images.Cruise}/> : <Box h='35px'/>}
