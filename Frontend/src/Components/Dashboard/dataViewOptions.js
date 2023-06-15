@@ -8,6 +8,7 @@ const dvOptions = {
     communication: "communication",
     system_power: "system_power",
     motor_motion: "motor_motion",
+    temperature: "temperature",
     select: ""
 };
 

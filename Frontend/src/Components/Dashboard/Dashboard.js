@@ -18,6 +18,7 @@ import SystemPower from "../SystemPower/SystemPower"
 import Motor_Motion from "../Motor_Motion/Motor_Motion";
 import GraphContainer from "./GraphContainer";
 import DataRecordingControl from "./DataRecordingControl";
+import Temperature from "../Temperature/Temperature";
 import dvOptions from "./dataViewOptions";
 import getColor from "../Shared/colors";
 import { ROUTES } from "../Shared/misc-constants";
@@ -248,6 +249,8 @@ export default function Dashboard(props) {
         return <IOView data={state.data}/>;
       case dvOptions.motor_motion:
         return <Motor_Motion data={state.data}/>
+      case dvOptions.temperature:
+        return <Temperature data={state.data}/>
       case dvOptions.select:
         return <Box />;
       default:
@@ -473,6 +476,7 @@ function DataViewOptions(props) {
       <option style={{color: props.txtColor}} value={dvOptions.system_power}>System Power</option>
       <option style={{color: props.txtColor}} value={dvOptions.io_boards}>I/O Boards</option>
       <option style={{color: props.txtColor}} value={dvOptions.motor_motion}>Motor/Motion</option>
+      <option style={{color: props.txtColor}} value={dvOptions.temperature}>Temperature</option>
     </>
   );
 }
