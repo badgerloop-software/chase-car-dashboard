@@ -1,6 +1,6 @@
 import {Flex, Box, Image, Text} from "@chakra-ui/react";
-import CheckMark from "./DriverIcons/Check Mark.png"
-import CrossMark from "./DriverIcons/Cross Mark.png"
+import CheckMark from "./CommsIcons/Check Mark.png"
+import CrossMark from "./CommsIcons/Cross Mark.png"
 
 export default function CommsLabel(props) {
     return(
