@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
-import DriverComms from "../Communication/DriverComms";
 import Communication from "../Communication/Communication";
 import BatteryCells from "../BatteryCells/BatteryCells";
 import BatteryPack from "../BatteryPack/BatteryPack";
@@ -238,8 +237,6 @@ export default function Dashboard(props) {
         return <BatteryCells data={state.data} />;
       case dvOptions.ppc_mppt:
         return <PPC_MPPT data={state.data}/>;
-      case dvOptions.driver_comms:
-        return <DriverComms data={state.data}/>;
       case dvOptions.communication:
         return <Communication data={state.data}/>;
       case dvOptions.system_power:
@@ -468,7 +465,6 @@ function DataViewOptions(props) {
       <option style={{color: props.txtColor}} value={dvOptions.battery_pack}>BMS - Battery Pack</option>
       <option style={{color: props.txtColor}} value={dvOptions.cell_groups}>BMS - Cell Groups</option>
       <option style={{color: props.txtColor}} value={dvOptions.ppc_mppt}>PPC and MPPT</option>
-      <option style={{color: props.txtColor}} value={dvOptions.driver_comms}>Driver/Cabin and Communication</option>
       <option style={{color: props.txtColor}} value={dvOptions.communication}>Communication</option>
       <option style={{color: props.txtColor}} value={dvOptions.system_power}>System Power</option>
       <option style={{color: props.txtColor}} value={dvOptions.motor_motion}>Motor/Motion</option>
