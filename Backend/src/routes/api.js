@@ -334,19 +334,50 @@ function openSocket() {
     console.log(`Connected to car server: ${client.remoteAddress}:${INCOMING_DATA_PORT}`);
   });
 
+  let partialData = '';
   // Data received listener
   client.on("data", (data) => {
-    if (data.length === bytesPerPacket) {
-      unpackData(data);
+    // Combine the new data with any previously received partial data
+    partialData += data.toString('latin1');
 
+    let startIndex = partialData.indexOf("<bl>");
+    let endIndex = partialData.indexOf("</bl>");
+
+    // Check if the packet is the size of a nominal payload without <bl></bl>
+    // If so, assume it is a nominal packet without <bl></bl> and broadcast it as is
+    if (partialData.length === bytesPerPacket) {
+      unpackData(Buffer.from(partialData,'latin1'));
       if (doRecord) {
-        recordData(data);
+        recordData(Buffer.from(partialData,'latin1'));
       }
-
+      partialData = '';
     } else {
-      console.warn("ERROR: Bad packet length ------------------------------------");
+      while (startIndex !== -1 && endIndex !== -1) {
+        console.log("start index" + startIndex, "end index" + endIndex)
+        // Extract a complete data packet
+        const packet = Buffer.from(partialData.slice(startIndex+4, endIndex),'latin1');
+        // Process the complete data packet
+        if (packet.length == bytesPerPacket) {
+          unpackData(packet);
+          if (doRecord) {
+            recordData(packet);
+          }
+        } else {
+          console.warn("ERROR: Bad packet length ------------------------------------");
+        }
+        // Update the partial data to exclude the processed packet
+        partialData = partialData.substring(endIndex + 5);
+        // Search for the next complete data packet
+        startIndex = partialData.indexOf("<bl>");
+        endIndex = partialData.indexOf("</bl>");
+      }
+      // If the remaining data is longer than the expected packet length,
+      // there might be an incomplete packet, so log a warning.
+      if (partialData.length >= bytesPerPacket) {
+        console.warn("ERROR: Incomplete or malformed packet ------------------------------------");
+        partialData = '';
+      }
     }
-
   });
 
   // Socket closed listener
