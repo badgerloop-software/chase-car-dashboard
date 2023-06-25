@@ -39,6 +39,7 @@
 4. To download the script, open the script in GitHub and then click "Raw". The file will open in a tab. Then do `Ctrl + S` or `Command + S`, depending on your OS, and save it. This script will create a folder called recordedData in the same spot as your script, so keep that in mind when choosing where to download it. If operating on Windows make sure to remove the ".txt" when downloading and also download the powershell script in same folder. To run, look at the bullet points below:
    - (Windows) Navigate to the folder storing the script and double click on it. 
    - (MacOS/Linux) `cd` into the directory storing the script, and then run these commands: `chmod +x linux-pull-run.sh` and `./linux-pull-run.sh`.
+   - NOTE: Certain run configurations require specific network interface setups. Run `windows-pull-run.bat -h` or `./linux-pull-run.sh -h`, depending on your terminal environment, and see the desciption of the "config" option for more information about these setups.
 
 ## Contributing to the Dashboard
 
