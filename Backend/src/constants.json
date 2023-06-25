@@ -1,7 +1,7 @@
 {
-    "CAR_PORT": 4003,
-    "TEST_ADDRESS": "localhost",
-    "PI_ADDRESS": "192.168.1.15",
+    "NOM_INCOMING_DATA_PORT": 4003,
+    "LOCAL_INCOMING_DATA_ADDRESS": "localhost",
+    "LAN_INCOMING_DATA_ADDRESS": "192.168.1.15",
     "X_AXIS_CAP": 18000,
     "PORT": 4001,
     "ROUTES": {

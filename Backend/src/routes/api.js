@@ -277,44 +277,61 @@ function updateGraphsToSend(data) {
 
 
 //----------------------------------------------------- TCP ----------------------------------------------------------
-const CAR_PORT = CONSTANTS.CAR_PORT; // Port for TCP connection
-let CAR_ADDRESS; // TCP server's IP address (PI_ADDRESS to connect to pi; TEST_ADDRESS to connect to data generator)
-
-// Set CAR_ADDRESS according to the command used to start the backend
-if ((process.argv.length === 3) && (process.argv.findIndex((val) => val === "dev") === 2)) {
-  // `npm start dev` was used. Connect to data generator
-  CAR_ADDRESS = CONSTANTS.TEST_ADDRESS;
-} else if (process.argv.length === 2) {
-  // `npm start` was used. Connect to the pi
-  CAR_ADDRESS = CONSTANTS.PI_ADDRESS;
-} else {
-  // An invalid command was used. Throw an error describing the usage
+/**
+ * Throw an error describing the start command usage.
+ */
+function usageError() {
   throw new Error('Invalid command. Correct usages:\n' +
-    '\t`npm start`: Use to connect the backend to the pi\n' +
-    '\t`npm run start-dev`: Use to connect the backend to the local data generator\n' +
-    '\t`npm start dev` (from Backend/ only): Same as `npm run start-dev`\n');
+      '\t`npm start`: Use to connect the backend to the pi\n' +
+      '\t`npm run start-dev` or `npm start dev` (from Backend/ only): Use to connect the backend to the local data ' +
+         'generator\n' +
+      '\t`npm run start-individual` or `npm start individual` (from Backend/ only): Use to connect the backend to a ' +
+         'local instance of the engineering data distribution server, which is connected to the pi\n');
 }
 
-console.log('CAR_ADDRESS: ' + CAR_ADDRESS);
+let INCOMING_DATA_PORT; // Port for TCP connection
+let INCOMING_DATA_ADDRESS; // TCP server's IP address
+
+// Set INCOMING_DATA_ADDRESS according to the command used to start the backend
+if (process.argv.length === 3) {
+  if ((process.argv.at(2) === "dev") || (process.argv.at(2) === "individual")) {
+    // `npm start dev` or `npm start individual` was used. Connect to the local data generator or a local instance of
+    // the engineering data distribution server
+    INCOMING_DATA_ADDRESS = CONSTANTS.LOCAL_INCOMING_DATA_ADDRESS;
+    INCOMING_DATA_PORT = CONSTANTS.NOM_INCOMING_DATA_PORT;
+  } else {
+    // An invalid command was used. Throw an error describing the usage
+    usageError();
+  }
+} else if (process.argv.length === 2) {
+  // `npm start` was used. Connect to the device running the engineering data distribution server
+  INCOMING_DATA_ADDRESS = CONSTANTS.LAN_INCOMING_DATA_ADDRESS;
+  INCOMING_DATA_PORT = CONSTANTS.NOM_INCOMING_DATA_PORT;
+} else {
+  // An invalid command was used. Throw an error describing the usage
+  usageError();
+}
+
+console.log('INCOMING_DATA_ADDRESS: ' + INCOMING_DATA_ADDRESS);
 
 // The max number of data points to have in each array at one time
 // equivalent to 10 minutes' worth of data being sent 30 Hz
 const X_AXIS_CAP = CONSTANTS.X_AXIS_CAP;
 
 /**
- * Creates a connection with the TCP server at port CAR_PORT and address CAR_ADDRESS. Then, sets listeners for connect,
- * data, close, and error events. In the event of an error, the client will attempt to re-open the socket at
- * regular intervals.
+ * Creates a connection with the TCP server at port INCOMING_DATA_PORT and address INCOMING_DATA_ADDRESS. Then, sets
+ * listeners for connect, data, close, and error events. In the event of an error, the client will attempt to re-open
+ * the socket at regular intervals.
  */
 function openSocket() {
   // Establish connection with server
-  console.log('CAR_PORT: ' + CAR_PORT);
-  var client = net.connect(CAR_PORT, CAR_ADDRESS);
+  console.log('INCOMING_DATA_PORT: ' + INCOMING_DATA_PORT);
+  var client = net.connect(INCOMING_DATA_PORT, INCOMING_DATA_ADDRESS);
   client.setKeepAlive(true);
 
   // Connection established listener
   client.on("connect", () => {
-    console.log(`Connected to car server: ${client.remoteAddress}:${CAR_PORT}`);
+    console.log(`Connected to car server: ${client.remoteAddress}:${INCOMING_DATA_PORT}`);
   });
 
   // Data received listener
@@ -360,7 +377,7 @@ function openSocket() {
     client.destroy();
     client.unref();
 
-    console.warn(`Connection to car server (${CAR_PORT}) is closed`);
+    console.warn(`Connection to car server (${INCOMING_DATA_PORT}) is closed`);
 
     // Attempt to re-open socket
     setTimeout(openSocket, 1000);
