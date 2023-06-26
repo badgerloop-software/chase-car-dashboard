@@ -282,7 +282,7 @@ IF "%config%"=="individual" (
 	@REM Create a temporary container to parse package.json for the image's version. If it is lower than 3.8.0, making it
 	@REM incompatible with the "individual" configuration, store it in low_ver so that the script can exit below
 	> tempchasecardashboardversion.txt (
-		docker run --rm ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag% bash -c "grep -oP '(?<=\"version\": \"^)\d\.\d\.\d' package.json ^> v; if [[ $^(cut -d '.' -f 1 v^) -lt 3 ^|^| ^($^(cut -d '.' -f 1 v^) -eq 3 ^&^& $^(cut -d '.' -f 2 v^) -lt 8^) ]]; then cat v; fi"
+		docker run --rm ghcr.io/badgerloop-software/chase-car-dashboard-image:%tag% bash -c "grep -oP '(?<=\"version\": \"^)^(\d^)+\.^(\d^)+\.^(\d^)+' package.json ^> v; if [[ $^(cut -d '.' -f 1 v^) -lt 3 ^|^| ^($^(cut -d '.' -f 1 v^) -eq 3 ^&^& $^(cut -d '.' -f 2 v^) -lt 8^) ]]; then cat v; fi"
 	)
 	SET /p low_ver=<tempchasecardashboardversion.txt
 	DEL tempchasecardashboardversion.txt
