@@ -186,7 +186,7 @@ docker pull ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag
 if [[ "$config" == "individual" ]]; then
 	# Create a temporary container to parse package.json for the image's version. If it is lower than 3.8.0, making it
 	# incompatible with the "individual" configuration, store it in low_ver so that the script can exit below
-	low_ver=$(docker run --rm ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag bash -c 'grep -oP "(?<=\"version\": \")\d\.\d\.\d" package.json > v; if [[ $(cut -d "." -f 1 v) -lt 3 || ($(cut -d "." -f 1 v) -eq 3 && $(cut -d "." -f 2 v) -lt 8) ]]; then cat v; fi')
+	low_ver=$(docker run --rm ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag bash -c 'grep -oP "(?<=\"version\": \")(\d)+\.(\d)+\.(\d)+" package.json > v; if [[ $(cut -d "." -f 1 v) -lt 3 || ($(cut -d "." -f 1 v) -eq 3 && $(cut -d "." -f 2 v) -lt 8) ]]; then cat v; fi')
 
 	if [[ -n "$low_ver" ]]; then
 		echo -e "\n\033[1;31m[ERROR] The specified chase-car-dashboard-image (v$low_ver) does not support the \"$config\" configuration. The image must be v3.8.0 or newer.\033[0m\n"
