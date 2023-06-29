@@ -1,6 +1,6 @@
 {
   "name": "chase-car-dashboard",
-  "version": "3.8.1",
+  "version": "3.8.2",
   "scripts": {
     "data-generator": "cd DataGenerator && npm start",
     "backend": "cd Backend && npm start",
