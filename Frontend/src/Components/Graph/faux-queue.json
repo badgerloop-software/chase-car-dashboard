@@ -305,6 +305,18 @@
   "pack_power": [
     null
   ],
+  "highest_cell_group_voltage": [
+    null
+  ],
+  "highest_cell_group_voltage_idx": [
+    null
+  ],
+  "lowest_cell_group_voltage": [
+    null
+  ],
+  "lowest_cell_group_voltage_idx": [
+    null
+  ],
   "supplemental_voltage": [
     null
   ],
