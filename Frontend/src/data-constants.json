@@ -462,7 +462,7 @@
     "pack_temp": {
         "UNIT": "°C",
         "MIN": 0,
-        "MAX": 60
+        "MAX": 55
     },
     "pack_internal_temp": {
         "UNIT": "°C",
@@ -471,18 +471,38 @@
     },
     "pack_current": {
         "UNIT": "A",
-        "MIN": -10,
-        "MAX": 40
+        "MIN": -24.4,
+        "MAX": 48.8
     },
     "pack_voltage": {
         "UNIT": "V",
-        "MIN": 69,
-        "MAX": 108
+        "MIN": 77.5,
+        "MAX": 113.15
     },
     "pack_power": {
         "UNIT": "W",
-        "MIN": -1080,
-        "MAX": 4320
+        "MIN": -2760.86,
+        "MAX": 5521.72
+    },
+    "highest_cell_group_voltage": {
+        "UNIT": "V",
+        "MIN": 2.5,
+        "MAX": 3.65
+    },
+    "highest_cell_group_voltage_idx": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 55
+    },
+    "lowest_cell_group_voltage": {
+        "UNIT": "V",
+        "MIN": 2.5,
+        "MAX": 3.65
+    },
+    "lowest_cell_group_voltage_idx": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 55
     },
     "supplemental_voltage": {
         "UNIT": "V",
@@ -491,158 +511,158 @@
     },
     "cell_group1_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group2_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group3_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group4_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group5_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group6_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group7_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group8_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group9_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group10_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group11_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group12_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group13_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group14_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group15_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group16_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group17_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group18_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group19_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group20_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group21_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group22_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group23_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group24_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group25_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group26_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group27_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group28_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group29_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group30_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "cell_group31_voltage": {
         "UNIT": "V",
-        "MIN": 6.4,
-        "MAX": 7.2
+        "MIN": 2.5,
+        "MAX": 3.65
     },
     "populated_cells": {
         "UNIT": "",

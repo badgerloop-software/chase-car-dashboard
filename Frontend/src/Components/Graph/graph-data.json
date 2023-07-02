@@ -782,7 +782,7 @@
               "name": "Pack Temperature",
               "unit": "°C",
               "min": 0,
-              "max": 60
+              "max": 55
             },
             {
               "key": "pack_internal_temp",
@@ -795,15 +795,43 @@
               "key": "pack_current",
               "name": "Pack Current",
               "unit": "A",
-              "min": -10,
-              "max": 40
+              "min": -24.4,
+              "max": 48.8
             },
             {
               "key": "pack_voltage",
               "name": "Pack Voltage",
               "unit": "V",
-              "min": 69,
-              "max": 108
+              "min": 77.5,
+              "max": 113.15
+            },
+            {
+              "key": "highest_cell_group_voltage",
+              "name": "highest_cell_group_voltage",
+              "unit": "V",
+              "min": 2.5,
+              "max": 3.65
+            },
+            {
+              "key": "highest_cell_group_voltage_idx",
+              "name": "highest_cell_group_voltage_idx",
+              "unit": "",
+              "min": 1,
+              "max": 55
+            },
+            {
+              "key": "lowest_cell_group_voltage",
+              "name": "lowest_cell_group_voltage",
+              "unit": "V",
+              "min": 2.5,
+              "max": 3.65
+            },
+            {
+              "key": "lowest_cell_group_voltage_idx",
+              "name": "lowest_cell_group_voltage_idx",
+              "unit": "",
+              "min": 1,
+              "max": 55
             },
             {
               "key": "populated_cells",
@@ -1087,8 +1115,8 @@
               "key": "pack_power",
               "name": "pack_power",
               "unit": "W",
-              "min": -1080,
-              "max": 4320
+              "min": -2760.86,
+              "max": 5521.72
             }
           ]
         },
@@ -1118,218 +1146,218 @@
               "key": "cell_group1_voltage",
               "name": "Cell Group 1 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group2_voltage",
               "name": "Cell Group 2 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group3_voltage",
               "name": "Cell Group 3 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group4_voltage",
               "name": "Cell Group 4 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group5_voltage",
               "name": "Cell Group 5 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group6_voltage",
               "name": "Cell Group 6 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group7_voltage",
               "name": "Cell Group 7 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group8_voltage",
               "name": "Cell Group 8 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group9_voltage",
               "name": "Cell Group 9 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group10_voltage",
               "name": "Cell Group 10 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group11_voltage",
               "name": "Cell Group 11 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group12_voltage",
               "name": "Cell Group 12 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group13_voltage",
               "name": "Cell Group 13 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group14_voltage",
               "name": "Cell Group 14 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group15_voltage",
               "name": "Cell Group 15 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group16_voltage",
               "name": "Cell Group 16 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group17_voltage",
               "name": "Cell Group 17 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group18_voltage",
               "name": "Cell Group 18 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group19_voltage",
               "name": "Cell Group 19 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group20_voltage",
               "name": "Cell Group 20 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group21_voltage",
               "name": "Cell Group 21 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group22_voltage",
               "name": "Cell Group 22 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group23_voltage",
               "name": "Cell Group 23 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group24_voltage",
               "name": "Cell Group 24 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group25_voltage",
               "name": "Cell Group 25 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group26_voltage",
               "name": "Cell Group 26 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group27_voltage",
               "name": "Cell Group 27 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group28_voltage",
               "name": "Cell Group 28 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group29_voltage",
               "name": "Cell Group 29 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group30_voltage",
               "name": "Cell Group 30 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "cell_group31_voltage",
               "name": "Cell Group 31 Voltage",
               "unit": "V",
-              "min": 6.4,
-              "max": 7.2
+              "min": 2.5,
+              "max": 3.65
             },
             {
               "key": "bps_fault",
