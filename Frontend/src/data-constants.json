@@ -41,8 +41,8 @@
     },
     "mcu_hv_en": {
         "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
+        "MIN": 1,
+        "MAX": 1
     },
     "imd_status": {
         "UNIT": "",
