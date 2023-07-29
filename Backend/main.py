@@ -1,4 +1,4 @@
-import uvicorn
+import uvicorn, config
 from fastapi import FastAPI
 from framework import router, process
 
@@ -10,5 +10,5 @@ async def startup():
     process.start_processes()
 
 if __name__ == '__main__':
-    uvicorn.run(app='main:app', host="localhost", port=4001)
-
+    uvicorn.run(app='main:app', host="localhost", port=config.PORT)
+    

@@ -1,12 +1,11 @@
-import json
-import select
-import socket
-import struct
+import json, select, socket, struct
+import config
+from . import db
 
 format_string = '<' # little-endian
 byte_length = 0
 properties = []
-frontend_data = []
+frontend_data = {}
 solar_car_connection = False
 # Convert dataformat to format string for struct conversion
 # Docs: https://docs.python.org/3/library/struct.html
@@ -36,13 +35,14 @@ class TCP:
     __tmp_data = b''
 
     def listen_tcp(self, server_addr: str, port: int):
-        global solar_car_connection
+        global solar_car_connection, frontend_data
         while True:
             # create a client socket
             client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 client.connect((server_addr, port))
                 solar_car_connection = True
+                print('connected')
             except ConnectionRefusedError:
                 print(f'Connection to car server {server_addr} is refused')
                 continue
@@ -67,7 +67,8 @@ class TCP:
                     packets = self.parse_packets(data)
                     for packet in packets:
                         d = unpack_data(packet)
-                        frontend_data.append(d)
+                        frontend_data = d.copy()
+                        db.insert_data(d)
                 else:
                     # Timeout occurred, close the connection and break the loop
                     client.close()
@@ -94,7 +95,6 @@ class TCP:
 
             # Extract a complete data packet
             packets.append(self.__tmp_data[start_index + 4:end_index])
-
             # Update the remaining data to exclude the processed packet
             self.__tmp_data = self.__tmp_data[end_index + 5:]
 
@@ -108,6 +108,6 @@ class TCP:
 
 
 def start_comms():
-    gen_format_str("../Data/sc1-data-format/format.json")
+    gen_format_str(config.DATAFORMAT_PATH)
     tcp = TCP()
     tcp.listen_tcp('127.0.0.1', 4003)
