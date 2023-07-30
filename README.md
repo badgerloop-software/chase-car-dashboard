@@ -8,6 +8,9 @@
 - [Chart.js](https://www.chartjs.org/) & [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2) - Graph library & React wrapper
 - [XlsxWriter](https://pypi.org/project/XlsxWriter/) - Python module for writing Excel files
 - [NumPy](https://numpy.org/) - Python library for working with numerical data
+- [FastAPI](https://fastapi.tiangolo.com) - Python library for creating REST API endpoints
+- [Uvicorn](https://www.uvicorn.org) - Python library for hosting web services
+- [Redis](https://redis.io/docs/clients/python/) - High performance in memory database for storing our data
 
 ## Cloning the Data Format Repository and Initializing the Submodule
 
