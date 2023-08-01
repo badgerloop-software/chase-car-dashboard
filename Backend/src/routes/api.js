@@ -496,7 +496,7 @@ function unpackData(data) {
         break;
       case "uint16":
         if (property === "tstamp_ms") {
-          const millis = data.readUInt16BE(buffOffset);
+          const millis = data.readUInt16LE(buffOffset);
           let millisStr;
           if (millis >= 100) {
             millisStr = millis;

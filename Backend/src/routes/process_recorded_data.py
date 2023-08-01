@@ -159,7 +159,7 @@ while f4.tell() < recordedDataSize:  # Loop until there is no more data left in 
             data = np.fromfile(f4, np.dtype("u1"), 1, "", 0)
             data = chr(int(data))
         elif dataType == "uint16":
-            data = np.fromfile(f4, np.dtype(">u2"), 1, "", 0)
+            data = np.fromfile(f4, np.dtype("<u2"), 1, "", 0)
 
             # Add milliseconds to the timestamp if the current piece of data is tstamp_ms
             if property == "tstamp_ms":
