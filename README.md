@@ -25,13 +25,12 @@
 
 ## Running the Dashboard
 
-0. Ensure that you have [node.js](https://nodejs.org/en/download/) and [Python 3](https://www.python.org/downloads/release/python-3104/), as well as [XlsxWriter](https://xlsxwriter.readthedocs.io/getting_started.html) and [NumPy](https://numpy.org/install/), installed on your computer.
-   1. Additionally, check that running `python --version` on the terminal returns Python 3.X.X (ideally Python 3.10.X).
+0. Ensure that you have all the required package installed on your system. and check your python version by running `python3 --version` on the terminal, for this build Python 3.9 or higher is required
 1. Clone the repository to your computer (see steps 0-1 of "Cloning the Data Format Repository and Initializing the Submodule" for instructions on cloning a repo using SSH).
 2. If you have not already, clone the `sc1-data-format` repository and initialize the submodule (see instructions above).
 3. Run `npm run update-data` to update the constants (e.g. nominal min/max values for all data) related to each piece of data listed in the submodule (see the "Updating Data" section).
 4. Run `npm i` to install the latest dependencies to your computer.
-5. In a terminal, run `npm start` or, if you want to run the engineering dashboard without the solar car dashboard, `npm run start-dev`. The console output may look messy, but that is due to three servers running at the same time. For a more organized console, please look below.
+5. In a terminal, cd into frontend and run `npm start` to start the React frontend, then move the process to background or open a new terminal. In the new terminal, cd into backend and run `python3 main.py` to start the backend server
 
 ## Running the Dashboard With Docker
 
