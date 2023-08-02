@@ -1,4 +1,4 @@
-## Solar Car 1 Engineering Dashboard Versioning Guidelines
+## Solar Car 1 Engineering Dashboard Versioning Guidelines 🧑‍⚖️
 
 1. The Solar Car 1 Engineering Dashboard will adhere to [Semantic Versioning](https://semver.org/) specifications.
 
@@ -21,7 +21,7 @@
    `chase-car-dashboard-data-generator` packages (the "child packages") shall be versioned separately according to the
    changes made in the respective sections of the project.
     1. These versions will be tracked using the `version` field in the respective child package's `package.json` and
-       `package-lock.json` files.
+       `package-lock.json` files, and in `setup.py` of the `chase-car-dashboard-backend`.
     2. For a given update that warrants a new version of any child packages, the versions of the `chase-car-dashboard`
        and `chase-car-dashboard-image` packages (the "parent packages") shall be updated as described in item 6 to
        reflect the most significant version update made across the child packages.
