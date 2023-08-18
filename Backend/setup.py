@@ -9,5 +9,5 @@ setup(
     author='badgerloop',
     author_email='',
     description='',
-    install_requires=['uvicorn','fastapi','redis', 'numpy', 'XlsxWriter']
+    install_requires=['uvicorn','fastapi','redis', 'numpy', 'XlsxWriter', 'pandas']
 )
