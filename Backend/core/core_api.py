@@ -6,7 +6,7 @@ router = APIRouter()
 async def single_values():
     print(comms.solar_car_connection)
     if comms.solar_car_connection:
-        latest_data = comms.frontend_data[len(comms.frontend_data)-1]
+        latest_data = comms.frontend_data
         latest_data['solar_car_connection'] = True
         latest_data['timestamps'] = f'{latest_data["tstamp_hr"]:02d}:{latest_data["tstamp_mn"]:02d}:' \
                                     f'{latest_data["tstamp_sc"]:02d}.{latest_data["tstamp_ms"]}'
