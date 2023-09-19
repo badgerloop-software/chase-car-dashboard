@@ -11,7 +11,7 @@ for (const property in DATA_FORMAT) {
 }
 
 import { Buffer } from "buffer";
-let buf1 = Buffer.alloc(bytes, 0); // Fill a buffer of the correct size with zeros
+let buf1 = Buffer.alloc(bytes+9, 0); // Fill a buffer of the correct size with zeros
 let nextValue = 1;
 let buffOffset = 0;
 
@@ -42,12 +42,13 @@ const SERVER = NET.createServer((socket) => {
 
   // Pack and send a buffer at half second intervals
   interval = setInterval(() => {
-    buffOffset = 0; // Offset when adding each value to buf1
+    buffOffset = 4; // Offset when adding each value to buf1
 
     // const time = DateTime.now().minus(30_000); // thirty seconds in the past
     const time = DateTime.now();
     // console.log(time);
-
+    //write start symbol
+    buf1.write("<bl>")
     // Fill buf1 with new data according to the data format file
     for (const property in DATA_FORMAT) {
       // Generate a new value
@@ -102,7 +103,9 @@ const SERVER = NET.createServer((socket) => {
       // Increment offset by amount specified in data format json
       buffOffset += DATA_FORMAT[property][0];
     }
-
+    //write end symbol
+    buf1.write("</bl>",buffOffset)
+    console.log(buf1)
     socket.write(buf1);
   }, 34);
 });
