@@ -29,19 +29,36 @@ def insert_data(data_dict):
             # convert char to its ascii number
             r.execute_command('TS.ADD', key, int(timestamp.timestamp()*1000), ord(data_dict[key]), 'ON_DUPLICATE','LAST')
 
-async def query(keys: [], start_time, end_time, aggregate_methods: [], aggregate = 1):
-    """ return requested historical data in pandas dataframe"""
-    assert(len(keys), len(aggregate_methods))
-    if keys:
-        # get first response to set index and data
-        response = r.execute_command('TS.RANGE', keys[0], start_time, end_time, 'AGGREGATION', aggregate_methods[0], aggregate)
-        df = pd.DataFrame({keys[0]: [float(row[1]) for row in response]},
-                          index=[row[0] for row in response])
+async def query(keys: list, start_time, end_time, aggregate_methods: list, aggregate=1):
+    """Return requested historical data in a pandas dataframe"""
+    assert len(keys) == len(aggregate_methods), "Length of keys and aggregate_methods should be the same"
 
-        # get the rest of the data and append to the array
-        for i in range(1, len(keys)):
+    if keys:
+        # Initialize an empty DataFrame
+        df = pd.DataFrame()
+
+        min_length = float('inf')  # Initialize min_length to positive infinity
+
+        for i in range(len(keys)):
             response = r.execute_command('TS.RANGE', keys[i], start_time, end_time, 'AGGREGATION', aggregate_methods[i], aggregate)
-            df[keys[i]] = [float(row[1]) for row in response]
+            data = [float(row[1]) for row in response]
+            index = [row[0] for row in response]
+            column_name = keys[i]
+
+            # Create a new DataFrame for the current key and concat it to the existing DataFrame
+            new_df = pd.DataFrame({column_name: data}, index=index)
+
+            if len(data) < min_length:
+                min_length = len(data)  # Update min_length if a shorter array is found
+
+            if df.empty:
+                df = new_df
+            else:
+                df = pd.concat([df, new_df], axis=1)
+
+        # Truncate the longer arrays to match the length of the shortest array
+        df = df.iloc[:min_length]
+
         return df
 
 async def single_query(key: str, start_time, end_time, aggregate_method = 'AVG', aggregate = 1):
