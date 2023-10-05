@@ -1,3 +1,5 @@
+import time
+
 import redis, config
 import pandas as pd
 from datetime import datetime
@@ -33,6 +35,10 @@ async def query(keys: list, start_time, end_time, aggregate_methods: list, aggre
     """Return requested historical data in a pandas dataframe"""
     assert len(keys) == len(aggregate_methods), "Length of keys and aggregate_methods should be the same"
 
+    # if end time is '+' record current time
+    if end_time == '+':
+        end_time = round(time.time()*1000)
+
     if keys:
         # Initialize an empty DataFrame
         df = pd.DataFrame()
@@ -40,7 +46,9 @@ async def query(keys: list, start_time, end_time, aggregate_methods: list, aggre
         min_length = float('inf')  # Initialize min_length to positive infinity
 
         for i in range(len(keys)):
+            # query the data
             response = r.execute_command('TS.RANGE', keys[i], start_time, end_time, 'AGGREGATION', aggregate_methods[i], aggregate)
+            # parse data into array
             data = [float(row[1]) for row in response]
             index = [row[0] for row in response]
             column_name = keys[i]
@@ -61,5 +69,18 @@ async def query(keys: list, start_time, end_time, aggregate_methods: list, aggre
 
         return df
 
-async def single_query(key: str, start_time, end_time, aggregate_method = 'AVG', aggregate = 1):
+async def raw_query(key: str, start_time, end_time, aggregate_method = 'AVG', aggregate = 1):
+    """Get raw data from redis wrapper"""
     return r.execute_command('TS.RANGE', key, start_time, end_time, 'AGGREGATION', aggregate_method, aggregate)
+
+async def latest_data(keys: []):
+    """Return a dictionary containing latest data of requested keys"""
+    result = {}
+    data = r.execute_command('TS.GET', keys[0])
+    # set the time value
+    result['timestamp'] = data[0]
+    result[keys[0]] = float(data[1])
+    # set the rest of the values
+    for key in keys[1:]:
+        result[key] = float(r.execute_command('TS.GET', key)[1])
+    return result
