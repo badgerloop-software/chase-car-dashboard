@@ -1,4 +1,6 @@
 import json, select, socket, struct
+import sys
+
 import config
 from . import db
 
@@ -35,6 +37,7 @@ class TCP:
     __tmp_data = b''
 
     def listen_tcp(self, server_addr: str, port: int):
+        print(f'connecting to {server_addr}:{port}')
         global solar_car_connection, frontend_data
         while True:
             # create a client socket
@@ -110,4 +113,4 @@ class TCP:
 def start_comms():
     gen_format_str(config.DATAFORMAT_PATH)
     tcp = TCP()
-    tcp.listen_tcp('127.0.0.1', 4003)
+    tcp.listen_tcp(config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT)
