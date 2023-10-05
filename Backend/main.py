@@ -1,4 +1,5 @@
 import uvicorn, config
+import sys
 from fastapi import FastAPI
 from framework import router, process
 
@@ -10,5 +11,6 @@ async def startup():
     process.start_processes()
 
 if __name__ == '__main__':
-    uvicorn.run(app='main:app', host="localhost", port=config.PORT)
+    uvicorn.run(app='main:app', host="0.0.0.0", port=config.HOST_PORT)
+
     
