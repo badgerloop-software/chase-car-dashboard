@@ -4,9 +4,9 @@ setup(
     name='chase-car-dashboard-backend',
     version='5.0.0',
     packages=['core', 'framework', 'components'],
-    url='badgerloop.org',
+    url='badgersolarracing.org',
     license='',
-    author='badgerloop',
+    author='Badger Solar Racing Software Team',
     author_email='',
     description='',
     install_requires=['uvicorn','fastapi','redis', 'numpy', 'XlsxWriter', 'pandas']
