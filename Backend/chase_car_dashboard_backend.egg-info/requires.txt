@@ -1,0 +1,6 @@
+uvicorn
+fastapi
+redis
+numpy
+XlsxWriter
+pandas

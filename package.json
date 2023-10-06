@@ -1,14 +1,6 @@
 {
   "name": "chase-car-dashboard",
-<<<<<<< HEAD
-<<<<<<< HEAD
   "version": "5.0.0",
-=======
-  "version": "4.2.0",
->>>>>>> 16eebf1 (Update versions for FaultsView and metadata update)
-=======
-  "version": "4.2.0",
->>>>>>> a86a44b (Update versions for FaultsView and metadata update)
   "scripts": {
     "data-generator": "cd DataGenerator && npm start",
     "backend": "cd Backend && npm start",
