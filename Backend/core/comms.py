@@ -33,7 +33,7 @@ def unpack_data(data):
     return fields
 
 
-class TCP:
+class Telemetry:
     __tmp_data = b''
 
     def listen_tcp(self, server_addr: str, port: int):
@@ -78,7 +78,35 @@ class TCP:
                     solar_car_connection = False
                     break
 
+    def listen_udp(self, server_addr: str, port: int):
+        print(f'listening on {server_addr}:{port}')
+        global solar_car_connection, frontend_data
+        # Create a client socket for UDP
+        client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+        # Bind the client to the local address and port to receive incoming UDP datagrams
+        client.bind(('', port))
+
+        while True:
+            # Wait for data to be received or timeout after 5 seconds
+            readable, _, _ = select.select([client], [], [], 5)
+
+            if client in readable:
+                data, addr = client.recvfrom(1000)
+                print(data)
+                if not data:
+                    # No data received, continue listening
+                    continue
+
+                packets = self.parse_packets(data)
+                for packet in packets:
+                    d = unpack_data(packet)
+                    frontend_data = d.copy()
+                    db.insert_data(d)
+                    solar_car_connection = True
+            else:
+                # Timeout occurred, handle as needed
+                solar_car_connection = False
 
     def parse_packets(self, new_data: bytes):
         """Parse and check the length of each packet"""
@@ -112,5 +140,5 @@ class TCP:
 
 def start_comms():
     gen_format_str(config.DATAFORMAT_PATH)
-    tcp = TCP()
-    tcp.listen_tcp(config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT)
+    tel = Telemetry()
+    tel.listen_udp(config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT)
