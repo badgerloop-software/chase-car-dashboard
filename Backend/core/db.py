@@ -69,6 +69,43 @@ async def query(keys: list, start_time, end_time, aggregate_methods: list, aggre
 
         return df
 
+async def query_without_aggregation(keys: list, start_time, end_time):
+    """Return requested historical data in a pandas dataframe"""
+
+    # if end time is '+' record current time
+    if end_time == '+':
+        end_time = round(time.time()*1000)
+
+    if keys:
+        # Initialize an empty DataFrame
+        df = pd.DataFrame()
+
+        min_length = float('inf')  # Initialize min_length to positive infinity
+
+        for i in range(len(keys)):
+            # query the data
+            response = r.execute_command('TS.RANGE', keys[i], start_time, end_time)
+            # parse data into array
+            data = [float(row[1]) for row in response]
+            index = [row[0] for row in response]
+            column_name = keys[i]
+
+            # Create a new DataFrame for the current key and concat it to the existing DataFrame
+            new_df = pd.DataFrame({column_name: data}, index=index)
+
+            if len(data) < min_length:
+                min_length = len(data)  # Update min_length if a shorter array is found
+
+            if df.empty:
+                df = new_df
+            else:
+                df = pd.concat([df, new_df], axis=1)
+
+        # Truncate the longer arrays to match the length of the shortest array
+        df = df.iloc[:min_length]
+
+        return df
+
 async def raw_query(key: str, start_time, end_time, aggregate_method = 'AVG', aggregate = 1):
     """Get raw data from redis wrapper"""
     return r.execute_command('TS.RANGE', key, start_time, end_time, 'AGGREGATION', aggregate_method, aggregate)
