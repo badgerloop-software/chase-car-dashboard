@@ -66,138 +66,26 @@ export default function DataRecordingControl(props) {
 
     // ------------------------------------------ Data recording controls --------------------------------------------
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    // TODO: consider making isProcessing boolean to control when to display a loading spinner
 
-    const initialModalRef = useRef();
     const finalModalRef = useRef();
-
     const createRef = useRef();
-    const recordRef = useRef();
 
-    const [sessionsList, setSessionsList] = useState({ data: null });
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
 
-    const [currentSession, setCurrentSession] = useState("");
-    const [isRecording, setIsRecording] = useState(false);
-    const [sessionFileName, setSessionFileName] = useState("");
+    const startTimeChanged = (event) => setStartTime(event.target.value);
+    const endTimeChanged = (event) => setEndTime(event.target.value);
 
-    // Get the list of available sessions from the backend
-    const getSessionsList = async () => {
-        const response = await fetch(ROUTES.GET_SESSION_LIST);
-        if (response.status === 200) {
-            const body = await response.json();
-            return body;
-        }
-        console.error("Error retrieving sessionsList");
-        return;
-    };
+    const triggerDownload = () => {
+        const startTimeUnix = Math.round(new Date(startTime).getTime()/1000);
+        const endTimeUnix = Math.round(new Date(endTime).getTime()/1000);
 
-    // Get the initial list of sessions
-    useLayoutEffect(() => {
-        getSessionsList().then((res) => {
-            setSessionsList({ data: res.response });
-        }).catch((err) => console.error("error", err));
-    }, []);
-
-    // Convert recorded raw binary data to a formatted Excel csv
-    const processRecordedData = async () => {
-        const response = await fetch(ROUTES.PROCESS_RECORDED_DATA);
-        if (response.status === 200) {
-            const body = await response.json();
-            return body;
-        }
-        console.error("Error processing recorded data");
-        return;
-    };
-
-    // Toggle isRecording and send it to the backend to toggle its recording state
-    const recordCarData = () => {
-        fetch('http://localhost:4001' + ROUTES.SET_RECORD, {
-            method: "POST",
-            body: JSON.stringify({ doRecord: !isRecording }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        }).then(response => response.json()).then((data) => {
-            console.log("rcd res::", data);
-            if (data.response === "NoFile") {
-                console.warn("Attempted to record data with an empty file name");
-            }
-            if (data.response === "Recording") {
-                //Then Request is sent
-                setIsRecording(!isRecording);
-            } else {
-                setIsRecording(false);
-                // Handle the error
-                alert("Something went wrong");
-            }
-        }).catch((e) => {
-            setIsRecording(false);
-            console.error("Error:", e);
-        });
+        window.open('http://localhost:4001'
+            + ROUTES.GET_PROCESSED_DATA
+            + '?start_time=' + startTimeUnix
+            + '&end_time=' + endTimeUnix);
     }
-
-    // Set the current recording session according to the file name selected
-    const setCurrentRecordingSession = (fileName) => {
-        fetch('http://localhost:4001' + ROUTES.SET_RECORDING_SESSION, {
-            method: "POST",
-            body: JSON.stringify({ fileName: fileName }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        }).then(response => response.json()).then((data) => {
-            console.log("crs res::", data);
-            if (data.response === -1) {
-                toast("Empty name");
-                return;
-            }
-            if (data.response === 200) {
-                setCurrentSession(fileName);
-                toast("Current recording session is set");
-            } else {
-                // Handle the error
-                toast("Something went wrong");
-            }
-        }).catch((e) => {
-            console.error("Error:", e);
-        });
-    }
-
-    // Create a new recording session with the specified file name
-    const createRecordingSession = (fileName) => {
-        fetch('http://localhost:4001' + ROUTES.CREATE_RECORDING_SESSION, {
-            method: "POST",
-            body: JSON.stringify({ fileName: fileName }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        }).then(response => response.json()).then((data) => {
-            console.log("crs res::", data);
-            if (data.response === "Empty") {
-                alert("Empty feild");
-                return;
-            }
-            if (data.response === "Created") {
-                // Get the updated sessions list
-                getSessionsList().then((res) => {
-                    setSessionsList({ data: res.response });
-                }).catch((err) => console.log("error", err));
-                setCurrentSession(fileName);
-
-                toast("Session file has been created!!");
-                //Then Request is sent
-            } else {
-                // Handle the error
-                alert("Something went wrong");
-            }
-
-        }).catch((e) => {
-            console.error("Error:", e);
-        });
-    }
-
 
     return (
         <>
@@ -210,7 +98,7 @@ export default function DataRecordingControl(props) {
                 >
                     <Popover
                         placement='right'
-                        initialFocusRef={currentSession ? recordRef : createRef}
+                        initialFocusRef={createRef}
                     >
                         <PopoverTrigger>
                             <Button
@@ -232,132 +120,43 @@ export default function DataRecordingControl(props) {
                             <PopoverBody>
                                 <VStack>
                                     <HStack style={{marginBottom: "0.5em"}}>
-                                        <Select
-                                            disabled={isRecording}
-                                            width={"15em"}
-                                            placeholder={"Select session to view"}
-                                            value={currentSession}
-
-                                            onChange={(e) => {
-                                                console.log('current value', e.target.value)
-                                                setCurrentRecordingSession(e.target.value)
-                                            }}
-                                        >
-                                            {sessionsList?.data?.map((name, i) => {
-                                                return (<option key={i} value={name}>{name}</option>)
-                                            })}
-                                        </Select>
-                                        <Tooltip label='Create new recording session'>
+                                        <Tooltip label='Beginning date/time'>
+                                            <Input
+                                                placeholder="Beginning date/time"
+                                                size='sm'
+                                                onChange={startTimeChanged}
+                                                type='datetime-local'
+                                            />
+                                        </Tooltip>
+                                        <Tooltip label='Ending date/time'>
+                                            <Input
+                                                placeholder="Ending date/time"
+                                                size='sm'
+                                                onChange={endTimeChanged}
+                                                type='datetime-local'
+                                            />
+                                        </Tooltip>
+                                        <Tooltip label='Download recorded data in an Excel file'>
                                             <Button
                                                 id='create'
-                                                disabled={isRecording}
-                                                ref={createRef}
-                                                width={"auto"}
+                                                width={"12em"}
                                                 bgColor={selectBgCol}
                                                 color={createButtonColor}
                                                 size='sm'
-                                                onClick={onOpen}
+                                                onClick={triggerDownload}
                                                 onMouseEnter={changeButtonColor}
                                                 onMouseLeave={changeButtonColorBack}
                                             >
-                                                + Create
+                                                Download
                                             </Button>
                                         </Tooltip>
                                     </HStack>
-                                    {
-                                        currentSession ?
-                                            <HStack>
-                                                <Tooltip label='Export to Excel'>
-                                                    <Button
-                                                        id='process'
-                                                        disabled={isRecording}
-                                                        width={"auto"}
-                                                        bgColor={selectBgCol}
-                                                        color={processButtonColor}
-                                                        size='sm'
-                                                        onMouseEnter={changeButtonColor}
-                                                        onMouseLeave={changeButtonColorBack}
-                                                        onClick={async () => {
-                                                            processRecordedData()
-                                                        }}
-                                                    >
-                                                        <Image src={ConvertIcon} fit='scale-down' boxSize='2.75vh'/>
-                                                    </Button>
-                                                </Tooltip>
-
-                                                <Tooltip label={isRecording ? 'Stop recording' : 'Start recording'}>
-                                                    <Button
-                                                        id='record'
-                                                        ref={recordRef}
-                                                        width={"auto"}
-                                                        bgColor={selectBgCol}
-                                                        color={recordButtonColor}
-                                                        size='sm'
-                                                        onMouseEnter={changeButtonColor}
-                                                        onMouseLeave={changeButtonColorBack}
-                                                        onClick={() => {
-                                                            if (currentSession) {
-                                                                recordCarData()
-                                                            } else {
-                                                                alert("No session created or selected")
-                                                            }
-                                                        }}
-                                                    >
-                                                        <BsFillRecordCircleFill color={isRecording ? "red" : null}/>
-                                                    </Button>
-                                                </Tooltip>
-                                            </HStack>
-                                            : null
-                                    }
                                 </VStack>
                             </PopoverBody>
                         </PopoverContent>
                     </Popover>
                 </Box>
             </Draggable>
-            {/* Create new session popup */}
-            <Modal
-                initialFocusRef={initialModalRef}
-                finalFocusRef={finalModalRef}
-                isOpen={isOpen}
-                onClose={onClose}
-            >
-                <ModalOverlay/>
-                <ModalContent>
-                    <ModalHeader>Create recording session</ModalHeader>
-                    <ModalCloseButton/>
-                    <ModalBody pb={6}>
-                        <FormControl>
-                            <FormLabel>File name</FormLabel>
-                            <Input
-                                ref={initialModalRef}
-                                placeholder='File name'
-                                onChange={(e) => {
-                                    setSessionFileName(e.target.value)
-                                }}
-                            />
-                        </FormControl>
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <Button
-                            bg="#008640"
-                            mr={3}
-                            onClick={() => {
-                                if (sessionFileName === "") {
-                                    alert("Error: Empty feild")
-                                    return
-                                }
-                                createRecordingSession(sessionFileName);
-                                onClose()
-                            }}
-                        >
-                            Create
-                        </Button>
-                        <Button onClick={onClose}>Cancel</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
         </>
     );
 }
