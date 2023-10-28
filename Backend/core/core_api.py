@@ -21,16 +21,15 @@ async def single_values():
         return json_data
     return {'response': None}
 
-@router.get("/get_processed_data")
+@router.get("/get-processed-data")
 async def get_processed_data(start_time, end_time):
     all_keys = list(comms.frontend_data.keys())
     all_keys.remove('tstamp_ms')
     all_keys.remove('tstamp_sc')
     all_keys.remove('tstamp_mn')
     all_keys.remove('tstamp_hr')
-    # aggregate_methods = ['first' for key in all_keys]
 
-    result = await db.query_without_aggregation(all_keys, start_time, end_time)#, aggregate_methods)
+    result = await db.query_without_aggregation(all_keys, start_time, end_time)
 
     # see https://stackoverflow.com/a/63989481
     output = io.BytesIO()
