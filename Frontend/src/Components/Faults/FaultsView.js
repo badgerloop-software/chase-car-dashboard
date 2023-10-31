@@ -647,170 +647,185 @@ export default function Faults(props) {
 
   // Return html code
   return (
-    <Center w="100%" h="100%"> 
-    <table bgcolor = "black">
-          <tr bgcolor = "green">
-            <th> solar_car_connection </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {!(props.data?.solar_car_connection[0] ?? false) ? ("Lost communication with the solar car")  : ("ab")} </td>
-          </tr>
+      <Center w="100%" h="100%"> 
+      <div style={{ width: '100%', height: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'scroll' }}>
+        <table style={{ color: 'black', borderCollapse: 'collapse', width: '100%', height: '10vh', overflow: 'scroll' }}>
+              <tr bgcolor = "grey" >
+                <th> solar_car_connection </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {!(props.data?.solar_car_connection[0] ?? false) ? ("Lost communication with the solar car")  : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> Heartbeat </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("mainIO_heartbeat")
-          || _checkBooleanData("mppt_can_heartbeat")
-          || _checkBooleanData("mcc_can_heartbeat")
-          || _checkBooleanData("bms_can_heartbeat") ? (getHeartbeatString()) : ("") } </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> Heartbeat </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("mainIO_heartbeat")
+              || _checkBooleanData("mppt_can_heartbeat")
+              || _checkBooleanData("mcc_can_heartbeat")
+              || _checkBooleanData("bms_can_heartbeat") ? (getHeartbeatString()) : ("") } </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> mppt_contactor </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("mppt_contactor") ? ("MPPT contactor is open") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> mppt_contactor </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("mppt_contactor") ? ("MPPT contactor is open") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> low_contactor </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("low_contactor") ? ("Low contactor is open") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> low_contactor </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("low_contactor") ? ("Low contactor is open") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> motor_controller_contactor </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("motor_controller_contactor") ? ("Motor controller contactor is open") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> motor_controller_contactor </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("motor_controller_contactor") ? ("Motor controller contactor is open") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> crash </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("crash") ? ("Solar car has crashed") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> crash </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("crash") ? ("Solar car has crashed") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> door </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("door") ? ("Door is open") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> door </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("door") ? ("Door is open") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> driver_eStop </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("driver_eStop") ||
-        _checkBooleanData("external_eStop") ? (getEStopString()) : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> driver_eStop </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("driver_eStop") ||
+            _checkBooleanData("external_eStop") ? (getEStopString()) : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> main_power_warning </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("main_power_warning")
-          || _checkBooleanData("main_power_critical")
-          || _checkBooleanData("main_power_valid")
-          || _checkBooleanData("driver_power_warning")
-          || _checkBooleanData("driver_power_critical")
-          || _checkBooleanData("driver_power_valid") ? (getMainDriverPowerString()) : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> main_power_warning </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("main_power_warning")
+              || _checkBooleanData("main_power_critical")
+              || _checkBooleanData("main_power_valid")
+              || _checkBooleanData("driver_power_warning")
+              || _checkBooleanData("driver_power_critical")
+              || _checkBooleanData("driver_power_valid") ? (getMainDriverPowerString()) : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> bps_fault </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("bps_fault") ? ("BPS fault") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> bps_fault </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("bps_fault") ? ("BPS fault") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> discharge_enable </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("discharge_enable") ? ("Discharge enable") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> discharge_enable </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("discharge_enable") ? ("Discharge enable") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> imd_status </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("imd_status") ? ("IMD status (battery isolation) fault") : ("")} </td>
-          </tr>
-          
-          <tr bgcolor = "green">
-            <th> checkBMSFailures </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {_checkBooleanData("imd_status") ? ("IMD status (battery isolation) fault") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> imd_status </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("imd_status") ? ("IMD status (battery isolation) fault") : ("")} </td>
+              </tr>
+              
+              <tr bgcolor = "grey">
+                <th> checkBMSFailures </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {_checkBooleanData("imd_status") ? ("IMD status (battery isolation) fault") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> mc_status </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {props.data?.mc_status[0] > CONSTANTS.mc_status.MIN ? (getMotorControllerString()) : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> mc_status </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {props.data?.mc_status[0] > CONSTANTS.mc_status.MIN ? (getMotorControllerString()) : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> pack_current </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {props.data?.pack_current[0] > CONSTANTS.pack_current.MAX ? ("High battery pack current") : 
-            props.data?.pack_current[0] < CONSTANTS.pack_current.MIN ? ("Low battery pack current") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> pack_current </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {props.data?.pack_current[0] > CONSTANTS.pack_current.MAX ? ("High battery pack current") : 
+                props.data?.pack_current[0] < CONSTANTS.pack_current.MIN ? ("Low battery pack current") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> pack_voltage </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {props.data?.pack_voltage[0] > CONSTANTS.pack_voltage.MAX ? ("High battery pack voltage") : 
-            props.data?.pack_voltage[0] < CONSTANTS.pack_voltage.MIN ? ("Low battery pack voltage") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> pack_voltage </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {props.data?.pack_voltage[0] > CONSTANTS.pack_voltage.MAX ? ("High battery pack voltage") : 
+                props.data?.pack_voltage[0] < CONSTANTS.pack_voltage.MIN ? ("Low battery pack voltage") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> mppt_current_out </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {props.data?.mppt_current_out[0] > CONSTANTS.mppt_current_out.MAX ? ("High MPPT current") :
-            props.data?.mppt_current_out[0] < CONSTANTS.mppt_current_out.MIN ? ("MPPT current is negative") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> mppt_current_out </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {props.data?.mppt_current_out[0] > CONSTANTS.mppt_current_out.MAX ? ("High MPPT current") :
+                props.data?.mppt_current_out[0] < CONSTANTS.mppt_current_out.MIN ? ("MPPT current is negative") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> bms_input_voltage </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {props.data?.bms_input_voltage[0] > CONSTANTS.bms_input_voltage.MAX ? ("High BMS input voltage") :
-            props.data?.bms_input_voltage[0] < CONSTANTS.bms_input_voltage.MIN ? ("Low BMS input voltage") : ("")} </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> bms_input_voltage </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {props.data?.bms_input_voltage[0] > CONSTANTS.bms_input_voltage.MAX ? ("High BMS input voltage") :
+                props.data?.bms_input_voltage[0] < CONSTANTS.bms_input_voltage.MIN ? ("Low BMS input voltage") : ("")} </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> soc </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {props.data?.soc[0] < CONSTANTS.soc.MIN ? ("Battery charge is low (<${CONSTANTS.soc.MIN}%)") : ("") } </td>
-          </tr>
+              <tr bgcolor = "grey">
+                <th> soc </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {props.data?.soc[0] < CONSTANTS.soc.MIN ? ("Battery charge is low (<${CONSTANTS.soc.MIN}%)") : ("") } </td>
+              </tr>
 
-          <tr bgcolor = "green">
-            <th> CellGroupVoltages </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {checkBMSFailures() ? (getBMSFailureString()) : ("")} </td>
-          </tr>
-          
-          <tr bgcolor = "green">
-            <th> Temps </th>
-          </tr>
-          <tr bgcolor = "blue">
-            <td> {checkTemps() ? (getTempString()) : ("")} </td>
-          </tr>
-          
-        </table>
-      {/*
+              <tr bgcolor = "grey">
+                <th> CellGroupVoltages </th>
+              </tr>
+              <tr bgcolor="grey">
+                        <th>CellGroupVoltages</th>
+                    </tr>
+                    {checkBMSFailures() ? (
+                        getBMSFailureString().split(',').map((val, index) => (
+                            <tr key={index} bgcolor="white">
+                                <td>
+                                    <p>{val}</p>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr bgcolor="white">
+                            <td></td>
+                        </tr>
+                    )}
+              
+              <tr bgcolor = "grey">
+                <th> Temps </th>
+              </tr>
+              <tr bgcolor = "white">
+                <td> {checkTemps() ? (getTempString()) : ("")} </td>
+              </tr>
+              
+            </table>
+          </div>
+        {/*
       <SimpleGrid
         columns={8}
         rows={3}
