@@ -9,7 +9,7 @@ r = redis.StrictRedis(host=config.REDIS_URL, port=config.REDIS_PORT, db=config.R
 def insert_data(data_dict):
     # Get the timestamp from the dictionary
     timestamp = datetime.utcnow().replace(
-        hour=(data_dict['tstamp_hr'] + 6) % 24,
+        hour=(data_dict['tstamp_hr'] + 1) % 24,
         minute=data_dict['tstamp_mn'],
         second=data_dict['tstamp_sc'],
         microsecond=data_dict['tstamp_ms']
