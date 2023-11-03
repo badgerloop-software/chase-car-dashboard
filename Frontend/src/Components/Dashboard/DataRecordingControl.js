@@ -78,8 +78,8 @@ export default function DataRecordingControl(props) {
     const endTimeChanged = (event) => setEndTime(event.target.value);
 
     const triggerDownload = () => {
-        const startTimeUnix = Math.round(new Date(startTime).getTime()/1000);
-        const endTimeUnix = Math.round(new Date(endTime).getTime()/1000);
+        const startTimeUnix = Math.round(new Date(startTime).getTime());
+        const endTimeUnix = Math.round(new Date(endTime).getTime());
 
         window.open('http://localhost:4001'
             + ROUTES.GET_PROCESSED_DATA
