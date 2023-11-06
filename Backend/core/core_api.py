@@ -8,7 +8,6 @@ router = APIRouter()
 
 @router.get("/single-values")
 async def single_values():
-    print(comms.solar_car_connection)
     if comms.solar_car_connection:
         latest_data = comms.frontend_data
         latest_data['solar_car_connection'] = True
@@ -28,6 +27,7 @@ async def get_processed_data(start_time, end_time):
     all_keys.remove('tstamp_sc')
     all_keys.remove('tstamp_mn')
     all_keys.remove('tstamp_hr')
+    all_keys.remove('tstamp_unix')
 
     result = await db.query_without_aggregation(all_keys, start_time, end_time)
 

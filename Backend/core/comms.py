@@ -11,7 +11,7 @@ frontend_data = {}
 solar_car_connection = False
 # Convert dataformat to format string for struct conversion
 # Docs: https://docs.python.org/3/library/struct.html
-types = {'bool': '?', 'float': 'f', 'char': 'c', 'uint8': 'B', 'uint16': 'H'}
+types = {'bool': '?', 'float': 'f', 'char': 'c', 'uint8': 'B', 'uint16': 'H', 'uint64': 'Q'}
 
 def gen_format_str(file_path: str):
     global format_string, byte_length, properties
@@ -70,6 +70,7 @@ class TCP:
                     packets = self.parse_packets(data)
                     for packet in packets:
                         d = unpack_data(packet)
+                        print(d['tstamp_unix'])
                         frontend_data = d.copy()
                         db.insert_data(d)
                 else:
