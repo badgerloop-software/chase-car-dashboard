@@ -11,6 +11,7 @@ for (const property in DATA_FORMAT) {
 }
 
 import { Buffer } from "buffer";
+import {t} from "@babel/core/lib/vendor/import-meta-resolve";
 let buf1 = Buffer.alloc(bytes+9, 0); // Fill a buffer of the correct size with zeros
 let nextValue = 1;
 let buffOffset = 0;
@@ -86,11 +87,16 @@ const SERVER = NET.createServer((socket) => {
         case "uint16":
           // special value: Solar car dashboard time received (milliseconds)
           if (property === "tstamp_ms") {
-            buf1.writeUInt16BE(time.get("millisecond"), buffOffset);
+            buf1.writeUInt16LE(time.get("millisecond"), buffOffset);
             break;
           }
-          buf1.writeUInt16BE(Math.round(nextValue), buffOffset);
+          buf1.writeUInt16LE(Math.round(nextValue), buffOffset);
           break;
+        case "uint64":
+          if (property === "tstamp_unix") {
+            buf1.writeBigUInt64LE(BigInt(time), buffOffset);
+            break;
+          }
         default:
           // Fill the correct number of bytes with the next value if its type is not listed above
           buf1.fill(
@@ -105,7 +111,6 @@ const SERVER = NET.createServer((socket) => {
     }
     //write end symbol
     buf1.write("</bl>",buffOffset)
-    console.log(buf1)
     socket.write(buf1);
   }, 34);
 });
