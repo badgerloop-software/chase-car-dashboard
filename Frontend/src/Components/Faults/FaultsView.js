@@ -1,6 +1,7 @@
-import {Box, Tooltip, Image, SimpleGrid, Center, useColorMode, Table} from "@chakra-ui/react";
+import {Box, Tooltip, Image, SimpleGrid, Center, useColorMode, Table, background} from "@chakra-ui/react";
 import { FaultsViewImages } from "./Images/Images";
 import CONSTANTS from "../../data-constants.json";
+
 
 export default function Faults(props) {
   const fitType = "scale-down";
@@ -645,75 +646,78 @@ export default function Faults(props) {
     );
   };
 
+  const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
   // Return html code
   return (
       <Center w="100%" h="100%"> 
-      <div style={{ width: '100%', height: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'scroll' }}>
-        <table style={{ color: 'black', borderCollapse: 'collapse', width: '100%', height: '10vh', overflow: 'scroll' }}>
-              <tr bgcolor = "grey" >
+      <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'scroll', background: isDarkMode ? 'var(--chakra-colors-gray-800)' : 'white',
+          }}>
+        <table style={{color: isDarkMode ? 'white' : 'black', borderCollapse: 'collapse', width: '100%', height: '8vh', overflow: 'scroll' }}>
+              <tr bgcolor = {isDarkMode} >
                 <th> solar_car_connection </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {!(props.data?.solar_car_connection[0] ?? false) ? ("Lost communication with the solar car")  : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> Heartbeat </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("mainIO_heartbeat")
               || _checkBooleanData("mppt_can_heartbeat")
               || _checkBooleanData("mcc_can_heartbeat")
               || _checkBooleanData("bms_can_heartbeat") ? (getHeartbeatString()) : ("") } </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> mppt_contactor </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("mppt_contactor") ? ("MPPT contactor is open") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> low_contactor </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("low_contactor") ? ("Low contactor is open") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> motor_controller_contactor </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("motor_controller_contactor") ? ("Motor controller contactor is open") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> crash </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("crash") ? ("Solar car has crashed") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> door </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("door") ? ("Door is open") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> driver_eStop </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("driver_eStop") ||
             _checkBooleanData("external_eStop") ? (getEStopString()) : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> main_power_warning </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("main_power_warning")
               || _checkBooleanData("main_power_critical")
               || _checkBooleanData("main_power_valid")
@@ -722,110 +726,117 @@ export default function Faults(props) {
               || _checkBooleanData("driver_power_valid") ? (getMainDriverPowerString()) : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> bps_fault </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("bps_fault") ? ("BPS fault") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> discharge_enable </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("discharge_enable") ? ("Discharge enable") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> imd_status </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("imd_status") ? ("IMD status (battery isolation) fault") : ("")} </td>
               </tr>
               
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> checkBMSFailures </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {_checkBooleanData("imd_status") ? ("IMD status (battery isolation) fault") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> mc_status </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {props.data?.mc_status[0] > CONSTANTS.mc_status.MIN ? (getMotorControllerString()) : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> pack_current </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {props.data?.pack_current[0] > CONSTANTS.pack_current.MAX ? ("High battery pack current") : 
                 props.data?.pack_current[0] < CONSTANTS.pack_current.MIN ? ("Low battery pack current") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> pack_voltage </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {props.data?.pack_voltage[0] > CONSTANTS.pack_voltage.MAX ? ("High battery pack voltage") : 
                 props.data?.pack_voltage[0] < CONSTANTS.pack_voltage.MIN ? ("Low battery pack voltage") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> mppt_current_out </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {props.data?.mppt_current_out[0] > CONSTANTS.mppt_current_out.MAX ? ("High MPPT current") :
                 props.data?.mppt_current_out[0] < CONSTANTS.mppt_current_out.MIN ? ("MPPT current is negative") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> bms_input_voltage </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {props.data?.bms_input_voltage[0] > CONSTANTS.bms_input_voltage.MAX ? ("High BMS input voltage") :
                 props.data?.bms_input_voltage[0] < CONSTANTS.bms_input_voltage.MIN ? ("Low BMS input voltage") : ("")} </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> soc </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {props.data?.soc[0] < CONSTANTS.soc.MIN ? ("Battery charge is low (<${CONSTANTS.soc.MIN}%)") : ("") } </td>
               </tr>
 
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> CellGroupVoltages </th>
               </tr>
-              <tr bgcolor="grey">
+              <tr bgcolor={isDarkMode}>
                         <th>CellGroupVoltages</th>
                     </tr>
                     {checkBMSFailures() ? (
                         getBMSFailureString().split(',').map((val, index) => (
-                            <tr key={index} bgcolor="white">
+                            <tr key={index} bgcolor={isDarkMode}>
                                 <td>
                                     <p>{val}</p>
                                 </td>
                             </tr>
                         ))
                     ) : (
-                        <tr bgcolor="white">
+                        <tr bgcolor={isDarkMode}>
                             <td></td>
                         </tr>
                     )}
               
-              <tr bgcolor = "grey">
+              <tr bgcolor = {isDarkMode}>
                 <th> Temps </th>
               </tr>
-              <tr bgcolor = "white">
+              <tr bgcolor = {isDarkMode}>
                 <td> {checkTemps() ? (getTempString()) : ("")} </td>
               </tr>
               
             </table>
           </div>
+                        
+
+      
+        
         {/*
+        
+
+        
       <SimpleGrid
         columns={8}
         rows={3}
@@ -1019,4 +1030,5 @@ export default function Faults(props) {
         */}
     </Center>
   );
+      
 }

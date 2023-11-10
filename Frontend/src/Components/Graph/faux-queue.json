@@ -544,5 +544,8 @@
   ],
   "discharge_enable": [
     null
+  ],
+  "tstamp_unix": [
+    null
   ]
 }
