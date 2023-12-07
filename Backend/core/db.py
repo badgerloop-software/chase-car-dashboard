@@ -118,3 +118,4 @@ async def latest_data(keys: []):
     for key in keys[1:]:
         result[key] = float(r.execute_command('TS.GET', key)[1])
     return result
+
