@@ -105,7 +105,7 @@ async function callBackendSingleValuesAPI() {
  */
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
-
+  const [fetchDep, setFetchDep] = useState(false);
   const [[queue, latestTimestamp], updateQueue] = useReducer(reducer, [
     {},
     null,
@@ -141,8 +141,11 @@ export default function Dashboard(props) {
 
           //console.timeEnd("update react");
         })
-        .catch((err) => console.log(err));
-  }, [state]);
+        .catch((err) => console.log(err))
+        .finally(() => {
+          setFetchDep((oldFetchDep) => !oldFetchDep);
+        });
+  }, [fetchDep]);
 
   //------------------- Choosing data views using Select components -------------------
 
