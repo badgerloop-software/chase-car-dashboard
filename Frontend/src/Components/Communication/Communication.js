@@ -8,14 +8,12 @@ import {MILLIS_PER_HR, MILLIS_PER_MIN, MILLIS_PER_SEC} from "../Shared/misc-cons
 export default function Communication(props) {
     const { colorMode } = useColorMode();
 
-    const timeArr = props.data?.timestamps[0].split(":"); // Split most recent timestamp into [hh, mm, ss.SSS]
+    const timeArr = props.data?.tstamp_unix; // Split most recent timestamp into [hh, mm, ss.SSS]
 
     // Get delay (from hours to milliseconds) between most recent timestamp and current time
     const packetDelay = isNullOrUndef(props.data?.timestamps[0]) ?
                         new Date(0,0,0,0,0,0,0) :
-                        new Date(new Date() - parseInt(timeArr[0]) * MILLIS_PER_HR - parseInt(timeArr[1]) * MILLIS_PER_MIN
-                                 - parseInt(timeArr[2].substring(0,2)) * MILLIS_PER_SEC - parseInt(timeArr[2].substring(3)));
-
+                        new Date( Number(new Date(0,0,0,0,0,0,0)) + Number(new Date()) - timeArr);
     const bgColor = !props.data?.solar_car_connection[0] ||
             ((packetDelay.getHours() > 0) || (packetDelay.getMinutes() > 0) || (packetDelay.getSeconds() > 1)) ?
             getColor("errorBg", colorMode) : null;
