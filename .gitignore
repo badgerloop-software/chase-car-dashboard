@@ -26,6 +26,9 @@
 /Backend/recordedData/sessions/*.bin
 /Backend/recordedData/processedData/*.csv
 
+# Python
+/Backend/*.egg-info
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
