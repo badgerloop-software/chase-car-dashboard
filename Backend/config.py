@@ -10,3 +10,6 @@ REDIS_DB = 0
 CAR_IP = '127.0.0.1'
 LOCAL_IP = 'localhost'
 DATA_PORT = 4003
+
+#Filled by the program
+FORMAT = dict()
