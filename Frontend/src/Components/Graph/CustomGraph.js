@@ -6,7 +6,6 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  HStack,
   Icon,
   Input,
   Modal,
@@ -16,14 +15,16 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  HStack,
+  VStack,
   Stack,
   Text,
   useColorMode,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import {
   Chart as ChartJS,
+  Interaction,
   Legend,
   LinearScale,
   LineElement,
@@ -40,6 +41,8 @@ import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
 import GraphData from "./graph-data.json";
 import getColor from "../Shared/colors";
+import { ROUTES } from "../Shared/misc-constants";
+import {getRelativePosition} from "chart.js/helpers";
 
 ChartJS.register(
   LinearScale,
@@ -52,25 +55,56 @@ ChartJS.register(
 );
 
 /**
- * Stores all the units in the graph-data json file as key: value pairs
+ * Stores all the units and nominal minimum/maximum values in the graph-data json file as key: value pairs
  */
-const units = {};
+const valueInfo = {};
 for (const category of GraphData.Output) {
   for (const subcategory of category.subcategories) {
     for (const dataset of subcategory.values) {
-      units[dataset.key] = dataset.unit;
+      valueInfo[dataset.key] = {
+        unit: dataset.unit,
+        min: dataset.min,
+        max: dataset.max
+      };
     }
   }
 }
 
 // the options fed into the graph object, save regardless of datasets
-function getOptions(now, secondsRetained, colorMode) {
-  // console.log("now:", now);
-  // console.log("diff:", DateTime.now().diff(now).toHuman());
-
+function getOptions(now, secondsRetained, colorMode, optionInfo, extremes) {
   const gridColor = getColor("grid", colorMode);
   const gridBorderColor = getColor("gridBorder", colorMode);
   const ticksColor = getColor("ticks", colorMode);
+
+  // Custom interaction (feat. ChatGPT)
+  Interaction.modes.myCustomMode = function(chart, e, options, useFinalPosition) {
+    const position = chart.chartArea ? getRelativePosition(e, chart) : getRelativePosition(e, chart.chart);
+
+    const nearestPoints = [];
+
+    // Store the minimum distance and index of the nearest point for each dataset
+    chart.data.datasets.forEach((dataset, datasetIndex) => {
+      if (!chart.getDatasetMeta(datasetIndex).hidden) {
+        let minDistance = Number.POSITIVE_INFINITY;
+        let nearestIndex = -1;
+        // find the data point that is closest to the cursor
+        for (let index = 0; index < dataset.data.length; ++index) {
+          const element = chart.getDatasetMeta(datasetIndex).data[index];
+          const xValue = element.x;
+          const distance = Math.abs(xValue - position.x);
+          if (distance < minDistance) {
+            minDistance = distance;
+            nearestIndex = index;
+          }
+        }
+
+        if (nearestIndex !== -1) {
+          nearestPoints.push({ element: chart.getDatasetMeta(datasetIndex).data[nearestIndex], datasetIndex, index: nearestIndex });
+        }
+      }
+    });
+    return nearestPoints;
+  }
 
   return {
     responsive: true,
@@ -89,13 +123,15 @@ function getOptions(now, secondsRetained, colorMode) {
       tooltip: {
         callbacks: {
           label: (item) => {
-            // console.log(item);
-
             // custom dataset label
             // name: value unit
-            return `${item.dataset.label}: ${item.formattedValue}${
-              units[item.dataset.key]
-            }`;
+            return `${item.dataset.label}: ${item.formattedValue} ${optionInfo[item.dataset.key].unit}`;
+          },
+          labelColor: (item) => {
+            return {
+              borderColor: optionInfo[item.dataset.key].borderColor,
+              backgroundColor: optionInfo[item.dataset.key].backgroundColor
+            }
           },
         },
       },
@@ -103,7 +139,6 @@ function getOptions(now, secondsRetained, colorMode) {
     scales: {
       x: {
         type: "time",
-        reverse: true,
         bounds: "data", // ticks?
         time: {
           unit: "second",
@@ -123,11 +158,13 @@ function getOptions(now, secondsRetained, colorMode) {
         },
 
         // show the last secondsRetained seconds
-        max: now.toISO(),
-        min: now.minus(secondsRetained * 1000).toISO(),
+        max: DateTime.fromMillis(Math.floor(now/1000) * 1000).toISO(),
+        min: DateTime.fromMillis((Math.floor(now/1000) - secondsRetained) * 1000).toISO(),
       },
       y: {
-        suggestedMin: 0,
+        suggestedMin: extremes[0],
+        suggestedMax: extremes[1],
+        position: "right",
         ticks: {
           color: ticksColor,
         },
@@ -145,9 +182,7 @@ function getOptions(now, secondsRetained, colorMode) {
       },
     },
     interaction: {
-      mode: "nearest",
-      axis: "x",
-      intersect: false,
+      mode: 'myCustomMode'
     },
     datasets: {
       line: {
@@ -160,15 +195,92 @@ function getOptions(now, secondsRetained, colorMode) {
 }
 
 /**
- * Creates a customizable graph.
- *
- * @param {any} props the props to pass to this graph; any {@link StackProps} will be passed to the overarching container
- * @param {(name: string, isNew: boolean, data: {datasets: string[], historyLength: number}) => void} props.onSave the callback function for when the user attempts to save this graph
- * @param {string} props.title the title that this graph has
- * @param {string[]} props.initialDatasets a list of the IDs of the initial datasets
- * @param {any} props.packedData the queue of data, packed in Chart.js format, coming from the solar car
- * @param {number} props.secondsRetained the number of seconds to retain a point on this grpah
- * @returns
+ * The graph component, pass in list of data and it will fetch itself
+ * @param props
+ * @constructor
+ */
+function Graph(props) {
+  const { querylist, histLen, colorMode, optionInfo, extremes } = props;
+  // response from the server
+  const [data, setData] = useState([]);
+  const [fetchDep, setFetchDep] = useState(true);
+
+  const fetchData = useCallback(async () => {
+    // Desired fetch timeout duration in milliseconds
+    // NOTE: This should be well above an acceptable response time for the server
+    const maxFetchTime = 5000;
+    // Time to wait between fetches
+    const fetchDelay = 500;
+
+    try {
+      // Fetch graph data. Fetch with timeout is from https://dmitripavlutin.com/timeout-fetch-request/
+      const now = Date.now();
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), maxFetchTime);
+      const result = await fetch(
+          ROUTES.GET_GRAPH_DATA + `?data=${querylist}&start_time=${now - (histLen + 1) * 1000}&end_time=${now}`,
+          {signal: controller.signal}
+      );
+      clearTimeout(id);
+      let body = await result.json();
+      if (result.status === 200) {
+        setData(body.response);
+      } else {
+        console.error("Graph data API error or timeout");
+      }
+    } catch (error) {
+      console.error("Graph data API:", error.name === "AbortError" ? "Request timeout (connection lost)" : error.message);
+    } finally {
+      // Give it some time before the next fetch
+      await new Promise((resolve) => setTimeout(() => {
+        setFetchDep(prev => !prev);
+        resolve();
+      }, fetchDelay));
+    }
+  }, [querylist, histLen]);
+  useEffect(fetchData, [fetchDep]);
+
+  // get the latest timestamp in the packet
+  let tstamp = 0;
+  if ("timestamps" in data) {
+    tstamp = data["timestamps"].slice(-1)[0];
+  } else {
+    tstamp = Date.now()
+  }
+
+  let formattedData = {};
+  formattedData['datasets'] = [];
+  for(const key in data) {
+    if(key !== 'timestamps' && optionInfo[key])
+      formattedData['datasets'].push({
+        key: key,
+        label: optionInfo[key].label,
+        data: data[key],
+        borderColor: optionInfo[key].borderColor,
+        backgroundColor: optionInfo[key].backgroundColor
+      });
+  }
+
+  return (
+      <Line
+        data={formattedData}
+        options={getOptions(
+          tstamp,
+          histLen,
+          colorMode,
+          optionInfo,
+          extremes
+        )}
+        parsing="false"
+      />
+  );
+}
+
+/**
+ * Custom graph component and the data selector for the graph component
+ * @param props {}
+ * @returns {JSX.Element}
+ * @constructor
  */
 export default function CustomGraph(props) {
   const { colorMode } = useColorMode();
@@ -178,119 +290,60 @@ export default function CustomGraph(props) {
   // destructure props
   const {
     onSave,
-    updateGraphsMetaData,
     title,
     packedData,
     initialDatasets,
     secondsRetained,
-    latestTime,
-    index,
-    ...stackProps
   } = props;
 
-  // useEffect(() => {
-  //   console.log(
-  //     packedData
-  //       .find((data) => data.key === "speed")
-  //       .data.map((point) => point.x)
-  //       .join(", ")
-  //   );
-  // }, [packedData]);
+  // The datasets to be displayed on the graph
+  const [datasetKeys, setDatasetKeys] = useState(initialDatasets);
+  const [historyLength, setHistoryLength] = useState(secondsRetained ?? GraphData.defaultHistoryLength);
+  // those keys are crossed out
+  const [noShowKeys, setNoShowKeys] = useState({});
+  // Information about options for styling purposes,
+  // reduced and combined so that minimal information is passed to other components
+  const [optionInfo, yRange] = useMemo(() => {
+    return datasetKeys
+        .filter((key) => !noShowKeys[key])
+        .reduce((info, key) => {
+          info[0][key] = {
+            label: packedData[key].label,
+            borderColor: packedData[key].borderColor,
+            backgroundColor: packedData[key].backgroundColor,
+            unit: valueInfo[key].unit
+          };
+          if(valueInfo[key].min < info[1][0])
+            info[1][0] = valueInfo[key].min;
+          if(valueInfo[key].max > info[1][1])
+            info[1][1] = valueInfo[key].max;
+          return info;
+        }, [{}, [0,1]]);
+  }, [datasetKeys, noShowKeys]);
 
-  // disclosure for the data selection modal
   const {
     isOpen: isDataSelectOpen,
     onOpen: onDataSelectOpen,
     onClose: onDataSelectClose,
   } = useDisclosure();
-  // disclosure for the name modal
+
   const {
     isOpen: isNameModalOpen,
     onOpen: onNameModalOpen,
     onClose: onNameModalClose,
   } = useDisclosure();
 
-  // an object that contains every selected dataset and a boolean to store whether it is enabled
-  const [datasets, setDatasets] = useState(() => {
-    const output = {};
-    for (const dataset of initialDatasets) {
-      output[dataset] = true;
-    }
-
-    // console.log("init datasets:", output, "from", initialDatasets);
-
-    return output;
-  });
-  // useEffect(() => {
-  //   console.log(`datasets for "${title}" updated:`, datasets);
-  // }, [datasets, title]);
-
-  // a state variable that stores how many seconds' worth of data to display on the graph
-  const [historyLength, setHistoryLength] = useState(
-    secondsRetained ?? GraphData.defaultHistoryLength
-  );
-
-  // the data to pass to the graph
-  const [formattedDatasets, setFormattedDatasets] = useState([]);
-  // the keys of the dataset array
-  const [datasetKeys, setDatasetKeys] = useState(Object.keys(datasets));
-  // called when the name is to be saved for the first time, memoized for performance
-  const onNewSave = useCallback(
-    (name) => onSave(name, true, { datasets: datasetKeys, historyLength }),
-    [onSave, datasetKeys, historyLength]
-  );
-
-  // side-effects for when new datasets are chosen
-  useEffect(() => {
-    // console.log("yo, new datasets dropped:", datasetKeys);
-    // console.log("keys:", keys);
-
-    // update dataset object {key: boolean}
-    const newDatasets = {};
-    for (const key of datasetKeys) {
-      newDatasets[key] = datasets[key] ?? true;
-    }
-    // console.log("new datasets:", newDatasets);
-    setDatasets(newDatasets);
-  }, [datasetKeys]);
-
-  useEffect(() => {
-    // update formatted datasets storage array if all datasets are updated
-    const formattedDatasets = [];
-    for (const key of datasetKeys) {
-      const temp = packedData.find(
-        (packedDataset) => packedDataset.key === key
-      );
-      if (temp) {
-        // copy the data to ensure that this function remains pure
-        const copy = Object.assign({}, temp);
-        copy.hidden = !datasets[key];
-        // console.log(`${title} pushed:`, copy);
-        formattedDatasets.push(copy);
-      } else {
-        console.warn(`unable to find "${key}" for "${title}"`);
-      }
-    }
-
-    // console.log("formatted datasets:", formattedDatasets);
-    setFormattedDatasets(formattedDatasets);
-  }, [datasets, packedData]);
-
-  // console.log("formatted datasets:", formattedDatasets);
-  // console.log(datasets, "keys:", datasetKeys);
-
-  // the modal that appears when the user wants to update the datasets that are shown
   const graphSelectModal = useMemo(() => {
     const onSelectSave = (newDatasetKeys, newHistoryLength) => {
-      updateGraphsMetaData({
-        [index]: {
-          "historyLength": newHistoryLength,
-          "datasets": newDatasetKeys
-        }
-      });
 
       setDatasetKeys(newDatasetKeys);
       setHistoryLength(newHistoryLength);
+      setNoShowKeys((oldKeys) => {
+        return newDatasetKeys.reduce((noShow, key) => {
+          noShow[key] = oldKeys[key] ?? false;
+          return noShow;
+        }, {});
+      });
 
       // Save edits to graphs that are named
       if(title?.length && title !== "Custom") {
@@ -306,50 +359,22 @@ export default function CustomGraph(props) {
         onSave={onSelectSave}
       />
     );
-  }, [
-    isDataSelectOpen,
-    onDataSelectClose,
-    datasetKeys,
-    setDatasetKeys,
-    setHistoryLength,
-    historyLength,
-  ]);
+  }, [isDataSelectOpen, onDataSelectClose]);
 
-  // the modal that appears when the user saves the graph,
-  // but the graph has no name associated with it
   const graphNameModal = useMemo(
     () => (
       <GraphNameModal
         isOpen={isNameModalOpen}
         onClose={onNameModalClose}
-        onSave={onNewSave}
+        onSave={(name)=>onSave(name, true, { datasets: datasetKeys, historyLength })}
       />
     ),
-    [isNameModalOpen, onNameModalClose, onNewSave]
+    [isNameModalOpen, onNameModalClose]
   );
-
-  // the actual graph shown to the user
-  const graph = useMemo(() => {
-    // const min = DateTime.now().minus(historyLength * 1_000);
-    console.time("graph update");
-    const temp = (
-      <Line
-        data={{ datasets: formattedDatasets }}
-        options={getOptions(
-          DateTime.fromFormat(latestTime, "HH:mm:ss.SSS") ?? DateTime.now(),
-          historyLength,
-          colorMode
-        )}
-        parsing="false"
-      />
-    );
-    console.timeEnd("graph update");
-    return temp;
-  }, [formattedDatasets, historyLength, latestTime]);
 
   return (
     <>
-      <HStack w="100%" h="100%" align="stretch" {...stackProps}>
+      <HStack w="100%" h="100%" align="stretch">
         <Text
           css={{ writingMode: "vertical-lr" }}
           transform="rotate(180deg)"
@@ -395,39 +420,38 @@ export default function CustomGraph(props) {
               px={2}
             >
               {datasetKeys.map((key) => {
-                const dataset = formattedDatasets.find(
-                  (temp) => temp.key === key
-                );
-                // console.log("dataset", dataset, "for", key);
                 return (
-                  dataset && (
                     <Button
-                      key={key}
-                      borderColor={dataset.borderColor}
+                      key={`${key}-show-btn`}
                       borderWidth={2}
-                      backgroundColor={
-                        datasets[key] ? dataset.backgroundColor : "transparent"
-                      }
-                      textDecoration={datasets[key] ? "none" : "line-through"}
-                      onClick={() => {
-                        console.log("clicked", key);
-                        // updateDatasets({ action: "toggle", key: dataset.key });
-                        const temp = Object.assign({}, datasets);
-                        temp[key] = !temp[key];
-                        setDatasets(temp);
-                      }}
+                      borderColor={packedData[key].borderColor}
+                      backgroundColor={noShowKeys[key] ? "transparent" : packedData[key].backgroundColor}
+                      textDecoration={noShowKeys[key] ? "line-through" : "none"}
                       flexShrink={0}
                       size="xs"
+                      onClick={() => {
+                        setNoShowKeys((oldKeys) => ({
+                          ...oldKeys,
+                          [key]: !oldKeys[key]
+                        }))
+                      }}
                     >
-                      {dataset.label}
+                      {key}
                     </Button>
-                  )
                 );
               })}
             </HStack>
           </Stack>
 
-          <Center flex={1}>{graph}</Center>
+          <Center flex={1}>
+            <Graph
+              querylist={datasetKeys.filter(key=>!noShowKeys[key])}
+              histLen={historyLength}
+              colorMode={colorMode}
+              optionInfo={optionInfo}
+              extremes={yRange}
+            />
+          </Center>
         </VStack>
       </HStack>
 
