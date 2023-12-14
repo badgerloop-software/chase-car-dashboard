@@ -41,38 +41,12 @@ function generateCategories() {
 }
 
 /**
- * Sends new metadata to the backend describing what datasets should be shown for graphs
- * at specified indices.
- *
- * @param graphsMetadata The data needed by the graphs. The object is of the form:
- * {
- *     "<index>": {
- *         "historyLength": int,
- *         "datasets": string array,
- *     },
- *     ...
- * }
- */
-async function updateGraphsMetaData(graphsMetadata) {
-  let response = await fetch("http://localhost:4001" + ROUTES.UPDATE_GRAPHS_METADATA, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-    body: JSON.stringify(graphsMetadata)
-  });
-
-  console.log("Response from UPDATE_GRAPHS_METADATA:", response);
-}
-
-/**
  * Creates a new GraphContainer component
  *
  * @param {any} props the props to pass to this graph container
  * @returns the graph-containing component
  */
-export default function GraphContainer({ queue, latestTime, ...props }) {
+export default function GraphContainer(props) {
   // fetch constants: categories and flatpacked categories
   const allDatasets = useConst(generateCategories);
 
@@ -124,28 +98,10 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
             };
           }
 
-          // The graph being shown is being swapped with another graph
-          updateGraphsMetaData({
-            [oldIdx]: graphMetadataOldIdx,
-            [idx]: graphMetadataIdx
-          });
-
           setGraphTitles(copy);
           return;
         }
 
-        // The graph being shown is a saved graph that is not being swapped with another graph
-        updateGraphsMetaData({
-          [idx]: graphMetadataIdx
-        });
-      } else {
-        // The graph being shown is a new Custom graph, or a graph is being closed
-        updateGraphsMetaData({
-          [idx]: {
-            "historyLength": null,
-            "datasets": null
-          }
-        });
       }
 
       // default set: if new custom/empty graph or replacing new custom/empty graph
@@ -204,36 +160,24 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
    *
    * The object is of the format:
    * ```
-   * [
-   *   {
-   *     key: string,
-   *     label: string,
-   *     data: [{x: DateTime, y: any}],
-   *     borderColor: string,
-   *     backgroundColor: string
-   *   }
-   * ]
+   * {
+   *     [key: string]: {
+   *         label: string,
+   *         borderColor: string,
+   *         backgroundColor: string
+   *     },
+   *     ...
+   * }
+   * ```
    */
-  const packedData = useMemo(() => {
-    // console.log("memo invoked");
-    console.time("unpack graph data");
-    const temp = allDatasets.map((value) => {
-      const output = {
-        key: value.key,
-        label: value.name,
-        data: queue[value.key],
-        borderColor: value.color,
-        backgroundColor: value.color + "b3",
-      };
-      // console.log("packing:", output);
-      return output;
-    });
-    console.timeEnd("unpack graph data");
-    return temp;
-  }, [allDatasets, queue]);
-
-  // console.log("graph container propaganda");
-
+  const packedData = useMemo(() => allDatasets.reduce((packed, dset) => {
+    packed[dset.key] = {
+      label: dset.name,
+      borderColor: dset.color,
+      backgroundColor: dset.color + "b3",
+    };
+    return packed;
+  }, {}), [allDatasets]);
 
 
   const [selColors, setSelColors] = useState({0: props.selectTxt, 1: props.selectTxt, 2: props.selectTxt});
@@ -314,35 +258,21 @@ export default function GraphContainer({ queue, latestTime, ...props }) {
                 onSave={(title, isNew, data) =>
                   onSave(title, isNew, data, index)
                 }
-                updateGraphsMetaData={(graphsMetadata) =>
-                  updateGraphsMetaData(graphsMetadata)
-                }
                 title=""
-                // categories={categories}
                 packedData={packedData}
                 initialDatasets={[]}
-                // allDatasets={allDatasets}
-                latestTime={latestTime}
-                index={index}
               />
             ) : (
               <CustomGraph
                 onSave={(title, isNew, data) =>
                   onSave(title, isNew, data, index)
                 }
-                updateGraphsMetaData={(graphsMetadata) =>
-                  updateGraphsMetaData(graphsMetadata)
-                }
                 title={graphTitles[index]}
-                // categories={categories}
                 packedData={packedData}
                 initialDatasets={customGraphData[graphTitles[index]].datasets}
                 secondsRetained={
                   customGraphData[graphTitles[index]].historyLength
                 }
-                // allDatasets={allDatasets}
-                latestTime={latestTime}
-                index={index}
               />
             )}
           </VStack>

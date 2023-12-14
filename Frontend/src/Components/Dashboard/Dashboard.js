@@ -6,7 +6,7 @@ import {
   Select,
   useColorMode
 } from "@chakra-ui/react";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import FaultsView from "../Faults/FaultsView";
 import Communication from "../Communication/Communication";
 import BatteryCells from "../BatteryCells/BatteryCells";
@@ -25,56 +25,6 @@ import fauxQueue from "../Graph/faux-queue.json";
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
 
-
-/**
- * The reducer used for the main queue of data from the database
- * @param {[any[], string]} prevData the previous queue and last time data
- * @param {any[]} prevData[0] the queued data
- * @param {any} newData the new data that is recieved directly from the backend
- * @returns the new queue of data to use
- */
-function reducer([currentQueue], newData) {
-  // console.log("reducer called :~)", newData);
-
-  // const timestamps = newData.timestamps.map((timestamp) =>
-  //   DateTime.fromISO(timestamp)
-  // );
-
-  const output = {};
-  for (const key in newData) {
-    if (key === "timestamps" || key.startsWith("tstamp")) continue;
-
-    output[key] = newData[key].map((value, idx) => ({
-      x: newData.timestamps[idx],
-      y: value,
-    }));
-  }
-
-  return [output, newData.timestamps[0]];
-}
-
-/**
- * Requests the graph data API endpoint and returns the response
- * @returns the JSON response from the graph data API
- */
-async function callBackendGraphDataAPI() {
-  // console.time("graph data http call");
-
-  const response = await fetch(ROUTES.GET_GRAPH_DATA);
-  // console.timeLog("graph data http call", "fetch finished");
-  
-  const body = await response.json();
-  // console.timeLog("graph data http call", "json extracted");
-
-  if (response.status !== 200) {
-    console.error("graph data api: error");
-    throw Error(body.message);
-  }
-  
-  // console.timeEnd("graph data http call");
-  // console.log("body", body);
-  return body;
-}
 
 /**
  * Requests the single values API endpoint and returns the response
@@ -106,30 +56,6 @@ async function callBackendSingleValuesAPI() {
 export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
   const [fetchDep, setFetchDep] = useState(false);
-  const [[queue, latestTimestamp], updateQueue] = useReducer(reducer, [
-    {},
-    null,
-  ]);
-  useEffect(() => {
-    callBackendGraphDataAPI()
-      .then((res) => {
-        //console.time("update react");
-
-        // when the car/data generator is offline, res.response is going to be null,
-        //  so we need to set variables to a default value that will prevent a TypeError
-        //  when we try reading the properties of an undefined variable
-        if (res.response === null) {
-          // this object can't be null for the graph data, so we'll set it to a faux object
-          updateQueue(fauxQueue);
-        } else {
-          updateQueue(res.response);
-        }
-
-        //console.timeEnd("update react");
-      })
-      .catch((err) => console.log(err));
-  }, [queue]);
-
   const [state, setState] = useState({ data: null });
   useEffect(() => {
     callBackendSingleValuesAPI()
@@ -447,8 +373,6 @@ export default function Dashboard(props) {
         </GridItem>
       </Grid>
       <GraphContainer
-        queue={queue}
-        latestTime={latestTimestamp}
         flex="2 2 0"
         maxW="67vw"
         selectBg={selectBgCol}
