@@ -13,7 +13,7 @@ solar_car_connection = False
 # Docs: https://docs.python.org/3/library/struct.html
 types = {'bool': '?', 'float': 'f', 'char': 'c', 'uint8': 'B', 'uint16': 'H', 'uint64': 'Q'}
 
-def gen_format_str(file_path: str):
+def set_format(file_path: str):
     global format_string, byte_length, properties
     with open(file_path, 'r') as f:
         data_format = json.load(f)
@@ -22,7 +22,7 @@ def gen_format_str(file_path: str):
         format_string += types[data_format[key][1]]
         byte_length += data_format[key][0]
         properties.append(key)
-    print(byte_length)
+        config.FORMAT[key] = {'type': data_format[key][1]}
 
 def unpack_data(data):
     #print(solar_car_connection)
@@ -47,7 +47,6 @@ class TCP:
                 solar_car_connection = True
                 print('connected')
             except ConnectionRefusedError:
-                print(f'Connection to car server {server_addr} is refused')
                 continue
 
             # Set the socket to non-blocking mode
@@ -65,14 +64,15 @@ class TCP:
                     if not data:
                         # No data received, close the connection and break the loop
                         client.close()
+                        print("connection closed")
                         break
 
                     packets = self.parse_packets(data)
                     for packet in packets:
-                        d = unpack_data(packet)
-                        print(d['tstamp_unix'])
-                        frontend_data = d.copy()
-                        db.insert_data(d)
+                        if len(packet) == byte_length:
+                            d = unpack_data(packet)
+                            frontend_data = d.copy()
+                            db.insert_data(d)
                 else:
                     # Timeout occurred, close the connection and break the loop
                     client.close()
@@ -112,6 +112,6 @@ class TCP:
 
 
 def start_comms():
-    gen_format_str(config.DATAFORMAT_PATH)
+    set_format(config.DATAFORMAT_PATH)
     tcp = TCP()
     tcp.listen_tcp(config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT)
