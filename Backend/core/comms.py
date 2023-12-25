@@ -144,13 +144,15 @@ class Telemetry:
         :param new_data: Newly received bytes from the comm channel
         :param tmp_source: Name of tmp data source, put comm channel name here e.g. tcp, lte
         """
+        header = b'<bsr>'
+        footer = b'</bsr>'
         self.__tmp_data[tmp_source] += new_data
         packets = []
         while True:
             # Search for the next complete data packet
             try:
-                start_index = self.__tmp_data[tmp_source].index(b'<bsr>')
-                end_index = self.__tmp_data[tmp_source].index(b'</bsr>')
+                start_index = self.__tmp_data[tmp_source].index(header)
+                end_index = self.__tmp_data[tmp_source].index(footer)
             except ValueError:
                 break
 
@@ -158,9 +160,9 @@ class Telemetry:
             #print(solar_car_connection)
 
             # Extract a complete data packet
-            packets.append(self.__tmp_data[tmp_source][start_index + 5:end_index])
+            packets.append(self.__tmp_data[tmp_source][start_index + len(header):end_index])
             # Update the remaining data to exclude the processed packet
-            self.__tmp_data[tmp_source] = self.__tmp_data[tmp_source][end_index + 6:]
+            self.__tmp_data[tmp_source] = self.__tmp_data[tmp_source][end_index + len(footer):]
 
         # If the remaining data is longer than the expected packet length,
         # there might be an incomplete packet, so log a warning.

@@ -10,12 +10,13 @@ for (const property in DATA_FORMAT) {
   bytes += DATA_FORMAT[property][0];
 }
 
+const header = '<bsr>'
+const footer = '</bsr>'
 import { Buffer } from "buffer";
 import {t} from "@babel/core/lib/vendor/import-meta-resolve";
-let buf1 = Buffer.alloc(bytes+11, 0); // Fill a buffer of the correct size with zeros
+let buf1 = Buffer.alloc(bytes+header.length+footer.length, 0); // Fill a buffer of the correct size with zeros
 let nextValue = 1;
 let buffOffset = 0;
-
 const SERVER = NET.createServer((socket) => {
   console.log("New connection :)");
 
@@ -43,13 +44,13 @@ const SERVER = NET.createServer((socket) => {
 
   // Pack and send a buffer at half second intervals
   interval = setInterval(() => {
-    buffOffset = 5; // Offset when adding each value to buf1
+    buffOffset = header.length; // Offset when adding each value to buf1
 
     // const time = DateTime.now().minus(30_000); // thirty seconds in the past
     const time = DateTime.now();
     // console.log(time);
     //write start symbol
-    buf1.write("<bsr>")
+    buf1.write(header)
     // Fill buf1 with new data according to the data format file
     for (const property in DATA_FORMAT) {
       // Generate a new value
@@ -110,7 +111,7 @@ const SERVER = NET.createServer((socket) => {
       buffOffset += DATA_FORMAT[property][0];
     }
     //write end symbol
-    buf1.write("</bsr>",buffOffset)
+    buf1.write(footer,buffOffset)
     socket.write(buf1);
   }, 34);
 });
