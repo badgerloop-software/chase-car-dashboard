@@ -1,9 +1,9 @@
 import json, select, socket, struct, sys, time
 import threading
 import traceback
-
+import aiohttp
+import asyncio
 import config
-import requests
 
 from . import db
 
@@ -52,11 +52,7 @@ class Telemetry:
                 solar_car_connection['tcp'] = True
                 print('connected')
             except ConnectionRefusedError:
-                print(f'Connection to car server {server_addr} is refused')
-                solar_car_connection['tcp'] = False
-                continue
-            except Exception:
-                print(traceback.format_exc())
+                time.sleep(3)   # macOS is the superior system, it teaches you an important lesson of having patience
                 continue
 
             # Set the socket to non-blocking mode
@@ -85,7 +81,6 @@ class Telemetry:
                     packets = self.parse_packets(data, 'tcp')
                     for packet in packets:
                         d = unpack_data(packet)
-                        print(d['tstamp_unix'])
                         if d['tstamp_unix'] > self.latest_tstamp:
                             frontend_data = d.copy()
                             self.latest_tstamp = d['tstamp_unix']
@@ -96,34 +91,52 @@ class Telemetry:
                     solar_car_connection['tcp'] = False
                     break
 
-    def remote_db_fetch(self, server_url: str):
+    async def fetch(self, session, url):
+        try:
+            async with session.get(url, timeout=2) as response:
+                data = await response.json()
+                return data['response']
+        except asyncio.TimeoutError:
+            print("Connection to the VPS timed out")
+            return []
+        except Exception as e:
+            print(f"Error fetching data: {e}")
+            return []
+
+    async def remote_db_fetch(self, server_url: str):
         global frontend_data, solar_car_connection
-        while True:
-            try:
-                table_name = (
-                    requests.get(f'{server_url}/newest-timestamp-table', timeout=5).json())['response']
-                # we will only get the live data here assuming old data is already in redis database
-                latest_tstamp = int(time.time()*1000)
-                while True:
-                    data = requests.get(f'{server_url}/get-new-rows/{table_name}/{latest_tstamp}').json()['response']
-                    for d in data:
-                        if d['timestamp'] > latest_tstamp:
-                            latest_tstamp = d['timestamp']
-                        parsed_data = self.parse_packets(bytes(d['payload']['data']), 'lte')
-                        unpacked_data = unpack_data(parsed_data[0])
-                        if unpacked_data['tstamp_unix'] > self.latest_tstamp:
-                            frontend_data = unpacked_data.copy()
-                            self.latest_tstamp = unpacked_data['tstamp_unix']
-                        db.insert_data(unpacked_data)
-                        solar_car_connection['lte'] = True
-                    # If we have not received anything for more than 5 seconds restart the loop
-                    if time.time() - latest_tstamp/1000 > 5:
-                        solar_car_connection['lte'] = False
-                        break
-            except Exception:
-                print(traceback.format_exc())
-                print('Issue connecting to server')
-                continue
+
+        async with aiohttp.ClientSession() as session:
+            while True:
+                try:
+                    table_name = await self.fetch(session, f'{server_url}/newest-timestamp-table')
+                    latest_tstamp = int(time.time() * 1000)
+
+                    while True:
+                        data = await self.fetch(session, f'{server_url}/get-new-rows/{table_name}/{latest_tstamp}')
+
+                        for d in data:
+                            # update the timestamp for next query
+                            if d['timestamp'] > latest_tstamp:
+                                latest_tstamp = d['timestamp']
+
+                            parsed_data = self.parse_packets(bytes(d['payload']['data']), 'lte')
+                            unpacked_data = unpack_data(parsed_data[0])
+                            # if the new data has a timestamp later than any other we show the data to frontend
+                            if unpacked_data['tstamp_unix'] > self.latest_tstamp:
+                                frontend_data = unpacked_data.copy()
+                                self.latest_tstamp = unpacked_data['tstamp_unix']
+
+                            db.insert_data(unpacked_data)
+                            solar_car_connection['lte'] = True
+
+                        if time.time() - latest_tstamp / 1000 > 5:
+                            solar_car_connection['lte'] = False
+                            break
+                        # print("useless fucking loop")
+                except Exception as e:
+                    print(f"Error in the main loop: {e}")
+                    continue
 
     def parse_packets(self, new_data: bytes, tmp_source: str):
         """
@@ -159,14 +172,13 @@ class Telemetry:
 
 
 def start_comms():
-    gen_format_str(config.DATAFORMAT_PATH)
+    set_format(config.DATAFORMAT_PATH)
     telemetry = Telemetry()
+    #asyncio.run(telemetry.remote_db_fetch("http://150.136.104.125:3000"))
     # Start two live comm channels
-    vps_thread = threading.Thread(target=lambda : telemetry.remote_db_fetch("http://150.136.104.125:3000"))
-    vps_thread.daemon = True
+    vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
     vps_thread.start()
     #tcp.listen_tcp(config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT)
     tcp_thread = threading.Thread(target=lambda: telemetry.listen_tcp(
         config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT))
-    tcp_thread.daemon = True
     tcp_thread.start()
