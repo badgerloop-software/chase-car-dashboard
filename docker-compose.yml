@@ -1,0 +1,16 @@
+version: '3'
+services:
+  chase-car-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Use your Dockerfile name if different
+    ports:
+      - "3000:3000"  # Adjust the port as needed
+    depends_on:
+      - redis-stack-server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  redis-stack-server:
+    image: redis/redis-stack-server:latest  # Use the desired Redis image here
+    ports:
+      - "6379:6379"
