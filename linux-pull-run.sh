@@ -4,6 +4,8 @@
 usage="\033[1mSYNOPSIS
 \t./linux-pull-run.sh\033[0m [\033[4mOPTIONS\033[0m]\n
 \033[1mOPTIONS\033[0m
+\t\033[1m-n\033[0m, \033[1m--no-db\033[0m
+\t    Disable starting docker version of redis database
 \t\033[1m-o\033[0m, \033[1m--no-open\033[0m
 \t    Disables automatic opening of the dashboard.\n
 \t\033[1m-t\033[0m <\033[4mTAG\033[0m>, \033[1m--tag\033[0m=<\033[4mTAG\033[0m>
@@ -76,6 +78,9 @@ _enforce_one_configuration() {
 
 # Parse command line arguments
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
+	-n | --no-db )
+		no_db=true
+		;;
 	-o | --no-open )
 		no_open=true
 		;;
@@ -171,6 +176,12 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
 		exit 1
 		;;
 esac; shift; done
+
+# Pull and run redis-stack-server\
+if [[ ! $no_db ]]; then
+	echo "running with redis"
+	docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest &
+fi
 if [[ "$1" == '--' ]]; then shift; fi
 
 # If a tag, engineering-data-distributor tag, or configuration was specified as a CLA, use that. Otherwise, default to
@@ -218,7 +229,7 @@ docker volume create --name chasecar --opt type=none --opt device=${path}/record
 [[ $OSTYPE != 'darwin'* ]] && timezone=`cat /etc/timezone`
 
 # Arguments that remain constant for all instances of running the Docker images
-const_chase_car_args="-e TZ=$timezone -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag"
+const_chase_car_args="--network="host" -e TZ=$timezone -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag"
 const_data_dist_args="-i -a stdin -a stdout -a stderr ghcr.io/badgerloop-software/engineering-data-distributor-image:$dist_tag"
 
 # Run the image(s) according to the configuration specified
