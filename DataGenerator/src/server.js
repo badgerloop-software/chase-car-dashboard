@@ -1,4 +1,5 @@
 import DATA_FORMAT from "../../Backend/Data/sc1-data-format/format.json";
+import GPS_DATA from "../../Backend/Data/gps_dataset/dataset1.json";
 import { DateTime } from "luxon";
 import CONSTANTS from "../src/constants.json";
 const NET = require("net");
@@ -17,6 +18,7 @@ import {t} from "@babel/core/lib/vendor/import-meta-resolve";
 let buf1 = Buffer.alloc(bytes+header.length+footer.length, 0); // Fill a buffer of the correct size with zeros
 let nextValue = 1;
 let buffOffset = 0;
+let gpsDataIndex = 0;
 const SERVER = NET.createServer((socket) => {
   console.log("New connection :)");
 
@@ -59,6 +61,18 @@ const SERVER = NET.createServer((socket) => {
       // Add the next value to the Buffer based on the data type
       switch (DATA_FORMAT[property][1]) {
         case "float":
+          if (property === "lat") {
+            buf1.writeFloatLE(GPS_DATA['data'][gpsDataIndex]['latitude'], buffOffset);
+            break;
+          }
+          if (property === "lon") {
+            buf1.writeFloatLE(GPS_DATA['data'][gpsDataIndex]['longitude'], buffOffset);
+            break;
+          }
+          if (property === "elev") {
+            buf1.writeFloatLE(GPS_DATA['data'][gpsDataIndex]['elevation'], buffOffset);
+            break;
+          }
           buf1.writeFloatLE(Math.floor(nextValue) + 0.125, buffOffset);
           break;
         case "char":
@@ -110,8 +124,10 @@ const SERVER = NET.createServer((socket) => {
       // Increment offset by amount specified in data format json
       buffOffset += DATA_FORMAT[property][0];
     }
+    gpsDataIndex = (gpsDataIndex + 1) % GPS_DATA['data'].length;
     //write end symbol
     buf1.write(footer,buffOffset)
+    console.log("sent length: " + buf1.length)
     socket.write(buf1);
   }, 34);
 });
