@@ -7,7 +7,7 @@ REDIS_URL = '127.0.0.1'
 REDIS_PORT = 6379
 REDIS_DB = 0
 
-CAR_IP = '127.0.0.1'
+CAR_IP = '192.168.1.15'
 LOCAL_IP = 'localhost'
 DATA_PORT = 4003
 
