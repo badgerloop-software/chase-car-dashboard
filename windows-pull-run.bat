@@ -25,16 +25,6 @@ echo                                           - NOTE: The sc1-data-format submo
 echo                                                   will automatically be synced with that of the chase-car-dashboard-image being run.
 echo     -c ^<CONFIG^>, --config=^<CONFIG^>    Specifies the configuration in which to run the dasboard and data distribution server.
 echo                                       The following are the available configurations:
-echo                                       - "individual" (default^) (^>=v3.8.0^): Run both the chase-car-dashboard-image and the
-echo                                           engineering-data-distributor-image on this computer. The engineering-data-distributor-image
-echo                                           will receive data from the solar car and pass it to the local instance of the dashboard.
-echo                                           - NOTE: In order to run this configuration, you must have connection to the Internet and/or
-echo                                                   a radio connection to the solar car. If you have both, ensure that your routing table is
-echo                                                   set up such that you do not have a default route to the solar car via the radio interface.
-echo                                                   You can test the connections by pinging google.com and 192.168.1.15 or 192.168.1.17.
-echo                                                   Additionally, ensure that you have inbound and outbound firewall rules allowing remote
-echo                                                   IP addresses 192.168.1.200, 192.168.1.20, and 192.168.1.17 to communicate with the
-echo                                                   local IP address 192.168.1.16 via TCP through port 4003.
 echo                                       - "competition": Run only the chase-car-dashboard-image on this computer. This computer will be
 echo                                           connected to another device running the engineering-data-distributor-image via a LAN.
 echo                                           The device running the distribution server will receive data from the solar car and pipe it to
@@ -312,37 +302,24 @@ SET "const_data_dist_args=-i -a stdin -a stdout -a stderr ghcr.io/badgerloop-sof
 
 @REM Run the image(s) according to the configuration specified
 IF "%config%"=="competition" (
-	@REM Run the chase-car-dashboard image
-	docker run %const_chase_car_args%
-) ELSE IF "%config%"=="dev" (
-	@REM Run the chase-car-dashboard image using `npm run start-dev`
-	docker run %const_chase_car_args% npm run start-dev
-) ELSE IF "%config%"=="individual" (
-	@REM Run the chase-car-dashboard image in the background using `npm run start-individual` and get the container's ID
-	> tempchasecardashboardcid.txt (docker run -d %const_chase_car_args% npm run start-individual)
+	@REM Run the chase-car-dashboard image in the background and get container id
+	> tempchasecardashboardcid.txt (docker run -d %const_chase_car_args%)
 	SET /p cid=<tempchasecardashboardcid.txt
 	DEL tempchasecardashboardcid.txt
-
-	@REM Get the commit hash of the sc1-data-format submodule in the running chase-car-dashboard container
-	> tempchasecardashboardsha.txt (
-		docker exec !cid! bash -c "git submodule status ^| grep -oP '\S*(?= Backend/Data/sc1-data-format)'"
-	)
-	SET /p sha=<tempchasecardashboardsha.txt
-	DEL tempchasecardashboardsha.txt
-	echo sha is !sha!
-
-	@REM If sha is empty, throw an error and provide a possible explanation
-	IF "!sha!"=="" (
-		echo.
-		powershell write-host -fore Red [ERROR] The sc1-data-format SHA-1 read from the chase-car-dashboard-image container is empty. This may be caused by already running chase-car-dashboard-image containers. Please stop all containers and try again.
-		echo.
-		exit /b 1
-	)
-
-	@REM Run the engineering-data-distributor image using the -i (individual) and -s (submodule SHA-1) options
-	docker run --net=container:!cid! %const_data_dist_args% -- -i -s !sha!
+	@REM Log output to file
+	docker logs cid
+	@REM Run chase car dashboard and redis 
+	docker run --net=container:!cid! redis/redis-stack-server:latest
+) ELSE IF "%config%"=="dev" (
+	@REM Run the chase-car-dashboard image in the background and get container id
+	> tempchasecardashboardcid.txt (docker run -d %const_chase_car_args% npm run start-dev)
+	SET /p cid=<tempchasecardashboardcid.txt
+	DEL tempchasecardashboardcid.txt
+	@REM Log output to file
+	docker logs cid
+	@REM Run chase car dashboard and redis 
+	docker run --net=container:!cid! redis/redis-stack-server:latest
 )
-
 
 @REM #The server will be run at http://localhost:3000, it will take one to two minutes to start up
 @REM #if this window does not automatically pop up then please enter the URL manually
