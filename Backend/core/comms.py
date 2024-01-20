@@ -50,7 +50,7 @@ class Telemetry:
                 client.connect((server_addr, port))
                 solar_car_connection['tcp'] = True
                 print('connected')
-            except ConnectionRefusedError:
+            except Exception:
                 time.sleep(3)   # macOS is the superior system, it teaches you an important lesson of having patience
                 continue
 
