@@ -8,7 +8,6 @@
     "frontend": "wait-port 4001 && cd Frontend && npm start",
     "start": "run-p backend frontend",
     "start-dev": "run-p data-generator backend-dev frontend",
-    "start-individual": "run-p backend-individual frontend",
     "install-data-generator": "cd DataGenerator && npm i",
     "install-backend": "cd Backend && pip install .",
     "install-frontend": "cd Frontend && npm i",
