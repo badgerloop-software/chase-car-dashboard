@@ -4,8 +4,6 @@
 usage="\033[1mSYNOPSIS
 \t./linux-pull-run.sh\033[0m [\033[4mOPTIONS\033[0m]\n
 \033[1mOPTIONS\033[0m
-\t\033[1m-n\033[0m, \033[1m--no-db\033[0m
-\t    Disable starting docker version of redis database
 \t\033[1m-o\033[0m, \033[1m--no-open\033[0m
 \t    Disables automatic opening of the dashboard.\n
 \t\033[1m-t\033[0m <\033[4mTAG\033[0m>, \033[1m--tag\033[0m=<\033[4mTAG\033[0m>
@@ -17,11 +15,6 @@ usage="\033[1mSYNOPSIS
 \t    - NOTE: The sc1-data-format submodule in the engineering-data-distributor-image will automatically be synced with that of the chase-car-dashboard-image being run.\n
 \t\033[1m-c\033[0m <\033[4mCONFIG\033[0m>, \033[1m--config\033[0m=<\033[4mCONFIG\033[0m>
 \t    Specifies the configuration in which to run the dashboard and data distribution server. The following are the available configurations:
-\t        - \033[1m\"individual\" (default) (>=v3.8.0)\033[0m: Run both the chase-car-dashboard-image and the engineering-data-distributor-image on this computer. The engineering-data-distributor-image
-\t            will receive data from the solar car and pass it to the local instance of the dashboard.
-\t            - \033[4mNOTE\033[0m: In order to run this configuration, you must have connection to the Internet and/or a radio connection to the solar car. If you have both, ensure that your
-\t                    routing table is set up such that you do not have a default route to the solar car via the radio interface. You can test the connections by pinging 192.168.1.17 and
-\t                    google.com and running \`curl http://150.136.104.125:3000/newest-timestamp-table\` to ensure that you get a response from the VPS.
 \t        - \033[1m\"competition\"\033[0m: Run only the chase-car-dashboard-image on this computer. This computer will be connected to another device running the engineering-data-distributor application
 \t            via a LAN. The device running the distribution server will receive data from the solar car and broadcast it to the computers connected to it.
 \t            - \033[4mNOTE\033[0m: In order to run this configuration, the Ethernet port connected to the device running the distribution server has to be on the 192.168.1.0/24 subnet, and it cannot
@@ -177,11 +170,6 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
 		;;
 esac; shift; done
 
-# Pull and run redis-stack-server\
-if [[ ! $no_db ]]; then
-	echo "running with redis"
-	docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest &
-fi
 if [[ "$1" == '--' ]]; then shift; fi
 
 # If a tag, engineering-data-distributor tag, or configuration was specified as a CLA, use that. Otherwise, default to
@@ -229,28 +217,24 @@ docker volume create --name chasecar --opt type=none --opt device=${path}/record
 [[ $OSTYPE != 'darwin'* ]] && timezone=`cat /etc/timezone`
 
 # Arguments that remain constant for all instances of running the Docker images
-const_chase_car_args="--network="host" -e TZ=$timezone -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag"
-const_data_dist_args="-i -a stdin -a stdout -a stderr ghcr.io/badgerloop-software/engineering-data-distributor-image:$dist_tag"
-
+const_chase_car_args="-e TZ=$timezone -p 3000:3000 -p 4001:4001 -v chasecar:/chase-car-dashboard/Backend/recordedData/processedData ghcr.io/badgerloop-software/chase-car-dashboard-image:$tag"
 # Run the image(s) according to the configuration specified
 case $config in
 	competition )
+		# Run chese car dashboard and get container id
+		cid=$(docker run -d $const_chase_car_args)
+		# log output
+		docker logs $cid
 		# Run the chase-car-dashboard image
-		docker run $const_chase_car_args
+		docker run --net=container:$cid redis/redis-stack-server:latest
 		;;
 	dev )
-		# Run the chase-car-dashboard image using `npm run start-dev`
-		docker run $const_chase_car_args npm run start-dev
-		;;
-	individual )
-		# Run the chase-car-dashboard image in the background using `npm run start-individual` and get the container's ID
-		cid=$(docker run -d $const_chase_car_args npm run start-individual)
-
-		# Get the commit hash of the sc1-data-format submodule in the running chase-car-dashboard container
-		sha=$(docker exec $cid git submodule status | grep -oP "\S*(?= Backend/Data/sc1-data-format)")
-
-		# Run the engineering-data-distributor image using the -i (individual) and -s (submodule SHA-1) options
-		docker run --net=container:$cid $const_data_dist_args -- -i -s $sha
+		# Run chese car dashboard and get container id
+		cid=$(docker run -d $const_chase_car_args npm run start-dev)
+		# log output
+		docker logs $cid
+		# Run the chase-car-dashboard image
+		docker run --net=container:$cid redis/redis-stack-server:latest
 		;;
 esac
 
