@@ -16,7 +16,6 @@ def insert_data(data_dict):
     del data_dict['tstamp_ms']
     del data_dict['tstamp_unix']
     # Insert data into Redis time series database
-    # print(timestamp.timestamp())
     for key in data_dict.keys():
         if not isinstance(data_dict[key], (bool, bytes)):
             r.execute_command('TS.ADD', key, timestamp, data_dict[key], 'ON_DUPLICATE', 'LAST')

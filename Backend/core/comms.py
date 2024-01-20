@@ -28,7 +28,6 @@ def set_format(file_path: str):
         config.FORMAT[key] = {'type': data_format[key][1]}
 
 def unpack_data(data):
-    #print(solar_car_connection)
     fields = {}
     unpacked_data = struct.unpack(format_string, data)
     for i in range(len(properties)):
@@ -133,7 +132,6 @@ class Telemetry:
                         if time.time() - latest_tstamp / 1000 > 5:
                             solar_car_connection['lte'] = False
                             break
-                        # print("useless fucking loop")
                 except Exception as e:
                     print(f"Error in the main loop: {e}")
                     continue
@@ -155,9 +153,6 @@ class Telemetry:
                 end_index = self.__tmp_data[tmp_source].index(footer)
             except ValueError:
                 break
-
-            #print("start index:", start_index, "end index:", end_index)
-            #print(solar_car_connection)
 
             # Extract a complete data packet
             packets.append(self.__tmp_data[tmp_source][start_index + len(header):end_index])
