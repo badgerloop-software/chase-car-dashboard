@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.get("/graph")
 async def get_graph(data: str, start_time: int, end_time: int):
-    """pass in a comma separated list of data that the frontend requests start_time end_time must be in unix millisec"""
+    """pass in a comma separated list of data that the frontend requests. start_time and end_time must be in unix milliseconds"""
     if not data:
         # use a query to get timestamp
         query_result = await db.query(['speed'], start_time, end_time, ['avg'],
