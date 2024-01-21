@@ -162,7 +162,7 @@ class Telemetry:
         # If the remaining data is longer than the expected packet length,
         # there might be an incomplete packet, so log a warning.
         if len(self.__tmp_data[tmp_source]) >= byte_length:
-            print("ERROR: Incomplete or malformed packet ------------------------------------")
+            print("Warning: Incomplete or malformed packet ------------------------------------")
             self.__tmp_data[tmp_source] = b''
 
         return packets
@@ -171,11 +171,9 @@ class Telemetry:
 def start_comms():
     set_format(config.DATAFORMAT_PATH)
     telemetry = Telemetry()
-    #asyncio.run(telemetry.remote_db_fetch("http://150.136.104.125:3000"))
     # Start two live comm channels
     vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
     vps_thread.start()
-    #tcp.listen_tcp(config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT)
     tcp_thread = threading.Thread(target=lambda: telemetry.listen_tcp(
         config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT))
     tcp_thread.start()
