@@ -1,3 +1,10 @@
 node_modules
 dist
 __pycache__/
+
+# Data recording
+recordedData/sessions/*.bin
+recordedData/processedData/*.csv
+
+# Python
+*.egg-info
