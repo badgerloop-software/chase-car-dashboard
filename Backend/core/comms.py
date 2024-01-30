@@ -79,11 +79,12 @@ class Telemetry:
 
                     packets = self.parse_packets(data, 'tcp')
                     for packet in packets:
-                        d = unpack_data(packet)
-                        if d['tstamp_unix'] > self.latest_tstamp:
-                            frontend_data = d.copy()
-                            self.latest_tstamp = d['tstamp_unix']
-                        db.insert_data(d)
+                        if len(packet) == byte_length:
+                            d = unpack_data(packet)
+                            if d['tstamp_unix'] > self.latest_tstamp:
+                                frontend_data = d.copy()
+                                self.latest_tstamp = d['tstamp_unix']
+                            db.insert_data(d)
                 else:
                     # Timeout occurred, close the connection and break the loop
                     client.close()
@@ -120,14 +121,15 @@ class Telemetry:
                                 latest_tstamp = d['timestamp']
 
                             parsed_data = self.parse_packets(bytes(d['payload']['data']), 'lte')
-                            unpacked_data = unpack_data(parsed_data[0])
-                            # if the new data has a timestamp later than any other we show the data to frontend
-                            if unpacked_data['tstamp_unix'] > self.latest_tstamp:
-                                frontend_data = unpacked_data.copy()
-                                self.latest_tstamp = unpacked_data['tstamp_unix']
+                            if len(parsed_data[0]) == byte_length:
+                                unpacked_data = unpack_data(parsed_data[0])
+                                # if the new data has a timestamp later than any other we show the data to frontend
+                                if unpacked_data['tstamp_unix'] > self.latest_tstamp:
+                                    frontend_data = unpacked_data.copy()
+                                    self.latest_tstamp = unpacked_data['tstamp_unix']
 
-                            db.insert_data(unpacked_data)
-                            solar_car_connection['lte'] = True
+                                db.insert_data(unpacked_data)
+                                solar_car_connection['lte'] = True
 
                         if time.time() - latest_tstamp / 1000 > 5:
                             solar_car_connection['lte'] = False
