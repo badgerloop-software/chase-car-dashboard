@@ -7,5 +7,5 @@ export const ROUTES = {
     UPDATE_GRAPHS_METADATA: "/needed-graphs-metadata",
     GET_SINGLE_VALUES: "/single-values",
     GET_GRAPH_DATA: "components/graph",
-    GET_PROCESSED_DATA: "/get-processed-data",
+    GET_PROCESSED_DATA: "components/get-processed-data",
 }
