@@ -1,5 +1,5 @@
 import DATA_FORMAT from "../../Backend/Data/sc1-data-format/format.json";
-import GPS_DATA from "../../Backend/Data/gps_dataset/dataset1.json";
+import GPS_DATA from "../gps_dataset/dataset1.json";
 import { DateTime } from "luxon";
 import CONSTANTS from "../src/constants.json";
 const NET = require("net");
