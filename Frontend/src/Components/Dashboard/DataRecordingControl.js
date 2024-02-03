@@ -66,8 +66,6 @@ export default function DataRecordingControl(props) {
 
     // ------------------------------------------ Data recording controls --------------------------------------------
 
-    // TODO: consider making isProcessing boolean to control when to display a loading spinner
-
     const finalModalRef = useRef();
     const createRef = useRef();
 
