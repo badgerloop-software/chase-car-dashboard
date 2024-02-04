@@ -4,7 +4,7 @@ router = APIRouter()
 
 @router.get("/single-values")
 async def single_values():
-    if comms.solar_car_connection['tcp'] or comms.solar_car_connection['lte']:
+    if comms.solar_car_connection['udp'] or comms.solar_car_connection['lte']:
         latest_data = comms.frontend_data
         latest_data['solar_car_connection'] = True
         latest_data['timestamps'] = f'{latest_data["tstamp_hr"]:02d}:{latest_data["tstamp_mn"]:02d}:' \

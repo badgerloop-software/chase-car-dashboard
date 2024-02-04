@@ -11,7 +11,7 @@ format_string = '<' # little-endian
 byte_length = 0
 properties = []
 frontend_data = {}
-solar_car_connection = {'lte': False, 'tcp': False}
+solar_car_connection = {'lte': False, 'udp': False}
 # Convert dataformat to format string for struct conversion
 # Docs: https://docs.python.org/3/library/struct.html
 types = {'bool': '?', 'float': 'f', 'char': 'c', 'uint8': 'B', 'uint16': 'H', 'uint64': 'Q'}
@@ -36,8 +36,39 @@ def unpack_data(data):
 
 
 class Telemetry:
-    __tmp_data = {'tcp': b'', 'lte': b''}
+    __tmp_data = {'tcp': b'', 'lte': b'', 'udp': b''}
     latest_tstamp = 0
+
+    def listen_udp(self, port: int):
+        global solar_car_connection, frontend_data
+        # Create a client socket for UDP
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        print(f'listening on {port}')
+
+        # Bind the client to the local address and port to receive incoming UDP datagrams
+        sock.bind(('', port))
+
+        # set max buffer size to eliminate queueing
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 1024)
+        while True:
+            # Wait for data to be received or timeout after 5 seconds
+            readable, _, _ = select.select([sock], [], [], 5)
+            if sock in readable:
+                data, addr = sock.recvfrom(1024)
+                if not data:
+                    # No data received, continue listening
+                    continue
+
+                packets = self.parse_packets(data, 'udp')
+                for packet in packets:
+                    if len(packet) == byte_length:
+                        d = unpack_data(packet)
+                        frontend_data = d.copy()
+                        db.insert_data(d)
+                        solar_car_connection['udp'] = True
+            else:
+                # Timeout occurred, handle as needed
+                solar_car_connection['udp'] = False
 
     def listen_tcp(self, server_addr: str, port: int):
         print(f'connecting to {server_addr}:{port}')
@@ -176,6 +207,5 @@ def start_comms():
     # Start two live comm channels
     vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
     vps_thread.start()
-    tcp_thread = threading.Thread(target=lambda: telemetry.listen_tcp(
-        config.LOCAL_IP if len(sys.argv) > 1 and sys.argv[1]=='dev' else config.CAR_IP, config.DATA_PORT))
-    tcp_thread.start()
+    socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
+    socket_thread.start()
