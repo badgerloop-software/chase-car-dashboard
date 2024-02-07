@@ -1,6 +1,6 @@
 {
   "name": "chase-car-dashboard-datagenerator",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "-Generate data \r -Store data in bufferarray\r -Send data through TCP to",
   "main": "server.js",
   "scripts": {

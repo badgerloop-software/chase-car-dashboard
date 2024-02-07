@@ -1,10 +1,10 @@
 {
   "name": "chase-car-dashboard",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "scripts": {
     "data-generator": "cd DataGenerator && npm start",
     "backend": "cd Backend && python3 main.py",
-    "backend-dev": "wait-port 4003 && cd Backend && python3 main.py dev",
+    "backend-dev": "cd Backend && python3 main.py dev",
     "frontend": "wait-port 4001 && cd Frontend && npm start",
     "start": "run-p backend frontend",
     "start-dev": "run-p data-generator backend-dev frontend",
