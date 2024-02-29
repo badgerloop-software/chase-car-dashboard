@@ -46,7 +46,7 @@ function CarMap() {
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyAdnQ_Y4aN6hifZ5BDvDfysv9-jkrt0beE",
+  apiKey: "API_KEY_HERE",
 })(CarMap);
 
 // figure out how to update polyline coordinates and color based on new data, i.e. how does it refresh new data?
