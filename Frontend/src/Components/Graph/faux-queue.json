@@ -547,5 +547,14 @@
   ],
   "tstamp_unix": [
     null
+  ],
+  "lat": [
+    null
+  ],
+  "lon": [
+    null
+  ],
+  "elev": [
+    null
   ]
 }
