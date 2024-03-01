@@ -9,9 +9,9 @@ export default function BatteryPack(props) {
     const headerBg = getColor("header", colorMode);
     const borderColor = getColor("border", colorMode);
 
-    const fanEnableText = ((props.data?.fan_enable[0] ?? -1.0) === -1.0) ? 'N/A' : (props.data.fan_enable[0] ? 'EN' : 'DIS');
-    const fanEnableColor = (props.data?.fan_enable[0] ?? false) ? getColor("greenBg", colorMode) : getColor("redBg", colorMode);
-    const fanEnableTextColor = (props.data?.fan_enable[0] ?? false) ? getColor("txtGreenBg", colorMode) : getColor("txtRedBg", colorMode);
+    const fanEnableText = ((props.data?.fan_speed[0] ?? -1.0) === -1.0) ? 'N/A' : (props.data.fan_speed[0] ? 'EN' : 'DIS');
+    const fanEnableColor = (props.data?.fan_speed[0] ?? false) ? getColor("greenBg", colorMode) : getColor("redBg", colorMode);
+    const fanEnableTextColor = (props.data?.fan_speed[0] ?? false) ? getColor("txtGreenBg", colorMode) : getColor("txtRedBg", colorMode);
 
     const chargeEnableText = ((props.data?.charge_enable[0] ?? -1.0) === -1.0) ? 'N/A' : (props.data.charge_enable[0] ? 'High' : 'Low');
     const chargeEnableColor = ((props.data?.charge_enable[0] ?? -1.0) == CONSTANTS.charge_enable.MAX) ? getColor("greenBg", colorMode) : getColor("redBg", colorMode);
