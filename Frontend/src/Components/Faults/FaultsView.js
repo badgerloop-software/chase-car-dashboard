@@ -251,12 +251,8 @@ export default function Faults(props) {
       props.data?.motor_controller_temp[0] < CONSTANTS.motor_controller_temp.MIN ||
       props.data?.dcdc_temp[0] > CONSTANTS.dcdc_temp.MAX ||
       props.data?.dcdc_temp[0] < CONSTANTS.dcdc_temp.MIN ||
-      props.data?.driverIO_temp[0] > CONSTANTS.driverIO_temp.MAX ||
-      props.data?.driverIO_temp[0] < CONSTANTS.driverIO_temp.MIN ||
       props.data?.mainIO_temp[0] > CONSTANTS.mainIO_temp.MAX ||
       props.data?.mainIO_temp[0] < CONSTANTS.mainIO_temp.MIN ||
-      props.data?.cabin_temp[0] > CONSTANTS.cabin_temp.MAX ||
-      props.data?.cabin_temp[0] < CONSTANTS.cabin_temp.MIN ||
       props.data?.road_temp[0] > CONSTANTS.road_temp.MAX ||
       props.data?.road_temp[0] < CONSTANTS.road_temp.MIN ||
       props.data?.brake_temp[0] > CONSTANTS.brake_temp.MAX ||
@@ -353,23 +349,9 @@ export default function Faults(props) {
     _updateTempArrays(
       lowTempStrings,
       highTempStrings,
-      "driverIO_temp",
-      "Driver IO",
-      "driver IO"
-    );
-    _updateTempArrays(
-      lowTempStrings,
-      highTempStrings,
       "mainIO_temp",
       "Main IO",
       "main IO"
-    );
-    _updateTempArrays(
-      lowTempStrings,
-      highTempStrings,
-      "cabin_temp",
-      "Cabin",
-      "cabin"
     );
     _updateTempArrays(
         lowTempStrings,
@@ -482,9 +464,6 @@ export default function Faults(props) {
   const getMCUString = () => {
     let MCUStrings = [];
 
-    if (_checkBooleanData("mcu_check")) {
-      MCUStrings.push("MCU check");
-    }
     if (_checkBooleanData("mcu_stat_fdbk")) {
       MCUStrings.push("MCU status feedback");
     }
@@ -648,7 +627,7 @@ export default function Faults(props) {
   return (
     <Center w="100%" h="100%">
       <SimpleGrid
-        columns={8}
+        columns={7}
         rows={3}
         spacingX="1.6vw"
         spacingY="3.3vh"
@@ -698,18 +677,10 @@ export default function Faults(props) {
         ) : (
           <Box h={imageHeight} />
         )}
-        {_checkBooleanData("mcu_check")
-          || _checkBooleanData("mcu_stat_fdbk")
+        {_checkBooleanData("mcu_stat_fdbk")
           || _checkBooleanData("mcu_hv_en") ? (
           <Tooltip label={getMCUString()}>
             <Image fit={fitType} boxSize={imageHeight} src={Images.MCUCheck} />
-          </Tooltip>
-        ) : (
-          <Box h={imageHeight} />
-        )}
-        {_checkBooleanData("door") ? (
-          <Tooltip label={"Door is open"}>
-            <Image fit={fitType} boxSize={imageHeight} src={Images.Door} />
           </Tooltip>
         ) : (
           <Box h={imageHeight} />
@@ -718,18 +689,6 @@ export default function Faults(props) {
         _checkBooleanData("external_eStop") ? (
           <Tooltip label={getEStopString()}>
             <Image fit={fitType} boxSize={imageHeight} src={Images.EStop} />
-          </Tooltip>
-        ) : (
-          <Box h={imageHeight} />
-        )}
-        {_checkBooleanData("main_power_warning")
-          || _checkBooleanData("main_power_critical")
-          || _checkBooleanData("main_power_valid")
-          || _checkBooleanData("driver_power_warning")
-          || _checkBooleanData("driver_power_critical")
-          || _checkBooleanData("driver_power_valid") ? (
-          <Tooltip label={getMainDriverPowerString()}>
-            <Image fit={fitType} boxSize={imageHeight} src={Images.PowerWarnings} />
           </Tooltip>
         ) : (
           <Box h={imageHeight} />
@@ -748,8 +707,8 @@ export default function Faults(props) {
         ) : (
           <Box h={imageHeight} />
         )}
-        {_checkBooleanData("imd_status") ? (
-          <Tooltip label={"IMD status (battery isolation) fault"}>
+        {_checkBooleanData("isolation") ? (
+          <Tooltip label={"Isolation fault"}>
             <Image fit={fitType} boxSize={imageHeight} src={Images.IMDStatus} />
           </Tooltip>
         ) : (
@@ -780,8 +739,6 @@ export default function Faults(props) {
         ) : (
           <Box h={imageHeight} />
         )}
-        {/* Box to horizontally center the lowest row of faults */}
-        <Box h={imageHeight} />
         {props.data?.pack_voltage[0] > CONSTANTS.pack_voltage.MAX ? (
           <Tooltip label={"High battery pack voltage"}>
             <Image fit={fitType} boxSize={imageHeight} src={Images.HighVoltage} />
