@@ -7,6 +7,8 @@ import config
 
 from . import db
 
+from file_sync import file_sync_down
+
 format_string = '<' # little-endian
 byte_length = 0
 properties = []
@@ -216,6 +218,11 @@ class Telemetry:
             self.__tmp_data[tmp_source] = b''
 
         return packets
+
+    def fs_down_callback(self):
+
+    def run_file_sync_down(self):
+        
 
 
 def start_comms():
