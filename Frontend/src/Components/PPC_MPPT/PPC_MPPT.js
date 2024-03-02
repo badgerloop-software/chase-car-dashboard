@@ -20,12 +20,12 @@ export default function PPC_MPPT(props) {
                 <HeadingCell fontSize='2vh' label='Power Path Controller'/>
                 <Flex flex='2' p='1'>
                       <PPC_CELL
-                          isCurrSource={props.data?.supplemental_valid[0]}
+                          isCurrSource={props.data?.use_supp[0]}
                           label='Supplemental'
                       />
                       <Spacer/>
                       <PPC_CELL
-                          isCurrSource={props.data?.dcdc_valid[0]}
+                          isCurrSource={props.data?.use_dcdc[0]}
                           label='Main Pack'
                       />
                 </Flex>
