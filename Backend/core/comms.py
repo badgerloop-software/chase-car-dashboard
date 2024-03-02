@@ -51,24 +51,32 @@ class Telemetry:
         # set max buffer size to eliminate queueing
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 1024)
         while True:
-            # Wait for data to be received or timeout after 5 seconds
-            readable, _, _ = select.select([sock], [], [], 5)
-            if sock in readable:
-                data, addr = sock.recvfrom(1024)
-                if not data:
-                    # No data received, continue listening
-                    continue
+            try:
+                # Wait for data to be received or timeout after 5 seconds
+                readable, _, _ = select.select([sock], [], [], 5)
+                if sock in readable:
+                    data, addr = sock.recvfrom(1024)
+                    if not data:
+                        # No data received, continue listening
+                        continue
 
-                packets = self.parse_packets(data, 'udp')
-                for packet in packets:
-                    if len(packet) == byte_length:
-                        d = unpack_data(packet)
-                        frontend_data = d.copy()
-                        db.insert_data(d)
-                        solar_car_connection['udp'] = True
-            else:
-                # Timeout occurred, handle as needed
-                solar_car_connection['udp'] = False
+                    packets = self.parse_packets(data, 'udp')
+                    for packet in packets:
+                        if len(packet) == byte_length:
+                            d = unpack_data(packet)
+                            frontend_data = d.copy()
+                            try:
+                                db.insert_data(d)
+                            except exception:
+                                print(traceback.format_exc())
+                                continue
+                            solar_car_connection['udp'] = True
+                else:
+                    # Timeout occurred, handle as needed
+                    solar_car_connection['udp'] = False
+            except Exception as e:
+                print(f"Exception in UDP thread {e}")
+                continue
 
     def listen_tcp(self, server_addr: str, port: int):
         print(f'connecting to {server_addr}:{port}')
@@ -159,14 +167,18 @@ class Telemetry:
                                     frontend_data = unpacked_data.copy()
                                     self.latest_tstamp = unpacked_data['tstamp_unix']
 
-                                db.insert_data(unpacked_data)
+                                try:
+                                    db.insert_data(d)
+                                except Exception as e:
+                                    print(f"Error with inserting data in LTE code {e}")
+                                    continue
                                 solar_car_connection['lte'] = True
 
                         if time.time() - latest_tstamp / 1000 > 5:
                             solar_car_connection['lte'] = False
                             break
                 except Exception as e:
-                    print(f"Error in the main loop: {e}")
+                    print(f"Error in the LTE thread: {e}")
                     continue
 
     def parse_packets(self, new_data: bytes, tmp_source: str):
