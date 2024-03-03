@@ -14,12 +14,71 @@
               "max": 1
             }
           ]
+        },
+        {
+          "subcategory": "GPS",
+          "values": [
+            {
+              "key": "lat",
+              "name": "lat",
+              "unit": "Degree",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "lon",
+              "name": "lon",
+              "unit": "Degree",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "elev",
+              "name": "elev",
+              "unit": "meter",
+              "min": 0,
+              "max": 0
+            }
+          ]
         }
       ]
     },
     {
       "category": "MCC",
       "subcategories": [
+        {
+          "subcategory": "Sensors",
+          "values": [
+            {
+              "key": "accelerator_pedal",
+              "name": "accelerator_pedal",
+              "unit": "%",
+              "min": 0,
+              "max": 1
+            },
+            {
+              "key": "foot_brake",
+              "name": "foot_brake",
+              "unit": "",
+              "min": 0,
+              "max": 1
+            },
+            {
+              "key": "regen_brake",
+              "name": "regen_brake",
+              "unit": "%",
+              "min": 0,
+              "max": 1
+            },
+            {
+              "key": "motor_current",
+              "name": "motor_current",
+              "unit": "A",
+              "min": 0,
+              "max": 100
+            }
+          ]
+        },
         {
           "subcategory": "Motor Controller I/O",
           "values": [
@@ -29,20 +88,6 @@
               "unit": "mph",
               "min": 0,
               "max": 100
-            },
-            {
-              "key": "fr_out",
-              "name": "fr_out",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "accelerator_out",
-              "name": "accelerator_out",
-              "unit": "V",
-              "min": 0,
-              "max": 3.3
             },
             {
               "key": "mc_status",
@@ -57,11 +102,11 @@
           "subcategory": "Firmware",
           "values": [
             {
-              "key": "state",
-              "name": "State",
+              "key": "mcc_state",
+              "name": "mcc_state",
               "unit": "",
               "min": 0,
-              "max": 255
+              "max": 7
             },
             {
               "key": "crz_pwr_setpt",
@@ -74,13 +119,6 @@
               "key": "crz_spd_setpt",
               "name": "crz_spd_setpt",
               "unit": "mph",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "crz_state",
-              "name": "crz_state",
-              "unit": "",
               "min": 0,
               "max": 100
             },
@@ -132,51 +170,11 @@
               "max": 1
             }
           ]
-        },
-        {
-          "subcategory": "Sensors",
-          "values": [
-            {
-              "key": "brake_status",
-              "name": "brake_status",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "mech_brake_status",
-              "name": "mech_brake_status",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "parking_brake",
-              "name": "parking_brake",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "accelerator",
-              "name": "Accelerator",
-              "unit": "%",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "motor_current",
-              "name": "motor_current",
-              "unit": "A",
-              "min": 0,
-              "max": 100
-            }
-          ]
         }
       ]
     },
     {
-      "category": "Main IO",
+      "category": "High Voltage",
       "subcategories": [
         {
           "subcategory": "Shutdown",
@@ -203,22 +201,43 @@
               "max": 0
             },
             {
-              "key": "door",
-              "name": "Door",
+              "key": "discharge_enable",
+              "name": "discharge_enable",
               "unit": "",
               "min": 0,
               "max": 0
             },
             {
-              "key": "door_lim_out",
-              "name": "door_lim_out",
+              "key": "discharge_enabled",
+              "name": "discharge_enabled",
               "unit": "",
               "min": 0,
               "max": 0
             },
             {
-              "key": "mcu_check",
-              "name": "mcu_check",
+              "key": "charge_enable",
+              "name": "charge_enable",
+              "unit": "",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "charge_enabled",
+              "name": "charge_enabled",
+              "unit": "",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "isolation",
+              "name": "isolation",
+              "unit": "",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "mcu_hv_en",
+              "name": "mcu_hv_en",
               "unit": "",
               "min": 0,
               "max": 0
@@ -229,409 +248,9 @@
               "unit": "",
               "min": 0,
               "max": 0
-            },
-            {
-              "key": "mcu_hv_en",
-              "name": "mcu_hv_en",
-              "unit": "",
-              "min": 1,
-              "max": 1
-            },
-            {
-              "key": "imd_status",
-              "name": "imd_status",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "mcu_latch",
-              "name": "mcu_latch",
-              "unit": "",
-              "min": 0,
-              "max": 1
             }
           ]
         },
-        {
-          "subcategory": "Sensors",
-          "values": [
-            {
-              "key": "linear_accel_x",
-              "name": "linear_accel_x",
-              "unit": "m/s²",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "linear_accel_y",
-              "name": "linear_accel_y",
-              "unit": "m/s²",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "linear_accel_z",
-              "name": "linear_accel_z",
-              "unit": "m/s²",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "angular_rate_pitch",
-              "name": "angular_rate_pitch",
-              "unit": "°/s",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "angular_rate_roll",
-              "name": "angular_rate_roll",
-              "unit": "°/s",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "angular_rate_yaw",
-              "name": "angular_rate_yaw",
-              "unit": "°/s",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "motor_temp",
-              "name": "Motor Temperature",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "motor_controller_temp",
-              "name": "motor_controller_temp",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "dcdc_temp",
-              "name": "dcdc_temp",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "mainIO_temp",
-              "name": "Main IO Temperature",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "road_temp",
-              "name": "road_temp",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "brake_temp",
-              "name": "brake_temp",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "air_temp",
-              "name": "air_temp",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            }
-          ]
-        },
-        {
-          "subcategory": "Lights",
-          "values": [
-            {
-              "key": "bl_turn_led_en",
-              "name": "bl_turn_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "br_turn_led_en",
-              "name": "br_turn_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "bc_brake_led_en",
-              "name": "bc_brake_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "bc_bps_led_en",
-              "name": "bc_bps_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            }
-          ]
-        },
-        {
-          "subcategory": "Firmware",
-          "values": [
-            {
-              "key": "mppt_can_heartbeat",
-              "name": "mppt_can_heartbeat",
-              "unit": "",
-              "min": 1,
-              "max": 1
-            },
-            {
-              "key": "mcc_can_heartbeat",
-              "name": "mcc_can_heartbeat",
-              "unit": "",
-              "min": 1,
-              "max": 1
-            },
-            {
-              "key": "bms_can_heartbeat",
-              "name": "bms_can_heartbeat",
-              "unit": "",
-              "min": 1,
-              "max": 1
-            },
-            {
-              "key": "mainIO_heartbeat",
-              "name": "mainIO_heartbeat",
-              "unit": "",
-              "min": 1,
-              "max": 1
-            }
-          ]
-        },
-        {
-          "subcategory": "Power Monitor",
-          "values": [
-            {
-              "key": "main_5V_bus",
-              "name": "main_5V_bus",
-              "unit": "V",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "main_12V_bus",
-              "name": "main_12V_bus",
-              "unit": "V",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "main_vbus",
-              "name": "main_vbus",
-              "unit": "V",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "main_vbus_current",
-              "name": "main_vbus_current",
-              "unit": "A",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "main_power_critical",
-              "name": "main_power_critical",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "main_power_warning",
-              "name": "main_power_warning",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "main_power_tc",
-              "name": "main_power_tc",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "main_power_valid",
-              "name": "main_power_valid",
-              "unit": "",
-              "min": 1,
-              "max": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Driver IO",
-      "subcategories": [
-        {
-          "subcategory": "Sensors",
-          "values": [
-            {
-              "key": "driverIO_temp",
-              "name": "Driver IO Temperature",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "cabin_temp",
-              "name": "Cabin Temperature",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            }
-          ]
-        },
-        {
-          "subcategory": "Lights",
-          "values": [
-            {
-              "key": "headlights_led_en",
-              "name": "headlights_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "fl_turn_led_en",
-              "name": "fl_turn_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "fr_turn_led_en",
-              "name": "fr_turn_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            }
-          ]
-        },
-        {
-          "subcategory": "Driver Inputs",
-          "values": [
-            {
-              "key": "left_turn",
-              "name": "Left Turn",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "right_turn",
-              "name": "Right Turn",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "hazards",
-              "name": "Hazards",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "headlights",
-              "name": "Headlights",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "horn_status",
-              "name": "horn_status",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            }
-          ]
-        },
-        {
-          "subcategory": "Power Monitor",
-          "values": [
-            {
-              "key": "driver_5V_bus",
-              "name": "driver_5V_bus",
-              "unit": "V",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "driver_12V_bus",
-              "name": "driver_12V_bus",
-              "unit": "V",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "driver_vbus",
-              "name": "driver_vbus",
-              "unit": "V",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "driver_vbus_current",
-              "name": "driver_vbus_current",
-              "unit": "A",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "driver_power_critical",
-              "name": "driver_power_critical",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "driver_power_warning",
-              "name": "driver_power_warning",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "driver_power_tc",
-              "name": "driver_power_tc",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "driver_power_valid",
-              "name": "driver_power_valid",
-              "unit": "",
-              "min": 1,
-              "max": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "category": "High Voltage",
-      "subcategories": [
         {
           "subcategory": "MPS",
           "values": [
@@ -655,117 +274,46 @@
               "unit": "",
               "min": 1,
               "max": 1
-            }
-          ]
-        },
-        {
-          "subcategory": "PPC",
-          "values": [
+            },
             {
-              "key": "dcdc_valid",
-              "name": "dcdc_valid",
+              "key": "dcdc_current",
+              "name": "dcdc_current",
+              "unit": "A",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "dcdc_deg",
+              "name": "dcdc_deg",
               "unit": "",
               "min": 1,
               "max": 1
             },
             {
-              "key": "supplemental_valid",
-              "name": "supplemental_valid",
+              "key": "use_dcdc",
+              "name": "use_dcdc",
+              "unit": "",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "use_supp",
+              "name": "use_supp",
               "unit": "",
               "min": 0,
               "max": 0
             }
           ]
-        }
-      ]
-    },
-    {
-      "category": "Solar Array",
-      "subcategories": [
+        },
         {
-          "subcategory": "MPPT",
+          "subcategory": "IO",
           "values": [
             {
-              "key": "mppt_mode",
-              "name": "mppt_mode",
+              "key": "bms_mpio1",
+              "name": "bms_mpio1",
               "unit": "",
               "min": 0,
               "max": 1
-            }
-          ]
-        },
-        {
-          "subcategory": "Sensors",
-          "values": [
-            {
-              "key": "mppt_current_out",
-              "name": "mppt_current_out",
-              "unit": "A",
-              "min": 0,
-              "max": 7
-            },
-            {
-              "key": "string1_temp",
-              "name": "String 1 Temperature",
-              "unit": "°C",
-              "min": 20,
-              "max": 50
-            },
-            {
-              "key": "string2_temp",
-              "name": "String 2 Temperature",
-              "unit": "°C",
-              "min": 20,
-              "max": 50
-            },
-            {
-              "key": "string3_temp",
-              "name": "String 3 Temperature",
-              "unit": "°C",
-              "min": 20,
-              "max": 50
-            },
-            {
-              "key": "string1_V_in",
-              "name": "string1_V_in",
-              "unit": "V",
-              "min": 0,
-              "max": 60
-            },
-            {
-              "key": "string2_V_in",
-              "name": "string2_V_in",
-              "unit": "V",
-              "min": 0,
-              "max": 60
-            },
-            {
-              "key": "string3_V_in",
-              "name": "string3_V_in",
-              "unit": "V",
-              "min": 0,
-              "max": 60
-            },
-            {
-              "key": "string1_I_in",
-              "name": "string1_I_in",
-              "unit": "A",
-              "min": 0,
-              "max": 7
-            },
-            {
-              "key": "string2_I_in",
-              "name": "string2_I_in",
-              "unit": "A",
-              "min": 0,
-              "max": 7
-            },
-            {
-              "key": "string3_I_in",
-              "name": "string3_I_in",
-              "unit": "A",
-              "min": 0,
-              "max": 7
             }
           ]
         }
@@ -774,6 +322,39 @@
     {
       "category": "Battery",
       "subcategories": [
+        {
+          "subcategory": "Supplemental",
+          "values": [
+            {
+              "key": "supplemental_current",
+              "name": "supplemental_current",
+              "unit": "A",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "supplemental_voltage",
+              "name": "supplemental_voltage",
+              "unit": "V",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "supplemental_deg",
+              "name": "supplemental_deg",
+              "unit": "",
+              "min": 1,
+              "max": 1
+            },
+            {
+              "key": "est_supplemental_soc",
+              "name": "est_supplemental_soc",
+              "unit": "%",
+              "min": 0,
+              "max": 100
+            }
+          ]
+        },
         {
           "subcategory": "BMS CAN",
           "values": [
@@ -806,34 +387,6 @@
               "max": 113.15
             },
             {
-              "key": "highest_cell_group_voltage",
-              "name": "highest_cell_group_voltage",
-              "unit": "V",
-              "min": 2.5,
-              "max": 3.65
-            },
-            {
-              "key": "highest_cell_group_voltage_idx",
-              "name": "highest_cell_group_voltage_idx",
-              "unit": "",
-              "min": 1,
-              "max": 55
-            },
-            {
-              "key": "lowest_cell_group_voltage",
-              "name": "lowest_cell_group_voltage",
-              "unit": "V",
-              "min": 2.5,
-              "max": 3.65
-            },
-            {
-              "key": "lowest_cell_group_voltage_idx",
-              "name": "lowest_cell_group_voltage_idx",
-              "unit": "",
-              "min": 1,
-              "max": 55
-            },
-            {
               "key": "populated_cells",
               "name": "populated_cells",
               "unit": "",
@@ -850,13 +403,13 @@
             {
               "key": "soh",
               "name": "soh",
-              "unit": "Ah",
+              "unit": "%",
               "min": 0,
               "max": 100
             },
             {
-              "key": "pack_capacity",
-              "name": "Pack Capacity",
+              "key": "pack_amphours",
+              "name": "pack_amphours",
               "unit": "Ah",
               "min": 57,
               "max": 57
@@ -874,6 +427,20 @@
               "unit": "",
               "min": 0,
               "max": 6
+            },
+            {
+              "key": "pack_resistance",
+              "name": "Pack Resistance",
+              "unit": "mΩ",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "bms_input_voltage",
+              "name": "BMS Input Voltage",
+              "unit": "V",
+              "min": 12,
+              "max": 24
             },
             {
               "key": "voltage_failsafe",
@@ -976,6 +543,27 @@
             {
               "key": "pack_too_hot_fault",
               "name": "pack_too_hot_fault",
+              "unit": "",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "high_voltage_interlock_signal_fault",
+              "name": "high_voltage_interlock_signal_fault",
+              "unit": "",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "precharge_circuit_malfunction",
+              "name": "precharge_circuit_malfunction",
+              "unit": "",
+              "min": 0,
+              "max": 0
+            },
+            {
+              "key": "abnormal_state_of_charge_behavior",
+              "name": "abnormal_state_of_charge_behavior",
               "unit": "",
               "min": 0,
               "max": 0
@@ -1091,20 +679,6 @@
               "unit": "",
               "min": 0,
               "max": 0
-            },
-            {
-              "key": "pack_resistance",
-              "name": "Pack Resistance",
-              "unit": "mΩ",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "bms_input_voltage",
-              "name": "BMS Input Voltage",
-              "unit": "V",
-              "min": 12,
-              "max": 24
             }
           ]
         },
@@ -1121,27 +695,15 @@
           ]
         },
         {
-          "subcategory": "Supplemental",
-          "values": [
-            {
-              "key": "supplemental_voltage",
-              "name": "supplemental_voltage",
-              "unit": "V",
-              "min": 0,
-              "max": 100
-            },
-            {
-              "key": "est_supplemental_soc",
-              "name": "est_supplemental_soc",
-              "unit": "%",
-              "min": 0,
-              "max": 100
-            }
-          ]
-        },
-        {
           "subcategory": "BMS",
           "values": [
+            {
+              "key": "bps_fault",
+              "name": "BPS Fault",
+              "unit": "",
+              "min": 0,
+              "max": 0
+            },
             {
               "key": "cell_group1_voltage",
               "name": "Cell Group 1 Voltage",
@@ -1358,24 +920,151 @@
               "unit": "V",
               "min": 2.5,
               "max": 3.65
-            },
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Main IO",
+      "subcategories": [
+        {
+          "subcategory": "Sensors",
+          "values": [
             {
-              "key": "bps_fault",
-              "name": "BPS Fault",
-              "unit": "",
-              "min": 0,
-              "max": 0
-            },
-            {
-              "key": "fan_enable",
-              "name": "fan_enable",
+              "key": "park_brake",
+              "name": "park_brake",
               "unit": "",
               "min": 0,
               "max": 1
             },
             {
-              "key": "charge_enable",
-              "name": "charge_enable",
+              "key": "air_temp",
+              "name": "air_temp",
+              "unit": "°C",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "brake_temp",
+              "name": "brake_temp",
+              "unit": "°C",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "dcdc_temp",
+              "name": "dcdc_temp",
+              "unit": "°C",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "mainIO_temp",
+              "name": "Main IO Temperature",
+              "unit": "°C",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "motor_controller_temp",
+              "name": "motor_controller_temp",
+              "unit": "°C",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "motor_temp",
+              "name": "Motor Temperature",
+              "unit": "°C",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "road_temp",
+              "name": "road_temp",
+              "unit": "°C",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "main_5V_bus",
+              "name": "main_5V_bus",
+              "unit": "V",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "main_12V_bus",
+              "name": "main_12V_bus",
+              "unit": "V",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "main_24V_bus",
+              "name": "main_24V_bus",
+              "unit": "V",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "main_5V_current",
+              "name": "main_5V_current",
+              "unit": "A",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "main_12V_current",
+              "name": "main_12V_current",
+              "unit": "A",
+              "min": 0,
+              "max": 100
+            },
+            {
+              "key": "main_24V_current",
+              "name": "main_24V_current",
+              "unit": "A",
+              "min": 0,
+              "max": 100
+            }
+          ]
+        },
+        {
+          "subcategory": "Lights",
+          "values": [
+            {
+              "key": "l_turn_led_en",
+              "name": "l_turn_led_en",
+              "unit": "",
+              "min": 0,
+              "max": 1
+            },
+            {
+              "key": "r_turn_led_en",
+              "name": "r_turn_led_en",
+              "unit": "",
+              "min": 0,
+              "max": 1
+            },
+            {
+              "key": "brake_led_en",
+              "name": "brake_led_en",
+              "unit": "",
+              "min": 0,
+              "max": 1
+            },
+            {
+              "key": "headlights_led_en",
+              "name": "headlights_led_en",
+              "unit": "",
+              "min": 0,
+              "max": 1
+            },
+            {
+              "key": "hazards",
+              "name": "Hazards",
               "unit": "",
               "min": 0,
               "max": 0
@@ -1383,14 +1072,134 @@
           ]
         },
         {
-          "subcategory": "Shutdown",
+          "subcategory": "Firmware",
           "values": [
             {
-              "key": "discharge_enable",
-              "name": "discharge_enable",
+              "key": "bms_can_heartbeat",
+              "name": "bms_can_heartbeat",
+              "unit": "",
+              "min": 1,
+              "max": 1
+            },
+            {
+              "key": "hv_can_heartbeat",
+              "name": "hv_can_heartbeat",
+              "unit": "",
+              "min": 1,
+              "max": 1
+            },
+            {
+              "key": "mainIO_heartbeat",
+              "name": "mainIO_heartbeat",
+              "unit": "",
+              "min": 1,
+              "max": 1
+            },
+            {
+              "key": "mcc_can_heartbeat",
+              "name": "mcc_can_heartbeat",
+              "unit": "",
+              "min": 1,
+              "max": 1
+            },
+            {
+              "key": "mppt_can_heartbeat",
+              "name": "mppt_can_heartbeat",
+              "unit": "",
+              "min": 1,
+              "max": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Solar Array",
+      "subcategories": [
+        {
+          "subcategory": "MPPT",
+          "values": [
+            {
+              "key": "mppt_mode",
+              "name": "mppt_mode",
               "unit": "",
               "min": 0,
-              "max": 0
+              "max": 1
+            }
+          ]
+        },
+        {
+          "subcategory": "Sensors",
+          "values": [
+            {
+              "key": "mppt_current_out",
+              "name": "mppt_current_out",
+              "unit": "A",
+              "min": 0,
+              "max": 7
+            },
+            {
+              "key": "string1_temp",
+              "name": "String 1 Temperature",
+              "unit": "°C",
+              "min": 20,
+              "max": 50
+            },
+            {
+              "key": "string2_temp",
+              "name": "String 2 Temperature",
+              "unit": "°C",
+              "min": 20,
+              "max": 50
+            },
+            {
+              "key": "string3_temp",
+              "name": "String 3 Temperature",
+              "unit": "°C",
+              "min": 20,
+              "max": 50
+            },
+            {
+              "key": "string1_V_in",
+              "name": "string1_V_in",
+              "unit": "V",
+              "min": 0,
+              "max": 60
+            },
+            {
+              "key": "string2_V_in",
+              "name": "string2_V_in",
+              "unit": "V",
+              "min": 0,
+              "max": 60
+            },
+            {
+              "key": "string3_V_in",
+              "name": "string3_V_in",
+              "unit": "V",
+              "min": 0,
+              "max": 60
+            },
+            {
+              "key": "string1_I_in",
+              "name": "string1_I_in",
+              "unit": "A",
+              "min": 0,
+              "max": 7
+            },
+            {
+              "key": "string2_I_in",
+              "name": "string2_I_in",
+              "unit": "A",
+              "min": 0,
+              "max": 7
+            },
+            {
+              "key": "string3_I_in",
+              "name": "string3_I_in",
+              "unit": "A",
+              "min": 0,
+              "max": 7
             }
           ]
         }

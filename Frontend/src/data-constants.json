@@ -1,205 +1,20 @@
 {
+    "accelerator_pedal": {
+        "UNIT": "%",
+        "MIN": 0,
+        "MAX": 1
+    },
     "speed": {
         "UNIT": "mph",
         "MIN": 0,
         "MAX": 100
     },
-    "driver_eStop": {
+    "mcc_state": {
         "UNIT": "",
         "MIN": 0,
-        "MAX": 0
-    },
-    "external_eStop": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "crash": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "door": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "door_lim_out": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "mcu_check": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "mcu_stat_fdbk": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "mcu_hv_en": {
-        "UNIT": "",
-        "MIN": 1,
-        "MAX": 1
-    },
-    "imd_status": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "mcu_latch": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "state": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 255
+        "MAX": 7
     },
     "fr_telem": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "fr_out": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "linear_accel_x": {
-        "UNIT": "m/s²",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "linear_accel_y": {
-        "UNIT": "m/s²",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "linear_accel_z": {
-        "UNIT": "m/s²",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "angular_rate_pitch": {
-        "UNIT": "°/s",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "angular_rate_roll": {
-        "UNIT": "°/s",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "angular_rate_yaw": {
-        "UNIT": "°/s",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "motor_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "motor_controller_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "dcdc_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "driverIO_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "mainIO_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "cabin_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "road_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "brake_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "air_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "bl_turn_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "br_turn_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "bc_brake_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "bc_bps_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "headlights_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "fl_turn_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "fr_turn_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "left_turn": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "right_turn": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "hazards": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "headlights": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "horn_status": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 1
@@ -224,11 +39,6 @@
         "MIN": 0,
         "MAX": 100
     },
-    "crz_state": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 100
-    },
     "eco": {
         "UNIT": "",
         "MIN": 0,
@@ -239,30 +49,15 @@
         "MIN": 0,
         "MAX": 1
     },
-    "brake_status": {
+    "foot_brake": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 1
     },
-    "mech_brake_status": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "parking_brake": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "accelerator": {
+    "regen_brake": {
         "UNIT": "%",
         "MIN": 0,
         "MAX": 1
-    },
-    "accelerator_out": {
-        "UNIT": "V",
-        "MIN": 0,
-        "MAX": 3.3
     },
     "motor_current": {
         "UNIT": "A",
@@ -279,105 +74,55 @@
         "MIN": 0,
         "MAX": 0
     },
-    "mppt_can_heartbeat": {
-        "UNIT": "",
-        "MIN": 1,
-        "MAX": 1
-    },
-    "mcc_can_heartbeat": {
-        "UNIT": "",
-        "MIN": 1,
-        "MAX": 1
-    },
-    "bms_can_heartbeat": {
-        "UNIT": "",
-        "MIN": 1,
-        "MAX": 1
-    },
-    "mainIO_heartbeat": {
-        "UNIT": "",
-        "MIN": 1,
-        "MAX": 1
-    },
-    "main_5V_bus": {
-        "UNIT": "V",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "main_12V_bus": {
-        "UNIT": "V",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "main_vbus": {
-        "UNIT": "V",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "main_vbus_current": {
-        "UNIT": "A",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "driver_5V_bus": {
-        "UNIT": "V",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "driver_12V_bus": {
-        "UNIT": "V",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "driver_vbus": {
-        "UNIT": "V",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "driver_vbus_current": {
-        "UNIT": "A",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "main_power_critical": {
+    "driver_eStop": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 0
     },
-    "main_power_warning": {
+    "external_eStop": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 0
     },
-    "main_power_tc": {
+    "crash": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 0
     },
-    "main_power_valid": {
-        "UNIT": "",
-        "MIN": 1,
-        "MAX": 1
-    },
-    "driver_power_critical": {
+    "discharge_enable": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 0
     },
-    "driver_power_warning": {
+    "discharge_enabled": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 0
     },
-    "driver_power_tc": {
+    "charge_enable": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 0
     },
-    "driver_power_valid": {
+    "charge_enabled": {
         "UNIT": "",
-        "MIN": 1,
-        "MAX": 1
+        "MIN": 0,
+        "MAX": 0
+    },
+    "isolation": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "mcu_hv_en": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "mcu_stat_fdbk": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
     },
     "mppt_contactor": {
         "UNIT": "",
@@ -394,15 +139,170 @@
         "MIN": 1,
         "MAX": 1
     },
-    "dcdc_valid": {
+    "dcdc_current": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "dcdc_deg": {
         "UNIT": "",
         "MIN": 1,
         "MAX": 1
     },
-    "supplemental_valid": {
+    "use_dcdc": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 0
+    },
+    "supplemental_current": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "supplemental_voltage": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "supplemental_deg": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "use_supp": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "est_supplemental_soc": {
+        "UNIT": "%",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "bms_mpio1": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "park_brake": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "air_temp": {
+        "UNIT": "°C",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "brake_temp": {
+        "UNIT": "°C",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "dcdc_temp": {
+        "UNIT": "°C",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "mainIO_temp": {
+        "UNIT": "°C",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "motor_controller_temp": {
+        "UNIT": "°C",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "motor_temp": {
+        "UNIT": "°C",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "road_temp": {
+        "UNIT": "°C",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "l_turn_led_en": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "r_turn_led_en": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "brake_led_en": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "headlights_led_en": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 1
+    },
+    "hazards": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "main_5V_bus": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "main_12V_bus": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "main_24V_bus": {
+        "UNIT": "V",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "main_5V_current": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "main_12V_current": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "main_24V_current": {
+        "UNIT": "A",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "bms_can_heartbeat": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "hv_can_heartbeat": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "mainIO_heartbeat": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "mcc_can_heartbeat": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "mppt_can_heartbeat": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
     },
     "mppt_mode": {
         "UNIT": "",
@@ -484,30 +384,220 @@
         "MIN": -2760.86,
         "MAX": 5521.72
     },
-    "highest_cell_group_voltage": {
-        "UNIT": "V",
-        "MIN": 2.5,
-        "MAX": 3.65
-    },
-    "highest_cell_group_voltage_idx": {
+    "populated_cells": {
         "UNIT": "",
-        "MIN": 1,
-        "MAX": 55
-    },
-    "lowest_cell_group_voltage": {
-        "UNIT": "V",
-        "MIN": 2.5,
-        "MAX": 3.65
-    },
-    "lowest_cell_group_voltage_idx": {
-        "UNIT": "",
-        "MIN": 1,
-        "MAX": 55
-    },
-    "supplemental_voltage": {
-        "UNIT": "V",
         "MIN": 0,
         "MAX": 100
+    },
+    "soc": {
+        "UNIT": "%",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "soh": {
+        "UNIT": "%",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "pack_amphours": {
+        "UNIT": "Ah",
+        "MIN": 57,
+        "MAX": 57
+    },
+    "adaptive_total_capacity": {
+        "UNIT": "Ah",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "fan_speed": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 6
+    },
+    "pack_resistance": {
+        "UNIT": "mΩ",
+        "MIN": 0,
+        "MAX": 100
+    },
+    "bms_input_voltage": {
+        "UNIT": "V",
+        "MIN": 12,
+        "MAX": 24
+    },
+    "bps_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "voltage_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "current_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "relay_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "cell_balancing_active": {
+        "UNIT": "",
+        "MIN": 1,
+        "MAX": 1
+    },
+    "charge_interlock_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "thermistor_b_value_table_invalid": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "input_power_supply_failsafe": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "discharge_limit_enforcement_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "charger_safety_relay_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "internal_hardware_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "internal_heatsink_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "internal_software_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "highest_cell_voltage_too_high_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "lowest_cell_voltage_too_low_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "pack_too_hot_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "high_voltage_interlock_signal_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "precharge_circuit_malfunction": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "abnormal_state_of_charge_behavior": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "internal_communication_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "cell_balancing_stuck_off_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "weak_cell_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "low_cell_voltage_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "open_wiring_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "current_sensor_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "highest_cell_voltage_over_5V_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "cell_asic_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "weak_pack_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "fan_monitor_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "thermistor_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "external_communication_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "redundant_power_supply_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "high_voltage_isolation_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "input_power_supply_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "charge_limit_enforcement_fault": {
+        "UNIT": "",
+        "MIN": 0,
+        "MAX": 0
     },
     "cell_group1_voltage": {
         "UNIT": "V",
@@ -664,223 +754,18 @@
         "MIN": 2.5,
         "MAX": 3.65
     },
-    "populated_cells": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "soc": {
-        "UNIT": "%",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "est_supplemental_soc": {
-        "UNIT": "%",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "soh": {
-        "UNIT": "Ah",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "pack_capacity": {
-        "UNIT": "Ah",
-        "MIN": 57,
-        "MAX": 57
-    },
-    "adaptive_total_capacity": {
-        "UNIT": "Ah",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "bps_fault": {
-        "UNIT": "",
+    "lat": {
+        "UNIT": "Degree",
         "MIN": 0,
         "MAX": 0
     },
-    "fan_enable": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "fan_speed": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 6
-    },
-    "voltage_failsafe": {
-        "UNIT": "",
+    "lon": {
+        "UNIT": "Degree",
         "MIN": 0,
         "MAX": 0
     },
-    "current_failsafe": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "relay_failsafe": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "cell_balancing_active": {
-        "UNIT": "",
-        "MIN": 1,
-        "MAX": 1
-    },
-    "charge_interlock_failsafe": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "thermistor_b_value_table_invalid": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "input_power_supply_failsafe": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "discharge_limit_enforcement_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "charger_safety_relay_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "internal_hardware_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "internal_heatsink_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "internal_software_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "highest_cell_voltage_too_high_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "lowest_cell_voltage_too_low_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "pack_too_hot_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "internal_communication_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "cell_balancing_stuck_off_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "weak_cell_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "low_cell_voltage_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "open_wiring_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "current_sensor_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "highest_cell_voltage_over_5V_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "cell_asic_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "weak_pack_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "fan_monitor_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "thermistor_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "external_communication_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "redundant_power_supply_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "high_voltage_isolation_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "input_power_supply_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "charge_limit_enforcement_fault": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "pack_resistance": {
-        "UNIT": "mΩ",
-        "MIN": 0,
-        "MAX": 100
-    },
-    "bms_input_voltage": {
-        "UNIT": "V",
-        "MIN": 12,
-        "MAX": 24
-    },
-    "charge_enable": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 0
-    },
-    "discharge_enable": {
-        "UNIT": "",
+    "elev": {
+        "UNIT": "meter",
         "MIN": 0,
         "MAX": 0
     }
