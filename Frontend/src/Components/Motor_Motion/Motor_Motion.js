@@ -45,7 +45,7 @@ export default function Motor_Motion(props) {
                             borderRadius='md'
                             borderColor={borderCol}
                         >
-                            <Text as='b' fontSize='2vh'>{props.data?.fr_out[0] ? 'F' : 'R'}</Text>
+                            <Text as='b' fontSize='2vh'>{}</Text>
                         </Center>
                     </VStack>
                 </GridItem>
@@ -64,7 +64,7 @@ export default function Motor_Motion(props) {
                             borderRadius='md'
                             borderColor={borderCol}
                         >
-                            <Text as='b' fontSize='2vh'>{props.data?.state[0] ?? "?"}</Text>
+                            <Text as='b' fontSize='2vh'>{props.data?.mcc_state[0] ?? "?"}</Text>
                         </Center>
                     </VStack>
                 </GridItem>
@@ -98,7 +98,7 @@ export default function Motor_Motion(props) {
                     <Center direction='row' pl='1' pr='1' h='100%'>
                         <Text fontSize='sm'>Accelerator</Text>
                         <Spacer/>
-                        <Text fontSize='sm'>{props.data?.accelerator[0].toFixed(0) ?? -1.0} {CONSTANTS.accelerator.UNIT}</Text>
+                        <Text fontSize='sm'>{props.data?.accelerator_pedal[0].toFixed(0) ?? -1.0} {CONSTANTS.accelerator_pedal.UNIT}</Text>
                     </Center>
                 </GridItem>
                 <GridItem
@@ -112,7 +112,7 @@ export default function Motor_Motion(props) {
                     <Center direction='row' pl='1' pr='1' h='100%'>
                         <Text fontSize='sm'>Accelerator Out</Text>
                         <Spacer/>
-                        <Text fontSize='sm'>{props.data?.accelerator_out[0].toFixed(1) ?? -1.0} {CONSTANTS.accelerator_out.UNIT}</Text>
+                        {/*<Text fontSize='sm'>{props.data?.accelerator_out[0].toFixed(1) ?? -1.0} {CONSTANTS.accelerator_out.UNIT}</Text>*/}
                     </Center>
                 </GridItem>
                 <GridItem
@@ -235,145 +235,8 @@ export default function Motor_Motion(props) {
                     colStart={4}
                 >
                     <Center>
-                        {(props.data?.state[0] == 'C') ? <Image fit={fitType} boxSize='35px' src={Images.Cruise}/> : <Box h='35px'/>}
+                        {(props.data?.mcc_state[0] === 'C') ? <Image fit={fitType} boxSize='35px' src={Images.Cruise}/> : <Box h='35px'/>}
                     </Center>
-                </GridItem>
-            </Grid>
-
-            <Grid
-                flex='1'
-                templateRows='1fr 1fr 1fr'
-                templateColumns='3fr 1fr 1fr 1fr'
-                h='25%'
-            >
-                <GridItem
-                    rowStart={1}
-                    colStart={2}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderColor={borderCol}
-                    bg={headerBg}
-                >
-                    <Center fontSize='xs' h='100%'>
-                        X / Roll
-                    </Center>
-                </GridItem>
-                <GridItem
-                    rowStart={1}
-                    colStart={3}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderColor={borderCol}
-                    bg={headerBg}
-                >
-                    <Center fontSize='xs' h='100%'>
-                        Y / Pitch
-                    </Center>
-                </GridItem>
-                <GridItem
-                    rowStart={1}
-                    colStart={4}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderColor={borderCol}
-                    bg={headerBg}
-                >
-                    <Center fontSize='xs' h='100%'>
-                        Z / Yaw
-                    </Center>
-                </GridItem>
-
-                <GridItem
-                    rowStart={2}
-                    colStart={1}
-                    borderTopWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center fontSize='1.2vh' h='100%'>
-                        Linear Acceleration (m/s^2)
-                    </Center>
-                </GridItem>
-                <GridItem
-                    rowStart={3}
-                    colStart={1}
-                    borderTopWidth='1px'
-                    borderBottomWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center fontSize='xs' h='100%'>
-                        Angular Rate (deg/s)
-                    </Center>
-                </GridItem>
-
-                <GridItem
-                    rowStart={2}
-                    colStart={2}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center as='b' fontSize='1.5vh' h='100%'>
-                        {props.data?.linear_accel_x[0].toFixed(0) ?? -1.0}
-                    </Center>
-                </GridItem>
-                <GridItem
-                    rowStart={2}
-                    colStart={3}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center as='b' fontSize='1.5vh' h='100%'>
-                        {props.data?.linear_accel_y[0].toFixed(0) ?? -1.0}
-                    </Center>
-                </GridItem>
-                <GridItem
-                    rowStart={2}
-                    colStart={4}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center as='b' fontSize='1.5vh' h='100%'>
-                        {props.data?.linear_accel_z[0].toFixed(0) ?? -1.0}
-                    </Center>
-                </GridItem>
-
-                <GridItem
-                    rowStart={3}
-                    colStart={2}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderBottomWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center as='b' fontSize='1.5vh' h='100%'>
-                        {props.data?.angular_rate_roll[0].toFixed(0) ?? -1.0}
-                    </Center>
-                </GridItem>
-                <GridItem
-                    rowStart={3}
-                    colStart={3}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderBottomWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center as='b' fontSize='1.5vh' h='100%'>
-                        {props.data?.angular_rate_pitch[0].toFixed(0) ?? -1.0}
-                    </Center>
-                </GridItem>
-                <GridItem
-                    rowStart={3}
-                    colStart={4}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderBottomWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center as='b' fontSize='1.5vh' h='100%'>
-                        {props.data?.angular_rate_yaw[0].toFixed(0) ?? -1.0}
-                    </Center>      
                 </GridItem>
             </Grid>
             
@@ -392,7 +255,7 @@ export default function Motor_Motion(props) {
                     colStart={1}
                 >
                     <Center h='100%' w='100%'>
-                        {props.data?.parking_brake[0] ? <Image fit={fitType} boxSize='35px' src={Images.ParkingBrake}/> : <Box h='35px'/>}
+                        {props.data?.park_brake[0] ? <Image fit={fitType} boxSize='35px' src={Images.ParkingBrake}/> : <Box h='35px'/>}
                     </Center>
                 </GridItem>
                 <GridItem 
@@ -400,7 +263,6 @@ export default function Motor_Motion(props) {
                     colStart={2}
                 >
                     <Center h='100%' w='100%'>
-                        {props.data?.brake_status[0] ? <Image fit={fitType} boxSize='35px' src={Images.Brake}/> : <Box h='35px'/>}
                     </Center>
                 </GridItem>
                 <GridItem 
@@ -408,7 +270,7 @@ export default function Motor_Motion(props) {
                     colStart={3}
                 >
                     <Center h='100%' w='100%'>
-                        {props.data?.mech_brake_status[0] ? <Image fit={fitType} boxSize='35px' src={Images.MechanicalBrake}/> : <Box h='35px'/>}
+                        {props.data?.foot_brake[0] ? <Image fit={fitType} boxSize='35px' src={Images.MechanicalBrake}/> : <Box h='35px'/>}
                     </Center>                
                 </GridItem>
                 <GridItem 
@@ -416,15 +278,14 @@ export default function Motor_Motion(props) {
                     colStart={4}
                 >
                     <Center h='100%' w='100%'>
-                        {props.data?.horn_status[0] ? <Image fit={fitType} boxSize='35px' src={Images.Horn}/> : <Box h='35px'/>}
-                    </Center>                
+                    </Center>
                 </GridItem>
                 <GridItem 
                     rowStart={2}
                     colStart={1}
                 >
                     <Center h='100%' w='100%'>
-                        {props.data?.left_turn[0] ? <Image fit={fitType} boxSize='35px' src={Images.Left}/> : <Box h='35px'/>}
+                        {props.data?.l_turn_led_en[0] ? <Image fit={fitType} boxSize='35px' src={Images.Left}/> : <Box h='35px'/>}
                     </Center>                
                 </GridItem>
                 <GridItem 
@@ -432,7 +293,7 @@ export default function Motor_Motion(props) {
                     colStart={2}
                 >
                     <Center h='100%' w='100%'>
-                        {props.data?.right_turn[0] ? <Image fit={fitType} boxSize='35px' src={Images.Right}/> : <Box h='35px'/>}
+                        {props.data?.r_turn_led_en[0] ? <Image fit={fitType} boxSize='35px' src={Images.Right}/> : <Box h='35px'/>}
                     </Center>
                 </GridItem>
                 <GridItem 
@@ -440,7 +301,7 @@ export default function Motor_Motion(props) {
                     colStart={3}
                 >
                     <Center h='100%' w='100%'>
-                        {props.data?.headlights[0] ? <Image fit={fitType} boxSize='35px' src={Images.Headlights}/> : <Box h='35px'/>}
+                        {props.data?.headlights_led_en[0] ? <Image fit={fitType} boxSize='35px' src={Images.Headlights}/> : <Box h='35px'/> /*Does this mean the same as headlights on?*/}
                     </Center>
                 </GridItem>
                 <GridItem 
