@@ -67,7 +67,7 @@ class Telemetry:
                             frontend_data = d.copy()
                             try:
                                 db.insert_data(d)
-                            except exception:
+                            except Exception as e:
                                 print(traceback.format_exc())
                                 continue
                             solar_car_connection['udp'] = True
@@ -75,6 +75,7 @@ class Telemetry:
                     # Timeout occurred, handle as needed
                     solar_car_connection['udp'] = False
             except Exception as e:
+                solar_car_connection['udp'] = False
                 print(f"Exception in UDP thread {e}")
                 continue
 
@@ -178,6 +179,7 @@ class Telemetry:
                             solar_car_connection['lte'] = False
                             break
                 except Exception as e:
+                    solar_car_connection['lte'] = False
                     print(f"Error in the LTE thread: {e}")
                     continue
 
