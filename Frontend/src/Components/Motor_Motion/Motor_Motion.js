@@ -112,7 +112,6 @@ export default function Motor_Motion(props) {
                     <Center direction='row' pl='1' pr='1' h='100%'>
                         <Text fontSize='sm'>Accelerator Out</Text>
                         <Spacer/>
-                        {/*<Text fontSize='sm'>{props.data?.accelerator_out[0].toFixed(1) ?? -1.0} {CONSTANTS.accelerator_out.UNIT}</Text>*/}
                     </Center>
                 </GridItem>
                 <GridItem
@@ -301,7 +300,7 @@ export default function Motor_Motion(props) {
                     colStart={3}
                 >
                     <Center h='100%' w='100%'>
-                        {props.data?.headlights_led_en[0] ? <Image fit={fitType} boxSize='35px' src={Images.Headlights}/> : <Box h='35px'/> /*Does this mean the same as headlights on?*/}
+                        {props.data?.headlights_led_en[0] ? <Image fit={fitType} boxSize='35px' src={Images.Headlights}/> : <Box h='35px'/>}
                     </Center>
                 </GridItem>
                 <GridItem 
