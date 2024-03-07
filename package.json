@@ -19,6 +19,7 @@
     "wait-port": "^0.2.9"
   },
   "dependencies": {
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "google-maps-react": "^2.0.6"
   }
 }
