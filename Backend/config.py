@@ -15,7 +15,7 @@ DATA_PORT = 4003
 #UDP SETTINGS
 UDP_PORT = 4003
 
-VPS_URL = 'http://150.136.104.125:3000'
+VPS_URL = 'http://live.bsr-dev.org'
 
 #Filled by the program
 FORMAT = dict()
