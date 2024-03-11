@@ -169,7 +169,7 @@ class Telemetry:
                                     self.latest_tstamp = unpacked_data['tstamp_unix']
 
                                 try:
-                                    db.insert_data(d)
+                                    db.insert_data(unpacked_data)
                                 except Exception as e:
                                     print(f"Error with inserting data in LTE code {e}")
                                     continue
