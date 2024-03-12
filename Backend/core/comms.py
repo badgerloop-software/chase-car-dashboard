@@ -32,6 +32,9 @@ def unpack_data(data):
     unpacked_data = struct.unpack(format_string, data)
     for i in range(len(properties)):
         fields[properties[i]] = unpacked_data[i]
+        # if the data is -inf or inf, we set it to -10000
+        if fields[properties[i]] == float('inf') or fields[properties[i]] == float('-inf'):
+            fields[properties[i]] = -10000
     return fields
 
 
