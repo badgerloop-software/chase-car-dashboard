@@ -8,4 +8,5 @@ export const ROUTES = {
     GET_SINGLE_VALUES: "/single-values",
     GET_GRAPH_DATA: "components/graph",
     GET_PROCESSED_DATA: "components/get-processed-data",
+    GET_FORECAST_DATA: "components/forecast",
 }
