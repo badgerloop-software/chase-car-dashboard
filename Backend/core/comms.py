@@ -6,8 +6,7 @@ import asyncio
 import config
 
 from . import db
-
-from file_sync import file_sync_down
+from file_sync.file_sync_down.main import Downloader
 
 format_string = '<' # little-endian
 byte_length = 0
@@ -219,10 +218,24 @@ class Telemetry:
 
         return packets
 
-    def fs_down_callback(self):
+    
+    def fs_down_callback(data):
+        # copied from listen_upd()
+        if not data:
+            # No data received, we're done here
+            return
 
-    def run_file_sync_down(self):
-        
+        packets = self.parse_packets(data, 'file_sync')
+        for packet in packets:
+            if len(packet) == byte_length:
+                d = unpack_data(packet)
+                frontend_data = d.copy()
+                try:
+                    db.insert_data(d)
+                except Exception as e:
+                    print(traceback.format_exc())
+                    continue
+                #solar_car_connection['udp'] = True
 
 
 def start_comms():
@@ -233,3 +246,6 @@ def start_comms():
     vps_thread.start()
     socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
     socket_thread.start()
+
+    # start file sync
+    Downloader.sync(telemetry.fs_down_callback)
