@@ -6,7 +6,7 @@ import asyncio
 import config
 
 from . import db
-from file_sync.file_sync_down.main import Downloader
+from file_sync.file_sync_down.main import *
 
 format_string = '<' # little-endian
 byte_length = 0
@@ -40,7 +40,7 @@ def unpack_data(data):
 
 
 class Telemetry:
-    __tmp_data = {'tcp': b'', 'lte': b'', 'udp': b''}
+    __tmp_data = {'tcp': b'', 'lte': b'', 'udp': b'', 'file_sync': b''}
     latest_tstamp = 0
 
     def listen_udp(self, port: int):
@@ -218,8 +218,7 @@ class Telemetry:
 
         return packets
 
-    
-    def fs_down_callback(data):
+    def fs_down_callback(self, data):
         # copied from listen_upd()
         if not data:
             # No data received, we're done here
@@ -248,4 +247,4 @@ def start_comms():
     socket_thread.start()
 
     # start file sync
-    Downloader.sync(telemetry.fs_down_callback)
+    sync(telemetry.fs_down_callback)
