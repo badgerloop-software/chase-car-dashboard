@@ -228,13 +228,11 @@ class Telemetry:
         for packet in packets:
             if len(packet) == byte_length:
                 d = unpack_data(packet)
-                frontend_data = d.copy()
                 try:
                     db.insert_data(d)
                 except Exception as e:
                     print(traceback.format_exc())
                     continue
-                #solar_car_connection['udp'] = True
 
 
 def start_comms():
