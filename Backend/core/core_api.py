@@ -7,6 +7,8 @@ async def single_values():
     if comms.solar_car_connection['udp'] or comms.solar_car_connection['lte']:
         latest_data = comms.frontend_data
         latest_data['solar_car_connection'] = True
+        latest_data['udp_status'] = comms.solar_car_connection['udp']
+        latest_data['lte_status'] = comms.solar_car_connection['lte']
         latest_data['timestamps'] = f'{latest_data["tstamp_hr"]:02d}:{latest_data["tstamp_mn"]:02d}:' \
                                     f'{latest_data["tstamp_sc"]:02d}.{latest_data["tstamp_ms"]}'
         format_data = {}
