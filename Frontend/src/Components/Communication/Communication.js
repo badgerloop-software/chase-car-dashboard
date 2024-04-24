@@ -47,6 +47,16 @@ export default function Communication(props) {
                     <Text fontSize='2vh' backgroundColor={bgColor}>{_getFormattedPacketDelay()}</Text>
                 </HStack>
                 <CommsLabel
+                        indent={true}
+                        boolean={props.data?.udp_status[0]}
+                        label='UDP'
+                />
+                <CommsLabel
+                        indent={true}
+                        boolean={props.data?.lte_status[0]}
+                        label='LTE'
+                />
+                <CommsLabel
                     boolean={props.data?.mainIO_heartbeat[0]}
                     label='Main IO Heartbeat'
                 />
