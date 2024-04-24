@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='chase-car-dashboard-backend',
-    version='5.1.0',
+    version='5.1.1',
     packages=['core', 'framework', 'components'],
     url='badgersolarracing.org',
     license='',

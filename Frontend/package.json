@@ -1,6 +1,6 @@
 {
   "name": "chase-car-dashboard-frontend",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "private": true,
   "proxy": "http://127.0.0.1:4001",
   "dependencies": {
