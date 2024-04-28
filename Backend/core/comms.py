@@ -5,6 +5,8 @@ import aiohttp
 import asyncio
 import config
 
+from multiprocessing import Process, Manager
+from multiprocessing.managers import BaseManager
 from . import db
 from file_sync.file_sync_down.main import *
 
@@ -236,13 +238,21 @@ class Telemetry:
 
 
 def start_comms():
-    set_format(config.DATAFORMAT_PATH)
-    telemetry = Telemetry()
-    # Start two live comm channels
-    vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
-    vps_thread.start()
-    socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
-    socket_thread.start()
+    # create shared telemetry object instance
+    BaseManager.register('Telemetry', Telemetry)
+    manager = BaseManager()
+    manager.start()
+    inst = manager.Telemetry()
 
     # start file sync
-    sync(telemetry.fs_down_callback)
+    p = Process(target=sync, args=[inst.fs_down_callback], daemon=True)
+    p.start()
+
+    set_format(config.DATAFORMAT_PATH)
+
+    # Start two live comm channels
+    vps_thread = threading.Thread(target=lambda : asyncio.run(inst.remote_db_fetch(config.VPS_URL)))
+    vps_thread.start()
+    socket_thread = threading.Thread(target=lambda: inst.listen_udp(config.UDP_PORT))
+    socket_thread.start()
+
