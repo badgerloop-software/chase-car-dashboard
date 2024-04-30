@@ -5,6 +5,9 @@ import aiohttp
 import asyncio
 import config
 
+import signal
+import sys
+
 from multiprocessing import Process, Manager
 from multiprocessing.managers import BaseManager
 from . import db
@@ -237,17 +240,21 @@ class Telemetry:
                     continue
 
 
+
+telemetry = Telemetry()
+p = Process(target=sync, args=[telemetry.fs_down_callback])
+
+# kill child process when parent received SIGINT
+def sigint_handler(signal, frame):
+    # must send SIGKILL because child process ignores SIGTERM for unknown reasons
+    # TODO fix this?????????
+    p.kill() 
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, sigint_handler)
+
 def start_comms():
-#    # create shared telemetry object instance
-#    BaseManager.register('Telemetry', Telemetry)
-#    manager = BaseManager()
-#    manager.start()
-#    inst = manager.Telemetry()
-
-    telemetry = Telemetry()
-
     # start file sync
-    p = Process(target=sync, args=[telemetry.fs_down_callback], daemon=True)
     p.start()
 
     set_format(config.DATAFORMAT_PATH)
