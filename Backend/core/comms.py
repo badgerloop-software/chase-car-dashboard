@@ -238,21 +238,23 @@ class Telemetry:
 
 
 def start_comms():
-    # create shared telemetry object instance
-    BaseManager.register('Telemetry', Telemetry)
-    manager = BaseManager()
-    manager.start()
-    inst = manager.Telemetry()
+#    # create shared telemetry object instance
+#    BaseManager.register('Telemetry', Telemetry)
+#    manager = BaseManager()
+#    manager.start()
+#    inst = manager.Telemetry()
+
+    telemetry = Telemetry()
 
     # start file sync
-    p = Process(target=sync, args=[inst.fs_down_callback], daemon=True)
+    p = Process(target=sync, args=[telemetry.fs_down_callback], daemon=True)
     p.start()
 
     set_format(config.DATAFORMAT_PATH)
 
     # Start two live comm channels
-    vps_thread = threading.Thread(target=lambda : asyncio.run(inst.remote_db_fetch(config.VPS_URL)))
+    vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
     vps_thread.start()
-    socket_thread = threading.Thread(target=lambda: inst.listen_udp(config.UDP_PORT))
+    socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
     socket_thread.start()
 
