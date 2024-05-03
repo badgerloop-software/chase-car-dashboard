@@ -242,6 +242,7 @@ class Telemetry:
 
 
 telemetry = Telemetry()
+set_format(config.DATAFORMAT_PATH)
 p = Process(target=sync, args=[telemetry.fs_down_callback])
 
 # kill child process when parent received SIGINT
@@ -257,7 +258,6 @@ def start_comms():
     # start file sync
     p.start()
 
-    set_format(config.DATAFORMAT_PATH)
 
     # Start two live comm channels
     vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
