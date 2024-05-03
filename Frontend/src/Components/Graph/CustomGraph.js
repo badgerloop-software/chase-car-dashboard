@@ -21,6 +21,7 @@ import {
   Text,
   useColorMode,
   useDisclosure,
+  useInterval,
 } from "@chakra-ui/react";
 import {
   Chart as ChartJS,
@@ -71,7 +72,7 @@ for (const category of GraphData.Output) {
 }
 
 // the options fed into the graph object, save regardless of datasets
-function getOptions(now, secondsRetained, colorMode, optionInfo, extremes) {
+function getOptions(now, secondsRetained, colorMode, optionInfo, extremes, xaxisbounds) {
   const gridColor = getColor("grid", colorMode);
   const gridBorderColor = getColor("gridBorder", colorMode);
   const ticksColor = getColor("ticks", colorMode);
@@ -125,12 +126,22 @@ function getOptions(now, secondsRetained, colorMode, optionInfo, extremes) {
           label: (item) => {
             // custom dataset label
             // name: value unit
+            if (item.dataset.key.indexOf("_forcast") !== -1) {
+              return `${item.dataset.label}: ${item.formattedValue}`;
+            }
             return `${item.dataset.label}: ${item.formattedValue} ${optionInfo[item.dataset.key].unit}`;
           },
           labelColor: (item) => {
-            return {
-              borderColor: optionInfo[item.dataset.key].borderColor,
-              backgroundColor: optionInfo[item.dataset.key].backgroundColor
+            if (item.dataset.key.indexOf("_forcast") !== -1) {
+              return {
+                borderColor: "red",
+                backgroundColor: "rgba(255, 0, 0, 0.5)"
+              }
+            } else {
+              return {
+                borderColor: optionInfo[item.dataset.key].borderColor,
+                backgroundColor: optionInfo[item.dataset.key].backgroundColor
+              }
             }
           },
         },
@@ -157,9 +168,9 @@ function getOptions(now, secondsRetained, colorMode, optionInfo, extremes) {
           borderWidth: 2,
         },
 
-        // show the last secondsRetained seconds
-        max: DateTime.fromMillis(Math.floor(now/1000) * 1000).toISO(),
-        min: DateTime.fromMillis((Math.floor(now/1000) - secondsRetained) * 1000).toISO(),
+        // round to the nearest second
+        max: Math.round(xaxisbounds.max/1000)*1000,
+        min: Math.round(xaxisbounds.min/1000)*1000,
       },
       y: {
         suggestedMin: extremes[0],
@@ -200,9 +211,10 @@ function getOptions(now, secondsRetained, colorMode, optionInfo, extremes) {
  * @constructor
  */
 function Graph(props) {
-  const { querylist, histLen, colorMode, optionInfo, extremes } = props;
+  const { querylist, histLen, colorMode, optionInfo, extremes, forcastKey } = props;
   // response from the server
   const [data, setData] = useState([]);
+  const [forcastData, setForcastData] = useState([]);
   const [fetchDep, setFetchDep] = useState(true);
 
   const fetchData = useCallback(async () => {
@@ -239,7 +251,19 @@ function Graph(props) {
     }
   }, [querylist, histLen]);
   useEffect(fetchData, [fetchDep]);
-
+  
+  // fetch forcast data every 10 seconds
+  useInterval(() => {
+    if (forcastKey) {
+      const now = Date.now();
+      fetch(ROUTES.GET_FORECAST_DATA + `?data=${forcastKey}&start_time=${now - (histLen + 1) * 1000}&end_time=${now}&forecast_step=0`)
+      .then((response) => response.json())
+      .then((data) => {
+        setForcastData(data.response);
+      });
+    }
+  }, 10000);
+  console.log(forcastData);
   // get the latest timestamp in the packet
   let tstamp = 0;
   if ("timestamps" in data) {
@@ -250,6 +274,8 @@ function Graph(props) {
 
   let formattedData = {};
   formattedData['datasets'] = [];
+  let maximum = 0;
+  let minimum = Infinity;
   for(const key in data) {
     if(key !== 'timestamps' && optionInfo[key])
       formattedData['datasets'].push({
@@ -259,8 +285,26 @@ function Graph(props) {
         borderColor: optionInfo[key].borderColor,
         backgroundColor: optionInfo[key].backgroundColor
       });
+      maximum = Math.max(maximum, ...data[key].map((x) => x.x));
+      minimum = Math.min(minimum, ...data[key].map((x) => x.x));
+  }
+  if ('timestamps' in data) {
+    maximum = Math.max(...data['timestamps']);
+    minimum = Math.min(...data['timestamps']);
   }
 
+  if(forcastKey && forcastKey in forcastData) {
+    formattedData['datasets'].push({
+      key: forcastKey + "_forcast",
+      label: optionInfo[forcastKey].label,
+      data: forcastData[forcastKey],
+      borderColor: "red",
+      backgroundColor: "rgba(255, 0, 0, 0.5)"
+    });
+    maximum = Math.max(maximum, ...forcastData[forcastKey].map((x) => x.x));
+    minimum = Math.min(minimum, ...forcastData[forcastKey].map((x) => x.x));
+  }
+  const xbound = {'min': minimum, 'max': maximum};
   return (
       <Line
         data={formattedData}
@@ -269,7 +313,8 @@ function Graph(props) {
           histLen,
           colorMode,
           optionInfo,
-          extremes
+          extremes,
+          xbound
         )}
         parsing="false"
       />
@@ -303,6 +348,7 @@ export default function CustomGraph(props) {
   const [noShowKeys, setNoShowKeys] = useState({});
   // Information about options for styling purposes,
   // reduced and combined so that minimal information is passed to other components
+  const [forcastKey, setForcastKey] = useState(null);
   const [optionInfo, yRange] = useMemo(() => {
     return datasetKeys
         .filter((key) => !noShowKeys[key])
@@ -423,17 +469,29 @@ export default function CustomGraph(props) {
                 return (
                     <Button
                       key={`${key}-show-btn`}
-                      borderWidth={2}
-                      borderColor={packedData[key].borderColor}
+                      borderWidth={3}
+                      borderColor={forcastKey == key ? "red" : packedData[key].borderColor}
                       backgroundColor={noShowKeys[key] ? "transparent" : packedData[key].backgroundColor}
                       textDecoration={noShowKeys[key] ? "line-through" : "none"}
                       flexShrink={0}
                       size="xs"
                       onClick={() => {
-                        setNoShowKeys((oldKeys) => ({
-                          ...oldKeys,
-                          [key]: !oldKeys[key]
-                        }))
+                        // one click forcast, two clicks hide, click again to show
+                        if (forcastKey === key) {
+                          setForcastKey(null);
+                          setNoShowKeys((oldKeys) => ({
+                            ...oldKeys,
+                            [key]: !oldKeys[key]
+                          }));
+                        } else if (noShowKeys[key]) {
+                          setNoShowKeys((oldKeys) => ({
+                            ...oldKeys,
+                            [key]: false
+                          }));
+                        }
+                        else {
+                          setForcastKey(key);
+                        }
                       }}
                     >
                       {key}
@@ -450,6 +508,7 @@ export default function CustomGraph(props) {
               colorMode={colorMode}
               optionInfo={optionInfo}
               extremes={yRange}
+              forcastKey={forcastKey}
             />
           </Center>
         </VStack>
