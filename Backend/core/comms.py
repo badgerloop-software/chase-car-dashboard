@@ -4,6 +4,7 @@ import traceback
 import aiohttp
 import asyncio
 import config
+import serial
 
 import signal
 import sys
@@ -17,10 +18,11 @@ format_string = '<' # little-endian
 byte_length = 0
 properties = []
 frontend_data = {}
-solar_car_connection = {'lte': False, 'udp': False}
+solar_car_connection = {'lte': False, 'udp': False, 'serial': False}
 # Convert dataformat to format string for struct conversion
 # Docs: https://docs.python.org/3/library/struct.html
 types = {'bool': '?', 'float': 'f', 'char': 'c', 'uint8': 'B', 'uint16': 'H', 'uint64': 'Q'}
+serial_port = {"device": "", 'baud': 115200}    # shared object with core_api for setting serial device from frontend
 
 def set_format(file_path: str):
     global format_string, byte_length, properties
@@ -45,7 +47,7 @@ def unpack_data(data):
 
 
 class Telemetry:
-    __tmp_data = {'tcp': b'', 'lte': b'', 'udp': b'', 'file_sync': b''}
+    __tmp_data = {'tcp': b'', 'lte': b'', 'udp': b'', 'file_sync': b'', 'serial': b''}
     latest_tstamp = 0
 
     def listen_udp(self, port: int):
@@ -139,6 +141,56 @@ class Telemetry:
                     client.close()
                     solar_car_connection['tcp'] = False
                     break
+
+    def serial_read(self):
+        global frontend_data, serial_port
+        latest_tstamp = 0
+        while True:
+            curr_device = serial_port['device']
+            curr_baud = serial_port['baud']
+            print('serial', curr_device)
+            if(curr_device):
+                # Establish a serial connection)
+                ser = serial.Serial(curr_device, curr_baud)
+                # if device has been updated then exit loop and connect to new device
+                while curr_device == serial_port['device']:
+                    print('read serial')
+                    # Read data from serial port
+                    try:
+                        data = b''
+                        if(ser.in_waiting > 0):
+                            data = ser.read(ser.in_waiting)
+                        else:
+                            time.sleep(0.1)
+                        if not data:
+                            # No data received, continue listening
+                            continue
+                        print('read data')
+                        print('data:', data)
+                        packets = self.parse_packets(data, 'serial')
+                        for packet in packets:
+                            if len(packet) == byte_length:
+                                d = unpack_data(packet)
+                                latest_tstamp = time.time()
+                                try:
+                                    frontend_data = d.copy()
+                                    db.insert_data(d)
+                                except Exception as e:
+                                    print(traceback.format_exc())
+                                    continue
+                                solar_car_connection['serial'] = True
+                        if time.time() - latest_tstamp / 1000 > 5:
+                            solar_car_connection['lte'] = False
+                            break
+                    except Exception:
+                        print(traceback.format_exc())
+                        solar_car_connection['serial'] = False
+                        serial_port['device'] = ""
+                        break
+            else:
+                solar_car_connection['serial'] = False
+                # wait before retry
+                time.sleep(1)
 
     async def fetch(self, session, url):
         try:
@@ -257,11 +309,12 @@ signal.signal(signal.SIGINT, sigint_handler)
 def start_comms():
     # start file sync
     p.start()
-
-
+    
     # Start two live comm channels
     vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
     vps_thread.start()
-    socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
+    #socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
+    #socket_thread.start()
+    socket_thread = threading.Thread(target=lambda: telemetry.serial_read())
     socket_thread.start()
 
