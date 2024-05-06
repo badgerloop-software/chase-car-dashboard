@@ -148,13 +148,13 @@ class Telemetry:
         while True:
             curr_device = serial_port['device']
             curr_baud = serial_port['baud']
-            print('serial', curr_device)
             if(curr_device):
                 # Establish a serial connection)
                 ser = serial.Serial(curr_device, curr_baud)
                 # if device has been updated then exit loop and connect to new device
-                while curr_device == serial_port['device']:
-                    print('read serial')
+                while curr_device == serial_port['device'] and curr_baud == serial_port['baud']:
+                    if time.time() - latest_tstamp > 5:
+                        solar_car_connection['serial'] = False
                     # Read data from serial port
                     try:
                         data = b''
@@ -165,8 +165,6 @@ class Telemetry:
                         if not data:
                             # No data received, continue listening
                             continue
-                        print('read data')
-                        print('data:', data)
                         packets = self.parse_packets(data, 'serial')
                         for packet in packets:
                             if len(packet) == byte_length:
@@ -179,9 +177,6 @@ class Telemetry:
                                     print(traceback.format_exc())
                                     continue
                                 solar_car_connection['serial'] = True
-                        if time.time() - latest_tstamp / 1000 > 5:
-                            solar_car_connection['lte'] = False
-                            break
                     except Exception:
                         print(traceback.format_exc())
                         solar_car_connection['serial'] = False
@@ -270,7 +265,7 @@ class Telemetry:
         # If the remaining data is longer than the expected packet length,
         # there might be an incomplete packet, so log a warning.
         if len(self.__tmp_data[tmp_source]) >= byte_length:
-            print("Warning: Incomplete or malformed packet ------------------------------------")
+            print(f"Source: {tmp_source}: Warning: Incomplete or malformed packet ------------------------------------")
             self.__tmp_data[tmp_source] = b''
 
         return packets
