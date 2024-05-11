@@ -1,67 +1,31 @@
 import { Map, Marker, Polyline, GoogleApiWrapper } from "google-maps-react";
 import { useCallback } from "react";
 import { useEffect, useMemo, useState } from "react";
-import {useInterval} from "@chakra-ui/react";
+import {useInterval, Box, Menu, MenuItem, Button, MenuButton, MenuList } from "@chakra-ui/react";
 import CONSTANTS from "../../data-constants.json";
-
-function componentToHex(c) {
-  var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
-}
-
-// https://stackoverflow.com/a/17243070
-const HSVtoRGB = (hsv) => {
-  const [h, s, v] = hsv;
-  let r, g, b, i, f, p, q, t;
-  i = Math.floor(h * 6);
-  f = h * 6 - i;
-  p = v * (1 - s);
-  q = v * (1 - f * s);
-  t = v * (1 - (1 - f) * s);
-  switch (i % 6) {
-    case 0: r = v; g = t; b = p; break;
-    case 1: r = q; g = v; b = p; break;
-    case 2: r = p; g = v; b = t; break;
-    case 3: r = p; g = q; b = v; break;
-    case 4: r = t; g = p; b = v; break;
-    case 5: r = v; g = p; b = q; break;
-  }
-  let decimal = [
-    Math.round(r * 255),
-    Math.round(g * 255),
-    Math.round(b * 255)
-  ];
-  return "#" + componentToHex(decimal[0]) + componentToHex(decimal[1]) + componentToHex(decimal[2]);
-};
-
-function calculateColor(dataName, value) {
-  // calculate the color value for each segment of the polyline using the value range from dataformat
-  let min = CONSTANTS[dataName].MIN;
-  let max = CONSTANTS[dataName].MAX;
-  
-  let color = [];
-  for(let i = 0 ; i < value.length - 1; i++) {
-    let mean = (value[i] + value[i + 1])/2;
-    // calculate percentage within the value range
-    let percentage = (mean - min) / (max - min);
-    percentage = Math.max(Math.min(1, percentage), Math.max(0, percentage));
-    // map to hsv from 0 to 120 for transition from green to red
-    console.log(percentage)
-    color.push(HSVtoRGB([percentage*0.375, 1, 1]))
-  }
-  return color;
-}
+import { BsChevronDown } from "react-icons/bs";
 
 function CarMap() {
   const [mapPath, setMapPath] = useState([]);
   const [pathColor, setPathColor] = useState([]);
   const [selectedData, setSelectedData] = useState("speed");
+  const [selectedDuration, setSelectedDuration] = useState("60");
+
   const mapStyles = {
   };
 
+  const allowedDuration = {
+    60: "1min",
+    180: "3min",
+    300: "5min",
+    600: "10min",
+    1200: "20min",
+    1800: "30min"
+  }
+
   const refreshMap = () => {
     console.log("refreshmap")
-    fetch(`/components/maps?data=${selectedData}&duration=60`)
+    fetch(`/components/maps?data=${selectedData}&duration=${selectedDuration}`)
     .then(response => {
       if (response.ok) {
           return response.json();
@@ -70,14 +34,15 @@ function CarMap() {
       }
     })
     .then((body) => {
+        setPathColor(body["color"])
         setMapPath(body["coords"])
-        setPathColor(calculateColor("speed", body["data"]))
     }).catch(error => console.error('Fetch error:', error));
   }
 
-
+  // fetch and update the map every second
   useInterval(refreshMap, 1000)
 
+  //generate the map polyline
   const getLines = () => {
     let lines = [];
     for(let i = 0 ; i < mapPath.length - 1; i++) {
@@ -91,9 +56,75 @@ function CarMap() {
     return lines
   }
 
+  // selector overlay on the map
+  const overlay = () => {
+    return (
+      <div>
+        <Box
+          zIndex='overlay'
+          position='absolute'
+          top='10px'
+          right='180px'
+          height='40px'
+          display="flex"
+          alignItems="center"
+        >
+          <Menu>
+            <MenuButton 
+              as={Button} 
+              rightIcon={<BsChevronDown/>}
+              defaultValue = {"select"}
+            >
+              {selectedData}
+            </MenuButton>
+            <MenuList maxHeight="15rem" overflowY="scroll">
+              {Object.keys(CONSTANTS).map((item, i) => {
+                return <MenuItem
+                  key={item}
+                  onClick={()=>setSelectedData(item)}
+                  >{item}
+                  </MenuItem>
+              })}
+            </MenuList>
+          </Menu>
+        </Box>
+        <Box
+          zIndex='overlay'
+          position='absolute'
+          top='10px'
+          right='70px'
+          height='40px'
+          display="flex"
+          alignItems="center" // Align vertically
+        >
+          <Menu>
+            <MenuButton 
+              as={Button} 
+              rightIcon={<BsChevronDown/>}
+              defaultValue = {"60"}
+            >
+              {allowedDuration[selectedDuration]}
+            </MenuButton>
+            <MenuList maxHeight="15rem" overflowY="scroll">
+              {Object.keys(allowedDuration).map((item, i) => {
+                return <MenuItem
+                  key={item}
+                  onClick={()=>setSelectedDuration(item)}
+                  >{allowedDuration[item]}
+                  </MenuItem>
+              })}
+            </MenuList>
+          </Menu>
+        </Box>
+      </div>
+    )
+  }
+  
+
   const getMap = (mapPath)=>{
     return (
       <div style={{position: "absolute", height: '31%', width: '66.6%'}}>
+        {overlay()}
         <Map
           google={window.google}
           zoom={13}
@@ -114,9 +145,3 @@ function CarMap() {
 export default GoogleApiWrapper({
   apiKey: "YOUR_API_KEY",
 })(CarMap);
-
-// figure out how to update polyline coordinates and color based on new data, i.e. how does it refresh new data?
-
-// poly line with different color gradient to represent another value along car's path
-// add function in here to get data from backend (make new api file similar to graph_api.py)
-// then call lat, lon, and some value from format.json
