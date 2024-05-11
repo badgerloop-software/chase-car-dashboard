@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import {useInterval, Box, Menu, MenuItem, Button, MenuButton, MenuList } from "@chakra-ui/react";
 import CONSTANTS from "../../data-constants.json";
 import { BsChevronDown } from "react-icons/bs";
-
+import hsvBar from "./RangeBar/hsv.png"
 function CarMap() {
   const [mapPath, setMapPath] = useState([]);
   const [pathColor, setPathColor] = useState([]);
@@ -77,7 +77,7 @@ function CarMap() {
             >
               {selectedData}
             </MenuButton>
-            <MenuList maxHeight="15rem" overflowY="scroll">
+            <MenuList maxHeight="15rem" overflowY="scroll" right={0}>
               {Object.keys(CONSTANTS).map((item, i) => {
                 return <MenuItem
                   key={item}
@@ -105,16 +105,34 @@ function CarMap() {
             >
               {allowedDuration[selectedDuration]}
             </MenuButton>
-            <MenuList maxHeight="15rem" overflowY="scroll">
+            <MenuList maxHeight="15rem" overflowY="scroll" right={0}>
               {Object.keys(allowedDuration).map((item, i) => {
                 return <MenuItem
-                  key={item}
+                  key={i}
                   onClick={()=>setSelectedDuration(item)}
                   >{allowedDuration[item]}
                   </MenuItem>
               })}
             </MenuList>
           </Menu>
+        </Box>
+        <Box
+          zIndex='overlay'
+          position='absolute'
+          bottom='10px'
+          right='70px'
+          height='80px'
+          width='30%'
+          display="flex"
+          alignItems="top" // Align items vertically centered
+          flex='1'
+          flexDirection='column'
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <b>{CONSTANTS[selectedData].MIN}</b>
+            <b style={{ marginRight: '0' }}>{CONSTANTS[selectedData].MAX}</b>
+          </div>
+          <img src={hsvBar} style={{ height: '40%', width: '100%' }} />
         </Box>
       </div>
     )
@@ -133,6 +151,16 @@ function CarMap() {
           streetViewControl={false}
           mapType='terrain'
         >
+          <Marker
+            icon={{
+              path: window.google.maps.SymbolPath.CIRCLE,
+              scale: 4.5,
+              fillColor: "#0000FF",
+              fillOpacity: 0.7,
+              strokeWeight: 0.4
+            }}
+            position={mapPath[mapPath.length-1]}
+          />
           {getLines()}
         </Map>
       </div>
