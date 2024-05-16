@@ -245,12 +245,12 @@ telemetry = Telemetry()
 set_format(config.DATAFORMAT_PATH)
 p = Process(target=sync, args=[telemetry.fs_down_callback])
 
-# kill child process when parent received SIGINT
+# handle SIGINT by exiting (will apply to main process and all subprocesses)
 def sigint_handler(signal, frame):
     sys.exit(0)
 
+# all processes will execute this handler upon receiving SIGINT
 signal.signal(signal.SIGINT, sigint_handler)
-# all process will execute this handler upon receiving sigint
 
 def start_comms():
     # start file sync
