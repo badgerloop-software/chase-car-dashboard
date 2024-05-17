@@ -38,12 +38,8 @@ export default function Communication(props) {
         <Flex flex='auto' direction='column'>
             <HeadingCell fontSize='2.2vh' label='Communication'/>
             <Flex flex='inherit' direction='column' pl='2' pt='2' >
-                <CommsLabel
-                    boolean={props.data?.solar_car_connection[0]}
-                    label='Solar Car Connection'
-                />
                 <HStack>
-                    <Text fontSize='2vh' style={{ textIndent: 30 }}>&#160;Packet Delay: </Text>
+                    <Text fontSize='2vh'>&#160;Packet Delay: </Text>
                     <Text fontSize='2vh' backgroundColor={bgColor}>{_getFormattedPacketDelay()}</Text>
                 </HStack>
                 <CommsLabel
@@ -55,6 +51,11 @@ export default function Communication(props) {
                         indent={true}
                         boolean={props.data?.lte_status[0]}
                         label='LTE'
+                />
+                <CommsLabel
+                        indent={true}
+                        boolean={props.data?.serial_status[0]}
+                        label='Serial'
                 />
                 <CommsLabel
                     boolean={props.data?.mainIO_heartbeat[0]}
