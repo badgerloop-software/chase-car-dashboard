@@ -251,8 +251,6 @@ export default function Faults(props) {
       props.data?.motor_controller_temp[0] < CONSTANTS.motor_controller_temp.MIN ||
       props.data?.dcdc_temp[0] > CONSTANTS.dcdc_temp.MAX ||
       props.data?.dcdc_temp[0] < CONSTANTS.dcdc_temp.MIN ||
-      props.data?.mainIO_temp[0] > CONSTANTS.mainIO_temp.MAX ||
-      props.data?.mainIO_temp[0] < CONSTANTS.mainIO_temp.MIN ||
       props.data?.road_temp[0] > CONSTANTS.road_temp.MAX ||
       props.data?.road_temp[0] < CONSTANTS.road_temp.MIN ||
       props.data?.brake_temp[0] > CONSTANTS.brake_temp.MAX ||
@@ -345,13 +343,6 @@ export default function Faults(props) {
         "dcdc_temp",
         "DCDC",
         "DCDC"
-    );
-    _updateTempArrays(
-      lowTempStrings,
-      highTempStrings,
-      "mainIO_temp",
-      "Main IO",
-      "main IO"
     );
     _updateTempArrays(
         lowTempStrings,

@@ -109,13 +109,6 @@
               "max": 7
             },
             {
-              "key": "crz_pwr_setpt",
-              "name": "crz_pwr_setpt",
-              "unit": "W",
-              "min": 0,
-              "max": 100
-            },
-            {
               "key": "crz_spd_setpt",
               "name": "crz_spd_setpt",
               "unit": "mph",
@@ -137,13 +130,6 @@
             {
               "key": "fr_telem",
               "name": "fr_telem",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "crz_pwr_mode",
-              "name": "crz_pwr_mode",
               "unit": "",
               "min": 0,
               "max": 1
@@ -960,13 +946,6 @@
               "max": 100
             },
             {
-              "key": "mainIO_temp",
-              "name": "Main IO Temperature",
-              "unit": "°C",
-              "min": 0,
-              "max": 100
-            },
-            {
               "key": "motor_controller_temp",
               "name": "motor_controller_temp",
               "unit": "°C",
@@ -1044,20 +1023,6 @@
             {
               "key": "r_turn_led_en",
               "name": "r_turn_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "brake_led_en",
-              "name": "brake_led_en",
-              "unit": "",
-              "min": 0,
-              "max": 1
-            },
-            {
-              "key": "headlights_led_en",
-              "name": "headlights_led_en",
               "unit": "",
               "min": 0,
               "max": 1

@@ -19,20 +19,10 @@
         "MIN": 0,
         "MAX": 1
     },
-    "crz_pwr_mode": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
     "crz_spd_mode": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 1
-    },
-    "crz_pwr_setpt": {
-        "UNIT": "W",
-        "MIN": 0,
-        "MAX": 100
     },
     "crz_spd_setpt": {
         "UNIT": "mph",
@@ -204,11 +194,6 @@
         "MIN": 0,
         "MAX": 100
     },
-    "mainIO_temp": {
-        "UNIT": "°C",
-        "MIN": 0,
-        "MAX": 100
-    },
     "motor_controller_temp": {
         "UNIT": "°C",
         "MIN": 0,
@@ -230,16 +215,6 @@
         "MAX": 1
     },
     "r_turn_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "brake_led_en": {
-        "UNIT": "",
-        "MIN": 0,
-        "MAX": 1
-    },
-    "headlights_led_en": {
         "UNIT": "",
         "MIN": 0,
         "MAX": 1

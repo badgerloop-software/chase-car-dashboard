@@ -14,13 +14,7 @@
   "fr_telem": [
     null
   ],
-  "crz_pwr_mode": [
-    null
-  ],
   "crz_spd_mode": [
-    null
-  ],
-  "crz_pwr_setpt": [
     null
   ],
   "crz_spd_setpt": [
@@ -125,9 +119,6 @@
   "dcdc_temp": [
     null
   ],
-  "mainIO_temp": [
-    null
-  ],
   "motor_controller_temp": [
     null
   ],
@@ -141,12 +132,6 @@
     null
   ],
   "r_turn_led_en": [
-    null
-  ],
-  "brake_led_en": [
-    null
-  ],
-  "headlights_led_en": [
     null
   ],
   "hazards": [

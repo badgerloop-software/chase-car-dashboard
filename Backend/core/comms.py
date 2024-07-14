@@ -148,7 +148,9 @@ class Telemetry:
         while True:
             curr_device = serial_port['device']
             curr_baud = serial_port['baud']
+            print(f"serial, {curr_device}")
             if(curr_device):
+                print("connected")
                 # Establish a serial connection)
                 ser = serial.Serial(curr_device, curr_baud)
                 # if device has been updated then exit loop and connect to new device
@@ -160,8 +162,6 @@ class Telemetry:
                         data = b''
                         if(ser.in_waiting > 0):
                             data = ser.read(ser.in_waiting)
-                        else:
-                            time.sleep(0.1)
                         if not data:
                             # No data received, continue listening
                             continue
@@ -178,7 +178,7 @@ class Telemetry:
                                     continue
                                 solar_car_connection['serial'] = True
                     except Exception:
-                        print(traceback.format_exc())
+                        print("Exception in serial", traceback.format_exc())
                         solar_car_connection['serial'] = False
                         serial_port['device'] = ""
                         break
@@ -204,13 +204,13 @@ class Telemetry:
 
         async with aiohttp.ClientSession() as session:
             while True:
+                print("db")
                 try:
                     table_name = await self.fetch(session, f'{server_url}/newest-timestamp-table')
                     latest_tstamp = int(time.time() * 1000)
 
                     while True:
                         data = await self.fetch(session, f'{server_url}/get-new-rows/{table_name}/{latest_tstamp}')
-
                         for d in data:
                             # update the timestamp for next query
                             if d['timestamp'] > latest_tstamp:
@@ -264,8 +264,9 @@ class Telemetry:
 
         # If the remaining data is longer than the expected packet length,
         # there might be an incomplete packet, so log a warning.
-        if len(self.__tmp_data[tmp_source]) >= byte_length:
+        if len(self.__tmp_data[tmp_source]) >= byte_length+len(header)+len(footer):
             print(f"Source: {tmp_source}: Warning: Incomplete or malformed packet ------------------------------------")
+            print(f"Data: {self.__tmp_data[tmp_source]}")
             self.__tmp_data[tmp_source] = b''
 
         return packets

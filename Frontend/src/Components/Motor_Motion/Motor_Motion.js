@@ -207,27 +207,6 @@ export default function Motor_Motion(props) {
                         </Text>
                     </Center>
                 </GridItem>
-                <GridItem
-                    rowStart={4}
-                    colStart={4}
-                    pl='1'
-                    pr='1'
-                >
-                    <Center
-                        bg={props.data?.crz_pwr_mode[0] ? greenBgCol : redBgCol}
-                        borderWidth='1px'
-                        borderColor={borderCol}
-                        h='71.4%'
-                    >
-                        <Text 
-                            as='b' 
-                            fontSize='xs'
-                            color={props.data?.crz_pwr_mode[0] ? greenTxtCol : redTxtCol}
-                        >
-                            {props.data?.crz_pwr_setpt[0].toFixed(1) ?? -1.0} {CONSTANTS.crz_pwr_setpt.UNIT}
-                        </Text>
-                    </Center>
-                </GridItem>
 
                 <GridItem
                     rowStart={5}
@@ -293,14 +272,6 @@ export default function Motor_Motion(props) {
                 >
                     <Center h='100%' w='100%'>
                         {props.data?.r_turn_led_en[0] ? <Image fit={fitType} boxSize='35px' src={Images.Right}/> : <Box h='35px'/>}
-                    </Center>
-                </GridItem>
-                <GridItem 
-                    rowStart={2}
-                    colStart={3}
-                >
-                    <Center h='100%' w='100%'>
-                        {props.data?.headlights_led_en[0] ? <Image fit={fitType} boxSize='35px' src={Images.Headlights}/> : <Box h='35px'/>}
                     </Center>
                 </GridItem>
                 <GridItem 

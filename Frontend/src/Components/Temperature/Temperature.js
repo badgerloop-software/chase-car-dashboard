@@ -42,12 +42,6 @@ export default function Temperature(props) {
                 dataValue={props.data?.dcdc_temp[0] ?? -1.0}
                 dataConstant={CONSTANTS.dcdc_temp}
             />
-            <RangeRow
-                dataTitle="Main IO"
-                dataValue={props.data?.mainIO_temp[0] ?? -1.0}
-                dataConstant={CONSTANTS.mainIO_temp}
-                bg={headerBg}
-            />
         </Flex>
     );
 }
