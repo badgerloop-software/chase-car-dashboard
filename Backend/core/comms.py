@@ -298,7 +298,7 @@ p = Process(target=sync, args=[telemetry.fs_down_callback])
 def sigint_handler(signal, frame):
     # must send SIGKILL because child process ignores SIGTERM for unknown reasons
     # TODO fix this?????????
-    p.kill() 
+    # p.kill() 
     sys.exit(0)
 
 signal.signal(signal.SIGINT, sigint_handler)
