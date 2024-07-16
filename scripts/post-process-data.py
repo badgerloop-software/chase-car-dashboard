@@ -37,6 +37,32 @@ if __name__ == '__main__':
 
     # Get all timestamps where specified signals transition values
     data = data[signals]
-    timestamps = set()
+    signals_by_timestamp = {}
     for sig in signals:
-        timestamps |= set(data[sig][1:][data[sig].diff()[1:].astype(int) != 0].dropna().index.values)
+        _timestamps = set(data[sig][1:][data[sig].diff()[1:].astype(int) != 0].dropna().index.values)
+
+        # Timestamps will be unique for the current signal
+        init_timestamps = signals_by_timestamp.keys()
+        for t in _timestamps:
+            if t in init_timestamps:
+                signals_by_timestamp[t].append(sig)
+            else:
+                signals_by_timestamp[t] = [sig]
+
+    max_sig_name_len = max([len(sig) for sig in signals])
+    print(max_sig_name_len)
+
+    # Format lines for file
+    lines = [
+        f"{t} -"
+        + ' |'.join([
+            f' {s:^{max_sig_name_len}}' for s in sigs 
+        ])
+        + '\n'
+        for t, sigs in signals_by_timestamp.items()
+    ]
+
+    print(''.join(lines))
+    with open('timestamps.txt', 'w+') as tf:
+        tf.writelines(lines)
+    print("Timestamps and corresponding signals transitioning written to timestamps.txt")
