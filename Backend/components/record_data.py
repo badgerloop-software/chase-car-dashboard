@@ -1,6 +1,5 @@
-from core import db, comms
+from core import db
 from fastapi import APIRouter, Response
-import pandas as pd
 import io
 import config
 router = APIRouter()
@@ -16,17 +15,14 @@ async def get_processed_data(start_time, end_time):
 
     result = await db.query_without_aggregation(all_keys, start_time, end_time)
 
-
     # see https://stackoverflow.com/a/63989481
     output = io.BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter', datetime_format='MM-DD HH:MM:SS')
-    result.to_excel(writer, sheet_name='Sheet1')
+    result.to_csv(output)
 
-    writer.close()
-    xlsx_data = output.getvalue()
-
+    csv_data = output.getvalue()
 
     return Response(
-        content=xlsx_data,
-        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        headers={"Content-Disposition": "attachment; filename=\"download.xlsx\""})
+        content=csv_data,
+        media_type="application/csv",
+        headers={"Content-Disposition": f"attachment; filename=\"dashboard-data-{start_time}-{end_time}.csv\""}
+    )
