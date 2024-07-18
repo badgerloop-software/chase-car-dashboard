@@ -1,7 +1,9 @@
 import pandas as pd
 from argparse import ArgumentParser
 from pathlib import Path
+from datetime import datetime
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import json
 import re
 
@@ -27,6 +29,7 @@ if __name__ == '__main__':
     argparser.add_argument('-d', '--data-path', type=Path, required=True, help='Path to data download csv')
     argparser.add_argument('-s', '--signals', nargs='*', choices=flag_sigs, default=[], help='Signals whose transitions should be tracked')
     argparser.add_argument('-p', '--plot', action='store_true', help='Signals whose transitions should be tracked')
+    argparser.add_argument('-r', '--rolling-average', type=int, default=1, help='If specified, compute a rolling average for non-boolean data using strides of the specified number of timestamps')
     args = argparser.parse_args()
 
     # The file needs to exist to be parsed
@@ -45,14 +48,38 @@ if __name__ == '__main__':
             for sig in data_format_json.keys()
             if re.match(r'tstamp_*', sig) is None
         ])
-        hidden_signals = set(relevant_signals) - signals
+        non_flag_signals = relevant_signals - set(flag_sigs)
+        for sig in non_flag_signals:
+            data[sig] = data[sig].rolling(args.rolling_average).mean()
 
-        fig = go.Figure()
+        # Convert Unix timestamps to datetime
+        data.index = data.index.to_series().apply(lambda x: datetime.fromtimestamp(x / 1000.0))
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-        for sig in signals:
-            fig.add_trace(go.Scatter(x=data.index.values, y=data[sig].values, visible=True, name=sig))
-        for sig in hidden_signals:
-            fig.add_trace(go.Scatter(x=data.index.values, y=data[sig].values, visible='legendonly', name=sig))
+        # Add flags and other data with separate y axes for scaling
+        for sig in sorted(relevant_signals):
+            if sig in flag_sigs:
+                yaxis = "y"
+                secondary_y = False
+            else:
+                yaxis = "y1"
+                secondary_y = True
+            fig.add_trace(
+                go.Scatter(
+                    x=data.index.values,
+                    y=data[sig].values,
+                    visible=(True if sig in signals else 'legendonly'),
+                    name=sig,
+                    yaxis=yaxis
+                ),
+                secondary_y=secondary_y
+            )
+        fig.update_xaxes(title_text="Timestamp")
+        fig.update_yaxes(title_text="Flags", secondary_y=False)
+        fig.update_yaxes(title_text="Other", secondary_y=True)
+
+        # Show data for all values at a given timestamp
+        fig.update_layout(hovermode='x unified', legend_traceorder='normal')
 
         fig.show()
     else:
