@@ -2,7 +2,7 @@ import {Grid, GridItem, Box, Flex, Spacer, Text, Center, useColorMode, VStack, I
 import HeadingCell from "../Shared/HeadingCell";
 import CONSTANTS from "../../data-constants.json"
 import getColor from "../Shared/colors";
-import images from "../Motor_Motion/Icons/Images"
+import images from "./Icons/Images"
 import RangeCell from "../Shared/RangeCell";
 
 export default function Motor_Motion(props) {
