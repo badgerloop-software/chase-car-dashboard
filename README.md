@@ -2,7 +2,7 @@
 
 ## Libraries
 
-- [node.js and npm](https://nodejs.org/en/) - Package manager and server workhorse (node version **16**)
+- [node.js and npm](https://nodejs.org/en/) - Package manager and server workhorse (node version **20** -- use `nvm` to manage Node versions)
 - [React](https://reactjs.org/) - Front-end library
 - [Chakra UI](https://chakra-ui.com/) - Component library
 - [Chart.js](https://www.chartjs.org/) & [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2) - Graph library & React wrapper
