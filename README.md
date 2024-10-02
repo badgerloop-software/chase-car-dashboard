@@ -58,12 +58,12 @@
 5. Run `npm i` to install the latest dependencies to your computer. You will also need to do this when you `git pull` to get the most recent changes of the code on your branch.
 6. If you want to test the engineering dashboard with the solar car dashboard, do the following:
    1. Open up two separate terminals.
-   2. In the first, `cd` into `Backend` and run the command `npm start dev`.
+   2. In the first, `cd` into `Backend` and run the command `python3 main.py`.
    3. With the other terminal, cd into `Frontend` and run the command `npm start`.
 7. If you want to test the engineering dashboard without the solar car dashboard, do the following:
-   1. Open up terminal.
-   2. In the first, `cd` into `DataGenerator` and run the command `npm run start-dev`.
-8. Once you have finished making your necessary changes to your code, switch to a new branch that has a good name for the feature or names the Jira issue (e.g. `SW-23/skeleton`).
+   1. Open up a third terminal.
+   2. `cd` into `DataGenerator` and run the command `npm start`.
+8. Once you have finished making your necessary changes to your code, switch to a new branch that has a good name for the feature or names the Jira issue (e.g. `SC2-123/skeleton`).
 9. Commit related changes to that branch and push to this repository. (Do this often so that it is easy to finely revert to a previous state!)
 10. Once you are happy with the state of your code, open a pull request and request someone to conduct a code review. It may be kicked back with some suggestions or edits, but when it is accepted, it will be merged with `main`. Congrats! Now it's just time to rinse and repeat.
 
