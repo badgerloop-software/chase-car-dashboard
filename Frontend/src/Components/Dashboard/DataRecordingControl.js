@@ -11,7 +11,7 @@ import {
     VStack
 } from "@chakra-ui/react";
 import Draggable from 'react-draggable';
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState, useLayoutEffect, useRef, useMemo, memo } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BsFillRecordCircleFill } from "react-icons/bs";
@@ -23,14 +23,14 @@ import { ROUTES } from "../Shared/misc-constants";
 toast.configure();
 
 
-export default function DataRecordingControl(props) {
+function DataRecordingControl(props) {
     // ------------------------------------------ Color mode --------------------------------------------
     // Get system color mode
     const {colorMode} = useColorMode();
     // Get colors depending on color mode
-    const selectTxtCol = getColor("selectTxt", colorMode);
-    const selectTxtFocusCol = getColor("selectTxtFocus", colorMode);
-    const selectBgCol = getColor("selectBg", colorMode);
+    const selectTxtCol = useMemo(()=> getColor("selectTxt", colorMode),[colorMode]);
+    const selectTxtFocusCol = useMemo(() => getColor("selectTxtFocus", colorMode), [colorMode]);
+    const selectBgCol = useMemo(() => getColor("selectBg", colorMode), [colorMode]);
 
     const [createButtonColor, setCreateButtonColor] = useState(selectTxtCol);
     const [processButtonColor, setProcessButtonColor] = useState(selectTxtCol);
@@ -158,3 +158,5 @@ export default function DataRecordingControl(props) {
         </>
     );
 }
+
+export default memo(DataRecordingControl);
