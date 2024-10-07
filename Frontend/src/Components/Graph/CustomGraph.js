@@ -269,8 +269,6 @@ function Graph(props) {
       });
   }
 
-  console.log(formattedData, "formatted");
-
   return (
       <Line
         data={formattedData}
