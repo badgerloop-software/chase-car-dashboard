@@ -40,10 +40,6 @@ export default function Dashboard(props) {
   useEffect(() => {
     ws.current = new WebSocket(`ws://localhost:4001/single-values`);
 
-    ws.current.onopen = () => {
-      console.log('Successfully opened WebSocket connection!');
-    };
-
     ws.current.onmessage = (event) => {
       try {
         const carData = JSON.parse(event.data);
