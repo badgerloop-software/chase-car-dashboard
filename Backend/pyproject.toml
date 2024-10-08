@@ -1,9 +1,7 @@
 [tool.poetry]
 name = "chase-car-dashboard-backend"
 version = "5.2.0"
-description = ""
-authors = ["Badger Solar Racing Software Team"]
-readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
