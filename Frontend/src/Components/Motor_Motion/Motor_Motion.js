@@ -24,9 +24,9 @@ export default function Motor_Motion(props) {
             <HeadingCell fontSize='2.2vh' label='Motor / Motion'/>
             <Grid 
                 flex='2'
-                templateRows="1fr 1fr 1fr 1.4fr 1.4fr" 
+                templateRows="repeat(5, 0.4fr)"  /*Used to be 5 1fr */
                 templateColumns="1fr 1fr 4fr 2fr"
-                pt='1'
+                pt='4'  /* Used to be 1 */
                 pb='1'
             >
 
