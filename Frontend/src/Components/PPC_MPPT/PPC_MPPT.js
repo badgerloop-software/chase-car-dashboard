@@ -15,7 +15,7 @@ export default function PPC_MPPT(props) {
     const borderCol = getColor("border", colorMode);
 
     return (
-        <Flex flex='auto' direction='column' overflowY='scroll'>
+        <Flex flex='auto' direction='column' overflowY='auto' height='90%'>
             <Box borderRight='1px' h="100%">
                 <HeadingCell fontSize='2vh' label='Power Path Controller'/>
                 <Flex flex='2' p='1'>
