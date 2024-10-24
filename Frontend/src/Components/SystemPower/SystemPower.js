@@ -8,7 +8,7 @@ export default function SystemPower(props) {
     const headerBg = getColor("header", colorMode);
 
     return (
-        <Flex flex="auto" direction="column" overflowY="scroll">
+        <Flex flex='auto' direction='column' overflowY='auto' height='90%'>
             <RangeRow
                 dataTitle="BMS Input Voltage"
                 dataValue={props.data?.bms_input_voltage[0] ?? -1.0}

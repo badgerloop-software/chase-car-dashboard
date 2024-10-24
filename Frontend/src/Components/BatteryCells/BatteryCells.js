@@ -13,9 +13,10 @@ export default function BatteryCells(props) {
             rows={cellGroupsPerCol}
             spacingX={'0.25vw'}
             spacingY={'0.25vh'}
-            overflowY='scroll'
             borderTopColor='black'
             borderTopWidth={1}
+            height='90%'
+            overflowY='auto'
         >
             { /* Map the CellGroups using gridSizedArray */
                 gridSizedArray.map((val, idx) => {

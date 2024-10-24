@@ -17,7 +17,7 @@ export default function MPPT_CELL(props){
             borderColor={borderCol}
             borderWidth='2px'
             textAlign='center'
-            lineHeight='1vh'
+            lineHeight='1.25vh'
         >
             <Text as='b' fontSize='1.7vh' color={props.isCurrMode ? greenTxtCol : redTxtCol}>{props.label}</Text>
         </Center>

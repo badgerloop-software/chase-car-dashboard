@@ -20,7 +20,7 @@ export default function Motor_Motion(props) {
     const Images = images[`${colorMode}`];
     
     return (
-        <Flex flex='auto' direction='column'>
+        <Flex overflowY='auto' height='90%' flex='auto' direction='column'>
             <HeadingCell fontSize='2.2vh' label='Motor / Motion'/>
             <Grid 
                 flex='2'

@@ -24,7 +24,7 @@ export default function BatteryPack(props) {
                          CONSTANTS.fan_speed.MAX;
 
     return (
-        <Flex flex="auto" direction="column" overflowY="scroll">
+        <Flex flex='auto' direction='column' overflowY='auto' height='90%'>
             <RangeRow
                 dataTitle="Pack Temp"
                 dataValue={props.data?.pack_temp[0] ?? -1.0}
