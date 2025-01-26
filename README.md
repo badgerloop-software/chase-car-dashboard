@@ -25,7 +25,7 @@
 
 ## Running the Dashboard
 
-0. Install `redis-stack-server`, this is the database that we use to store telemetry data and it's essential for runninng the dashboard, run the docker version with `docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest`or follow [this guide](https://redis.io/docs/install/install-stack/) to install redis as a system service
+0. Install `redis-stack-server`. This is the database that we use to store telemetry data, and it's essential for runninng the dashboard. Run the docker version with `docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest` (see [here](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/) for more info) or follow [this guide](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/) to install redis stack as a system service
 1. Ensure that you have all the required package installed on your system. and check your python version by running `python3 --version` on the terminal, for this build Python 3.9 or higher is required
 2. Clone the repository to your computer (see steps 0-1 of "Cloning the Data Format Repository and Initializing the Submodule" for instructions on cloning a repo using SSH).
 3. If you have not already, clone the `sc1-data-format` repository and initialize the submodule (see instructions above).
