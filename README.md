@@ -96,3 +96,10 @@ We use Poetry for managing our backend Python environment. To setup a Poetry env
 ## Data Recording
 
 Raw recorded data is saved in redis database, you can access the data manually with `redis-cli` or using [redis-insight](https://redis.com/redis-enterprise/redis-insight/). However, the dashboard can be used to convert this raw database data to Excel format. You can do this by simply go press on the red record button on the dashboard and select the desired start and end time for your data, and click save, the dashboard should automatically save the data to your broswer download.
+
+
+## Troubleshooting
+
+### Killing the Backend After Errors
+
+If you run the backend and encounter errors, even after killing the command, the process may still be running on your computer (seen on Linux), as the file sync feature spawns an independent Python process. To check if the process is still running, run `ps -ef | grep main.py` and look for matches before the last line (i.e. not `... --color=auto main.py`). If there aren't any matches, you're peachy. Otherwise, to kill the process, run `kill -9 python` (unfortunately, `kill -9 <PID>` isn't enough).
