@@ -34,31 +34,13 @@ export default function Motor_Motion(props) {
                     rowStart={1}
                     rowSpan={2}
                     colStart={1}
+	   	    colSpan={2}
                 >
                     <VStack spacing='0px'>
-                        <Text fontSize='1.5vh'>F/R</Text>
-                        <Center 
-                            h='3vh'
-                            w='3vh'
-                            textAlign='center'
-                            borderWidth='2px'
-                            borderRadius='md'
-                            borderColor={borderCol}
-                        >
-                            <Text as='b' fontSize='2vh'>{}</Text>
-                        </Center>
-                    </VStack>
-                </GridItem>
-                <GridItem
-                    rowStart={1}
-                    rowSpan={2}
-                    colStart={2}
-                >
-                    <VStack spacing='0px'>
-                        <Text fontSize='1.5vh'>State</Text>
+                        <Text fontSize='2vh'>State</Text>
                         <Center
-                            h='3vh'
-                            w='3vh'
+                            h='4vh'
+                            w='4vh'
                             textAlign='center'
                             borderWidth='2px'
                             borderRadius='md'
@@ -102,20 +84,7 @@ export default function Motor_Motion(props) {
                     </Center>
                 </GridItem>
                 <GridItem
-                    rowStart={2}
-                    colStart={3}
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderRightWidth='1px'
-                    borderColor={borderCol}
-                >
-                    <Center direction='row' pl='1' pr='1' h='100%'>
-                        <Text fontSize='sm'>Accelerator Out</Text>
-                        <Spacer/>
-                    </Center>
-                </GridItem>
-                <GridItem
-                    rowStart={3}
+                    rowStar={2}
                     colStart={3}
                     borderTopWidth='1px'
                     borderLeftWidth='1px'
@@ -129,7 +98,7 @@ export default function Motor_Motion(props) {
                     </Center>
                 </GridItem>
                 <GridItem
-                    rowStart={4}
+                    rowStart={3}
                     colStart={3}
                     borderTopWidth='1px'
                     borderLeftWidth='1px'
@@ -150,7 +119,7 @@ export default function Motor_Motion(props) {
                     />
                 </GridItem>
                 <GridItem
-                    rowStart={5}
+                    rowStart={4}
                     colStart={3}
                     borderWidth='1px'
                     borderColor={borderCol}
