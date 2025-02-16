@@ -768,5 +768,20 @@
         "UNIT": "meter",
         "MIN": 0,
         "MAX": 0
+    },
+    "lat": {
+        "UNIT": "Degree",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "lon": {
+        "UNIT": "Degree",
+        "MIN": 0,
+        "MAX": 0
+    },
+    "elev": {
+        "UNIT": "meter",
+        "MIN": 0,
+        "MAX": 0
     }
 }
