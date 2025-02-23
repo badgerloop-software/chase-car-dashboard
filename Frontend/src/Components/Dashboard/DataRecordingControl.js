@@ -7,17 +7,18 @@ import {
     PopoverBody,
     PopoverCloseButton,
     PopoverContent,
-    PopoverTrigger, Select, useColorMode, useDisclosure,
-    VStack
+    PopoverTrigger, Select, useColorMode, useDisclosure, 
+    VStack, Checkbox, CheckboxGroup, Text,
 } from "@chakra-ui/react";
 import Draggable from 'react-draggable';
-import { useState, useLayoutEffect, useRef, useMemo, memo } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, useMemo, memo } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BsFillRecordCircleFill } from "react-icons/bs";
 import ConvertIcon from "./Convert Icon.png";
 import getColor from "../Shared/colors";
 import { ROUTES } from "../Shared/misc-constants";
+import { Slider, SliderTrack, SliderFilledTrack, SliderThumb } from "@chakra-ui/react";
 
 // Compulsory toast-configuration method
 toast.configure();
@@ -66,6 +67,123 @@ function DataRecordingControl(props) {
 
     // ------------------------------------------ Data recording controls --------------------------------------------
 
+    const MIN_REFRESH_RATE = 100;
+    const MAX_REFRESH_RATE = 3000;
+
+    const [selectedElements, setSelectedElements] = useState({
+        Errors: false,
+        GraphData1: false,
+        GraphData2: false,
+        GraphData3: false,
+        DataClusters: false
+    });
+
+    // State for refresh rate (default: 300ms)
+    const [refreshRates, setRefreshRates] = useState({});
+    const [refreshRate, setRefreshRate] = useState(300);
+
+    useEffect(() => {
+        // Initialize refresh rates to 300ms for each element
+        setRefreshRates((prev) => {
+            const newRates = { ...prev };
+            Object.keys(selectedElements).forEach((key) => {
+                if (!(key in newRates)) {
+                    newRates[key] = 300;
+                }
+            });
+            return newRates;
+        });
+    }, [selectedElements]);
+
+    const [savedSettings, setSavedSettings] = useState({
+        refreshRate: 300,
+        selectedElements: { ...selectedElements }
+    });
+
+    const handleCheckboxChange = (event) => {
+        const { name, checked } = event.target;
+        setSelectedElements((prev) => ({
+            ...prev,
+            [name]: checked,
+        }));
+    };
+
+    const handleRefreshRateChange = (key, value) => {
+        const numericValue = Number(value);
+        if (value === "" || (numericValue >= MIN_REFRESH_RATE && numericValue <= MAX_REFRESH_RATE)) {
+            setRefreshRates((prev) => ({
+                ...prev,
+                [key]: value === "" ? "" : numericValue,
+            }));
+        } else {
+            toast.error(`Refresh rate must be between ${MIN_REFRESH_RATE} and ${MAX_REFRESH_RATE} ms.`);
+        }
+    };
+
+    const handleSaveSettings = () => {
+        let hasError = false;
+    
+        if (refreshRate < MIN_REFRESH_RATE || refreshRate > MAX_REFRESH_RATE) {
+            toast.error(`Setting saving failed: Refresh rate must be between ${MIN_REFRESH_RATE} and ${MAX_REFRESH_RATE} ms.`);
+            hasError = true;
+        }
+    
+        // Validate individual refresh rates
+        Object.entries(refreshRates).forEach(([key, rate]) => {
+            if (rate < MIN_REFRESH_RATE || rate > MAX_REFRESH_RATE) {
+                setRefreshRate("");
+                toast.error(`Setting saving failed: ${key} refresh rate must be between ${MIN_REFRESH_RATE} and ${MAX_REFRESH_RATE} ms.`);
+                hasError = true;
+            }
+        });
+    
+        if (hasError) return;
+    
+        if (!hasError) {
+            const payload = { refreshRates };
+            console.log('Request payload:', payload);
+    
+            // Send the refresh rates to the backend
+            fetch('http://localhost:3000/settings/update-refresh-rates', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json().then(data => ({ status: response.status, body: data }));
+            })
+            .then(({ status, body }) => {
+                console.log('Response data:', body);
+                if (status !== 200) {
+                    toast.error(body.detail || 'Failed to save settings.');
+                } else {
+                    toast.success("Settings saved successfully!");
+                    setSavedSettings({
+                        refreshRate: refreshRate,
+                        selectedElements: { ...selectedElements }
+                    });
+    
+                    setSelectedElements((prevElements) => {
+                        const updatedElements = {};
+                        Object.keys(prevElements).forEach((key) => {
+                            updatedElements[key] = false; 
+                        });
+                        return updatedElements;
+                    });
+    
+                    setRefreshRate("");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                toast.error("Failed to save settings. Please try again.");
+            });
+        }
+    };
+
     const finalModalRef = useRef();
     const createRef = useRef();
 
@@ -83,7 +201,7 @@ function DataRecordingControl(props) {
             + ROUTES.GET_PROCESSED_DATA
             + '?start_time=' + startTimeUnix
             + '&end_time=' + endTimeUnix);
-    }
+    };
 
     return (
         <>
@@ -149,6 +267,58 @@ function DataRecordingControl(props) {
                                             </Button>
                                         </Tooltip>
                                     </HStack>
+                                    <FormControl>
+                                        <HStack spacing={1}>
+                                            <FormLabel mb={0}>Refresh Rate (ms):</FormLabel>
+                                            <Input
+                                                type="number"
+                                                value={refreshRate === "" ? "" : refreshRate}
+                                                min={100}
+                                                max={5000}
+                                                step={1}
+                                                onChange={(e) => {
+                                                    const value = e.target.value.trim(); 
+                                                    if (value === "") {
+                                                        setRefreshRate(""); 
+                                                        return;
+                                                    }
+                                                    const numValue = Number(value);
+                                                    if (!isNaN(numValue) && numValue >= 0 && numValue <= 10000) {
+                                                        setRefreshRate(numValue);
+                                                    }
+                                                }}
+                                                height="3vh"
+                                                width={"5vw"}
+                                            />
+                                        </HStack>
+                                    </FormControl>
+                                    <CheckboxGroup>
+                                        <HStack align="start" spacing={3}>
+                                            {Object.keys(selectedElements).map((key) => (
+                                                <Box key={key}>
+                                                    <Checkbox
+                                                        name={key}
+                                                        isChecked={selectedElements[key]}
+                                                        onChange={handleCheckboxChange}
+                                                    >
+                                                        {key}
+                                                    </Checkbox>
+                                                    <Text fontSize="xs" color="gray.500">
+                                                        Current: {refreshRates[key] || refreshRate}ms
+                                                    </Text>
+                                                </Box>
+                                            ))}
+                                        </HStack>
+                                    </CheckboxGroup>
+                                    <Button
+                                        width={"12em"}
+                                        bgColor={selectBgCol}
+                                        color={selectTxtCol}
+                                        size='sm'
+                                        onClick={handleSaveSettings} 
+                                    >
+                                        Save Settings
+                                    </Button>
                                 </VStack>
                             </PopoverBody>
                         </PopoverContent>

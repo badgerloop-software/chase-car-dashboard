@@ -35,6 +35,8 @@ export default function Dashboard(props) {
   const [fetchDep, setFetchDep] = useState(false);
   const [state, setState] = useState({ data: null });
   const ws = useRef(null);
+  const [refreshRate, setRefreshRate] = useState(300);
+  const [lowPowerMode, setLowPowerMode] = useState(false);
   
   // // open websocket on mount
   useEffect(() => {
