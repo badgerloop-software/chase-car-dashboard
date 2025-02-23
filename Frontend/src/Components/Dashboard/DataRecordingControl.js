@@ -131,7 +131,6 @@ function DataRecordingControl(props) {
         // Validate individual refresh rates
         Object.entries(refreshRates).forEach(([key, rate]) => {
             if (rate < MIN_REFRESH_RATE || rate > MAX_REFRESH_RATE) {
-                setRefreshRate("");
                 toast.error(`Setting saving failed: ${key} refresh rate must be between ${MIN_REFRESH_RATE} and ${MAX_REFRESH_RATE} ms.`);
                 hasError = true;
             }
@@ -139,49 +138,32 @@ function DataRecordingControl(props) {
     
         if (hasError) return;
     
-        if (!hasError) {
-            const payload = { refreshRates };
-            console.log('Request payload:', payload);
-    
-            // Send the refresh rates to the backend
-            fetch('http://localhost:3000/settings/update-refresh-rates', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => {
-                console.log('Response status:', response.status);
-                return response.json().then(data => ({ status: response.status, body: data }));
-            })
-            .then(({ status, body }) => {
-                console.log('Response data:', body);
-                if (status !== 200) {
-                    toast.error(body.detail || 'Failed to save settings.');
-                } else {
-                    toast.success("Settings saved successfully!");
-                    setSavedSettings({
-                        refreshRate: refreshRate,
-                        selectedElements: { ...selectedElements }
-                    });
-    
-                    setSelectedElements((prevElements) => {
-                        const updatedElements = {};
-                        Object.keys(prevElements).forEach((key) => {
-                            updatedElements[key] = false; 
-                        });
-                        return updatedElements;
-                    });
-    
-                    setRefreshRate("");
+        setRefreshRates((prev) => {
+            const updatedRates = { ...prev };
+            Object.keys(selectedElements).forEach((key) => {
+                if (selectedElements[key]) {
+                    updatedRates[key] = refreshRate;
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                toast.error("Failed to save settings. Please try again.");
             });
-        }
+            return updatedRates;
+        });
+    
+        setSavedSettings({
+            refreshRate: refreshRate,
+            selectedElements: { ...selectedElements }
+        });
+    
+        setSelectedElements((prevElements) => {
+            const updatedElements = {};
+            Object.keys(prevElements).forEach((key) => {
+                updatedElements[key] = false;
+            });
+            return updatedElements;
+        });
+    
+        setRefreshRate("");
+    
+        toast.success("Settings saved successfully!");
     };
 
     const finalModalRef = useRef();
