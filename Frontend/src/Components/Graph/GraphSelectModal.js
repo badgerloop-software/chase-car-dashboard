@@ -16,28 +16,34 @@ import {
   SliderThumb,
   SliderTrack,
   VStack,
-  useColorMode
+  useColorMode,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useReducer } from "react";
 import GraphData from "./graph-data.json";
 import Expandable from "./ExpandableContent";
-import getColor from "../Shared/colors"
+import getColor from "../Shared/colors";
 
 /**
  * The reducer for the dataKeys state variable
  *
  * @param {string[]} state the previous list of selected data keys
- * @param {{action: string, key: string}}} new the action to perform and the key to add or remove
+ * @param {{action: string, key: string, keys: string[]}}} new the action to perform and the key to add or remove
  * @returns the new state (or list of selected data keys)
  */
-const dataKeysReducer = (state, { action, key }) => {
+const dataKeysReducer = (state, { action, key, keys }) => {
   switch (action) {
     case "add":
       return state.concat([key]);
     case "remove":
       const index = state.indexOf(key);
       return state.slice(0, index).concat(state.slice(index + 1));
+    //subcategory actions: adds or removes an entire subcategory of keys
+    case "addSubcategory":
+      return [...new Set([...state, ...keys])];
+    case "removeSubcategory":
+      return state.filter((k) => !keys.includes(k));
+
     default:
       console.warn("DEFAULT CASE REACHED IN GRAPH MODAL");
       return [];
@@ -79,8 +85,8 @@ function GraphSelectModal(props) {
   const { isOpen, onClose, initialDatasets, initialHistoryLength, onSave } =
     props;
 
-  const {colorMode} = useColorMode()
-  const contentBg = getColor('contentBg', colorMode);
+  const { colorMode } = useColorMode();
+  const contentBg = getColor("contentBg", colorMode);
 
   // a state variable that keeps track of which datasets are selected to be shown
   const [dataKeys, changeDataKeys] = useReducer(
@@ -98,36 +104,78 @@ function GraphSelectModal(props) {
         <ModalCloseButton />
         <ModalBody>
           <VStack align="stretch">
-            <hr/>
+            <hr />
             {GraphData.Output.map((category) => (
               <VStack align="stretch" key={category.category}>
-                <Expandable label={category.category} contentBg={contentBg} size="md">
-                  {category.subcategories.map((subcategory) => (
-                    <VStack align="strech" key={subcategory.subcategory}>
-                      <Heading pt="2" size="sm">{subcategory.subcategory}</Heading>
-                      <SimpleGrid columns={2}>
-                        {subcategory.values.map((value) => (
+                <Expandable
+                  label={category.category}
+                  contentBg={contentBg}
+                  size="md"
+                >
+                  {category.subcategories.map((subcategory) => {
+                    //Find keys for this subcategory.
+                    const childKeys = subcategory.values.map(
+                      (value) => value.key
+                    );
+                    //Check if all child checkboxes are selected.
+                    const allSelected = childKeys.every((key) =>
+                      dataKeys.includes(key)
+                    );
+                    // Check if some (but not all) child checkboxes are selected.
+                    const someSelected = childKeys.some((key) =>
+                      dataKeys.includes(key)
+                    );
+                    return (
+                      <VStack align="stretch" key={subcategory.subcategory}>
+                        <Heading pt="2" size="sm">
                           <Checkbox
-                            defaultChecked={dataKeys.includes(value.key)}
-                            onInput={(e) => {
+                            isChecked={allSelected}
+                            isIndeterminate={someSelected && !allSelected}
+                            onChange={(e) => {
                               if (e.target.checked) {
-                                // checked => add to checked datasets
-                                changeDataKeys({ action: "add", key: value.key });
+                                changeDataKeys({
+                                  action: "addSubcategory",
+                                  keys: childKeys,
+                                });
                               } else {
-                                // unchecked => remove from checked datasets
-                                changeDataKeys({ action: "remove", key: value.key });
+                                changeDataKeys({
+                                  action: "removeSubcategory",
+                                  keys: childKeys,
+                                });
                               }
                             }}
-                            key={value.key}
                           >
-                            {value.name}
+                            {subcategory.subcategory}
                           </Checkbox>
-                        ))}
-                      </SimpleGrid>
-                    </VStack>
-                  ))}
+                        </Heading>
+                        <SimpleGrid columns={2}>
+                          {subcategory.values.map((value) => (
+                            <Checkbox
+                              isChecked={dataKeys.includes(value.key)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  changeDataKeys({
+                                    action: "add",
+                                    key: value.key,
+                                  });
+                                } else {
+                                  changeDataKeys({
+                                    action: "remove",
+                                    key: value.key,
+                                  });
+                                }
+                              }}
+                              key={value.key}
+                            >
+                              {value.name}
+                            </Checkbox>
+                          ))}
+                        </SimpleGrid>
+                      </VStack>
+                    );
+                  })}
                 </Expandable>
-                <hr/>
+                <hr />
               </VStack>
             ))}
             <VStack align="stretch" pb={5}>
