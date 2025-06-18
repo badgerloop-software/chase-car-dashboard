@@ -1,7 +1,9 @@
 [tool.poetry]
 name = "chase-car-dashboard-backend"
 version = "5.2.0"
-package-mode = false
+#package-mode = false
+description = ""
+authors = []
 
 [tool.poetry.dependencies]
 python = "^3.10"
