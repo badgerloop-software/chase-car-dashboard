@@ -40,5 +40,5 @@ async def get_processed_data(start_time, end_time, output_format: str = 'xlsx'):
     except Exception as e:
         raise Exception(
             status_code=500,
-            detail="Unknown error occured: " + str(e)
+            detail="Unknown error occurred: " + str(e)
         )
