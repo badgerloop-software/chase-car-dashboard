@@ -14,11 +14,13 @@ jobs:
           echo "${{ secrets.ACTIONS_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
+
       - name: checkout
         uses: actions/checkout@v2
         with:
           submodules: recursive
           ssh-key: ${{ secrets.ACTIONS_SSH_KEY }}
+          
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
