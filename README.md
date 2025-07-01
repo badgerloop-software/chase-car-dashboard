@@ -1,4 +1,4 @@
-# Solar Car 1 Engineering Dashboard
+# Solar Car 2 Engineering Dashboard
 
 ## Libraries
 
