@@ -3,15 +3,18 @@
   "version": "5.1.1",
   "scripts": {
     "data-generator": "cd DataGenerator && npm start",
-    "backend": "cd Backend && python3 main.py",
-    "backend-dev": "cd Backend && python3 main.py dev",
+     "data-replayer": "cd DataReplayer && npm start",
+    "backend": "cd Backend && poetry run python3 main.py",
+    "backend-dev": "cd Backend && poetry run python3 main.py dev",
     "frontend": "wait-port 4001 && cd Frontend && npm start",
     "start": "run-p backend frontend",
     "start-dev": "run-p data-generator backend-dev frontend",
+    "start-replay": "run-p data-replayer backend-dev frontend",
     "install-data-generator": "cd DataGenerator && npm i",
-    "install-backend": "cd Backend && pip install .",
+    "install-data-replayer": "cd DataReplayer && npm i",
+    "install-backend": "cd Backend && poetry install",
     "install-frontend": "cd Frontend && npm i",
-    "postinstall": "run-p install-data-generator install-backend install-frontend",
+    "postinstall": "run-p install-data-generator install-data-replayer install-backend install-frontend",
     "update-data": "git submodule update --recursive --remote && cd Frontend && npm run update-data"
   },
   "devDependencies": {

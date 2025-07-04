@@ -5,3 +5,6 @@
 [submodule "Backend/file_sync"]
 	path = Backend/file_sync
 	url = git@github.com:badgerloop-software/file_sync
+[submodule "race-profile"]
+	path = race-profile
+	url = git@github.com:badgerloop-software/race-profile.git

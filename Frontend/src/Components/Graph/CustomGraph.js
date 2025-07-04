@@ -35,7 +35,7 @@ import {
 } from "chart.js";
 import "chartjs-adapter-luxon";
 import { DateTime } from "luxon";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Line } from "react-chartjs-2";
 import { FaSave } from "react-icons/fa";
 import GraphSelectModal from "./GraphSelectModal";
@@ -203,42 +203,50 @@ function Graph(props) {
   const { querylist, histLen, colorMode, optionInfo, extremes } = props;
   // response from the server
   const [data, setData] = useState([]);
-  const [fetchDep, setFetchDep] = useState(true);
+  const fetchDelay = 500;
+  const ws = useRef(null);
 
-  const fetchData = useCallback(async () => {
-    // Desired fetch timeout duration in milliseconds
-    // NOTE: This should be well above an acceptable response time for the server
-    const maxFetchTime = 5000;
-    // Time to wait between fetches
-    const fetchDelay = 500;
+  // open websocket on mount
+  useEffect(() => {
+    ws.current = new WebSocket(`ws://localhost:4001/components/graph`);
 
-    try {
-      // Fetch graph data. Fetch with timeout is from https://dmitripavlutin.com/timeout-fetch-request/
-      const now = Date.now();
-      const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), maxFetchTime);
-      const result = await fetch(
-          ROUTES.GET_GRAPH_DATA + `?data=${querylist}&start_time=${now - (histLen + 1) * 1000}&end_time=${now}`,
-          {signal: controller.signal}
-      );
-      clearTimeout(id);
-      let body = await result.json();
-      if (result.status === 200) {
-        setData(body.response);
-      } else {
-        console.error("Graph data API error or timeout");
+    ws.current.onmessage = (event) => {
+      try {
+        const carData = JSON.parse(event.data);
+        setData(carData.response);
+      } catch {
+        console.log('Error recieving data from websocket');
       }
-    } catch (error) {
-      console.error("Graph data API:", error.name === "AbortError" ? "Request timeout (connection lost)" : error.message);
-    } finally {
-      // Give it some time before the next fetch
-      await new Promise((resolve) => setTimeout(() => {
-        setFetchDep(prev => !prev);
-        resolve();
-      }, fetchDelay));
-    }
-  }, [querylist, histLen]);
-  useEffect(fetchData, [fetchDep]);
+    };
+
+    ws.current.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    // close connection on unmount
+    return () => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
+  },[])
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = Date.now();
+      const message = {
+        querylist: querylist.join(','),
+        start_time: now - (histLen + 1) * 1000,
+        end_time: now,
+      };
+
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        ws.current.send(JSON.stringify(message));
+      }
+    }, fetchDelay);
+
+    return () => clearInterval(intervalId);
+  },[querylist, histLen]);
 
   // get the latest timestamp in the packet
   let tstamp = 0;
@@ -282,7 +290,7 @@ function Graph(props) {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function CustomGraph(props) {
+function CustomGraph(props) {
   const { colorMode } = useColorMode();
 
   const borderCol = getColor("border", colorMode);
@@ -320,6 +328,7 @@ export default function CustomGraph(props) {
           return info;
         }, [{}, [0,1]]);
   }, [datasetKeys, noShowKeys]);
+
 
   const {
     isOpen: isDataSelectOpen,
@@ -549,3 +558,5 @@ function GraphNameModal(props) {
     </Modal>
   );
 }
+
+export default memo(CustomGraph);

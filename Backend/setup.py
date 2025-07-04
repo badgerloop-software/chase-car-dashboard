@@ -9,5 +9,5 @@ setup(
     author='Badger Solar Racing Software Team',
     author_email='',
     description='',
-    install_requires=['uvicorn','fastapi','redis', 'numpy', 'XlsxWriter', 'pandas', 'aiohttp']
+    install_requires=['uvicorn','fastapi','redis', 'requests', 'numpy', 'XlsxWriter', 'pandas', 'aiohttp']
 )

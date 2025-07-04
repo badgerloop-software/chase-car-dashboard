@@ -1,5 +1,5 @@
 import { Select, useConst, VStack } from "@chakra-ui/react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, memo } from "react";
 import CustomGraph from "../Graph/CustomGraph";
 import GraphData from "../Graph/graph-data.json";
 import CarMap from "../GoogleMap/Map";
@@ -48,7 +48,7 @@ function generateCategories() {
  * @param {any} props the props to pass to this graph container
  * @returns the graph-containing component
  */
-export default function GraphContainer(props) {
+function GraphContainer(props) {
   // fetch constants: categories and flatpacked categories
   const allDatasets = useConst(generateCategories);
 
@@ -323,3 +323,5 @@ function GraphOptions({ titles, txtColor }) {
     </>
   );
 }
+
+export default memo(GraphContainer);

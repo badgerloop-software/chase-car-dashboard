@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "chase-car-dashboard-backend"
+version = "5.2.0"
+package-mode = false
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.10"
+websockets = "^13.1"
+
+[tool.poetry.group.dev.dependencies]
+uvicorn = "^0.31.0"
+fastapi = "^0.115.0"
+redis = "^5.1.0"
+requests = "^2.32.3"
+numpy = "^2.1.1"
+XlsxWriter = "^3.2.0"
+pandas = "^2.2.3"
+aiohttp = "^3.10.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
