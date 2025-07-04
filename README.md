@@ -1,6 +1,6 @@
 # Solar Car 2 Engineering (Chase Car) Dashboard
 
-This dashboard, which will on a Laptop ouside of the Solar Car, provides real-time monitoring and data visualization for our team. It includes:
+This dashboard, which will run on a Laptop outside of the Solar Car, provides real-time monitoring and data visualization for our team. It includes:
 
 - **Frontend**: React-based dashboard with live graphs and telemetry display
 - **Backend**: Python FastAPI server for data processing and WebSocket communication  
