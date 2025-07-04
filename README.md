@@ -6,7 +6,6 @@ This dashboard, which will on a Laptop ouside of the Solar Car, provides real-ti
 - **Backend**: Python FastAPI server for data processing and WebSocket communication  
 - **DataGenerator**: Simulates live car data for testing and development
 - **DataReplayer**: Replays previously recorded CSV data as live telemetry for analysis
-- **Redis**: In-memory database for high-performance data storage
 
 ## Libraries
 
