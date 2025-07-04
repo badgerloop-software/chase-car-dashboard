@@ -1,4 +1,11 @@
-# Solar Car 1 Engineering Dashboard
+# Solar Car 2 Engineering (Chase Car) Dashboard
+
+This dashboard, which will run on a Laptop outside of the Solar Car, provides real-time monitoring and data visualization for our team. It includes:
+
+- **Frontend**: React-based dashboard with live graphs and telemetry display
+- **Backend**: Python FastAPI server for data processing and WebSocket communication  
+- **DataGenerator**: Simulates live car data for testing and development
+- **DataReplayer**: Replays previously recorded CSV data as live telemetry for analysis
 
 ## Libraries
 
@@ -61,12 +68,28 @@ We use Poetry for managing our backend Python environment. To setup a Poetry env
 0. If you want to test the engineering dashboard without the solar car dashboard, do the following:
    1. Open up a third terminal.
    1. `cd` into `DataGenerator` and run the command `npm start`.
+0. If you want to test the engineering dashboard with recorded data, do the following:
+   1. Open up a third terminal.
+   1. `cd` into `DataReplayer` and run the command `npm start`.
+   1. This will replay recorded CSV data from `DataReplayer/raw_data/` as if it were live telemetry data.
 0. Once you have finished making your necessary changes to your code, switch to a new branch that has a good name for the feature or names the Jira issue (e.g. `SC2-123/skeleton`).
 0. Commit related changes to that branch and push to this repository. Do this often so that it is easy to finely revert to a previous state!
 0. Once you are happy with the state of your code, open a pull request and request someone to conduct a code review. It may be kicked back with some suggestions or edits, but when it is accepted, it will be merged with `main`. Congrats! Now it's just time to rinse and repeat.
 
 
 ## Running the Dashboard
+
+### Quick Start Scripts
+
+From the root directory, you can use these convenient npm scripts:
+
+- `npm run start` - Runs backend + frontend (for live car data)
+- `npm run start-dev` - Runs data generator + backend + frontend (for simulated data)
+- `npm run start-replay` - Runs data replayer + backend + frontend (for recorded data)
+- `npm run data-generator` - Runs only the data generator
+- `npm run data-replayer` - Runs only the data replayer
+- `npm run backend` - Runs only the backend
+- `npm run frontend` - Runs only the frontend
 
 ### Natively
 
