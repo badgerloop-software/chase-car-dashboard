@@ -25,7 +25,7 @@ let currentIndex = 0;
 
 async function loadCSV() {
     console.log('Loading CSV data...');
-    const fileStream = fs.createReadStream('raw_data/2024-4-7rawdata.csv');
+    const fileStream = fs.createReadStream('raw_data/coasts2024-04-141530.csv');
     
     const rl = readline.createInterface({
         input: fileStream,
