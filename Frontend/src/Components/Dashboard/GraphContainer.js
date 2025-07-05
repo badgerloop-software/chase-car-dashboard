@@ -2,6 +2,7 @@ import { Select, useConst, VStack } from "@chakra-ui/react";
 import { useCallback, useMemo, useState, memo } from "react";
 import CustomGraph from "../Graph/CustomGraph";
 import GraphData from "../Graph/graph-data.json";
+import CarMap from "../GoogleMap/Map";
 import { ROUTES } from "../Shared/misc-constants";
 
 /**
@@ -24,8 +25,9 @@ import { ROUTES } from "../Shared/misc-constants";
  * @returns a list of categories taken from the JSON file with randomly generated colors
  */
 function generateCategories() {
-  const subcategories = GraphData.Output
-    .flatMap((category) => category.subcategories)
+  const subcategories = GraphData.Output.flatMap(
+    (category) => category.subcategories
+  );
   const allDatasets = subcategories
     .flatMap((category) => category.values)
     .map((obj) => {
@@ -93,15 +95,14 @@ function GraphContainer(props) {
             // The graph that the selected one is being swapped with is empty or a Custom graph whose datasets and
             // historyLength will be cleared
             graphMetadataOldIdx = {
-              "historyLength": null,
-              "datasets": null
+              historyLength: null,
+              datasets: null,
             };
           }
 
           setGraphTitles(copy);
           return;
         }
-
       }
 
       // default set: if new custom/empty graph or replacing new custom/empty graph
@@ -170,49 +171,55 @@ function GraphContainer(props) {
    * }
    * ```
    */
-  const packedData = useMemo(() => allDatasets.reduce((packed, dset) => {
-    packed[dset.key] = {
-      label: dset.name,
-      borderColor: dset.color,
-      backgroundColor: dset.color + "b3",
-    };
-    return packed;
-  }, {}), [allDatasets]);
+  const packedData = useMemo(
+    () =>
+      allDatasets.reduce((packed, dset) => {
+        packed[dset.key] = {
+          label: dset.name,
+          borderColor: dset.color,
+          backgroundColor: dset.color + "b3",
+        };
+        return packed;
+      }, {}),
+    [allDatasets]
+  );
 
-
-  const [selColors, setSelColors] = useState({0: props.selectTxt, 1: props.selectTxt, 2: props.selectTxt});
+  const [selColors, setSelColors] = useState({
+    0: props.selectTxt,
+    1: props.selectTxt,
+    2: props.selectTxt,
+  });
 
   const [selectFocus, setSelectFocus] = useState("");
 
   const _updateSelColor = (targetId, newColor) => {
-      switch (targetId) {
-        case "graphSelect0":
-          setSelColors({...selColors, 0: newColor});
-          break;
-        case "graphSelect1":
-          setSelColors({...selColors, 1: newColor});
-          break;
-        case "graphSelect2":
-          setSelColors({...selColors, 2: newColor});
-          break;
-      }
-  }
+    switch (targetId) {
+      case "graphSelect0":
+        setSelColors({ ...selColors, 0: newColor });
+        break;
+      case "graphSelect1":
+        setSelColors({ ...selColors, 1: newColor });
+        break;
+      case "graphSelect2":
+        setSelColors({ ...selColors, 2: newColor });
+        break;
+    }
+  };
 
   const removeSelectFocus = (event) => {
-      setSelectFocus("");
-      _updateSelColor(event.target.id, props.selectTxt);
-  }
+    setSelectFocus("");
+    _updateSelColor(event.target.id, props.selectTxt);
+  };
 
   const changeSelColor = (event) => {
-      if(selectFocus !== event.target.id)
-          _updateSelColor(event.target.id, props.selectTxtFocus);
-  }
+    if (selectFocus !== event.target.id)
+      _updateSelColor(event.target.id, props.selectTxtFocus);
+  };
 
   const changeSelColorBack = (event) => {
-      if (selectFocus !== event.target.id)
-          _updateSelColor(event.target.id, props.selectTxt);
-  }
-
+    if (selectFocus !== event.target.id)
+      _updateSelColor(event.target.id, props.selectTxt);
+  };
 
   return (
     <VStack align="stretch" padding={0.5} spacing={1} {...props}>
@@ -223,8 +230,6 @@ function GraphContainer(props) {
             : "graph_" + graphTitles[index]
           : index;
         // console.log(index, graphTitle, key);
-
-
 
         return (
           <VStack
@@ -240,17 +245,22 @@ function GraphContainer(props) {
               size="xs"
               variant="filled"
               bgColor={props.selectBg}
-              color={selColors[index]}//props.selectTxt}
+              color={selColors[index]} //props.selectTxt}
               focusBorderColor={props.borderCol}
               value={graphTitles[index]}
-              onFocus={() => {setSelectFocus("graphSelect"+index)}}
+              onFocus={() => {
+                setSelectFocus("graphSelect" + index);
+              }}
               onBlur={removeSelectFocus}
               onMouseEnter={changeSelColor}
               onMouseLeave={changeSelColorBack}
               onChange={(evt) => showGraph(evt.target.value, index)}
               onChangeCapture={removeSelectFocus}
             >
-              <GraphOptions titles={Object.keys(customGraphData)} txtColor={props.optionTxt} />
+              <GraphOptions
+                titles={Object.keys(customGraphData)}
+                txtColor={props.optionTxt}
+              />
             </Select>
             {graphTitles[index] === "" ? null : graphTitles[index] ===
               "Custom" ? (
@@ -262,6 +272,8 @@ function GraphContainer(props) {
                 packedData={packedData}
                 initialDatasets={[]}
               />
+            ) : graphTitles[index] === "Map" ? (
+              <CarMap />
             ) : (
               <CustomGraph
                 onSave={(title, isNew, data) =>
@@ -287,20 +299,27 @@ function GraphContainer(props) {
  *
  * @param {{titles: string[]}} props the props to pass to this component
  * @param {string[]} props.titles the list of graph titles to display in the dropdown
- * @returns a component containing all the given options and "Custom"
+ * @returns a component containing all the given options and "Custom" and "Google Maps"
  */
-function GraphOptions({ titles, txtColor}) {
+function GraphOptions({ titles, txtColor }) {
   return (
     <>
-      <option style={{color: txtColor}} value="">Select option</option>
+      <option style={{ color: txtColor }} value="">
+        Select option
+      </option>
       {titles
         .filter((title) => title && title !== "Custom")
         .map((title) => (
-          <option style={{color: txtColor}} key={title} value={title}>
+          <option style={{ color: txtColor }} key={title} value={title}>
             {title}
           </option>
         ))}
-      <option style={{color: txtColor}} value="Custom">Custom</option>
+      <option style={{ color: txtColor }} value="Custom">
+        Custom
+      </option>
+      <option style={{ color: txtColor }} value="Map">
+        Google Maps
+      </option>
     </>
   );
 }
