@@ -34,7 +34,7 @@ async def calculate_color(data_name, value):
     
     if max_val - min_val == 0:
         if config.FORMAT[data_name]["type"] == bool:
-            return [hsv_to_rgb(val * 0.375, 1, 1) for val in value]
+            return [hsv_to_rgb((val * 0.375, 1, 1)) for val in value]
         else:
             return ["#aaaaaa"] * (len(value)-1)
     colors = []

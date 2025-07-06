@@ -61,6 +61,7 @@ function CarMap() {
     let lines = [];
     for(let i = 0 ; i < mapPath.length - 1; i++) {
       lines.push(<Polyline
+        key={`polyline-${i}`}
         path={[mapPath[i], mapPath[i + 1]]}
         strokeColor={pathColor[i]}
         strokeOpacity={1}
@@ -143,14 +144,14 @@ function CarMap() {
           </Menu>
         </Box>
         <Box
-          zIndex='overlay'
+          zIndex='999'
           position='absolute'
           bottom='4px'
           right='70px'
           height='80px'
           width='30%'
           display="flex"
-          alignItems="top" // Align items vertically centered
+          alignItems="top"
           flex='1'
           flexDirection='column'
         >
@@ -207,7 +208,7 @@ function CarMap() {
     );
   }
 
-  return useCallback(getMap(mapPath, pathColor), [mapPath, pathColor])
+  return useMemo(() => getMap(mapPath, pathColor), [mapPath, pathColor])
 }
 
 export default GoogleApiWrapper({
