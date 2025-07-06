@@ -1,7 +1,7 @@
 import { Map, Marker, Polyline, GoogleApiWrapper } from "google-maps-react";
 import { useCallback } from "react";
 import { useEffect, useMemo, useState } from "react";
-import {useInterval, Box, Menu, MenuItem, Button, MenuButton, MenuList } from "@chakra-ui/react";
+import {useInterval, Box, Menu, MenuItem, Button, MenuButton, MenuList, useColorModeValue } from "@chakra-ui/react";
 import CONSTANTS from "../../data-constants.json";
 import { BsChevronDown } from "react-icons/bs";
 import hsvBar from "./RangeBar/hsv.png"
@@ -10,6 +10,17 @@ function CarMap() {
   const [pathColor, setPathColor] = useState([]);
   const [selectedData, setSelectedData] = useState("speed");
   const [selectedDuration, setSelectedDuration] = useState("60");
+  const [hasReceivedData, setHasReceivedData] = useState(false);
+
+  const textColor = "white";
+  const buttonColorScheme = "blackAlpha";
+  // const textShadow = "1px 1px 2px rgba(43.1,50.2,58.4,0.8)";
+    const textShadow = "1px 1px 2px rgba(0,0,0,0.8)";
+
+  const defaultCenter = {
+    lat: 43.072745366387494, // MEHQ
+    lng: -89.4119894994727
+  };
 
   const mapStyles = {
   };
@@ -36,6 +47,9 @@ function CarMap() {
     .then((body) => {
         setPathColor(body["color"])
         setMapPath(body["coords"])
+        if (body["coords"] && body["coords"].length > 0) {
+          setHasReceivedData(true);
+        }
     }).catch(error => console.error('Fetch error:', error));
   }
 
@@ -61,7 +75,7 @@ function CarMap() {
     return (
       <div>
         <Box
-          zIndex='overlay'
+          zIndex='9999'
           position='absolute'
           top='10px'
           right='180px'
@@ -74,14 +88,20 @@ function CarMap() {
               as={Button} 
               rightIcon={<BsChevronDown/>}
               defaultValue = {"select"}
+              borderRadius="0"
+              colorScheme={buttonColorScheme}
+              color={textColor}
+              _hover={{ bg: "rgba(0,0,0,0.7)" }}
+              bg="rgba(43.1,50.2,58.4, 0.6)"
             >
               {selectedData}
             </MenuButton>
-            <MenuList maxHeight="15rem" overflowY="scroll" right={0}>
+            <MenuList maxHeight="15rem" overflowY="scroll" right={0} zIndex='9999' borderRadius="0">
               {Object.keys(CONSTANTS).map((item, i) => {
                 return <MenuItem
                   key={item}
                   onClick={()=>setSelectedData(item)}
+                  color={textColor}
                   >{item}
                   </MenuItem>
               })}
@@ -89,7 +109,7 @@ function CarMap() {
           </Menu>
         </Box>
         <Box
-          zIndex='overlay'
+          zIndex='9999'
           position='absolute'
           top='10px'
           right='70px'
@@ -102,14 +122,20 @@ function CarMap() {
               as={Button} 
               rightIcon={<BsChevronDown/>}
               defaultValue = {"60"}
+              borderRadius="0"
+              colorScheme={buttonColorScheme}
+              color={textColor}
+              _hover={{ bg: "rgba(0,0,0,0.7)" }}
+              bg="rgba(43.1,50.2,58.4, 0.6)"
             >
               {allowedDuration[selectedDuration]}
             </MenuButton>
-            <MenuList maxHeight="15rem" overflowY="scroll" right={0}>
+            <MenuList maxHeight="15rem" overflowY="scroll" right={0} zIndex='9999' borderRadius="0">
               {Object.keys(allowedDuration).map((item, i) => {
                 return <MenuItem
                   key={i}
                   onClick={()=>setSelectedDuration(item)}
+                  color={textColor}
                   >{allowedDuration[item]}
                   </MenuItem>
               })}
@@ -119,7 +145,7 @@ function CarMap() {
         <Box
           zIndex='overlay'
           position='absolute'
-          bottom='10px'
+          bottom='4px'
           right='70px'
           height='80px'
           width='30%'
@@ -129,8 +155,21 @@ function CarMap() {
           flexDirection='column'
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-            <b>{CONSTANTS[selectedData].MIN}</b>
-            <b style={{ marginRight: '0' }}>{CONSTANTS[selectedData].MAX}</b>
+            <b style={{ 
+              color: textColor, 
+              textShadow: textShadow,
+              backgroundColor: 'rgba(43.1,50.2,58.4,0.6)',
+              padding: '2px 6px',
+              borderRadius: '2px'
+            }}>{CONSTANTS[selectedData].MIN}</b>
+            <b style={{ 
+              marginRight: '0', 
+              color: textColor, 
+              textShadow: textShadow,
+              backgroundColor: 'rgba(43.1,50.2,58.4,0.6)',
+              padding: '2px 6px',
+              borderRadius: '2px'
+            }}>{CONSTANTS[selectedData].MAX}</b>
           </div>
           <img src={hsvBar} style={{ height: '40%', width: '100%' }} />
         </Box>
@@ -147,7 +186,8 @@ function CarMap() {
           google={window.google}
           zoom={13}
           style={mapStyles}
-          center={mapPath[mapPath.length-1]}
+          center={hasReceivedData && mapPath.length > 0 ? mapPath[mapPath.length-1] : defaultCenter}
+          initialCenter={defaultCenter}
           streetViewControl={false}
           mapType='terrain'
         >
@@ -159,7 +199,7 @@ function CarMap() {
               fillOpacity: 0.7,
               strokeWeight: 0.4
             }}
-            position={mapPath[mapPath.length-1]}
+            position={hasReceivedData && mapPath.length > 0 ? mapPath[mapPath.length-1] : defaultCenter}
           />
           {getLines()}
         </Map>
