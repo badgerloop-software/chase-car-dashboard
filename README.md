@@ -71,6 +71,8 @@ We use Poetry for managing our backend Python environment. To setup a Poetry env
 0. If you want to test the engineering dashboard with recorded data, do the following:
    1. Open up a third terminal.
    1. `cd` into `DataReplayer` and run the command `npm start`.
+   1. **Select a CSV file** from the interactive menu showing file size and drive duration.
+   1. Alternatively, use `npm start filename.csv` to directly load a specific file.
    1. This will replay recorded CSV data from `DataReplayer/raw_data/` as if it were live telemetry data.
 0. Once you have finished making your necessary changes to your code, switch to a new branch that has a good name for the feature or names the Jira issue (e.g. `SC2-123/skeleton`).
 0. Commit related changes to that branch and push to this repository. Do this often so that it is easy to finely revert to a previous state!
@@ -78,18 +80,6 @@ We use Poetry for managing our backend Python environment. To setup a Poetry env
 
 
 ## Running the Dashboard
-
-### Quick Start Scripts
-
-From the root directory, you can use these convenient npm scripts:
-
-- `npm run start` - Runs backend + frontend (for live car data)
-- `npm run start-dev` - Runs data generator + backend + frontend (for simulated data)
-- `npm run start-replay` - Runs data replayer + backend + frontend (for recorded data)
-- `npm run data-generator` - Runs only the data generator
-- `npm run data-replayer` - Runs only the data replayer
-- `npm run backend` - Runs only the backend
-- `npm run frontend` - Runs only the frontend
 
 ### Natively
 
