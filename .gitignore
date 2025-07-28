@@ -21,6 +21,7 @@
 /**/.idea
 /**/.vscode
 /recordedData
+Frontend/.env
 venv/
 
 npm-debug.log*
