@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useEffect, useMemo, useState } from "react";
 import {useInterval, Box, Menu, MenuItem, Button, MenuButton, MenuList, useColorModeValue } from "@chakra-ui/react";
 import CONSTANTS from "../../data-constants.json";
-import { BsChevronDown } from "react-icons/bs";
+import { BsChevronDown } from "react-icons/bs/index.esm.js";
 import hsvBar from "./RangeBar/hsv.png"
 function CarMap() {
   const [mapPath, setMapPath] = useState([]);

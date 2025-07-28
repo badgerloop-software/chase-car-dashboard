@@ -1,11 +1,11 @@
 import {Flex, GridItem, Spacer, Grid, Center, Text, Box, useColorMode} from "@chakra-ui/react";
-import PPC_CELL from "./PPC_CELL";
-import MPPT_CELL from "./MPPT_CELL";
-import OutputCurrent from "./OutputCurrent";
-import StringCell from "./StringCell";
-import HeadingCell from "../Shared/HeadingCell";
+import PPC_CELL from "./PPC_CELL.js";
+import MPPT_CELL from "./MPPT_CELL.js";
+import OutputCurrent from "./OutputCurrent.js";
+import StringCell from "./StringCell.js";
+import HeadingCell from "../Shared/HeadingCell.js";
 import CONSTANTS from "../../data-constants.json";
-import getColor from "../Shared/colors";
+import getColor from "../Shared/colors.js";
 
 
 export default function PPC_MPPT(props) {

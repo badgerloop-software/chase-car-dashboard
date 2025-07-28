@@ -21,8 +21,8 @@ import {
 import { useState } from "react";
 import { useReducer } from "react";
 import GraphData from "./graph-data.json";
-import Expandable from "./ExpandableContent";
-import getColor from "../Shared/colors";
+import Expandable from "./ExpandableContent.js";
+import getColor from "../Shared/colors.js";
 
 /**
  * The reducer for the dataKeys state variable

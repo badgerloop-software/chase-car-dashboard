@@ -1,6 +1,6 @@
-import Dashboard from "./Components/Dashboard/Dashboard";
+import Dashboard from "./Components/Dashboard/Dashboard.js";
 import { Box, ChakraProvider } from "@chakra-ui/react";
-import theme from "./styles/theme";
+import theme from "./styles/theme.js";
 
 function App() {
   return (

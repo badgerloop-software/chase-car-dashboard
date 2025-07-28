@@ -1,7 +1,7 @@
 import {Flex, useColorMode} from "@chakra-ui/react";
-import RangeRow from "../Shared/RangeRow";
+import RangeRow from "../Shared/RangeRow.js";
 import CONSTANTS from "../../data-constants.json";
-import getColor from "../Shared/colors";
+import getColor from "../Shared/colors.js";
 
 export default function SystemPower(props) {
     const { colorMode } = useColorMode();

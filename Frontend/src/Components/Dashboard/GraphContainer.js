@@ -1,9 +1,9 @@
 import { Select, useConst, VStack } from "@chakra-ui/react";
 import { useCallback, useMemo, useState, memo } from "react";
-import CustomGraph from "../Graph/CustomGraph";
+import CustomGraph from "../Graph/CustomGraph.js";
 import GraphData from "../Graph/graph-data.json";
-import CarMap from "../GoogleMap/Map";
-import { ROUTES } from "../Shared/misc-constants";
+import CarMap from "../GoogleMap/Map.js";
+import { ROUTES } from "../Shared/misc-constants.js";
 
 /**
  * Generates color data for all categories/datasets and packs the data nicely

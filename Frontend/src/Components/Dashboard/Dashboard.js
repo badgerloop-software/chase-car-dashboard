@@ -7,20 +7,20 @@ import {
   useColorMode
 } from "@chakra-ui/react";
 import { useEffect, useState, Suspense, lazy, memo, useRef } from "react";
-import GraphContainer from "./GraphContainer";
-import DataRecordingControl from "./DataRecordingControl";
-import dvOptions from "./dataViewOptions";
-import getColor from "../Shared/colors";
-import { ROUTES } from "../Shared/misc-constants";
-import FaultsView from "../Faults/FaultsView";
-import fauxQueue from "../Graph/faux-queue.json";
-const Temperature = lazy(() => import("../Temperature/Temperature"));
-const Communication = lazy(() => import("../Communication/Communication"));
-const BatteryCells = lazy(() => import("../BatteryCells/BatteryCells"));
-const BatteryPack = lazy(() => import("../BatteryPack/BatteryPack"));
-const PPC_MPPT = lazy(() => import("../PPC_MPPT/PPC_MPPT"));
-const SystemPower = lazy(() => import("../SystemPower/SystemPower"));
-const Motor_Motion = lazy(() => import("../Motor_Motion/Motor_Motion"));
+import GraphContainer from "./GraphContainer.js";
+import DataRecordingControl from "./DataRecordingControl.js";
+import dvOptions from "./dataViewOptions.js";
+import getColor, { colors } from "../Shared/colors.js";
+import { ROUTES } from "../Shared/misc-constants.js";
+import FaultsView from "../Faults/FaultsView.js";
+import data from "../Graph/faux-queue.json";
+const Temperature = lazy(() => import("../Temperature/Temperature.js"));
+const Communication = lazy(() => import("../Communication/Communication.js"));
+const BatteryCells = lazy(() => import("../BatteryCells/BatteryCells.js"));
+const BatteryPack = lazy(() => import("../BatteryPack/BatteryPack.js"));
+const PPC_MPPT = lazy(() => import("../PPC_MPPT/PPC_MPPT.js"));
+const SystemPower = lazy(() => import("../SystemPower/SystemPower.js"));
+const Motor_Motion = lazy(() => import("../Motor_Motion/Motor_Motion.js"));
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;

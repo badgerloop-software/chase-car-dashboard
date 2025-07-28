@@ -37,16 +37,16 @@ import "chartjs-adapter-luxon";
 import { DateTime } from "luxon";
 import { memo, useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Line } from "react-chartjs-2";
-import { FaSave } from "react-icons/fa";
-import GraphSelectModal from "./GraphSelectModal";
+import { FaSave } from "react-icons/fa/index.esm.js";
+import GraphSelectModal from "./GraphSelectModal.js";
 import GraphData from "./graph-data.json";
-import getColor from "../Shared/colors";
-import { ROUTES } from "../Shared/misc-constants";
-import {getRelativePosition} from "chart.js/helpers";
+import getColor from "../Shared/colors.js";
+import { ROUTES } from "../Shared/misc-constants.js";
+const isNullOrUndef = (value) => value === null || value === undefined;
+import { getRelativePosition as _getRelativePosition } from 'chart.js/helpers/helpers.js';
 
-ChartJS.register(
+ChartJS.register(  LinearScale,
   LinearScale,
-  TimeScale,
   PointElement,
   LineElement,
   Title,

@@ -1,5 +1,5 @@
 import {Text, Center, useColorMode} from "@chakra-ui/react"
-import getColor from "../Shared/colors";
+import getColor from "../Shared/colors.js";
 
 export default function MPPT_CELL(props){
     const { colorMode } = useColorMode();

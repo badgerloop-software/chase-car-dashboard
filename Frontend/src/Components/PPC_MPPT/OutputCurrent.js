@@ -1,6 +1,6 @@
 import {Flex, Box, Text, useColorMode} from "@chakra-ui/react";
-import RangeBar from "../Shared/RangeBar";
-import getColor from "../Shared/colors";
+import RangeBar from "../Shared/RangeBar.js";
+import getColor from "../Shared/colors.js";
 
 export default function OutputCurrent(props) {
     const { colorMode } = useColorMode();

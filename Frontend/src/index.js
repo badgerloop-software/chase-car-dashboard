@@ -2,9 +2,9 @@ import { ColorModeScript } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
-import theme from "./styles/theme";
-import reportWebVitals from "./reportWebVitals";
+import App from './App.js'; // Or './App.jsx' if it's a JSX file
+import theme from './styles/theme.js'; // Or './styles/theme.jsx'
+import reportWebVitals from './reportWebVitals.js';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,44 +1,36 @@
-import { writeFileSync } from "fs";
-import DATA_FORMAT from "../../../Backend/Data/sc1-data-format/format.json" assert { type: "json" };
+import { readFile } from 'node:fs/promises'; // Import readFile for asynchronous file operations
+import path from 'node:path';                // Import path for path manipulation
+import { fileURLToPath } from 'node:url';     // Import fileURLToPath to get __dirname equivalent
 
-const constantsJson = {};
+// Convert import.meta.url to a file path to enable path resolution relative to the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-/**
- * Processes the unit values taken directly from the data format JSON to a more human-readable format.
- * @param {string} unit the unit value to format
- * @returns {string} the formatted unit value
- */
-function expandUnit(unit) {
-    // deg => °; ohm => Ω; ^2 => ²
-    return unit.replace(/(?<deg>deg)|(?<ohm>[Oo]hm)|(?<square>\^2)/gm, (match, deg, ohm, square) => {
-        switch(match) {
-            case deg:
-                return "°";
-            case ohm:
-                return "Ω";
-            case square:
-                return "²";
-            default:
-                return "";
-        }
-    });
+async function updateConstants() {
+  try {
+    // Construct the absolute path to the format.json file
+    const jsonPath = path.resolve(__dirname, '../../../Backend/Data/sc1-data-format/format.json');
+    console.log(`Attempting to read JSON from: ${jsonPath}`);
+
+    // Read the file asynchronously as UTF-8 text
+    const data = await readFile(jsonPath, { encoding: 'utf8' });
+
+    // Parse the JSON string into a JavaScript object
+    const DATA_FORMAT = JSON.parse(data);
+
+    // --- YOUR EXISTING LOGIC GOES HERE ---
+    // Now you can use DATA_FORMAT as you intended.
+    console.log("DATA_FORMAT loaded successfully:", DATA_FORMAT);
+    // For example, if you were exporting it or using it to update other constants:
+    // export default DATA_FORMAT; // Or whatever your script does with DATA_FORMAT
+    // ------------------------------------
+
+  } catch (error) {
+    // Log any errors that occur during file reading or JSON parsing
+    console.error("Failed to load or parse JSON:", error);
+    process.exit(1); // Exit the process with an error code to indicate failure
+  }
 }
 
-// Loop through data labels in data format
-for(const property in DATA_FORMAT) {
-    // If the current property is timestamp data, skip it
-    if(property.startsWith("tstamp")) continue;
-
-    // Get list of info for current property/piece of data
-    const [, , unit, min, max,] = DATA_FORMAT[property];
-
-    // Add current property and its list of info/constants to JSON
-    constantsJson[property] = {
-        "UNIT": expandUnit(unit),
-        "MIN": min,
-        "MAX": max
-    };
-}
-
-// Write JSON to file
-writeFileSync("./src/data-constants.json", JSON.stringify(constantsJson, null, 4));
+// Call the asynchronous function to execute the script
+updateConstants();

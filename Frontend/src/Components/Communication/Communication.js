@@ -1,9 +1,10 @@
 import {Flex, Text, Box, HStack, useColorMode} from "@chakra-ui/react";
-import HeadingCell from "../Shared/HeadingCell";
-import CommsLabel from "./CommsLabel";
-import {isNullOrUndef} from "chart.js/helpers";
-import getColor from "../Shared/colors";
-import {MILLIS_PER_HR, MILLIS_PER_MIN, MILLIS_PER_SEC} from "../Shared/misc-constants";
+import HeadingCell from "../Shared/HeadingCell.js";
+import CommsLabel from "./CommsLabel.js";
+const isNullOrUndef = (value) => value === null || value === undefined;
+import { getRelativePosition as _getRelativePosition } from 'chart.js/helpers/helpers.js';
+import getColor from "../Shared/colors.js";
+import {MILLIS_PER_HR, MILLIS_PER_MIN, MILLIS_PER_SEC} from "../Shared/misc-constants.js";
 
 export default function Communication(props) {
     const { colorMode } = useColorMode();

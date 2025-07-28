@@ -1,5 +1,5 @@
 import { SimpleGrid } from "@chakra-ui/react";
-import CellGroup from "./CellGroup";
+import CellGroup from "./CellGroup.js";
 
 export default function BatteryCells(props) {
     const cellGroupsPerRow = 3; // Number of items/cell groups per row in the grid

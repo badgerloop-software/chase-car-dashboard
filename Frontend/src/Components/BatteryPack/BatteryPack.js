@@ -1,8 +1,8 @@
 import {Flex, Center, Box, Spacer, Text, useColorMode} from "@chakra-ui/react";
-import RangeRow from "../Shared/RangeRow";
-import RangeBar from "../Shared/RangeBar";
+import RangeRow from "../Shared/RangeRow.js";
+import RangeBar from "../Shared/RangeBar.js";
 import CONSTANTS from "../../data-constants.json";
-import getColor from "../Shared/colors";
+import getColor from "../Shared/colors.js";
 
 export default function BatteryPack(props) {
     const { colorMode } = useColorMode();

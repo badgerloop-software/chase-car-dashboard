@@ -1,5 +1,5 @@
 import {Box, Heading, useColorMode} from "@chakra-ui/react";
-import getColor from "./colors";
+import getColor from "./colors.js";
 
 export default function HeadingCell(props) {
     const { colorMode } = useColorMode();

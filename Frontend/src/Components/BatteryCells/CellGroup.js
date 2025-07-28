@@ -1,7 +1,7 @@
 import {Text, useColorMode, VStack} from "@chakra-ui/react";
 import CONSTANTS from "../../data-constants.json";
-import RangeBar from "../Shared/RangeBar";
-import getColor from "../Shared/colors";
+import RangeBar from "../Shared/RangeBar.js";
+import getColor from "../Shared/colors.js";
 
 export default function CellGroup(props) {
     const { colorMode } = useColorMode();

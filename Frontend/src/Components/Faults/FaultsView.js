@@ -1,6 +1,6 @@
 import {Box, Tooltip, Image, SimpleGrid, Center, useColorMode} from "@chakra-ui/react";
-import { FaultsViewImages } from "./Images/Images";
-import CONSTANTS from "../../data-constants.json";
+import { FaultsViewImages } from "./Images/Images.js";
+import CONSTANTS from "../../data-constants.json"
 
 export default function Faults(props) {
   const fitType = "scale-down";

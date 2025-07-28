@@ -14,10 +14,10 @@ import Draggable from 'react-draggable';
 import { useState, useLayoutEffect, useRef, useMemo, memo } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BsFillRecordCircleFill } from "react-icons/bs";
+import { BsIcon } from 'react-icons/bs/index.esm.js';
 import ConvertIcon from "./Convert Icon.png";
-import getColor from "../Shared/colors";
-import { ROUTES } from "../Shared/misc-constants";
+import getColor from "../Shared/colors.js";
+import { ROUTES } from "../Shared/misc-constants.js";
 
 // Compulsory toast-configuration method
 toast.configure();

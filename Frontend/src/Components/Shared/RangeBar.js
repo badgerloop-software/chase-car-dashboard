@@ -1,5 +1,5 @@
 import { Box, useColorMode } from "@chakra-ui/react";
-import getColor from "./colors";
+import getColor from "./colors.js";
 
 export default function RangeBar(props) {
   const clamp = (x, a, b) => Math.max(a, Math.min(x, b));

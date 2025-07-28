@@ -1,6 +1,6 @@
 import {Flex, Text, Spacer, useColorMode} from "@chakra-ui/react"
-import RangeBar from "./RangeBar"
-import getColor from "./colors";
+import RangeBar from "./RangeBar.js"
+import getColor from "./colors.js";
 
 export default function RangeCell(props) {
     const { colorMode } = useColorMode();

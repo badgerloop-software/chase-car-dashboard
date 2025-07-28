@@ -1,9 +1,9 @@
 import {Grid, GridItem, Box, Flex, Spacer, Text, Center, useColorMode, VStack, Image} from "@chakra-ui/react";
-import HeadingCell from "../Shared/HeadingCell";
+import HeadingCell from "../Shared/HeadingCell.js";
 import CONSTANTS from "../../data-constants.json"
-import getColor from "../Shared/colors";
-import images from "./Icons/Images"
-import RangeCell from "../Shared/RangeCell";
+import getColor from "../Shared/colors.js";
+import images from "./Icons/Images.js"
+import RangeCell from "../Shared/RangeCell.js";
 
 export default function Motor_Motion(props) {
     const { colorMode } = useColorMode();
