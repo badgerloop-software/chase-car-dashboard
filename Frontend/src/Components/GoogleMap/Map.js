@@ -7,7 +7,6 @@ import CONSTANTS from "../../data-constants.json";
 import { BsChevronDown } from "react-icons/bs";
 import hsvBar from "./RangeBar/hsv.png"
 
-
 function CarMap() {
   const [mapMode, setMapMode] = useState("Google Maps");
   const mapRef = useRef(null);
@@ -20,7 +19,9 @@ function CarMap() {
 
   const textColor = "white";
   const buttonColorScheme = "blackAlpha";
+  // const textShadow = "1px 1px 2px rgba(43.1,50.2,58.4,0.8)";
   const textShadow = "1px 1px 2px rgba(0,0,0,0.8)";
+
 
   const defaultCenter = {
     lat: 43.072745366387494, // MEHQ
@@ -30,6 +31,7 @@ function CarMap() {
   const mapStyles = {
     width: "100%",
     height: "100%"
+
   };
 
   const allowedDuration = {
@@ -39,6 +41,7 @@ function CarMap() {
     600: "10min",
     1200: "20min",
     1800: "30min"
+
   };
 
   const refreshMap = () => {
@@ -84,7 +87,6 @@ function CarMap() {
   const overlay = () => {
     return (
       <div>
-        {/* ...existing overlay code... */}
         <Box
           zIndex='9999'
           position='absolute'
@@ -126,6 +128,7 @@ function CarMap() {
           right='70px'
           height='40px'
           display="flex"
+
           alignItems="center"
         >
           <Menu>
