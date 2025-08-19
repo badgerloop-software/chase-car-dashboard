@@ -6,10 +6,11 @@ export default function Faults(props) {
   const fitType = "scale-down";
   const imageHeight = "5vh";
 
-  const { colorMode } = useColorMode();
+//  const { colorMode } = useColorMode();
 
   // Get set of images for light mode or dark mode
-  const Images = FaultsViewImages[`${colorMode}`];
+//  const Images = FaultsViewImages[`${colorMode}`];
+  const Images = FaultsViewImages;
 
   /**
    * Checks the boolean value specified by dataLabel against its nominal value. Returns true if the boolean value

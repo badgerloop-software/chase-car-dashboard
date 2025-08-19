@@ -42,7 +42,6 @@ import GraphSelectModal from "./GraphSelectModal.js";
 import GraphData from "./graph-data.json";
 import getColor from "../Shared/colors.js";
 import { ROUTES } from "../Shared/misc-constants.js";
-const isNullOrUndef = (value) => value === null || value === undefined;
 import { getRelativePosition as _getRelativePosition } from 'chart.js/helpers/helpers.js';
 
 ChartJS.register(  LinearScale,
@@ -54,6 +53,7 @@ ChartJS.register(  LinearScale,
   Legend
 );
 
+const isNullOrUndef = (value) => value === null || value === undefined;
 /**
  * Stores all the units and nominal minimum/maximum values in the graph-data json file as key: value pairs
  */
@@ -78,7 +78,7 @@ function getOptions(now, secondsRetained, colorMode, optionInfo, extremes) {
 
   // Custom interaction (feat. ChatGPT)
   Interaction.modes.myCustomMode = function(chart, e, options, useFinalPosition) {
-    const position = chart.chartArea ? getRelativePosition(e, chart) : getRelativePosition(e, chart.chart);
+    const position = chart.chartArea ? _getRelativePosition(e, chart) : _getRelativePosition(e, chart.chart);
 
     const nearestPoints = [];
 

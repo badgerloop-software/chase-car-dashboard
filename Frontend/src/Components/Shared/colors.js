@@ -47,11 +47,15 @@ export const colors = {
  *                   the given color mode.
  */
 export default function getColor(key, colorMode) {
-    // Return color depending on color mode and key. If the key does not exist for the given color mode, return null
-    if(colors[`${colorMode}`].hasOwnProperty(key)) {
-        return colors[`${colorMode}`][key];
-    } else {
-        console.warn(`There is no ${colorMode} mode value of ${key}`);
-        return null;
-    }
+  // Safely check if the color exists.
+  if (colors && colors[colorMode] && colors[colorMode].hasOwnProperty(key)) {
+    // If it exists, return the correct color.
+    return colors[colorMode][key];
+  }
+
+  // If the color doesn't exist, generate a random color for debugging.
+  const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+
+  console.warn(`Color key "${key}" not found for mode "${colorMode}". Using random color ${randomColor}.`);
+  return randomColor;
 }
