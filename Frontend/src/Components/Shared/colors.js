@@ -38,24 +38,23 @@ export const colors = {
 };
 
 /**
- * Returns a hexadecimal color string corresponding to the provided key and color mode. Returns null if that pair does
- * not exist.
+ * Returns a hexadecimal color string corresponding to the provided key and color mode.
+ * If the color is not found, it defaults to a readable shade of gray.
  *
  * @param key The description of the color you want to retrieve (e.g. "border" and "selectTxt")
  * @param colorMode The color mode, "light" or "dark"
- * @returns {null|*} The color corresponding to the provided key and color mode or null if that key does not exist for
- *                   the given color mode.
+ * @returns {string} The corresponding color string.
  */
 export default function getColor(key, colorMode) {
   // Safely check if the color exists.
-  if (colors && colors[colorMode] && colors[colorMode].hasOwnProperty(key)) {
+  if (colors?.[colorMode]?.hasOwnProperty(key)) {
     // If it exists, return the correct color.
     return colors[colorMode][key];
   }
 
-  // If the color doesn't exist, generate a random color for debugging.
-  const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+  // If the color doesn't exist, select a readable gray for the best contrast.
+  const fallbackColor = colorMode === 'dark' ? '#CCCCCC' : '#4A5568';
 
-  console.warn(`Color key "${key}" not found for mode "${colorMode}". Using random color ${randomColor}.`);
-  return randomColor;
+  console.warn(`Color key "${key}" not found for mode "${colorMode}". Using fallback color ${fallbackColor}.`);
+  return fallbackColor;
 }

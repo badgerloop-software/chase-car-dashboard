@@ -1,0 +1,1328 @@
+nohup: ignoring input
+WebSocket server started at ws://localhost:8765
+Waiting for dashboard to connect...
+Dashboard connected!
+Starting GPS simulation...
+Processing point: Lat=38.956, Lon=-95.7379
+Dashboard connected!
+Starting GPS simulation...
+Processing point: Lat=38.956, Lon=-95.7379
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+====================
+LAP 1 DETECTED!
+Time: 0:10.007
+Best: 0:10.007
+====================
+send failed, stopping simulation for client: received 1000 (OK); then sent 1000 (OK)
+Processing point: Lat=38.9568, Lon=-95.7379
+====================
+LAP 1 DETECTED!
+Time: 0:10.004
+Best: 0:10.004
+====================
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 2 DETECTED!
+Time: 0:15.011
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 3 DETECTED!
+Time: 0:25.011
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 4 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 5 DETECTED!
+Time: 0:25.016
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 6 DETECTED!
+Time: 0:25.016
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 7 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 8 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 9 DETECTED!
+Time: 0:25.014
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 10 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 11 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 12 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 13 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 14 DETECTED!
+Time: 0:25.019
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 15 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 16 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 17 DETECTED!
+Time: 0:25.014
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 18 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 19 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 20 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 21 DETECTED!
+Time: 0:25.017
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 22 DETECTED!
+Time: 21:05.390
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 23 DETECTED!
+Time: 0:25.016
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 24 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 25 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 26 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 27 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 28 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 29 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 30 DETECTED!
+Time: 0:25.027
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 31 DETECTED!
+Time: 0:25.014
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 32 DETECTED!
+Time: 0:25.019
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 33 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 34 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 35 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 36 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 37 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 38 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 39 DETECTED!
+Time: 0:25.019
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 40 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 41 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 42 DETECTED!
+Time: 0:25.017
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 43 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 44 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 45 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 46 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 47 DETECTED!
+Time: 0:25.019
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 48 DETECTED!
+Time: 0:25.019
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 49 DETECTED!
+Time: 0:25.016
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 50 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 51 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 52 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 53 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 54 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 55 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 56 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 57 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 58 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 59 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 60 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 61 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 62 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 63 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 64 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 65 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 66 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 67 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 68 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 69 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 70 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 71 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 72 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 73 DETECTED!
+Time: 0:25.026
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 74 DETECTED!
+Time: 0:25.026
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 75 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 76 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 77 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 78 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 79 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 80 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 81 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 82 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 83 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 84 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 85 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 86 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 87 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 88 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 89 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 90 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 91 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 92 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 93 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 94 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 95 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 96 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 97 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 98 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 99 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 100 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 101 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 102 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 103 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 104 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 105 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 106 DETECTED!
+Time: 0:25.026
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 107 DETECTED!
+Time: 0:25.017
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 108 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 109 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 110 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 111 DETECTED!
+Time: 0:25.018
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 112 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 113 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 114 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 115 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 116 DETECTED!
+Time: 0:25.017
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 117 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 118 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 119 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 120 DETECTED!
+Time: 0:25.020
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 121 DETECTED!
+Time: 0:25.023
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 122 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 123 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 124 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 125 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 126 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 127 DETECTED!
+Time: 0:25.025
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 128 DETECTED!
+Time: 0:25.024
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 129 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 130 DETECTED!
+Time: 0:25.022
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================
+LAP 131 DETECTED!
+Time: 0:25.021
+Best: 0:10.004
+====================
+Processing point: Lat=38.9564, Lon=-95.7379
+Processing point: Lat=38.9568, Lon=-95.7379
+Processing point: Lat=38.9572, Lon=-95.7379
+Processing point: Lat=38.9576, Lon=-95.7379
+Processing point: Lat=38.956, Lon=-95.7379
+====================

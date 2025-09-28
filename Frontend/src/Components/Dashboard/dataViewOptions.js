@@ -7,6 +7,7 @@ const dvOptions = {
     system_power: "system_power",
     motor_motion: "motor_motion",
     temperature: "temperature",
+    lap_counter: "lap_counter",
     select: ""
 };
 
