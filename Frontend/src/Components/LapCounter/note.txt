@@ -1,0 +1,56 @@
+The Core Flow: From GPS Point to Lap Count
+
+Step 1: Define the "Track" and the Start/Finish Line
+
+Before you can count a lap, your program needs to know what a lap is. This is done by defining a virtual boundary.
+Location National Corvette Museum Motorsports Park in Bowling Green, Kentucky
+
+    Geofencing: You need to define a geofence for your start/finish line. In its simplest form, this is a straight line defined by two GPS coordinates (a starting latitude/longitude and an ending latitude/longitude).
+
+    Direction: You also need to know the official direction of travel. This prevents the system from counting a lap if a driver goes over the finish line in reverse.
+
+Step 2: Acquire Real-Time Location Data
+
+This is where the "satellite API" comes in. A device on the vehicle or person (like a smartphone or a dedicated GPS tracker) continuously determines its position.
+
+    The Device: The device uses its built-in GPS receiver to get its current latitude, longitude, and a timestamp.
+
+    Data Stream: It sends this data packet (lat, lon, timestamp) to your central program or server at regular intervals (e.g., once per second). The more frequent the updates, the more accurate your lap detection will be.
+
+Step 3: The Logic Engine - Detect the Crossing
+
+This is the heart of your program. Your application continuously analyzes the incoming stream of GPS data points to see if the start/finish line has been crossed.
+
+    Store Previous & Current Point: The logic always keeps track of the most recent GPS point (current_point) and the one that came just before it (previous_point).
+
+    Check for Intersection: Every time a new GPS point arrives, the program creates a small line segment between the previous_point and the current_point. It then performs a geometric calculation to see if this travel segment intersects with your predefined start/finish line geofence.
+
+    Validate Direction: If an intersection occurs, the logic then checks which direction the line was crossed to ensure it matches the official direction of the race.
+
+    Debounce/Cooldown: To prevent one slow pass over a wide finish line from being counted as multiple laps, a "cooldown" is initiated. Once a lap is counted, the system will ignore any further crossings for a set period (e.g., 30 seconds) or until the vehicle is a certain distance away from the line.
+
+Step 4: Calculate and Store Lap Data
+
+When a valid crossing is confirmed:
+
+    Increment Lap Counter: The main lap count is increased by one.
+
+    Calculate Lap Time: The program takes the timestamp of the crossing and subtracts the timestamp of the previous lap's crossing. The result is the new lap time.
+
+    Store Results: The lap number, lap time, and timestamp are saved. The system also checks if this was the "best lap" so far and updates that value if needed.
+
+Step 5: Update the Dashboard
+
+The final step is to display this information to the user in a clear, real-time format.
+
+    Data Binding: Your dashboard UI is "bound" to the data from Step 4.
+
+    Real-Time Updates: As soon as the logic engine confirms a lap and calculates the new data, the dashboard instantly refreshes to show:
+
+        Current Lap: The big, primary number.
+
+        Last Lap Time: How long the most recent lap took.
+
+        Best Lap Time: The fastest lap of the session.
+
+        Total Time: The cumulative time of the session.
