@@ -265,7 +265,7 @@ function startSending() {
     console.log('Starting to send data packets...');
     console.log(`Sending at ~31Hz (32ms intervals) to localhost:${PORT}`);
     
-    setInterval(() => {
+    const sendInterval = setInterval(() => {
         if (csvData.length === 0) return;
         
         const currentRow = csvData[currentIndex];
@@ -278,7 +278,21 @@ function startSending() {
         });
         
         // Move to next row, loop back to start when done
-        currentIndex = (currentIndex + 1) % csvData.length;
+        currentIndex++;
+
+        // Log progress occasionally
+        if (currentIndex % 100 === 0) {
+        console.log(`Sent ${currentIndex} packets, timestamp: ${currentRow.Var1 || 'N/A'}`);
+        }
+
+        // Stop when finished
+        if (currentIndex >= csvData.length) {
+        console.log('All data packets sent. Stopping replay.');
+        clearInterval(sendInterval);
+        client.close();
+        process.exit(0);
+        } 
+
         
         // Log progress occasionally
         if (currentIndex % 100 === 0) {
