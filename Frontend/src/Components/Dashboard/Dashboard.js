@@ -11,6 +11,7 @@ import GraphContainer from "./GraphContainer";
 import DataRecordingControl from "./DataRecordingControl";
 import dvOptions from "./dataViewOptions";
 import getColor from "../Shared/colors";
+import SerialSelector from "../SerialSelector/SerialSelector";
 import { ROUTES } from "../Shared/misc-constants";
 import FaultsView from "../Faults/FaultsView";
 import fauxQueue from "../Graph/faux-queue.json";
@@ -368,6 +369,18 @@ export default function Dashboard(props) {
             <DataViewOptions txtColor={optionTxtCol} />
           </Select>
           {switchDataView(dataView4)}
+        </GridItem>
+        <GridItem
+          minH="min-content"
+          rowStart={4}
+          rowSpan={1}
+          colStart={1}
+          colSpan={2}
+          borderColor={borderCol}
+          borderWidth={1}
+          p={1}
+        >
+          <SerialSelector/>
         </GridItem>
       </Grid>
       <GraphContainer

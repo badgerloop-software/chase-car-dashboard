@@ -9,3 +9,6 @@ recordedData/processedData/*.csv
 
 # Python
 *.egg-info
+
+# File sync
+Downloaded*/

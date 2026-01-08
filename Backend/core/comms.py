@@ -5,6 +5,7 @@ import traceback
 import aiohttp
 import asyncio
 import config
+import serial
 
 import signal
 import sys
@@ -13,15 +14,17 @@ from multiprocessing import Process, Manager
 from multiprocessing.managers import BaseManager
 from . import db
 from file_sync.file_sync_down.main import *
+import re
 
 format_string = '<' # little-endian
 byte_length = 0
 properties = []
 frontend_data = {}
-solar_car_connection = {'lte': False, 'udp': False}
+solar_car_connection = {'lte': False, 'udp': False, 'serial': False}
 # Convert dataformat to format string for struct conversion
 # Docs: https://docs.python.org/3/library/struct.html
 types = {'bool': '?', 'float': 'f', 'char': 'c', 'uint8': 'B', 'uint16': 'H', 'uint64': 'Q'}
+serial_port = {"device": "", 'baud': 115200}    # shared object with core_api for setting serial device from frontend
 
 def set_format(file_path: str):
     global format_string, byte_length, properties
@@ -46,7 +49,7 @@ def unpack_data(data):
 
 
 class Telemetry:
-    __tmp_data = {'tcp': b'', 'lte': b'', 'udp': b'', 'file_sync': b''}
+    __tmp_data = {'tcp': b'', 'lte': b'', 'udp': b'', 'file_sync': b'', 'serial': b''}
     latest_tstamp = 0
 
     def listen_udp(self, port: int):
@@ -141,6 +144,51 @@ class Telemetry:
                     solar_car_connection['tcp'] = False
                     break
 
+    def serial_read(self):
+        global frontend_data, serial_port
+        latest_tstamp = 0
+        while True:
+            curr_device = serial_port['device']
+            curr_baud = serial_port['baud']
+            if(curr_device):
+                # Establish a serial connection)
+                ser = serial.Serial(curr_device, curr_baud)
+                # if device has been updated then exit loop and connect to new device
+                while curr_device == serial_port['device'] and curr_baud == serial_port['baud']:
+                    if time.time() - latest_tstamp > 5:
+                        solar_car_connection['serial'] = False
+                    # Read data from serial port
+                    try:
+                        data = b''
+                        if(ser.in_waiting > 0):
+                            data = ser.read(ser.in_waiting)
+                        else:
+                            time.sleep(0.1)
+                        if not data:
+                            # No data received, continue listening
+                            continue
+                        packets = self.parse_packets(data, 'serial')
+                        for packet in packets:
+                            if len(packet) == byte_length:
+                                d = unpack_data(packet)
+                                latest_tstamp = time.time()
+                                try:
+                                    frontend_data = d.copy()
+                                    db.insert_data(d)
+                                except Exception as e:
+                                    print(traceback.format_exc())
+                                    continue
+                                solar_car_connection['serial'] = True
+                    except Exception:
+                        print(traceback.format_exc())
+                        solar_car_connection['serial'] = False
+                        serial_port['device'] = ""
+                        break
+            else:
+                solar_car_connection['serial'] = False
+                # wait before retry
+                time.sleep(1)
+
     async def fetch(self, session, url):
         try:
             async with session.get(url, timeout=2) as response:
@@ -195,34 +243,39 @@ class Telemetry:
 
     def parse_packets(self, new_data: bytes, tmp_source: str):
         """
-        Parse and check the length of each packet
-        :param new_data: Newly received bytes from the comm channel
-        :param tmp_source: Name of tmp data source, put comm channel name here e.g. tcp, lte
+        Parse and check the length of each packet.
+        
+        :param new_data: Newly received bytes from the comm channel.
+        :param tmp_source: Name of tmp data source, put comm channel name here e.g. tcp, lte.
         """
-        header = b'<bsr>'
-        footer = b'</bsr>'
-        self.__tmp_data[tmp_source] += new_data
-        packets = []
-        while True:
-            # Search for the next complete data packet
-            try:
-                start_index = self.__tmp_data[tmp_source].index(header)
-                end_index = self.__tmp_data[tmp_source].index(footer)
-            except ValueError:
-                break
-
-            # Extract a complete data packet
-            packets.append(self.__tmp_data[tmp_source][start_index + len(header):end_index])
-            # Update the remaining data to exclude the processed packet
-            self.__tmp_data[tmp_source] = self.__tmp_data[tmp_source][end_index + len(footer):]
-
-        # If the remaining data is longer than the expected packet length,
-        # there might be an incomplete packet, so log a warning.
-        if len(self.__tmp_data[tmp_source]) >= byte_length:
-            print("Warning: Incomplete or malformed packet ------------------------------------")
+        header = b"<bsr>"
+        footer = b"<bsr"
+        if tmp_source not in self.__tmp_data:
             self.__tmp_data[tmp_source] = b''
 
+        # Append new data to the temporary buffer
+        self.__tmp_data[tmp_source] += new_data
+
+        # Regex pattern to match packets with <bsr> and </bsr> tags
+        pattern = re.compile(b'<bsr>(.*?)</bsr>', re.DOTALL)
+
+        packets = []
+        while True:
+            match = pattern.search(self.__tmp_data[tmp_source])
+            if not match:
+                break
+            # Extract the packet data
+            packet = match.group(1)
+            #remove headers and footers
+            packets.append(packet)
+
+            if match.start(0) != 0:
+                print(f"skipping {match.start(0)} bytes")
+            # Remove the processed packet from the temporary buffer
+            self.__tmp_data[tmp_source] = self.__tmp_data[tmp_source][match.end():]
+
         return packets
+
 
     def fs_down_callback(self, data):
         # copied from listen_upd()
@@ -255,12 +308,13 @@ signal.signal(signal.SIGINT, sigint_handler)
 
 def start_comms():
     # start file sync
-    p.start()
-
-
+    # p.start()
+    
     # Start two live comm channels
-    vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
-    vps_thread.start()
-    socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
+    #vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
+    #vps_thread.start()
+    #socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
+    #socket_thread.start()
+    socket_thread = threading.Thread(target=lambda: telemetry.serial_read())
     socket_thread.start()
 
