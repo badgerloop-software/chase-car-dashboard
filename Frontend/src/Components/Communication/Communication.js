@@ -35,7 +35,7 @@ export default function Communication(props) {
     };
 
     return (
-        <Flex flex='auto' direction='column'>
+        <Flex flex='auto' direction='column' overflowY='auto' height='90%'>
             <HeadingCell fontSize='2.2vh' label='Communication'/>
             <Flex flex='inherit' direction='column' pl='2' pt='2' >
                 <HStack>

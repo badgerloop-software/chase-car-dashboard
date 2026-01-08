@@ -6,48 +6,25 @@ import {
   Select,
   useColorMode
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import FaultsView from "../Faults/FaultsView";
-import Communication from "../Communication/Communication";
-import BatteryCells from "../BatteryCells/BatteryCells";
-import BatteryPack from "../BatteryPack/BatteryPack";
-import PPC_MPPT from "../PPC_MPPT/PPC_MPPT";
-import SystemPower from "../SystemPower/SystemPower"
-import Motor_Motion from "../Motor_Motion/Motor_Motion";
+import { useEffect, useState, Suspense, lazy, memo, useRef } from "react";
 import GraphContainer from "./GraphContainer";
 import DataRecordingControl from "./DataRecordingControl";
-import Temperature from "../Temperature/Temperature";
 import dvOptions from "./dataViewOptions";
 import getColor from "../Shared/colors";
 import SerialSelector from "../SerialSelector/SerialSelector";
 import { ROUTES } from "../Shared/misc-constants";
+import FaultsView from "../Faults/FaultsView";
 import fauxQueue from "../Graph/faux-queue.json";
+const Temperature = lazy(() => import("../Temperature/Temperature"));
+const Communication = lazy(() => import("../Communication/Communication"));
+const BatteryCells = lazy(() => import("../BatteryCells/BatteryCells"));
+const BatteryPack = lazy(() => import("../BatteryPack/BatteryPack"));
+const PPC_MPPT = lazy(() => import("../PPC_MPPT/PPC_MPPT"));
+const SystemPower = lazy(() => import("../SystemPower/SystemPower"));
+const Motor_Motion = lazy(() => import("../Motor_Motion/Motor_Motion"));
 
 // prevent accidental reloading/closing
 window.onbeforeunload = () => true;
-
-
-/**
- * Requests the single values API endpoint and returns the response
- * @returns the JSON response from the single values API
- */
-async function callBackendSingleValuesAPI() {
-  // console.time("single values http call");
-
-  const response = await fetch(ROUTES.GET_SINGLE_VALUES);
-  // console.timeLog("single values http call", "fetch finished");
-  const body = await response.json();
-  // console.timeLog("single values http call", "json extracted");
-
-  if (response.status !== 200) {
-    console.error("single values api: error");
-    throw Error(body.message);
-  }
-
-  // console.timeEnd("single values http call");
-  // console.log("body", body);
-  return body;
-}
 
 /**
  * The Dashboard component
@@ -58,21 +35,42 @@ export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
   const [fetchDep, setFetchDep] = useState(false);
   const [state, setState] = useState({ data: null });
+  const ws = useRef(null);
+  
+  // // open websocket on mount
   useEffect(() => {
-    callBackendSingleValuesAPI()
-        .then((res) => {
-          //console.time("update react");
+    ws.current = new WebSocket(`ws://localhost:4001/single-values`);
 
-          // when the car/data generator is offline, res.response is going to be null
-          setState({ data: res.response });
+    ws.current.onmessage = (event) => {
+      try {
+        const carData = JSON.parse(event.data);
+        setState({ data: carData.response });
+      } catch {
+        console.log('Error recieving data from websocket');
+      }
+    };
 
-          //console.timeEnd("update react");
-        })
-        .catch((err) => console.log(err))
-        .finally(() => {
-          setFetchDep((oldFetchDep) => !oldFetchDep);
-        });
-  }, [fetchDep]);
+    ws.current.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    // close connection on unmount
+    return () => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
+  },[])
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        ws.current.send(JSON.stringify({ action: 'getData' }));
+      }
+    }, 300);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   //------------------- Choosing data views using Select components -------------------
 
@@ -162,19 +160,19 @@ export default function Dashboard(props) {
   const switchDataView = (optionValue) => {
     switch(optionValue) {
       case dvOptions.battery_pack:
-        return <BatteryPack data={state.data} />;
+        return <Suspense fallback={<div>Loading...</div>}><BatteryPack data={state.data} /></Suspense>;
       case dvOptions.cell_groups:
-        return <BatteryCells data={state.data} />;
+        return <Suspense fallback={<div>Loading...</div>}><BatteryCells data={state.data} /></Suspense>;
       case dvOptions.ppc_mppt:
-        return <PPC_MPPT data={state.data}/>;
+        return <Suspense fallback={<div>Loading...</div>}><PPC_MPPT data={state.data}/></Suspense>;
       case dvOptions.communication:
-        return <Communication data={state.data}/>;
+        return <Suspense fallback={<div>Loading...</div>}><Communication data={state.data}/></Suspense>;
       case dvOptions.system_power:
-        return <SystemPower data={state.data}/>;
+        return <Suspense fallback={<div>Loading...</div>}><SystemPower data={state.data}/></Suspense>;
       case dvOptions.motor_motion:
-        return <Motor_Motion data={state.data}/>
+        return <Suspense fallback={<div>Loading...</div>}><Motor_Motion data={state.data}/></Suspense>;
       case dvOptions.temperature:
-        return <Temperature data={state.data}/>
+        return <Suspense fallback={<div>Loading...</div>}><Temperature data={state.data}/></Suspense>;
       case dvOptions.select:
         return <Box />;
       default:
@@ -398,7 +396,7 @@ export default function Dashboard(props) {
   );
 }
 
-function DataViewOptions(props) {
+const DataViewOptions = memo(function DataViewOptions(props) {
   return (
     <>
       <option style={{color: props.txtColor}} value={dvOptions.select}>Select option</option>
@@ -411,4 +409,4 @@ function DataViewOptions(props) {
       <option style={{color: props.txtColor}} value={dvOptions.temperature}>Temperature</option>
     </>
   );
-}
+});

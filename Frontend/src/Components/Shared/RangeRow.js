@@ -1,5 +1,5 @@
 import {Flex, Center, Text, Spacer, useColorMode} from "@chakra-ui/react";
-import getColor from "../Shared/colors";
+import getColor from "./colors";
 import RangeBar from "./RangeBar";
 
 export default function RangeRow(props) {

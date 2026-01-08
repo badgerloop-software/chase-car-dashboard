@@ -1,3 +1,4 @@
+from os import getpid
 import json, select, socket, struct, sys, time
 import threading
 import traceback
@@ -34,7 +35,7 @@ def set_format(file_path: str):
         format_string += types[data_format[key][1]]
         byte_length += data_format[key][0]
         properties.append(key)
-        config.FORMAT[key] = {'type': data_format[key][1]}
+        config.FORMAT[key] = {'type': data_format[key][1], 'min': data_format[key][3], 'max': data_format[key][4]}
 
 def unpack_data(data):
     fields = {}

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, WebSocket
 import serial.tools.list_ports
 from . import comms
 from pydantic import BaseModel
