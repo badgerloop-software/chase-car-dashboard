@@ -81,6 +81,23 @@ We use Poetry for managing our backend Python environment. To setup a Poetry env
 
 ## Running the Dashboard
 
+### GitHub Pages (Static Frontend Only)
+
+The frontend can be deployed as a static website to GitHub Pages at: https://badgerloop-software.github.io/chase-car-dashboard
+
+**Note:** This is a static build without backend connectivity. It's useful for UI demos and previews but won't have live data functionality.
+
+**To deploy:**
+1. From the `Frontend/` directory, run `npm run deploy`
+2. This will build the app and push it to the `gh-pages` branch
+3. The site will be available at the URL above within a few minutes
+
+**First-time setup:**
+- Go to your repository settings → Pages
+- Set Source to "Deploy from a branch"
+- Select the `gh-pages` branch and `/ (root)` folder
+- Click Save
+
 ### Natively
 
 1. Ensure that you have:

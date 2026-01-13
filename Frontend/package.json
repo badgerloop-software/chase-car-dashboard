@@ -2,6 +2,7 @@
   "name": "chase-car-dashboard-frontend",
   "version": "5.0.1",
   "private": true,
+  "homepage": "https://badgerloop-software.github.io/chase-car-dashboard",
   "proxy": "http://127.0.0.1:4001",
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",
@@ -35,6 +36,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "update-data-constants": "node --experimental-json-modules ./src/CustomScripts/updateDataConstants.mjs",
     "update-graph-data": "node --experimental-json-modules ./src/CustomScripts/convertData.mjs",
     "update-data": "run-p update-data-constants update-graph-data"
@@ -61,6 +64,7 @@
     "@babel/cli": "^7.17.3",
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
+    "gh-pages": "^6.3.0",
     "npm-run-all": "^4.1.5"
   }
 }
