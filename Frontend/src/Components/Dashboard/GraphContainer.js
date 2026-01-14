@@ -67,14 +67,14 @@ function GraphContainer(props) {
   const showGraph = useCallback(
     (name, idx) => {
       // save graph in old position, if needed
-      // if (graphTitles[idx] && graphTitles[idx] !== "Custom")
+      // if (graphTitles[idx] && graphTitles[idx] !== "Timeseries Graph")
       //   onSave(graphTitles[idx], datasets);
 
       // duplicate the graph titles
       const copy = graphTitles.slice();
 
       // check for special values
-      if (name?.length && name !== "Custom") {
+      if (name?.length && name !== "Timeseries Graph") {
         // Get information about the graph being shown
         const oldIdx = graphTitles.indexOf(name);
         const graphMetadataIdx = customGraphData[name];
@@ -92,7 +92,7 @@ function GraphContainer(props) {
             // The graph that the selected one is being swapped with is a saved graph
             graphMetadataOldIdx = customGraphData[copy[oldIdx]];
           } else {
-            // The graph that the selected one is being swapped with is empty or a Custom graph whose datasets and
+            // The graph that the selected one is being swapped with is empty or a Timeseries Graph whose datasets and
             // historyLength will be cleared
             graphMetadataOldIdx = {
               historyLength: null,
@@ -105,7 +105,7 @@ function GraphContainer(props) {
         }
       }
 
-      // default set: if new custom/empty graph or replacing new custom/empty graph
+      // default set: if new Timeseries Graph/empty graph or replacing new Timeseries Graph/empty graph
       // see https://jsbench.me/vsl20xqpso/1 for reasoning behind this algorithm
       copy[idx] = name;
       // console.log(graphData, "[", idx, "] =", name, "=", graphData);
@@ -263,7 +263,7 @@ function GraphContainer(props) {
               />
             </Select>
             {graphTitles[index] === "" ? null : graphTitles[index] ===
-              "Custom" ? (
+              "Timeseries Graph" ? (
               <CustomGraph
                 onSave={(title, isNew, data) =>
                   onSave(title, isNew, data, index)
@@ -295,11 +295,11 @@ function GraphContainer(props) {
 }
 
 /**
- * Creates a component that contains all the given titles as well as "Custom" in a dropdown option list.
+ * Creates a component that contains all the given titles as well as "Timeseries Graph" in a dropdown option list.
  *
  * @param {{titles: string[]}} props the props to pass to this component
  * @param {string[]} props.titles the list of graph titles to display in the dropdown
- * @returns a component containing all the given options and "Custom" and "Google Maps"
+ * @returns a component containing all the given options and "Timeseries Graph" and "Google Maps"
  */
 function GraphOptions({ titles, txtColor }) {
   return (
@@ -308,14 +308,14 @@ function GraphOptions({ titles, txtColor }) {
         Select option
       </option>
       {titles
-        .filter((title) => title && title !== "Custom")
+        .filter((title) => title && title !== "Timeseries Graph")
         .map((title) => (
           <option style={{ color: txtColor }} key={title} value={title}>
             {title}
           </option>
         ))}
-      <option style={{ color: txtColor }} value="Custom">
-        Custom
+      <option style={{ color: txtColor }} value="Timeseries Graph">
+        Timeseries Graph
       </option>
       <option style={{ color: txtColor }} value="Map">
         Google Maps

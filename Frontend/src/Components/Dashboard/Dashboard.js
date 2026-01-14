@@ -17,6 +17,7 @@ import FaultsView from "../Faults/FaultsView";
 import fauxQueue from "../Graph/faux-queue.json";
 import Sidebar from "../Sidebar/Sidebar";
 import Settings from "../Settings/Settings";
+import Home from "../Home/Home";
 const Temperature = lazy(() => import("../Temperature/Temperature"));
 const Communication = lazy(() => import("../Communication/Communication"));
 const BatteryCells = lazy(() => import("../BatteryCells/BatteryCells"));
@@ -38,6 +39,8 @@ export default function Dashboard(props) {
   const [fetchDep, setFetchDep] = useState(false);
   const [state, setState] = useState({ data: null });
   const [currentPage, setCurrentPage] = useState("home");
+  const [render3D, setRender3D] = useState(true);
+  const [dataMode, setDataMode] = useState("normal");
   const ws = useRef(null);
   
   // // open websocket on mount
@@ -242,10 +245,14 @@ export default function Dashboard(props) {
   // Render different pages based on current selection
   const renderPage = () => {
     if (currentPage === "settings") {
-      return <Settings />;
+      return <Settings render3D={render3D} setRender3D={setRender3D} dataMode={dataMode} setDataMode={setDataMode} />;
     }
     
-    // Default: Home or Dashboard page
+    if (currentPage === "home") {
+      return <Home render3D={render3D} />;
+    }
+    
+    // Default: Dashboard page
     return (
       <>
         <DataRecordingControl/>

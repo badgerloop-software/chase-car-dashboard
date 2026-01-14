@@ -11,34 +11,24 @@ import {
   Divider,
   useColorMode,
   Icon,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatGroup,
   useToast,
+  Badge,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { MdPerson, MdCamera, MdNotifications, MdSecurity, MdInfo, MdChevronRight } from "react-icons/md";
-import { IoSpeedometer } from "react-icons/io5";
-import { FaLeaf } from "react-icons/fa";
+import { MdPerson, MdCamera, MdSecurity, MdInfo, MdChevronRight } from "react-icons/md";
 import getColor from "../Shared/colors";
 
-export default function Settings() {
+export default function Settings({ render3D, setRender3D, dataMode, setDataMode }) {
   const { colorMode, toggleColorMode } = useColorMode();
   const toast = useToast();
   const borderCol = getColor("border", colorMode);
   const bgCol = colorMode === "light" ? "white" : "gray.800";
   const cardBg = colorMode === "light" ? "gray.50" : "gray.700";
+  const isSignedIn = false;
 
-  // Settings state
-  const [notifications, setNotifications] = useState(true);
-  const [dataMode, setDataMode] = useState("normal");
-  const [render3D, setRender3D] = useState(true);
-
-  const handleAccountSettings = () => {
+  const handleSignIn = () => {
     toast({
-      title: "Account Settings",
-      description: "Account settings would open here",
+      title: "Sign In",
+      description: "Sign in functionality would open here",
       status: "info",
       duration: 3000,
       isClosable: true,
@@ -96,57 +86,29 @@ export default function Settings() {
               <Avatar
                 size="2xl"
                 icon={<Icon as={MdPerson} boxSize={16} />}
-                bg="#C9302C"
+                bg="gray.400"
                 color="white"
               />
-              <IconButton
-                icon={<MdCamera />}
-                size="sm"
-                colorScheme="red"
-                borderRadius="full"
-                position="absolute"
-                bottom={0}
-                right={0}
-                onClick={handleProfileImageEdit}
-                aria-label="Edit profile picture"
-              />
             </Box>
-            <VStack spacing={1}>
-              <Text fontSize="2xl" fontWeight="bold">
-                Bucky Badger
-              </Text>
-              <Text color="gray.500">bucky.badger@email.com</Text>
-              <Text fontSize="sm" color="gray.500">
-                Solar Car Owner since 2023
-              </Text>
+            <VStack spacing={2}>
+              <HStack spacing={2}>
+                <Text fontSize="2xl" fontWeight="bold">
+                  Guest User
+                </Text>
+                <Badge colorScheme="gray" fontSize="sm">
+                  Not Signed In
+                </Badge>
+              </HStack>
+              <Button
+                colorScheme="red"
+                size="md"
+                onClick={handleSignIn}
+                mt={2}
+              >
+                Sign In to Account
+              </Button>
             </VStack>
           </VStack>
-        </Box>
-
-        {/* Stats Section */}
-        <Box
-          p={6}
-          bgColor={bgCol}
-          borderRadius="lg"
-          borderWidth={1}
-          borderColor={borderCol}
-        >
-          <StatGroup>
-            <Stat>
-              <HStack>
-                <Icon as={IoSpeedometer} boxSize={5} color="#C9302C" />
-                <StatLabel>Total Miles</StatLabel>
-              </HStack>
-              <StatNumber>15,248</StatNumber>
-            </Stat>
-            <Stat>
-              <HStack>
-                <Icon as={FaLeaf} boxSize={5} color="green.500" />
-                <StatLabel>CO₂ Saved</StatLabel>
-              </HStack>
-              <StatNumber>2,847 lbs</StatNumber>
-            </Stat>
-          </StatGroup>
         </Box>
 
         {/* Settings Toggles */}
@@ -161,21 +123,6 @@ export default function Settings() {
             <Text fontSize="xl" fontWeight="semibold" mb={2}>
               Preferences
             </Text>
-
-            {/* Notifications */}
-            <HStack justify="space-between">
-              <HStack>
-                <Icon as={MdNotifications} boxSize={5} color="gray.500" />
-                <Text>Notifications</Text>
-              </HStack>
-              <Switch
-                colorScheme="red"
-                isChecked={notifications}
-                onChange={(e) => setNotifications(e.target.checked)}
-              />
-            </HStack>
-
-            <Divider />
 
             {/* Data Mode */}
             <HStack justify="space-between">
@@ -242,23 +189,6 @@ export default function Settings() {
           overflow="hidden"
         >
           <VStack spacing={0} align="stretch">
-            <Button
-              justifyContent="space-between"
-              variant="ghost"
-              borderRadius={0}
-              p={6}
-              h="auto"
-              onClick={handleAccountSettings}
-              rightIcon={<MdChevronRight />}
-            >
-              <HStack>
-                <Icon as={MdPerson} boxSize={5} color="gray.500" />
-                <Text>Account Settings</Text>
-              </HStack>
-            </Button>
-
-            <Divider />
-
             <Button
               justifyContent="space-between"
               variant="ghost"

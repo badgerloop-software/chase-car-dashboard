@@ -5,3 +5,6 @@
 [submodule "Backend/file_sync"]
 	path = Backend/file_sync
 	url = git@github.com:badgerloop-software/file_sync
+[submodule "Frontend/src/Components/CarVisualizer"]
+	path = Frontend/src/Components/CarVisualizer
+	url = git@github.com:badgerloop-software/car-visualizer.git

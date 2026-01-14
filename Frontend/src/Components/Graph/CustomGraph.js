@@ -355,7 +355,7 @@ function CustomGraph(props) {
       });
 
       // Save edits to graphs that are named
-      if(title?.length && title !== "Custom") {
+      if(title?.length && title !== "Timeseries Graph") {
         onSave(title, false, { datasets: newDatasetKeys, historyLength: newHistoryLength });
       }
     };
@@ -391,7 +391,7 @@ function CustomGraph(props) {
           borderLeftWidth={1}
           textAlign="center"
         >
-          {title?.length ? title : "Custom"}
+          {title?.length ? title : "Timeseries Graph"}
         </Text>
         <VStack
           p={2}
@@ -494,7 +494,7 @@ function GraphNameModal(props) {
   // const isInvalid = !name.length || name === "Custom";
   const [isInvalid, setInvalid] = useState(true);
   useEffect(() => {
-    setInvalid(!name.length || name === "Custom");
+    setInvalid(!name.length || name === "Timeseries Graph");
   }, [name]);
 
   return (
@@ -526,7 +526,7 @@ function GraphNameModal(props) {
             {isInvalid ? (
               <FormErrorMessage>
                 A unique name for the graph is required, and it cannot be
-                "Custom".
+                "Timeseries Graph".
               </FormErrorMessage>
             ) : (
               <FormHelperText>
