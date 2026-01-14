@@ -15,6 +15,7 @@ import SerialSelector from "../SerialSelector/SerialSelector";
 import { ROUTES } from "../Shared/misc-constants";
 import FaultsView from "../Faults/FaultsView";
 import fauxQueue from "../Graph/faux-queue.json";
+import Sidebar from "../Sidebar/Sidebar";
 const Temperature = lazy(() => import("../Temperature/Temperature"));
 const Communication = lazy(() => import("../Communication/Communication"));
 const BatteryCells = lazy(() => import("../BatteryCells/BatteryCells"));
@@ -35,6 +36,7 @@ export default function Dashboard(props) {
   //-------------- Fetching data from backend and updating state/data --------------
   const [fetchDep, setFetchDep] = useState(false);
   const [state, setState] = useState({ data: null });
+  const [currentPage, setCurrentPage] = useState("home");
   const ws = useRef(null);
   
   // // open websocket on mount
@@ -239,6 +241,8 @@ export default function Dashboard(props) {
   return (
     <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
 
+      <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} />
+
       <DataRecordingControl/>
 
       <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
@@ -384,8 +388,8 @@ export default function Dashboard(props) {
         </GridItem>
       </Grid>
       <GraphContainer
-        flex="2 2 0"
-        maxW="67vw"
+        flex="1.8 1.8 0"
+        maxW="60vw"
         selectBg={selectBgCol}
         selectTxt={selectTxtCol}
         selectTxtFocus={selectTxtFocusCol}
