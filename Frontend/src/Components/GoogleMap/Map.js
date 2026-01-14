@@ -225,7 +225,7 @@ function CarMap() {
   }
 
   return (
-    <div style={{ position: "absolute", height: '31%', width: '66.6%' }}>
+    <div style={{ position: "relative", height: '100%', width: '100%' }}>
       {overlay()}
       <GoogleMap
         mapContainerStyle={mapStyles}
