@@ -16,6 +16,7 @@ import { ROUTES } from "../Shared/misc-constants";
 import FaultsView from "../Faults/FaultsView";
 import fauxQueue from "../Graph/faux-queue.json";
 import Sidebar from "../Sidebar/Sidebar";
+import Settings from "../Settings/Settings";
 const Temperature = lazy(() => import("../Temperature/Temperature"));
 const Communication = lazy(() => import("../Communication/Communication"));
 const BatteryCells = lazy(() => import("../BatteryCells/BatteryCells"));
@@ -238,87 +239,33 @@ export default function Dashboard(props) {
       _updateSelColor(event.target.id, selectTxtCol);
   }
 
-  return (
-    <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
+  // Render different pages based on current selection
+  const renderPage = () => {
+    if (currentPage === "settings") {
+      return <Settings />;
+    }
+    
+    // Default: Home or Dashboard page
+    return (
+      <>
+        <DataRecordingControl/>
 
-      <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} />
-
-      <DataRecordingControl/>
-
-      <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
-        <GridItem
-          minH="min-content"
-          rowStart={1}
-          rowSpan={1}
-          colStart={1}
-          colSpan={2}
-          borderColor={borderCol}
-          borderWidth={1}
-          p={2}
-        >
-          <FaultsView data={state.data} />
-        </GridItem>
-        <GridItem
-          minH="min-content"
-          rowStart={2}
-          rowSpan={1}
-          colStart={1}
-          colSpan={1}
-          borderColor={borderCol}
-          borderWidth={1}
-          display="flex"
-          flexDir="column"
-        >
-          <Select
-            id="dataViewSelect1"
-            size="xs"
-            variant="filled"
-            bgColor={selectBgCol}
-            color={selColorStr1}
-            focusBorderColor={borderCol}
-            value={dataView1}
-            onFocus={() => {setSelectFocus("dataViewSelect1")}}
-            onBlur={removeSelectFocus}
-            onMouseEnter={changeSelColor}
-            onMouseLeave={changeSelColorBack}
-            onChange={selectDataView}
-          >
-            <DataViewOptions txtColor={optionTxtCol} />
-          </Select>
-          {switchDataView(dataView1)}
-        </GridItem>
-        <GridItem
-          minH="fit-content"
-          rowStart={2}
-          rowSpan={1}
-          colStart={2}
-          colSpan={1}
-          borderColor={borderCol}
-          borderWidth={1}
-          display="flex"
-          flexDir="column"
-        >
-          <Select
-            id="dataViewSelect2"
-            size="xs"
-            variant="filled"
-            bgColor={selectBgCol}
-            color={selColorStr2}
-            focusBorderColor={borderCol}
-            value={dataView2}
-            onFocus={() => {setSelectFocus("dataViewSelect2")}}
-            onBlur={removeSelectFocus}
-            onMouseEnter={changeSelColor}
-            onMouseLeave={changeSelColorBack}
-            onChange={selectDataView}
-          >
-            <DataViewOptions txtColor={optionTxtCol} />
-          </Select>
-            {switchDataView(dataView2)}
-        </GridItem>
-        <GridItem
+        <Grid margin={0.5} gap={1} flex="1 1 0" templateRows="2fr 3fr 3fr" templateColumns="1fr 1fr" >
+          <GridItem
             minH="min-content"
-            rowStart={3}
+            rowStart={1}
+            rowSpan={1}
+            colStart={1}
+            colSpan={2}
+            borderColor={borderCol}
+            borderWidth={1}
+            p={2}
+          >
+            <FaultsView data={state.data} />
+          </GridItem>
+          <GridItem
+            minH="min-content"
+            rowStart={2}
             rowSpan={1}
             colStart={1}
             colSpan={1}
@@ -326,28 +273,28 @@ export default function Dashboard(props) {
             borderWidth={1}
             display="flex"
             flexDir="column"
-        >
-          <Select
-              id="dataViewSelect3"
+          >
+            <Select
+              id="dataViewSelect1"
               size="xs"
               variant="filled"
               bgColor={selectBgCol}
-              color={selColorStr3}
+              color={selColorStr1}
               focusBorderColor={borderCol}
-              value={dataView3}
-              onFocus={() => {setSelectFocus("dataViewSelect3")}}
+              value={dataView1}
+              onFocus={() => {setSelectFocus("dataViewSelect1")}}
               onBlur={removeSelectFocus}
               onMouseEnter={changeSelColor}
               onMouseLeave={changeSelColorBack}
               onChange={selectDataView}
-          >
-            <DataViewOptions txtColor={optionTxtCol} />
-          </Select>
-          {switchDataView(dataView3)}
-        </GridItem>
-        <GridItem
-            minH="min-content"
-            rowStart={3}
+            >
+              <DataViewOptions txtColor={optionTxtCol} />
+            </Select>
+            {switchDataView(dataView1)}
+          </GridItem>
+          <GridItem
+            minH="fit-content"
+            rowStart={2}
             rowSpan={1}
             colStart={2}
             colSpan={1}
@@ -355,47 +302,113 @@ export default function Dashboard(props) {
             borderWidth={1}
             display="flex"
             flexDir="column"
-        >
-          <Select
-              id="dataViewSelect4"
+          >
+            <Select
+              id="dataViewSelect2"
               size="xs"
               variant="filled"
               bgColor={selectBgCol}
-              color={selColorStr4}
+              color={selColorStr2}
               focusBorderColor={borderCol}
-              value={dataView4}
-              onFocus={() => {setSelectFocus("dataViewSelect4")}}
+              value={dataView2}
+              onFocus={() => {setSelectFocus("dataViewSelect2")}}
               onBlur={removeSelectFocus}
               onMouseEnter={changeSelColor}
               onMouseLeave={changeSelColorBack}
               onChange={selectDataView}
+            >
+              <DataViewOptions txtColor={optionTxtCol} />
+            </Select>
+              {switchDataView(dataView2)}
+          </GridItem>
+          <GridItem
+              minH="min-content"
+              rowStart={3}
+              rowSpan={1}
+              colStart={1}
+              colSpan={1}
+              borderColor={borderCol}
+              borderWidth={1}
+              display="flex"
+              flexDir="column"
           >
-            <DataViewOptions txtColor={optionTxtCol} />
-          </Select>
-          {switchDataView(dataView4)}
-        </GridItem>
-        <GridItem
-          minH="min-content"
-          rowStart={4}
-          rowSpan={1}
-          colStart={1}
-          colSpan={2}
-          borderColor={borderCol}
-          borderWidth={1}
-          p={1}
-        >
-          <SerialSelector/>
-        </GridItem>
-      </Grid>
-      <GraphContainer
-        flex="1.8 1.8 0"
-        maxW="60vw"
-        selectBg={selectBgCol}
-        selectTxt={selectTxtCol}
-        selectTxtFocus={selectTxtFocusCol}
-        optionTxt={optionTxtCol}
-        borderCol={borderCol}
-      />
+            <Select
+                id="dataViewSelect3"
+                size="xs"
+                variant="filled"
+                bgColor={selectBgCol}
+                color={selColorStr3}
+                focusBorderColor={borderCol}
+                value={dataView3}
+                onFocus={() => {setSelectFocus("dataViewSelect3")}}
+                onBlur={removeSelectFocus}
+                onMouseEnter={changeSelColor}
+                onMouseLeave={changeSelColorBack}
+                onChange={selectDataView}
+            >
+              <DataViewOptions txtColor={optionTxtCol} />
+            </Select>
+            {switchDataView(dataView3)}
+          </GridItem>
+          <GridItem
+              minH="min-content"
+              rowStart={3}
+              rowSpan={1}
+              colStart={2}
+              colSpan={1}
+              borderColor={borderCol}
+              borderWidth={1}
+              display="flex"
+              flexDir="column"
+          >
+            <Select
+                id="dataViewSelect4"
+                size="xs"
+                variant="filled"
+                bgColor={selectBgCol}
+                color={selColorStr4}
+                focusBorderColor={borderCol}
+                value={dataView4}
+                onFocus={() => {setSelectFocus("dataViewSelect4")}}
+                onBlur={removeSelectFocus}
+                onMouseEnter={changeSelColor}
+                onMouseLeave={changeSelColorBack}
+                onChange={selectDataView}
+            >
+              <DataViewOptions txtColor={optionTxtCol} />
+            </Select>
+            {switchDataView(dataView4)}
+          </GridItem>
+          <GridItem
+            minH="min-content"
+            rowStart={4}
+            rowSpan={1}
+            colStart={1}
+            colSpan={2}
+            borderColor={borderCol}
+            borderWidth={1}
+            p={1}
+          >
+            <SerialSelector/>
+          </GridItem>
+        </Grid>
+        <GraphContainer
+          flex="1.8 1.8 0"
+          maxW="60vw"
+          selectBg={selectBgCol}
+          selectTxt={selectTxtCol}
+          selectTxtFocus={selectTxtFocusCol}
+          optionTxt={optionTxtCol}
+          borderCol={borderCol}
+        />
+      </>
+    );
+  };
+
+  return (
+    <HStack h="100vh" w="100vw" align="stretch" spacing={0}>
+      <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} />
+      {renderPage()}
     </HStack>
   );
 }
