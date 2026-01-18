@@ -39,6 +39,8 @@ jobs:
         working-directory: Frontend
         run: npm run build
         env:
+          REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
+          REACT_APP_WS_URL: ${{ vars.REACT_APP_WS_URL }}
           NODE_OPTIONS: --openssl-legacy-provider
           CI: false
 

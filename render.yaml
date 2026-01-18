@@ -1,0 +1,46 @@
+# Render Blueprint - Chase Car Dashboard
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Backend API Service
+  - type: web
+    name: chase-car-backend
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: |
+      cd Backend && pip install poetry && poetry install --no-root
+    startCommand: |
+      cd Backend && poetry run python main.py
+    envVars:
+      - key: DEPLOYMENT_MODE
+        value: cloud
+      - key: PYTHON_VERSION
+        value: "3.11"
+      # Redis connection - use Upstash or Render's Redis
+      - key: REDIS_URL
+        sync: false  # Set this manually in Render dashboard
+      # Convex configuration
+      - key: CONVEX_URL
+        sync: false  # Set this manually in Render dashboard
+      - key: CONVEX_DEPLOY_KEY
+        sync: false  # Set this manually in Render dashboard
+      # Data source toggles
+      - key: ENABLE_SERIAL
+        value: "false"  # No serial in cloud
+      - key: ENABLE_UDP
+        value: "false"  # No UDP in cloud (unless using VPN)
+      - key: ENABLE_CONVEX
+        value: "true"   # Primary data source in cloud
+    healthCheckPath: /
+    autoDeploy: true
+
+# Note: For a Render Redis instance, uncomment below:
+# databases:
+#   - name: chase-car-redis
+#     plan: free
+#     ipAllowList: []
+
+# However, Render's free Redis doesn't support TimeSeries.
+# Recommend using Upstash Redis instead (free tier available).
+# Get your Upstash URL from: https://console.upstash.com/

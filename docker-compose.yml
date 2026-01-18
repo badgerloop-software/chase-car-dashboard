@@ -1,16 +1,57 @@
-version: '3'
+version: '3.8'
+
 services:
+  # Main application - Backend + Frontend
   chase-car-dashboard:
     build:
       context: .
-      dockerfile: Dockerfile  # Use your Dockerfile name if different
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # Adjust the port as needed
+      - "3000:3000"   # Frontend
+      - "4001:4001"   # Backend API/WebSocket
     depends_on:
-      - redis-stack-server
+      redis-stack-server:
+        condition: service_healthy
+    environment:
+      - DEPLOYMENT_MODE=local
+      - USE_TIMESERIES=true
+      - REDIS_HOST=redis-stack-server
+      - REDIS_PORT=6379
+      - ENABLE_SERIAL=false
+      - ENABLE_UDP=true
+      - ENABLE_CONVEX=false
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    networks:
+      - chase-car-network
+
+  # Redis Stack with TimeSeries support
   redis-stack-server:
-    image: redis/redis-stack-server:latest  # Use the desired Redis image here
+    image: redis/redis-stack-server:latest
     ports:
       - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - chase-car-network
+
+  # Optional: Data Generator for testing (uncomment to use)
+  # data-generator:
+  #   build:
+  #     context: ./DataGenerator
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - chase-car-dashboard
+  #   network_mode: host
+
+networks:
+  chase-car-network:
+    driver: bridge
+
+volumes:
+  redis-data:

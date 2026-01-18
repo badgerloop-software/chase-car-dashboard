@@ -2,8 +2,9 @@ import { Box, useColorMode, VStack, Stat, StatLabel, StatNumber, HStack, Icon, T
 import { IoSpeedometer } from "react-icons/io5";
 import { FaLeaf } from "react-icons/fa";
 import getColor from "../Shared/colors";
+import FaultsView from "../Faults/FaultsView";
 
-export default function Home({ render3D = true }) {
+export default function Home({ render3D = true, data }) {
   const { colorMode } = useColorMode();
   const borderCol = getColor("border", colorMode);
   const bgCol = colorMode === "light" ? "white" : "gray.800";
@@ -64,6 +65,22 @@ export default function Home({ render3D = true }) {
           SOLAR CAR 2 - SUNBURST
         </Text>
       </VStack>
+      
+      {/* Status Icons at top center */}
+      <Box
+        position="absolute"
+        top={4}
+        left="50%"
+        transform="translateX(-50%)"
+        p={4}
+        bgColor={bgCol}
+        borderRadius="lg"
+        borderWidth={2}
+        borderColor={borderCol}
+        boxShadow="xl"
+      >
+        <FaultsView data={data} />
+      </Box>
       
       {/* Stats box in top right corner */}
       <Box
