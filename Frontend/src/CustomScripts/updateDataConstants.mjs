@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs";
-import DATA_FORMAT from "../../../Backend/Data/sc1-data-format/format.json" assert { type: "json" };
+import DATA_FORMAT from "../../../Backend/Data/sc1-data-format/format.json" with { type: "json" };
 
 const constantsJson = {};
 

@@ -135,3 +135,7 @@ Raw recorded data is saved in redis database, you can access the data manually w
 ### Killing the Backend After Errors
 
 If you run the backend and encounter errors, even after killing the command, the process may still be running on your computer (seen on Linux), as the file sync feature spawns an independent Python process. To check if the process is still running, run `ps -ef | grep main.py` and look for matches before the last line (i.e. not `... --color=auto main.py`). If there aren't any matches, you're peachy. Otherwise, to kill the process, run `kill -9 <PIDs>`, replacing `<PIDs>` with the first number in each matching line except for the last.
+
+## License / Model credit
+
+This work uses the Ferrari F40 model by Black Snow on Sketchfab, licensed under CC-BY-4.0. See `ferrari_f40/license.txt` for details.

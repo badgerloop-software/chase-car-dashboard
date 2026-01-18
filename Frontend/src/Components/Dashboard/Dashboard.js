@@ -249,7 +249,7 @@ export default function Dashboard(props) {
     }
     
     if (currentPage === "home") {
-      return <Home render3D={render3D} />;
+      return <Home render3D={render3D} data={state.data} />;
     }
     
     // Default: Dashboard page
