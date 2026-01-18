@@ -313,8 +313,7 @@ def start_comms():
     # Start two live comm channels
     #vps_thread = threading.Thread(target=lambda : asyncio.run(telemetry.remote_db_fetch(config.VPS_URL)))
     #vps_thread.start()
-    #socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
-    #socket_thread.start()
-    socket_thread = threading.Thread(target=lambda: telemetry.serial_read())
+    socket_thread = threading.Thread(target=lambda: telemetry.listen_udp(config.UDP_PORT))
     socket_thread.start()
-
+    #socket_thread = threading.Thread(target=lambda: telemetry.serial_read())
+    #socket_thread.start()
