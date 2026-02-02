@@ -14,7 +14,7 @@ import config
 
 from .udp_source import UDPDataSource
 from .serial_source import SerialDataSource
-from .convex_source import ConvexDataSource
+from .supabase_source import SupabaseDataSource
 
 
 class DataSourceManager:
@@ -54,8 +54,8 @@ class DataSourceManager:
         self.connection_status = {
             'udp': False,
             'serial': False,
-            'convex': False,
-            'lte': False,  # Legacy - alias for convex
+            'supabase': False,
+            'lte': False,  # Legacy - alias for supabase
         }
         
         # Data sources
@@ -83,11 +83,11 @@ class DataSourceManager:
             self._sources['serial'].set_data_callback(self._on_data_received)
             print("[DataSourceManager] Serial source enabled")
         
-        # Convex source (both modes)
-        if config.ENABLE_CONVEX:
-            self._sources['convex'] = ConvexDataSource()
-            self._sources['convex'].set_data_callback(self._on_data_received)
-            print("[DataSourceManager] Convex source enabled")
+        # Supabase source (cloud mode primarily)
+        if config.ENABLE_SUPABASE:
+            self._sources['supabase'] = SupabaseDataSource()
+            self._sources['supabase'].set_data_callback(self._on_data_received)
+            print("[DataSourceManager] Supabase source enabled")
     
     def start(self):
         """Start all enabled data sources."""
@@ -151,8 +151,8 @@ class DataSourceManager:
             data['solar_car_connection'] = any(self.connection_status.values())
             data['udp_status'] = self.connection_status.get('udp', False)
             data['serial_status'] = self.connection_status.get('serial', False)
-            data['convex_status'] = self.connection_status.get('convex', False)
-            data['lte_status'] = self.connection_status.get('convex', False)  # Legacy alias
+            data['supabase_status'] = self.connection_status.get('supabase', False)
+            data['lte_status'] = self.connection_status.get('supabase', False)  # Legacy alias
             data['data_source'] = self.latest_source
             
             return data

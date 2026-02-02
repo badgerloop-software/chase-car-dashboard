@@ -7,6 +7,7 @@ import {
   useColorMode
 } from "@chakra-ui/react";
 import { useEffect, useState, Suspense, lazy, memo, useRef } from "react";
+import { WS_BASE } from "../../config";
 import GraphContainer from "./GraphContainer";
 import DataRecordingControl from "./DataRecordingControl";
 import dvOptions from "./dataViewOptions";
@@ -45,7 +46,7 @@ export default function Dashboard(props) {
   
   // // open websocket on mount
   useEffect(() => {
-    ws.current = new WebSocket(`ws://localhost:4001/single-values`);
+    ws.current = new WebSocket(`${WS_BASE}/single-values`);
 
     ws.current.onmessage = (event) => {
       try {

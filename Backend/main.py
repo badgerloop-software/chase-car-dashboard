@@ -1,8 +1,10 @@
 import uvicorn, config
+import os
 import sys
 import threading
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from framework import router
 from core.data_sources.manager import DataSourceManager
 
@@ -40,6 +42,27 @@ async def lifespan(app: FastAPI):
     print("Backend stopped.")
 
 app = FastAPI(lifespan=lifespan)
+
+# CORS configuration for GitHub Pages frontend
+# Allow requests from GitHub Pages and localhost for development
+allowed_origins = [
+    "https://badgerloop-software.github.io",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+# Add any custom frontend URL from environment
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    allowed_origins.append(frontend_url)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == '__main__':
     print(f"Starting server on port {config.HOST_PORT}...")

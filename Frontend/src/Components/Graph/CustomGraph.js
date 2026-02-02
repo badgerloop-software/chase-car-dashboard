@@ -42,6 +42,7 @@ import GraphSelectModal from "./GraphSelectModal";
 import GraphData from "./graph-data.json";
 import getColor from "../Shared/colors";
 import { ROUTES } from "../Shared/misc-constants";
+import { WS_BASE } from "../../config";
 import {getRelativePosition} from "chart.js/helpers";
 
 ChartJS.register(
@@ -208,7 +209,7 @@ function Graph(props) {
 
   // open websocket on mount
   useEffect(() => {
-    ws.current = new WebSocket(`ws://localhost:4001/components/graph`);
+    ws.current = new WebSocket(`${WS_BASE}/components/graph`);
 
     ws.current.onmessage = (event) => {
       try {

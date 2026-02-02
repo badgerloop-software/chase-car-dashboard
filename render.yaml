@@ -20,17 +20,17 @@ services:
       # Redis connection - use Upstash or Render's Redis
       - key: REDIS_URL
         sync: false  # Set this manually in Render dashboard
-      # Convex configuration
-      - key: CONVEX_URL
+      # Supabase configuration
+      - key: SUPABASE_URL
         sync: false  # Set this manually in Render dashboard
-      - key: CONVEX_DEPLOY_KEY
+      - key: SUPABASE_KEY
         sync: false  # Set this manually in Render dashboard
       # Data source toggles
       - key: ENABLE_SERIAL
         value: "false"  # No serial in cloud
       - key: ENABLE_UDP
         value: "false"  # No UDP in cloud (unless using VPN)
-      - key: ENABLE_CONVEX
+      - key: ENABLE_SUPABASE
         value: "true"   # Primary data source in cloud
     healthCheckPath: /
     autoDeploy: true

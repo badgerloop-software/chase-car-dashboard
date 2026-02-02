@@ -19,6 +19,7 @@ XlsxWriter = "^3.2.0"
 pandas = "^2.2.3"
 aiohttp = "^3.10.8"
 pyserial = "^3.5"
+supabase = "^2.0.0"
 
 [build-system]
 requires = ["poetry-core"]

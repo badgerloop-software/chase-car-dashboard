@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { useCallback } from "react";
 import { useEffect, useMemo, useState } from "react";
 import {useInterval, Box, Menu, MenuItem, Button, MenuButton, MenuList, useColorModeValue } from "@chakra-ui/react";
+import { API_BASE } from "../../config";
 import CONSTANTS from "../../data-constants.json";
 import { BsChevronDown } from "react-icons/bs";
 import hsvBar from "./RangeBar/hsv.png"
@@ -45,7 +46,7 @@ function CarMap() {
   };
 
   const refreshMap = () => {
-    fetch(`/components/maps?data=${selectedData}&duration=${selectedDuration}`)
+    fetch(`${API_BASE}/components/maps?data=${selectedData}&duration=${selectedDuration}`)
       .then(response => {
         if (response.ok) {
           return response.json();

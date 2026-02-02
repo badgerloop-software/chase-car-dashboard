@@ -19,7 +19,7 @@ services:
       - REDIS_PORT=6379
       - ENABLE_SERIAL=false
       - ENABLE_UDP=true
-      - ENABLE_CONVEX=false
+      - ENABLE_SUPABASE=false
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

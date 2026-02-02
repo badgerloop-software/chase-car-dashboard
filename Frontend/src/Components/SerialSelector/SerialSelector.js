@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Select, Flex, useInterval } from "@chakra-ui/react";
+import { API_BASE } from "../../config";
 
 export default function SerialSelector() {
     const [allDevices, setAllDevices] = useState([]);
@@ -7,7 +8,7 @@ export default function SerialSelector() {
     const [selectedBaud, setSelectedBaud] = useState(115200);
 
     const refresh = () => {
-        fetch('/serial-info')
+        fetch(`${API_BASE}/serial-info`)
         .then((response) => {
             if (response.ok) {
                 return response.json();
@@ -25,7 +26,7 @@ export default function SerialSelector() {
     useInterval(refresh, 3000);
 
     useEffect(()=> {
-        fetch("/connect-device", {
+        fetch(`${API_BASE}/connect-device`, {
             method: "POST",
             body: JSON.stringify({
                 device: selectedDevice,

@@ -3,7 +3,7 @@ import os
 # ==================== DEPLOYMENT MODE ====================
 # Determines how the application runs:
 # - "local": Full features (Redis Stack, Serial, DataGenerator/Replayer)
-# - "cloud": Cloud-compatible mode (Convex, Upstash Redis, no serial)
+# - "cloud": Cloud-compatible mode (Supabase, Upstash Redis, no serial)
 DEPLOYMENT_MODE = os.getenv("DEPLOYMENT_MODE", "local")
 
 # ==================== PATHS ====================
@@ -31,25 +31,22 @@ else:
     REDIS_DB = int(os.getenv("REDIS_DB", 0))
     USE_TIMESERIES = True
 
-# ==================== CONVEX SETTINGS ====================
-# Convex is used as the primary cloud database for real-time data
-CONVEX_URL = os.getenv("CONVEX_URL", "")
-CONVEX_DEPLOY_KEY = os.getenv("CONVEX_DEPLOY_KEY", "")
+# ==================== SUPABASE SETTINGS ====================
+# Supabase is used as the primary cloud database for real-time data
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")  # Use anon/public key for reads
 
 # ==================== DATA SOURCE SETTINGS ====================
 # Which data sources are enabled
 ENABLE_SERIAL = DEPLOYMENT_MODE == "local"  # Serial only works locally
 ENABLE_UDP = DEPLOYMENT_MODE == "local"      # UDP only works locally
-ENABLE_CONVEX = bool(CONVEX_URL)             # Convex works in both modes
+ENABLE_SUPABASE = bool(SUPABASE_URL)          # Supabase works in both modes
 
 # ==================== NETWORK SETTINGS (Local Mode) ====================
 CAR_IP = os.getenv("CAR_IP", "192.168.1.15")
 LOCAL_IP = os.getenv("LOCAL_IP", "127.0.0.1")
 DATA_PORT = int(os.getenv("DATA_PORT", 4003))
 UDP_PORT = int(os.getenv("UDP_PORT", 4003))
-
-# ==================== LEGACY VPS SETTINGS ====================
-VPS_URL = os.getenv("VPS_URL", "http://live.bsr-dev.org")
 
 # ==================== RUNTIME DATA ====================
 # Filled by the program at startup
@@ -70,5 +67,5 @@ def print_config():
     print(f"Redis TimeSeries: {'Enabled' if USE_TIMESERIES else 'Disabled'}")
     print(f"Serial Enabled: {ENABLE_SERIAL}")
     print(f"UDP Enabled: {ENABLE_UDP}")
-    print(f"Convex Enabled: {ENABLE_CONVEX}")
+    print(f"Supabase Enabled: {ENABLE_SUPABASE}")
     print(f"=========================================")

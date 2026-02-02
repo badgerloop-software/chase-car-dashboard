@@ -11,7 +11,7 @@ class DataSource(ABC):
     """
     Abstract base class for data sources.
     
-    All data sources (Serial, UDP, Convex) implement this interface
+    All data sources (Serial, UDP, Supabase) implement this interface
     to provide a consistent way of receiving telemetry data.
     """
     
