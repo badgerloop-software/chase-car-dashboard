@@ -10,10 +10,10 @@
     "start": "run-p backend frontend",
     "start-dev": "run-p data-generator backend-dev frontend",
     "start-replay": "run-p data-replayer backend-dev frontend",
-    "install-data-generator": "cd DataGenerator && npm i",
-    "install-data-replayer": "cd DataReplayer && npm i",
+    "install-data-generator": "cd DataGenerator && npm i --legacy-peer-deps",
+    "install-data-replayer": "cd DataReplayer && npm i --legacy-peer-deps",
     "install-backend": "cd Backend && poetry install",
-    "install-frontend": "cd Frontend && npm i",
+    "install-frontend": "cd Frontend && npm i --legacy-peer-deps",
     "postinstall": "run-p install-data-generator install-data-replayer install-backend install-frontend",
     "update-data": "git submodule update --recursive --remote && cd Frontend && npm run update-data"
   },

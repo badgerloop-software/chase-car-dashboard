@@ -15,8 +15,8 @@ COPY Frontend/package.json ./Frontend/
 COPY DataGenerator/package.json ./DataGenerator/
 COPY DataReplayer/package.json ./DataReplayer/
 
-# Install dependencies
-RUN npm install
+# Install dependencies (--legacy-peer-deps needed for older react-scripts)
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application
 COPY . .
