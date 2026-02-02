@@ -8,18 +8,23 @@ RUN pip install --upgrade pip && pip install poetry
 
 WORKDIR /chase-car-dashboard
 
-# Copy dependency files first for better caching
+# Copy package files for caching
 COPY package.json ./
-COPY Backend/pyproject.toml Backend/poetry.lock* ./Backend/
 COPY Frontend/package.json ./Frontend/
 COPY DataGenerator/package.json ./DataGenerator/
 COPY DataReplayer/package.json ./DataReplayer/
 
-# Install dependencies (--legacy-peer-deps needed for older react-scripts)
-RUN npm install --legacy-peer-deps
+# Install root dependencies only (skip postinstall)
+RUN npm install --legacy-peer-deps --ignore-scripts
 
 # Copy the rest of the application
 COPY . .
+
+# Now install all dependencies with full context
+RUN npm run install-data-generator && \
+    npm run install-data-replayer && \
+    npm run install-frontend && \
+    cd Backend && poetry install
 
 # Set environment variables for local mode
 ENV DEPLOYMENT_MODE=local
