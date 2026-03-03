@@ -21,7 +21,7 @@ The DataGenerator simulates live solar car telemetry data by generating realisti
 
 ### Sensor Simulation
 - **Algorithm**: Mathematical sine wave generation for realistic sensor variation
-- **Scope**: All fields defined in `../../Backend/Data/sc1-data-format/format.json`
+- **Scope**: All fields defined in `../../Backend/Data/sc-data-format/format.json`
 - **Timestamps**: Live system time (hour, minute, second, millisecond, Unix timestamp)
 
 ## Usage
@@ -116,7 +116,7 @@ The project uses Babel to transpile modern JavaScript:
 - **constants.json**: Configuration constants (port numbers, etc.)
 
 ### Data Format Integration
-- Reads format specification from `../../Backend/Data/sc1-data-format/format.json`
+- Reads format specification from `../../Backend/Data/sc-data-format/format.json`
 - Dynamically calculates buffer sizes based on data types
 - Ensures perfect compatibility with backend data parsing
 

@@ -6,7 +6,7 @@ const inquirer = require('inquirer');
 const path = require('path');
 
 // Load the data format and constants
-const DATA_FORMAT = JSON.parse(fs.readFileSync('../Backend/Data/sc1-data-format/format.json', 'utf8'));
+const DATA_FORMAT = JSON.parse(fs.readFileSync('../Backend/Data/sc-data-format/format.json', 'utf8'));
 const PORT = 4003; // Same port as DataGenerator
 
 // Calculate buffer size

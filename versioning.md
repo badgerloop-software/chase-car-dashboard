@@ -9,7 +9,7 @@
     3. PATCH - A backwards compatible bug fix
 
 3. The following are examples of changes that would warrant an update of each version number:
-    1. MAJOR: A change was made to the [`sc1-data-format` submodule](https://github.com/badgerloop-software/sc1-data-format)
+    1. MAJOR: A change was made to the [`sc-data-format` submodule](https://github.com/badgerloop-software/sc-data-format)
        such that an incoming dataset from the solar car, which had been packed according to the definition
        (`format.json`) in the previous state of the submodule, cannot be unpacked effectively in the backend using the
        new definition in the updated submodule. Such a change could include signals being added to, removed from, or
