@@ -12,7 +12,7 @@ usage="\033[1mSYNOPSIS
 \t\033[1m-d\033[0m <\033[4mTAG\033[0m>, \033[1m--dist-tag\033[0m=<\033[4mTAG\033[0m>
 \t    Specifies the tag of the engineering-data-distributor-image to pull and run.
 \t    If no tag is specified, the image tagged \"latest\" will be used.
-\t    - NOTE: The sc1-data-format submodule in the engineering-data-distributor-image will automatically be synced with that of the chase-car-dashboard-image being run.\n
+\t    - NOTE: The sc-data-format submodule in the engineering-data-distributor-image will automatically be synced with that of the chase-car-dashboard-image being run.\n
 \t\033[1m-c\033[0m <\033[4mCONFIG\033[0m>, \033[1m--config\033[0m=<\033[4mCONFIG\033[0m>
 \t    Specifies the configuration in which to run the dashboard and data distribution server. The following are the available configurations:
 \t        - \033[1m\"competition\"\033[0m: Run only the chase-car-dashboard-image on this computer. This computer will be connected to another device running the engineering-data-distributor application

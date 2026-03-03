@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs"
-import SC1DataFormat from "../../../Backend/Data/sc1-data-format/format.json" with { type: "json" }
+import SC1DataFormat from "../../../Backend/Data/sc-data-format/format.json" assert { type: "json" }
 import OldGraphData from "../Components/Graph/graph-data.json" with { type: "json" }
 
 /**

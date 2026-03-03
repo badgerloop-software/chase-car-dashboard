@@ -102,7 +102,7 @@ This ensures the frontend's live graphing feature works correctly, as it expects
 
 ## Data Format
 
-The binary packets follow the format defined in `../../Backend/Data/sc1-data-format/format.json`:
+The binary packets follow the format defined in `../../Backend/Data/sc-data-format/format.json`:
 - Header: `<bsr>`
 - Data: Binary encoded according to field types (float, uint8, etc.)
 - Footer: `</bsr>`

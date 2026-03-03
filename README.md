@@ -58,7 +58,7 @@ We use Poetry for managing our backend Python environment. To setup a Poetry env
 0. Make sure that you have followed all steps in the sections above.
 0. Open the repository in your IDE of choice (Visual Studio Code is recommended).
 0. Run `npm i` to install the latest dependencies to your computer. You will also need to do this when you `git pull` to get the most recent changes of the code on your branch.
-0. Run `npm run update-data` to update the `sc1-data-format` submodule and any associated JSON files (see the "Updating Data" section). You should also do this any time the submodule might have changed (i.e. whenever the [data format](https://github.com/badgerloop-software/sc1-data-format/blob/main/format.json) has been modified).
+0. Run `npm run update-data` to update the `sc-data-format` submodule and any associated JSON files (see the "Updating Data" section). You should also do this any time the submodule might have changed (i.e. whenever the [data format](https://github.com/badgerloop-software/sc-data-format/blob/main/format.json) has been modified).
    1. To avoid pushing changes that use obsolete data, update the submodule and data constants before you `git push` your changes. If there are changes to the data format, run the dashboard to make sure your code still works.
 0. Ensure that the Redis server is running. You can follow the instructions for your system as listed in the installation guides above (see [Installing Dependencies](#installing-dependencies))
 0. If you want to test the engineering dashboard with the solar car dashboard, do the following:
@@ -135,7 +135,3 @@ Raw recorded data is saved in redis database, you can access the data manually w
 ### Killing the Backend After Errors
 
 If you run the backend and encounter errors, even after killing the command, the process may still be running on your computer (seen on Linux), as the file sync feature spawns an independent Python process. To check if the process is still running, run `ps -ef | grep main.py` and look for matches before the last line (i.e. not `... --color=auto main.py`). If there aren't any matches, you're peachy. Otherwise, to kill the process, run `kill -9 <PIDs>`, replacing `<PIDs>` with the first number in each matching line except for the last.
-
-## License / Model credit
-
-This work uses the Ferrari F40 model by Black Snow on Sketchfab, licensed under CC-BY-4.0. See `ferrari_f40/license.txt` for details.

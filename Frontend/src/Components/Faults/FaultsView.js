@@ -16,7 +16,7 @@ export default function Faults(props) {
    * indicates a fault (i.e. if the value is not equal to its nominal value).
    *
    * @param dataLabel Name of the specific boolean/piece of data (found in the
-   *                  <a href="https://github.com/badgerloop-software/sc1-data-format/blob/main/format.json">data
+   *                  <a href="https://github.com/badgerloop-software/sc-data-format/blob/main/format.json">data
    *                  format</a>) whose value is being checked
    * @returns {boolean} true if the specified boolean value is NOT equal to its nominal value; false otherwise
    * @private
@@ -275,7 +275,7 @@ export default function Faults(props) {
   /**
    * A function for which more time was spent working to get a reference to the data format file in the method header
    * than was actually spent making function. In the end, I gave up on linking to the actual file, so I just linked
-   * to the sc1-data-format repo on GitHub (see the link in the dataLabel parameter description). If you know how to
+   * to the sc-data-format repo on GitHub (see the link in the dataLabel parameter description). If you know how to
    * link to the file so that it opens in the IDE when you click on it in the method header, or if you know that it
    * isn't possible, DM on teams. My name is listed in the "Author" section of this method header.
    * <p>This function adds the provided uppercaseLabel/lowercaseLabel to lowArray or highArray if the value specified
@@ -285,7 +285,7 @@ export default function Faults(props) {
    * @param lowArray Array of devices/items with low temperatures
    * @param highArray Same thing but with high temperatures
    * @param dataLabel Name of the specific temperature/piece of data (found in the
-   *                  <a href="https://github.com/badgerloop-software/sc1-data-format/blob/main/format.json">data
+   *                  <a href="https://github.com/badgerloop-software/sc-data-format/blob/main/format.json">data
    *                  format</a>) whose value is being checked
    * @param uppercaseLabel A more user-friendly label for the device/item whose temperature might be high or low.
    *                       Starts with an uppercase letter (in case this is the first item in one of the lists)

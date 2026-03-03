@@ -21,7 +21,7 @@ echo     -t ^<TAG^>, --tag=^<TAG^>             Specifies the tag of the dashboar
 echo                                       By default, the "latest" tag is used
 echo     -d ^<TAG^>, --dist-tag=^<TAG^>        Specifies the tag of the engineering-data-distributor-image to pull and run.
 echo                                       If no tag is specified, the image tagged "latest" will be used.
-echo                                           - NOTE: The sc1-data-format submodule in the engineering-data-distributor-image
+echo                                           - NOTE: The sc-data-format submodule in the engineering-data-distributor-image
 echo                                                   will automatically be synced with that of the chase-car-dashboard-image being run.
 echo     -c ^<CONFIG^>, --config=^<CONFIG^>    Specifies the configuration in which to run the dasboard and data distribution server.
 echo                                       The following are the available configurations:
