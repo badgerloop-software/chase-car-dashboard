@@ -1,3 +1,11 @@
+> [!WARNING]
+> **This repository is no longer actively maintained.**
+>
+> Development has moved to the `sc-mobile-web-app` repository. Much of the functionality originally implemented here now exists there (the 'dashboard' tab at https://dashboard.badgersolarracing.org/), and this repository is retained only for historical reference.
+>
+> Please use `sc-mobile-web-app` for all new development and future updates.
+
+
 # Solar Car 1.5 Engineering (Chase Car) Dashboard
 
 This dashboard, which will run on a Laptop outside of the Solar Car, provides real-time monitoring and data visualization for our team. It includes:
