@@ -1,4 +1,4 @@
-# Solar Car 2 Engineering (Chase Car) Dashboard
+# Solar Car 1.5 Engineering (Chase Car) Dashboard
 
 This dashboard, which will run on a Laptop outside of the Solar Car, provides real-time monitoring and data visualization for our team. It includes:
 
